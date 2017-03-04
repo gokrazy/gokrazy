@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/gokrazy/gokrazy.svg?branch=master)](https://travis-ci.org/gokrazy/gokrazy)
+
 # Overview
 
 gokrazy packs your Go application(s) into an SD card image for the
