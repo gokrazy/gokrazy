@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/gokrazy/gokrazy.svg?branch=master)](https://travis-ci.org/gokrazy/gokrazy)
+[![Go Report Card](https://goreportcard.com/badge/github.com/gokrazy/gokrazy)](https://goreportcard.com/report/github.com/gokrazy/gokrazy)
 
 # Overview
 
