@@ -12,12 +12,7 @@ would like. Hence, he is going Go-only where feasible.
 
 ## Installation
 
-Install Go if you haven’t already:
-```
-sudo apt install golang-go
-export GOPATH=~/go
-export PATH=$GOPATH/bin:$PATH
-```
+[Install Go 1.8](https://golang.org/dl/) if you haven’t already.
 
 Then, use the `go` tool to download and install `gokr-packer`:
 ```
