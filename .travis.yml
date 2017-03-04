@@ -1,0 +1,16 @@
+# Use the (faster) container-based infrastructure, see also
+# http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+sudo: false
+
+language: go
+go:
+  - 1.8
+
+script:
+  # Check whether files are syntactically correct.
+  - "gofmt -l $(find . -name '*.go' | tr '\\n' ' ') >/dev/null"
+  # Check whether files were not gofmt'ed.
+  - gosrc=$(find . -name '*.go' | tr '\\n' ' '); [ $(gofmt -l $gosrc 2>&- | wc -l) -eq 0 ] || (echo 'gofmt was not run on these files:'; gofmt -l $gosrc 2>&-; false)
+  - go test ./...
+  - go get -u github.com/gokrazy/tools/cmd/gokr-packer
+  - gokr-packer -overwrite=full.img -target_storage_bytes=1610612736 github.com/gokrazy/hello
