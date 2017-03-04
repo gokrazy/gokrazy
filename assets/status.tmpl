@@ -1,0 +1,34 @@
+{{ template "header" . }}
+
+<div class="row">
+<div class="col-md-12">
+<table>
+<tr>
+<th>Name</th>
+<th>Started</th>
+<th>Actions</th>
+</tr>
+<tr>
+<td><a href="#{{ .Service.Name }}">{{ .Service.Name }}</a></td>
+<td>{{ .Service.Started }}</td>
+<td><form method="POST" action="/restart"><input type="hidden" name="path" value="{{ .Service.Name }}"><input type="submit" value="restart"></form><form method="POST" action="/stop"><input type="hidden" name="path" value="{{ .Service.Name }}"><input type="submit" value="stop"></form></td>
+</tr>
+</table>
+
+  <h3>stdout</h3>
+  <pre>
+  {{ range $idx, $line := .Service.Stdout.Lines -}}
+    {{ $line }}
+  {{ end }}
+  </pre>
+
+  <h3>stderr</h3>
+  <pre>
+  {{ range $idx, $line := .Service.Stderr.Lines -}}
+    {{ $line }}
+  {{ end }}
+  </pre>
+</div>
+</div>
+
+{{ template "footer" . }}

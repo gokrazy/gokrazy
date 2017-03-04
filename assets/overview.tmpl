@@ -1,0 +1,82 @@
+{{ template "header" . }}
+
+<div class="row">
+<div class="col-md-12">
+
+<h1>services</h1>
+
+<table class="table">
+<tbody><tr>
+<th width="20%">path</th>
+<th width="80%">last log line</th>
+</tr>
+
+{{ range $idx, $svc := .Services }}
+<tr>
+<td>
+<a href="/status?path={{ $svc.Name }}">{{ $svc.Name }}</a>
+{{ if restarting $svc.Started }}
+<span class="label label-danger">restarting</span>
+{{ end }}
+{{ if $svc.Stopped }}
+<span class="label label-warning">stopped</span>
+{{ end }}
+</td>
+<td class="lastlog">
+{{ last $svc.Stdout.Lines $svc.Stderr.Lines }}
+</td>
+</tr>
+{{ end }}
+
+</table>
+</div>  
+<div class="col-md-12">
+<h2>memory</h2>
+{{ megabytes (index .Meminfo "MemTotal") }} total, {{ megabytes (index .Meminfo "MemAvailable") }} available<br>
+<strong>resident set size (RSS) by service</strong>:
+<div class="progress">
+
+{{ with $rss := initRss }}
+<div class="progress-bar" style="width: {{ rssPercentage $.Meminfo $rss }}%" title="init uses {{ megabytes $rss }} RSS">
+<span class="sr-only"></span>
+init
+</div>
+{{ end }}
+
+{{ range $idx, $svc := .Services }}
+{{ with $rss := $svc.RSS }}
+<div class="progress-bar" style="width: {{ rssPercentage $.Meminfo $rss }}%" title="{{ $svc.Name }} uses {{ megabytes $rss }} RSS">
+<span class="sr-only"></span>
+{{ baseName $svc.Name }}
+</div>
+{{ end }}
+{{ end }}
+<div class="progress-bar" style="width: 100%; overflow:initial; float: none" title="memory usage outside of gokrazy services">
+<span class="sr-only"></span>
+unaccounted
+</div>
+</div>
+</div>
+
+<div class="col-md-12">
+
+
+<h2>storage</h2>
+
+{{ if eq .PermAvail 0 }}
+No permanent storage mounted. To create a filesystem for permanent storage, plug the SD card into a Linux computer and, if your SD card is <code>/dev/sdb</code>, use <code>mkfs.ext4 /dev/sdb4</code>.
+{{ else }}
+<strong>/dev/mmcblk0p4</strong>: {{ gigabytes .PermTotal }} total, {{ gigabytes .PermUsed }} used, {{ gigabytes .PermAvail }} avail<br>
+{{ end }}
+
+<h2>private network addresses</h2>
+<ul>
+{{ range $idx, $host := .Hosts }} 
+<li>{{ $host }}</li>
+{{ end }}
+</ul>
+
+</div>
+</div>
+
+{{ template "footer" . }}

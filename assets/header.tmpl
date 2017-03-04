@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>gokrazy</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css" integrity="sha256-eU4xmpfQx1HSi5q1q2rHNcMEzTNJov7r2Wr/6zF3ANc=" crossorigin="anonymous" />
+<style type="text/css">
+.progress-bar:nth-child(5n) {
+        background-color: #337ab7;
+}
+.progress-bar:nth-child(5n+1) {
+        background-color: #5cb85c;
+}
+.progress-bar:nth-child(5n+2) {
+        background-color: #5bc0de;
+}
+.progress-bar:nth-child(5n+3) {
+        background-color: #f0ad4e;
+}
+.progress-bar:nth-child(5n+4) {
+        background-color: #d9534f;
+}
+.lastlog {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+}
+table {
+        table-layout: fixed;
+}
+</style>
+
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <p style="width: 50ex; margin-top: 0.25em; font-size: 18px"><a href="/">gokrazy</a><br>
+        <small style="font-size: 11px" class="text-muted">version {{ .BuildTimestamp }}</small></p>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav">
+        </ul>
+
+        <p class="navbar-text navbar-right">
+          host “{{ .Hostname }}”
+        </p>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  <div class="container">

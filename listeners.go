@@ -1,0 +1,135 @@
+package gokrazy
+
+import (
+	"log"
+	"net"
+	"net/http"
+	"sync"
+)
+
+var privateNets []net.IPNet
+var ipv6LinkLocal net.IPNet
+
+func init() {
+	var pn = []string{
+		// loopback: https://tools.ietf.org/html/rfc3330#section-2
+		"127.0.0.0/8",
+		// loopback: https://tools.ietf.org/html/rfc3513#section-2.4
+		"::1/128",
+
+		// reserved: https://tools.ietf.org/html/rfc1918#section-3
+		"10.0.0.0/8",
+		"172.16.0.0/12",
+		"192.168.0.0/16",
+		// reserved: https://tools.ietf.org/html/rfc4193#section-3.1
+		"fc00::/7",
+
+		// link-local: https://tools.ietf.org/html/rfc3927#section-1.2
+		"169.254.0.0/16",
+		// link-local: https://tools.ietf.org/html/rfc4291#section-2.4
+		"fe80::/10",
+	}
+	privateNets = make([]net.IPNet, len(pn))
+	for idx, s := range pn {
+		_, net, err := net.ParseCIDR(s)
+		if err != nil {
+			log.Panicf(err.Error())
+		}
+		privateNets[idx] = *net
+		if s == "fe80::/10" {
+			ipv6LinkLocal = *net
+		}
+	}
+}
+
+func isPrivate(ipaddr net.IP) bool {
+	for _, n := range privateNets {
+		if n.Contains(ipaddr) {
+			return true
+		}
+	}
+	return false
+}
+
+// PrivateInterfaceAddrs returns all private (as per RFC1918, RFC4193,
+// RFC3330, RFC3513, RFC3927, RFC4291) host addresses of all active
+// interfaces, suitable to be passed to net.Listen.
+func PrivateInterfaceAddrs() ([]string, error) {
+	ifaces, err := net.Interfaces()
+	if err != nil {
+		return nil, err
+	}
+
+	var hosts []string
+	for _, i := range ifaces {
+		if i.Flags&net.FlagUp != net.FlagUp {
+			continue
+		}
+		addrs, err := i.Addrs()
+		if err != nil {
+			return nil, err
+		}
+
+		for _, a := range addrs {
+			ipaddr, _, err := net.ParseCIDR(a.String())
+			if err != nil {
+				return nil, err
+			}
+
+			if !isPrivate(ipaddr) {
+				continue
+			}
+
+			host := ipaddr.String()
+			if ipv6LinkLocal.Contains(ipaddr) {
+				host = host + "%" + i.Name
+			}
+			hosts = append(hosts, host)
+		}
+	}
+	return hosts, nil
+}
+
+var (
+	listeners   = make(map[string]*http.Server)
+	listenersMu sync.Mutex
+)
+
+func updateListeners(port string) error {
+	hosts, err := PrivateInterfaceAddrs()
+	if err != nil {
+		return err
+	}
+
+	listenersMu.Lock()
+	defer listenersMu.Unlock()
+	vanished := make(map[string]bool)
+	for host := range listeners {
+		vanished[host] = false
+	}
+	for _, host := range hosts {
+		if _, ok := listeners[host]; ok {
+			// confirm found
+			delete(vanished, host)
+		} else {
+			// add a new listener
+			srv := &http.Server{
+				Addr:    net.JoinHostPort(host, port),
+				Handler: http.HandlerFunc(authenticated),
+			}
+			listeners[host] = srv
+			go func(host string, srv *http.Server) {
+				err := srv.ListenAndServe()
+				log.Printf("listener for %q died: %v", host, err)
+				listenersMu.Lock()
+				defer listenersMu.Unlock()
+				delete(listeners, host)
+			}(host, srv)
+		}
+	}
+	for host := range vanished {
+		listeners[host].Close()
+		delete(listeners, host)
+	}
+	return nil
+}
