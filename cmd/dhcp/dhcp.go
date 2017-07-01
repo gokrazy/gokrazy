@@ -34,9 +34,7 @@ var (
 	defaultNetmask = net.IPMask([]byte{0, 0, 0, 0})
 )
 
-// dhcpRequest is a copy of (dhcp4client/Client).Request which
-// includes the hostname.
-func dhcpRequest(c *dhcp4client.Client) (bool, dhcp4.Packet, error) {
+func addHostname(p *dhcp4.Packet) {
 	var utsname unix.Utsname
 	if err := unix.Uname(&utsname); err != nil {
 		log.Fatal(err)
@@ -49,8 +47,14 @@ func dhcpRequest(c *dhcp4client.Client) (bool, dhcp4.Packet, error) {
 		nnb = append(nnb, byte(i))
 	}
 
+	p.AddOption(dhcp4.OptionHostName, nnb)
+}
+
+// dhcpRequest is a copy of (dhcp4client/Client).Request which
+// includes the hostname.
+func dhcpRequest(c *dhcp4client.Client) (bool, dhcp4.Packet, error) {
 	discoveryPacket := c.DiscoverPacket()
-	discoveryPacket.AddOption(dhcp4.OptionHostName, nnb)
+	addHostname(&discoveryPacket)
 	discoveryPacket.PadToMinSize()
 
 	if err := c.SendPacket(discoveryPacket); err != nil {
@@ -63,7 +67,7 @@ func dhcpRequest(c *dhcp4client.Client) (bool, dhcp4.Packet, error) {
 	}
 
 	requestPacket := c.RequestPacket(&offerPacket)
-	requestPacket.AddOption(dhcp4.OptionHostName, nnb)
+	addHostname(&requestPacket)
 	requestPacket.PadToMinSize()
 
 	if err := c.SendPacket(requestPacket); err != nil {
@@ -71,6 +75,29 @@ func dhcpRequest(c *dhcp4client.Client) (bool, dhcp4.Packet, error) {
 	}
 
 	acknowledgement, err := c.GetAcknowledgement(&requestPacket)
+	if err != nil {
+		return false, acknowledgement, err
+	}
+
+	acknowledgementOptions := acknowledgement.ParseOptions()
+	if dhcp4.MessageType(acknowledgementOptions[dhcp4.OptionDHCPMessageType][0]) != dhcp4.ACK {
+		return false, acknowledgement, nil
+	}
+
+	return true, acknowledgement, nil
+}
+
+// dhcpRenew is a copy of (dhcp4client/Client).Renew which
+// includes the hostname.
+func dhcpRenew(c *dhcp4client.Client, packet dhcp4.Packet) (bool, dhcp4.Packet, error) {
+	addHostname(&packet)
+	packet.PadToMinSize()
+
+	if err := c.SendPacket(packet); err != nil {
+		return false, packet, err
+	}
+
+	acknowledgement, err := c.GetAcknowledgement(&packet)
 	if err != nil {
 		return false, acknowledgement, err
 	}
@@ -228,6 +255,6 @@ func main() {
 		}
 
 		time.Sleep(renewalTime)
-		ok, ack, err = dhcp.Renew(ack)
+		ok, ack, err = dhcpRenew(dhcp, dhcp.RenewalRequestPacket(&ack))
 	}
 }
