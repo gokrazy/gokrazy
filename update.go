@@ -15,7 +15,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/gokrazy/fat"
+	"github.com/gokrazy/internal/fat"
 )
 
 var rootRe = regexp.MustCompile(`root=/dev/mmcblk0p([2-3])`)
