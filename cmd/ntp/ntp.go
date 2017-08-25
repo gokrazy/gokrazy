@@ -11,7 +11,7 @@ import (
 )
 
 func set() error {
-	r, err := ntp.Query("pool.ntp.org")
+	r, err := ntp.Query("0.gokrazy.pool.ntp.org")
 	if err != nil {
 		return err
 	}
