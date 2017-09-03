@@ -23,6 +23,8 @@ func set() error {
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
+	mustDropPrivileges()
+
 	for {
 		if err := set(); err != nil {
 			log.Fatalf("setting time failed: %v", err)
