@@ -32,6 +32,8 @@ func parseDHCPDuration(b []byte) time.Duration {
 var (
 	defaultDst     = net.IP([]byte{0, 0, 0, 0})
 	defaultNetmask = net.IPMask([]byte{0, 0, 0, 0})
+
+	hardwareAddr net.HardwareAddr
 )
 
 func addHostname(p *dhcp4.Packet) {
@@ -50,11 +52,19 @@ func addHostname(p *dhcp4.Packet) {
 	p.AddOption(dhcp4.OptionHostName, nnb)
 }
 
+func addClientId(p *dhcp4.Packet) {
+	id := make([]byte, len(hardwareAddr)+1)
+	id[0] = 1 // hardware type ethernet, https://tools.ietf.org/html/rfc1700
+	copy(id[1:], hardwareAddr)
+	p.AddOption(dhcp4.OptionClientIdentifier, id)
+}
+
 // dhcpRequest is a copy of (dhcp4client/Client).Request which
 // includes the hostname.
 func dhcpRequest(c *dhcp4client.Client) (bool, dhcp4.Packet, error) {
 	discoveryPacket := c.DiscoverPacket()
 	addHostname(&discoveryPacket)
+	addClientId(&discoveryPacket)
 	discoveryPacket.PadToMinSize()
 
 	if err := c.SendPacket(discoveryPacket); err != nil {
@@ -68,6 +78,7 @@ func dhcpRequest(c *dhcp4client.Client) (bool, dhcp4.Packet, error) {
 
 	requestPacket := c.RequestPacket(&offerPacket)
 	addHostname(&requestPacket)
+	addClientId(&requestPacket)
 	requestPacket.PadToMinSize()
 
 	if err := c.SendPacket(requestPacket); err != nil {
@@ -91,6 +102,7 @@ func dhcpRequest(c *dhcp4client.Client) (bool, dhcp4.Packet, error) {
 // includes the hostname.
 func dhcpRenew(c *dhcp4client.Client, packet dhcp4.Packet) (bool, dhcp4.Packet, error) {
 	addHostname(&packet)
+	addClientId(&packet)
 	packet.PadToMinSize()
 
 	if err := c.SendPacket(packet); err != nil {
@@ -138,6 +150,8 @@ func main() {
 		}
 		time.Sleep(1 * time.Second)
 	}
+
+	hardwareAddr = eth0.HardwareAddr
 
 	pktsock, err := dhcp4client.NewPacketSock(eth0.Index)
 	if err != nil {
