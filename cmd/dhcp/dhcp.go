@@ -245,7 +245,13 @@ func main() {
 			if err := os.Remove("/etc/resolv.conf"); err != nil && !os.IsNotExist(err) {
 				log.Fatalf("resolv.conf: %v", err)
 			}
-			if err := ioutil.WriteFile("/etc/resolv.conf", []byte(fmt.Sprintf("nameserver %v\n", net.IP(b))), 0644); err != nil {
+			var lines []string
+			if domain, ok := opts[dhcp4.OptionDomainName]; ok {
+				lines = append(lines, fmt.Sprintf("domain %s", string(domain)))
+				lines = append(lines, fmt.Sprintf("search %s", string(domain)))
+			}
+			lines = append(lines, fmt.Sprintf("nameserver %v", net.IP(b)))
+			if err := ioutil.WriteFile("/etc/resolv.conf", []byte(strings.Join(lines, "\n")+"\n"), 0644); err != nil {
 				log.Fatalf("resolv.conf: %v", err)
 			}
 		}
