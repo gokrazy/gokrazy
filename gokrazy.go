@@ -47,6 +47,23 @@ func configureLoopback() error {
 	return cs.SetNetmask(net.IPMask([]byte{255, 0, 0, 0}))
 }
 
+// watchdog periodically pings the hardware watchdog.
+func watchdog() {
+	f, err := os.OpenFile("/dev/watchdog", os.O_WRONLY, 0)
+	if err != nil {
+		log.Printf("disabling hardware watchdog, as it could not be opened: %v", err)
+		return
+	}
+	defer f.Close()
+	for {
+		const WDIOC_KEEPALIVE = 0x80045705 // TODO: switch to x/sys/unix version once added
+		if _, _, errno := unix.Syscall(unix.SYS_IOCTL, f.Fd(), WDIOC_KEEPALIVE, 0); errno != 0 {
+			log.Printf("hardware watchdog ping failed: %v", errno)
+		}
+		time.Sleep(1 * time.Second)
+	}
+}
+
 // Boot configures basic system settings. More specifically, it:
 //
 //   - mounts /dev, /tmp, /proc, /sys and /perm file systems
@@ -62,6 +79,8 @@ func configureLoopback() error {
 // userBuildTimestamp will be exposed on the HTTP status handlers that
 // are set up by Supervise.
 func Boot(userBuildTimestamp string) error {
+	go watchdog()
+
 	buildTimestamp = userBuildTimestamp
 
 	if err := mountfs(); err != nil {
