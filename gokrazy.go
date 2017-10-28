@@ -56,8 +56,7 @@ func watchdog() {
 	}
 	defer f.Close()
 	for {
-		const WDIOC_KEEPALIVE = 0x80045705 // TODO: switch to x/sys/unix version once added
-		if _, _, errno := unix.Syscall(unix.SYS_IOCTL, f.Fd(), WDIOC_KEEPALIVE, 0); errno != 0 {
+		if _, _, errno := unix.Syscall(unix.SYS_IOCTL, f.Fd(), unix.WDIOC_KEEPALIVE, 0); errno != 0 {
 			log.Printf("hardware watchdog ping failed: %v", errno)
 		}
 		time.Sleep(1 * time.Second)
