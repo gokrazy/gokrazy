@@ -51,10 +51,7 @@ func isPrivate(ipaddr net.IP) bool {
 	return false
 }
 
-// PrivateInterfaceAddrs returns all private (as per RFC1918, RFC4193,
-// RFC3330, RFC3513, RFC3927, RFC4291) host addresses of all active
-// interfaces, suitable to be passed to net.Listen.
-func PrivateInterfaceAddrs() ([]string, error) {
+func interfaceAddrs(keep func(net.IP) bool) ([]string, error) {
 	ifaces, err := net.Interfaces()
 	if err != nil {
 		return nil, err
@@ -76,7 +73,7 @@ func PrivateInterfaceAddrs() ([]string, error) {
 				return nil, err
 			}
 
-			if !isPrivate(ipaddr) {
+			if !keep(ipaddr) {
 				continue
 			}
 
@@ -88,6 +85,24 @@ func PrivateInterfaceAddrs() ([]string, error) {
 		}
 	}
 	return hosts, nil
+}
+
+// PrivateInterfaceAddrs returns all private (as per RFC1918, RFC4193,
+// RFC3330, RFC3513, RFC3927, RFC4291) host addresses of all active
+// interfaces, suitable to be passed to net.JoinHostPort.
+func PrivateInterfaceAddrs() ([]string, error) {
+	return interfaceAddrs(func(addr net.IP) bool {
+		return isPrivate(addr)
+	})
+}
+
+// PublicInterfaceAddrs returns all public (excluding RFC1918, RFC4193,
+// RFC3330, RFC3513, RFC3927, RFC4291) host addresses of all active
+// interfaces, suitable to be passed to net.JoinHostPort.
+func PublicInterfaceAddrs() ([]string, error) {
+	return interfaceAddrs(func(addr net.IP) bool {
+		return !isPrivate(addr)
+	})
 }
 
 var (

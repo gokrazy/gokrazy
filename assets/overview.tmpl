@@ -71,10 +71,18 @@ No permanent storage mounted. To create a filesystem for permanent storage, plug
 
 <h2>private network addresses</h2>
 <ul>
-{{ range $idx, $host := .Hosts }} 
-<li>{{ $host }}</li>
+{{ range $idx, $addr := .PrivateAddrs }}
+<li>{{ $addr }}</li>
 {{ end }}
 </ul>
+
+<h2>public network addresses</h2>
+<ul>
+{{ range $idx, $addr := .PublicAddrs }}
+<li>{{ $addr }}</li>
+{{ end }}
+</ul>
+
 
 </div>
 </div>

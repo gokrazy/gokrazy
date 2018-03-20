@@ -124,9 +124,13 @@ func initStatus(services []*service) {
 		if err := unix.Statfs("/perm", &st); err != nil {
 			log.Printf("could not stat /perm: %v", err)
 		}
-		hosts, err := PrivateInterfaceAddrs()
+		privateAddrs, err := PrivateInterfaceAddrs()
 		if err != nil {
-			log.Printf("could not get addrs: %v", err)
+			log.Printf("could not get private addrs: %v", err)
+		}
+		publicAddrs, err := PublicInterfaceAddrs()
+		if err != nil {
+			log.Printf("could not get public addrs: %v", err)
 		}
 		var buf bytes.Buffer
 		if err := overviewTmpl.Execute(&buf, struct {
@@ -134,7 +138,8 @@ func initStatus(services []*service) {
 			PermUsed       int64
 			PermAvail      int64
 			PermTotal      int64
-			Hosts          []string
+			PrivateAddrs   []string
+			PublicAddrs    []string
 			BuildTimestamp string
 			Meminfo        map[string]int64
 			Hostname       string
@@ -143,7 +148,8 @@ func initStatus(services []*service) {
 			PermUsed:       int64(st.Bsize) * int64(st.Blocks-st.Bfree),
 			PermAvail:      int64(st.Bsize) * int64(st.Bavail),
 			PermTotal:      int64(st.Bsize) * int64(st.Blocks),
-			Hosts:          hosts,
+			PrivateAddrs:   privateAddrs,
+			PublicAddrs:    publicAddrs,
 			BuildTimestamp: buildTimestamp,
 			Meminfo:        parseMeminfo(),
 			Hostname:       hostname,
