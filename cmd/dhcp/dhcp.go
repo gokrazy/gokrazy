@@ -8,6 +8,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/binary"
 	"fmt"
 	"io/ioutil"
@@ -41,14 +42,7 @@ func addHostname(p *dhcp4.Packet) {
 	if err := unix.Uname(&utsname); err != nil {
 		log.Fatal(err)
 	}
-	nnb := make([]byte, 0, len(utsname.Nodename))
-	for _, i := range utsname.Nodename {
-		if i == 0 {
-			break
-		}
-		nnb = append(nnb, byte(i))
-	}
-
+	nnb := utsname.Nodename[:bytes.IndexByte(utsname.Nodename[:], 0)]
 	p.AddOption(dhcp4.OptionHostName, nnb)
 }
 
