@@ -58,7 +58,7 @@ go get -u github.com/gokrazy/tools/cmd/gokr-packer
 To update your gokrazy installation (running on a Raspberry Pi 3),
 use:
 ```
-gokr-packer -update=http://gokrazy:mysecretpassword@gokrazy/ github.com/gokrazy/hello
+GOKRAZY_UPDATE=http://gokrazy:mysecretpassword@gokrazy/ gokr-packer github.com/gokrazy/hello
 ```
 
 # SD card contents
