@@ -94,7 +94,12 @@ at https://github.com/stapelberg/zkj-nas-tools/commit/6f90ace35981f78dcd66d61126
 
 ## Changing init behavior
 
+Assuming the application you’d like to create on gokrazy lives in the repository
+`github.com/stapelberg/mediaserver`, this is how you can make gokrazy dump the
+generated init package’s source:
+
 ```
+mkdir -p $(go env GOPATH)/src/github.com/stapelberg/mediaserver/cmd/init
 gokr-packer \
   -overwrite_init=$(go env GOPATH)/src/github.com/stapelberg/mediaserver/cmd/init/init.go \
   github.com/gokrazy/hello
@@ -106,7 +111,7 @@ Then, edit the `github.com/stapelberg/mediaserver` package to your
 liking. When done, pack an image with your own init package:
 ```
 gokr-packer \
-  -init_pkg=github.com/stapelberg/mediaserver \
+  -init_pkg=github.com/stapelberg/mediaserver/cmd/init \
   -overwrite=/dev/sdb \
   github.com/gokrazy/hello
 ```
