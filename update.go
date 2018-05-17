@@ -130,6 +130,17 @@ func initUpdate() error {
 	http.HandleFunc("/update/boot", nonConcurrentUpdateHandler("/dev/mmcblk0p1"))
 	http.HandleFunc("/update/root", nonConcurrentUpdateHandler("/dev/mmcblk0p"+inactiveRootPartition))
 	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(inactiveRootPartition))
+	// bakery updates only the boot partition, which would reset the active root
+	// partition to 2.
+	updateHandler := nonConcurrentUpdateHandler("/dev/mmcblk0p1")
+	http.HandleFunc("/update/bootonly", func(w http.ResponseWriter, r *http.Request) {
+		updateHandler(w, r)
+		if err := switchRootPartition(rootPartition); err != nil {
+			log.Printf("switching root partition to %q failed: %v", rootPartition, err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	})
 	http.HandleFunc("/reboot", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "expected a POST request", http.StatusBadRequest)
