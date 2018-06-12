@@ -8,6 +8,7 @@
 package gokrazy
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -146,6 +147,18 @@ func Supervise(commands []*exec.Cmd) error {
 			if err := updateListeners("80"); err != nil {
 				log.Printf("updating listeners: %v", err)
 			}
+		}
+	}()
+
+	go func() {
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			if err := updateListeners("80"); err != nil {
+				log.Printf("updating listeners: %v", err)
+			}
+		}
+		if err := scanner.Err(); err != nil {
+			log.Print(err)
 		}
 	}()
 
