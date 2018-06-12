@@ -18,10 +18,29 @@ import (
 	"github.com/gokrazy/internal/fat"
 )
 
-var rootRe = regexp.MustCompile(`root=/dev/mmcblk0p([2-3])`)
+var (
+	rootRe       = regexp.MustCompile(`root=/dev/(?:mmcblk0p|sda)([2-3])`)
+	rootDeviceRe = regexp.MustCompile(`root=(/dev/(?:mmcblk0p|sda))`)
+)
+
+// mustFindRootDevice returns the device from which gokrazy was booted. It is
+// safe to append a partition number to the resulting string. mustFindRootDevice
+// works once /proc is mounted.
+func mustFindRootDevice() string {
+	cmdline, err := ioutil.ReadFile("/proc/cmdline")
+	if err != nil {
+		panic(err)
+	}
+
+	matches := rootDeviceRe.FindStringSubmatch(string(cmdline))
+	if len(matches) != 2 {
+		panic(fmt.Sprintf("mustFindRootDevice: kernel command line %q did not match %v", string(cmdline), rootRe))
+	}
+	return matches[1]
+}
 
 func switchRootPartition(newRootPartition string) error {
-	f, err := os.OpenFile("/dev/mmcblk0p1", os.O_RDWR, 0600)
+	f, err := os.OpenFile(mustFindRootDevice()+"1", os.O_RDWR, 0600)
 	if err != nil {
 		return err
 	}
@@ -45,7 +64,7 @@ func switchRootPartition(newRootPartition string) error {
 		return err
 	}
 
-	rep := rootRe.ReplaceAllLiteral(b, []byte("root=/dev/mmcblk0p"+newRootPartition))
+	rep := rootRe.ReplaceAllLiteral(b, []byte("root="+mustFindRootDevice()+newRootPartition))
 	if _, err := f.Write(rep); err != nil {
 		return err
 	}
@@ -127,12 +146,12 @@ func initUpdate() error {
 		return fmt.Errorf("root partition %q (from %q) is unexpectedly neither 2 nor 3", rootPartition, matches[0])
 	}
 
-	http.HandleFunc("/update/boot", nonConcurrentUpdateHandler("/dev/mmcblk0p1"))
-	http.HandleFunc("/update/root", nonConcurrentUpdateHandler("/dev/mmcblk0p"+inactiveRootPartition))
+	http.HandleFunc("/update/boot", nonConcurrentUpdateHandler(mustFindRootDevice()+"1"))
+	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(mustFindRootDevice()+inactiveRootPartition))
 	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(inactiveRootPartition))
 	// bakery updates only the boot partition, which would reset the active root
 	// partition to 2.
-	updateHandler := nonConcurrentUpdateHandler("/dev/mmcblk0p1")
+	updateHandler := nonConcurrentUpdateHandler(mustFindRootDevice() + "1")
 	http.HandleFunc("/update/bootonly", func(w http.ResponseWriter, r *http.Request) {
 		updateHandler(w, r)
 		if err := switchRootPartition(rootPartition); err != nil {
