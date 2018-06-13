@@ -46,7 +46,7 @@ func getCaps() (caps, error) {
 // mustDropPrivileges executes the program in a child process, dropping root
 // privileges, but retaining the CAP_SYS_TIME capability to change the system
 // clock.
-func mustDropPrivileges() {
+func mustDropPrivileges(rtc *os.File) {
 	if os.Getenv("NTP_PRIVILEGES_DROPPED") == "1" {
 		return
 	}
@@ -71,6 +71,10 @@ func mustDropPrivileges() {
 
 	cmd := exec.Command(os.Args[0])
 	cmd.Env = append(os.Environ(), "NTP_PRIVILEGES_DROPPED=1")
+	if rtc != nil {
+		cmd.Env = append(cmd.Env, "NTP_RTC=1")
+		cmd.ExtraFiles = []*os.File{rtc}
+	}
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.SysProcAttr = &syscall.SysProcAttr{
