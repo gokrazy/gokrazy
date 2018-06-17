@@ -21,6 +21,8 @@ import (
 var (
 	rootRe       = regexp.MustCompile(`root=/dev/(?:mmcblk0p|sda)([2-3])`)
 	rootDeviceRe = regexp.MustCompile(`root=(/dev/(?:mmcblk0p|sda))`)
+
+	inactiveRootPartition string
 )
 
 // mustFindRootDevice returns the device from which gokrazy was booted. It is
@@ -136,7 +138,6 @@ func initUpdate() error {
 	}
 
 	rootPartition := matches[1]
-	var inactiveRootPartition string
 	switch rootPartition {
 	case "2":
 		inactiveRootPartition = "3"
@@ -176,7 +177,7 @@ func initUpdate() error {
 				log.Printf("unmounting /perm failed: %v", err)
 			}
 
-			if err := unix.Reboot(unix.LINUX_REBOOT_CMD_RESTART); err != nil {
+			if err := reboot(); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
 		}()
