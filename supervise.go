@@ -205,6 +205,10 @@ func redirectToStatus(w http.ResponseWriter, r *http.Request, path string) {
 	http.Redirect(w, r, u.String(), http.StatusSeeOther)
 }
 
+// killSupervisedServices is called before rebooting when upgrading, allowing
+// processes to terminate in an orderly fashion.
+var killSupervisedServices = func() {}
+
 func superviseServices(services []*service) {
 	for _, s := range services {
 		go supervise(s)
@@ -217,6 +221,20 @@ func superviseServices(services []*service) {
 			}
 		}
 		return nil
+	}
+
+	killSupervisedServices = func() {
+		for _, s := range services {
+			if s.Stopped() {
+				continue
+			}
+
+			s.setStopped(true)
+
+			if p := s.Process(); p != nil {
+				p.Signal(syscall.SIGTERM)
+			}
+		}
 	}
 
 	http.HandleFunc("/stop", func(w http.ResponseWriter, r *http.Request) {

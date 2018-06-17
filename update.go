@@ -166,14 +166,16 @@ func initUpdate() error {
 			return
 		}
 
-		// TODO: implement a shutdown sequence, i.e. kill + timeout + term; unmount, then force-unmount?
-
-		if err := syscall.Unmount("/perm", unix.MNT_FORCE); err != nil {
-			log.Printf("unmounting /perm failed: %v", err)
-		}
-
 		go func() {
-			time.Sleep(1 * time.Second) // give the HTTP response some time to be sent
+			killSupervisedServices()
+
+			// give the HTTP response some time to be sent; allow processes some time to terminate
+			time.Sleep(1 * time.Second)
+
+			if err := syscall.Unmount("/perm", unix.MNT_FORCE); err != nil {
+				log.Printf("unmounting /perm failed: %v", err)
+			}
+
 			if err := unix.Reboot(unix.LINUX_REBOOT_CMD_RESTART); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
