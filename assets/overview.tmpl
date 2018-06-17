@@ -66,7 +66,7 @@ unaccounted
 {{ if eq .PermAvail 0 }}
 No permanent storage mounted. To create a filesystem for permanent storage, plug the SD card into a Linux computer and, if your SD card is <code>/dev/sdb</code>, use <code>mkfs.ext4 /dev/sdb4</code>.
 {{ else }}
-<strong>/dev/mmcblk0p4</strong>: {{ gigabytes .PermTotal }} total, {{ gigabytes .PermUsed }} used, {{ gigabytes .PermAvail }} avail<br>
+<strong>{{ .PermDev }}</strong>: {{ gigabytes .PermTotal }} total, {{ gigabytes .PermUsed }} used, {{ gigabytes .PermAvail }} avail<br>
 {{ end }}
 
 <h2>private network addresses</h2>

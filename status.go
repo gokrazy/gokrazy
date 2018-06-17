@@ -135,6 +135,7 @@ func initStatus(services []*service) {
 		var buf bytes.Buffer
 		if err := overviewTmpl.Execute(&buf, struct {
 			Services       []*service
+			PermDev        string
 			PermUsed       int64
 			PermAvail      int64
 			PermTotal      int64
@@ -145,6 +146,7 @@ func initStatus(services []*service) {
 			Hostname       string
 		}{
 			Services:       services,
+			PermDev:        mustFindRootDevice() + "4",
 			PermUsed:       int64(st.Bsize) * int64(st.Blocks-st.Bfree),
 			PermAvail:      int64(st.Bsize) * int64(st.Bavail),
 			PermTotal:      int64(st.Bsize) * int64(st.Blocks),

@@ -77,8 +77,9 @@ func mountfs() error {
 		}
 	}
 
-	if err := syscall.Mount("/dev/mmcblk0p4", "/perm", "ext4", 0, ""); err != nil {
-		log.Printf("Could not mount permanent storage partition: %v", err)
+	dev := mustFindRootDevice() + "4"
+	if err := syscall.Mount(dev, "/perm", "ext4", 0, ""); err != nil {
+		log.Printf("Could not mount permanent storage partition %s: %v", dev, err)
 	}
 
 	return nil
