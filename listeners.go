@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"strings"
 	"sync"
 )
 
@@ -42,7 +43,10 @@ func init() {
 	}
 }
 
-func isPrivate(ipaddr net.IP) bool {
+func isPrivate(iface string, ipaddr net.IP) bool {
+	if strings.HasPrefix(iface, "uplink") {
+		return false
+	}
 	for _, n := range privateNets {
 		if n.Contains(ipaddr) {
 			return true
@@ -51,7 +55,7 @@ func isPrivate(ipaddr net.IP) bool {
 	return false
 }
 
-func interfaceAddrs(keep func(net.IP) bool) ([]string, error) {
+func interfaceAddrs(keep func(string, net.IP) bool) ([]string, error) {
 	ifaces, err := net.Interfaces()
 	if err != nil {
 		return nil, err
@@ -73,7 +77,7 @@ func interfaceAddrs(keep func(net.IP) bool) ([]string, error) {
 				return nil, err
 			}
 
-			if !keep(ipaddr) {
+			if !keep(i.Name, ipaddr) {
 				continue
 			}
 
@@ -91,8 +95,8 @@ func interfaceAddrs(keep func(net.IP) bool) ([]string, error) {
 // RFC3330, RFC3513, RFC3927, RFC4291) host addresses of all active
 // interfaces, suitable to be passed to net.JoinHostPort.
 func PrivateInterfaceAddrs() ([]string, error) {
-	return interfaceAddrs(func(addr net.IP) bool {
-		return isPrivate(addr)
+	return interfaceAddrs(func(iface string, addr net.IP) bool {
+		return isPrivate(iface, addr)
 	})
 }
 
@@ -100,8 +104,8 @@ func PrivateInterfaceAddrs() ([]string, error) {
 // RFC3330, RFC3513, RFC3927, RFC4291) host addresses of all active
 // interfaces, suitable to be passed to net.JoinHostPort.
 func PublicInterfaceAddrs() ([]string, error) {
-	return interfaceAddrs(func(addr net.IP) bool {
-		return !isPrivate(addr)
+	return interfaceAddrs(func(iface string, addr net.IP) bool {
+		return !isPrivate(iface, addr)
 	})
 }
 
