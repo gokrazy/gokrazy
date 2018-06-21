@@ -235,8 +235,12 @@ func main() {
 		}
 
 		if b, ok := opts[dhcp4.OptionDomainNameServer]; ok {
+			resolvConf := "/etc/resolv.conf"
+			if dest, err := os.Readlink("/etc/resolv.conf"); err == nil && dest == "/tmp/resolv.conf" {
+				resolvConf = "/tmp/resolv.conf"
+			}
 			// Get the symlink out of the way, if any.
-			if err := os.Remove("/etc/resolv.conf"); err != nil && !os.IsNotExist(err) {
+			if err := os.Remove(resolvConf); err != nil && !os.IsNotExist(err) {
 				log.Fatalf("resolv.conf: %v", err)
 			}
 			var lines []string
@@ -245,7 +249,7 @@ func main() {
 				lines = append(lines, fmt.Sprintf("search %s", string(domain)))
 			}
 			lines = append(lines, fmt.Sprintf("nameserver %v", net.IP(b)))
-			if err := ioutil.WriteFile("/etc/resolv.conf", []byte(strings.Join(lines, "\n")+"\n"), 0644); err != nil {
+			if err := ioutil.WriteFile(resolvConf, []byte(strings.Join(lines, "\n")+"\n"), 0644); err != nil {
 				log.Fatalf("resolv.conf: %v", err)
 			}
 		}

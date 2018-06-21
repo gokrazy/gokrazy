@@ -8,11 +8,9 @@ import (
 	"syscall"
 )
 
-func mountfs() error {
-	if err := syscall.Mount("tmpfs", "/tmp", "tmpfs", syscall.MS_NOSUID|syscall.MS_NODEV|syscall.MS_RELATIME, "size=50M"); err != nil {
-		return fmt.Errorf("tmpfs on /tmp: %v", err)
-	}
-
+// mountCompat deals with old FAT root file systems, to cover the case where
+// users use an old gokr-packer with a new github.com/gokrazy/gokrazy package.
+func mountCompat() error {
 	// Symlink /etc/resolv.conf. We cannot do this in the root file
 	// system itself, as FAT does not support symlinks.
 	if err := syscall.Mount("tmpfs", "/etc", "tmpfs", syscall.MS_NOSUID|syscall.MS_NODEV|syscall.MS_RELATIME, "size=1M"); err != nil {
@@ -39,6 +37,23 @@ func mountfs() error {
 
 	if err := ioutil.WriteFile("/etc/hosts", []byte("127.0.0.1 localhost\n::1 localhost\n"), 0644); err != nil {
 		return fmt.Errorf("/etc/hosts: %v", err)
+	}
+	return nil
+}
+
+func mountfs() error {
+	if err := syscall.Mount("tmpfs", "/tmp", "tmpfs", syscall.MS_NOSUID|syscall.MS_NODEV|syscall.MS_RELATIME, "size=50M"); err != nil {
+		return fmt.Errorf("tmpfs on /tmp: %v", err)
+	}
+
+	if err := os.Symlink("/proc/net/pnp", "/tmp/resolv.conf"); err != nil {
+		return fmt.Errorf("etc: %v", err)
+	}
+
+	if _, err := os.Lstat("/etc/resolv.conf"); err != nil && os.IsNotExist(err) {
+		if err := mountCompat(); err != nil {
+			return err
+		}
 	}
 
 	if err := syscall.Mount("devtmpfs", "/dev", "devtmpfs", 0, ""); err != nil {

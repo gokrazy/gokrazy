@@ -68,7 +68,7 @@ func watchdog() {
 //
 //   - mounts /dev, /tmp, /proc, /sys and /perm file systems
 //   - mounts and populate /etc tmpfs overlay
-//   - sets hostname from the /hostname file
+//   - sets hostname from the /etc/hostname file
 //   - sets HTTP password from the gokr-pw.txt file
 //   - configures the loopback network interface
 //
@@ -87,7 +87,10 @@ func Boot(userBuildTimestamp string) error {
 		return err
 	}
 
-	hostnameb, err := ioutil.ReadFile("/hostname")
+	hostnameb, err := ioutil.ReadFile("/etc/hostname")
+	if err != nil && os.IsNotExist(err) {
+		hostnameb, err = ioutil.ReadFile("/hostname")
+	}
 	if err != nil {
 		return err
 	}
@@ -98,10 +101,13 @@ func Boot(userBuildTimestamp string) error {
 
 	pw, err := ioutil.ReadFile("/perm/gokr-pw.txt")
 	if err != nil {
+		pw, err = ioutil.ReadFile("/etc/gokr-pw.txt")
+	}
+	if err != nil && os.IsNotExist(err) {
 		pw, err = ioutil.ReadFile("/gokr-pw.txt")
-		if err != nil {
-			return fmt.Errorf("could read neither /perm/gokr-pw.txt nor /gokr-pw.txt: %v", err)
-		}
+	}
+	if err != nil {
+		return fmt.Errorf("could read neither /perm/gokr-pw.txt, nor /etc/gokr-pw.txt, nor /gokr-pw.txt: %v", err)
 	}
 
 	httpPassword = strings.TrimSpace(string(pw))
