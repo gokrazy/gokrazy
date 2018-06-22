@@ -119,6 +119,9 @@ func dhcpRenew(c *dhcp4client.Client, packet dhcp4.Packet) (bool, dhcp4.Packet, 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
+	// NOTE: cannot gokrazy.WaitForClock() here, since the clock can only be
+	// initialized once the network is up.
+
 	eth0, err := net.InterfaceByName("eth0")
 	if err != nil {
 		log.Fatal(err)
