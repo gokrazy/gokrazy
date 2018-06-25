@@ -94,24 +94,38 @@ var statusTmpl = template.Must(template.Must(commonTmpls.Clone()).New("statusTmp
 
 func initStatus(services []*service) {
 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
+		token := xsrfTokenFromCookies(r.Cookies())
+		if token == 0 {
+			// Only generate a new XSRF token if the old one is expired, so that
+			// loading a different form in the background doesn’t render the
+			// current one unusable.
+			token = xsrfToken()
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "gokrazy_xsrf",
+			Value:    fmt.Sprintf("%d", token),
+			Expires:  time.Now().Add(24 * time.Hour),
+			HttpOnly: true,
+		})
+
 		path := r.FormValue("path")
-		var svc *service
-		for _, s := range services {
-			if s.cmd.Path != path {
-				continue
-			}
-			svc = s
-			break
+		svc := findSvc(path)
+		if svc == nil {
+			http.Error(w, "service not found", http.StatusNotFound)
+			return
 		}
 		var buf bytes.Buffer
 		if err := statusTmpl.Execute(&buf, struct {
 			Service        *service
 			BuildTimestamp string
 			Hostname       string
+			XsrfToken      int32
 		}{
 			Service:        svc,
 			BuildTimestamp: buildTimestamp,
 			Hostname:       hostname,
+			XsrfToken:      token,
 		}); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

@@ -255,6 +255,21 @@ func stopstartHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cookieToken := xsrfTokenFromCookies(r.Cookies())
+	if cookieToken == 0 {
+		http.Error(w, "XSRF cookie missing", http.StatusBadRequest)
+		return
+	}
+	i, err := strconv.ParseInt(r.FormValue("xsrftoken"), 0, 32)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("parsing XSRF token form value: %v", err), http.StatusBadRequest)
+		return
+	}
+	if formToken := int32(i); cookieToken != formToken {
+		http.Error(w, "XSRF token mismatch", http.StatusForbidden)
+		return
+	}
+
 	signal := syscall.SIGTERM
 	if r.FormValue("signal") == "kill" {
 		signal = syscall.SIGKILL
@@ -266,7 +281,7 @@ func stopstartHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "no such service", http.StatusNotFound)
 		return
 	}
-	var err error
+
 	if r.URL.Path == "/restart" {
 		err = restart(s, signal)
 	} else {
