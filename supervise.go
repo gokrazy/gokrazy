@@ -105,6 +105,15 @@ func (s *service) Process() *os.Process {
 	return s.process
 }
 
+func (s *service) Signal(signal syscall.Signal) error {
+	s.processMu.RLock()
+	defer s.processMu.RUnlock()
+	if s.process != nil {
+		return s.process.Signal(signal)
+	}
+	return nil // no process, nothing to signal
+}
+
 func (s *service) setProcess(p *os.Process) {
 	s.processMu.Lock()
 	defer s.processMu.Unlock()
@@ -195,7 +204,78 @@ func supervise(s *service) {
 	}
 }
 
-func redirectToStatus(w http.ResponseWriter, r *http.Request, path string) {
+var services []*service
+
+// killSupervisedServices is called before rebooting when upgrading, allowing
+// processes to terminate in an orderly fashion.
+func killSupervisedServices() {
+	for _, s := range services {
+		if s.Stopped() {
+			continue
+		}
+
+		s.setStopped(true)
+
+		if p := s.Process(); p != nil {
+			p.Signal(syscall.SIGTERM)
+		}
+	}
+}
+
+func findSvc(path string) *service {
+	for _, s := range services {
+		if s.cmd.Path == path {
+			return s
+		}
+	}
+	return nil
+}
+
+func restart(s *service, signal syscall.Signal) error {
+	if s.Stopped() {
+		s.setStopped(false) // start process in next supervise iteration
+		return nil
+	}
+
+	return s.Signal(signal) // kill to restart
+}
+
+func stop(s *service, signal syscall.Signal) error {
+	if s.Stopped() {
+		return nil // nothing to do
+	}
+
+	s.setStopped(true)
+	return s.Signal(signal)
+}
+
+func stopstartHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "expected a POST request", http.StatusBadRequest)
+		return
+	}
+
+	signal := syscall.SIGTERM
+	if r.FormValue("signal") == "kill" {
+		signal = syscall.SIGKILL
+	}
+
+	path := r.FormValue("path")
+	s := findSvc(path)
+	if s == nil {
+		http.Error(w, "no such service", http.StatusNotFound)
+		return
+	}
+	var err error
+	if r.URL.Path == "/restart" {
+		err = restart(s, signal)
+	} else {
+		err = stop(s, signal)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	// StatusSeeOther will result in a GET request for the
 	// redirect location
 	u, _ := url.Parse("/status")
@@ -205,104 +285,12 @@ func redirectToStatus(w http.ResponseWriter, r *http.Request, path string) {
 	http.Redirect(w, r, u.String(), http.StatusSeeOther)
 }
 
-// killSupervisedServices is called before rebooting when upgrading, allowing
-// processes to terminate in an orderly fashion.
-var killSupervisedServices = func() {}
-
-func superviseServices(services []*service) {
+func superviseServices(svc []*service) {
+	services = svc
 	for _, s := range services {
 		go supervise(s)
 	}
 
-	findSvc := func(path string) *service {
-		for _, s := range services {
-			if s.cmd.Path == path {
-				return s
-			}
-		}
-		return nil
-	}
-
-	killSupervisedServices = func() {
-		for _, s := range services {
-			if s.Stopped() {
-				continue
-			}
-
-			s.setStopped(true)
-
-			if p := s.Process(); p != nil {
-				p.Signal(syscall.SIGTERM)
-			}
-		}
-	}
-
-	http.HandleFunc("/stop", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			http.Error(w, "expected a POST request", http.StatusBadRequest)
-			return
-		}
-
-		path := r.FormValue("path")
-
-		s := findSvc(path)
-		if s == nil || s.Stopped() {
-			redirectToStatus(w, r, path)
-			return
-		}
-
-		s.setStopped(true)
-
-		p := s.Process()
-		if p == nil {
-			redirectToStatus(w, r, path)
-			return
-		}
-
-		if err := p.Signal(syscall.SIGTERM); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		redirectToStatus(w, r, path)
-	})
-
-	http.HandleFunc("/restart", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			http.Error(w, "expected a POST request", http.StatusBadRequest)
-			return
-		}
-
-		signal := syscall.SIGTERM
-		if r.FormValue("signal") == "kill" {
-			signal = syscall.SIGKILL
-		}
-
-		path := r.FormValue("path")
-
-		s := findSvc(path)
-		if s == nil {
-			redirectToStatus(w, r, path)
-			return
-		}
-
-		if s.Stopped() {
-			s.setStopped(false)
-			redirectToStatus(w, r, path)
-			return
-		}
-
-		p := s.Process()
-		if p == nil {
-			redirectToStatus(w, r, path)
-			return
-		}
-
-		if err := p.Signal(signal); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		redirectToStatus(w, r, path)
-	})
+	http.HandleFunc("/stop", stopstartHandler)
+	http.HandleFunc("/restart", stopstartHandler)
 }
