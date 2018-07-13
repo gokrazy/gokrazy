@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -151,7 +152,7 @@ func initUpdate() error {
 	}
 
 	http.HandleFunc("/update/boot", nonConcurrentUpdateHandler(mustFindRootDevice()+"1"))
-	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(mustFindRootDevice()))
+	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(strings.TrimSuffix(mustFindRootDevice(), "p")))
 	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(mustFindRootDevice()+inactiveRootPartition))
 	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(inactiveRootPartition))
 	// bakery updates only the boot partition, which would reset the active root
