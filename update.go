@@ -83,6 +83,9 @@ func streamRequestTo(path string, r io.Reader) error {
 	if _, err := io.Copy(f, r); err != nil {
 		return err
 	}
+	if err := f.Sync(); err != nil {
+		return err
+	}
 	return f.Close()
 }
 
