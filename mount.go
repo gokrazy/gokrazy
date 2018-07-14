@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"syscall"
+
+	"github.com/gokrazy/internal/rootdev"
 )
 
 // mountCompat deals with old FAT root file systems, to cover the case where
@@ -92,7 +94,7 @@ func mountfs() error {
 		}
 	}
 
-	dev := mustFindRootDevice() + "4"
+	dev := rootdev.MustFind() + "4"
 	if err := syscall.Mount(dev, "/perm", "ext4", 0, ""); err != nil {
 		log.Printf("Could not mount permanent storage partition %s: %v", dev, err)
 	}

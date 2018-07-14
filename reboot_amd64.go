@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"unsafe"
 
+	"github.com/gokrazy/internal/rootdev"
 	"golang.org/x/sys/unix"
 )
 
@@ -23,7 +24,7 @@ func kexecReboot() error {
 		return err
 	}
 
-	if err := syscall.Mount(mustFindRootDevice()+"1", tmpdir, "vfat", 0, ""); err != nil {
+	if err := syscall.Mount(rootdev.MustFind()+"1", tmpdir, "vfat", 0, ""); err != nil {
 		return err
 	}
 
@@ -36,7 +37,7 @@ func kexecReboot() error {
 	if err != nil {
 		return err
 	}
-	rep := rootRe.ReplaceAllLiteral(cmdline, []byte("root="+mustFindRootDevice()+inactiveRootPartition))
+	rep := rootRe.ReplaceAllLiteral(cmdline, []byte("root="+rootdev.MustFind()+inactiveRootPartition))
 	// NUL-terminate cmdline
 	cmdlinebuf := make([]byte, len(rep)+1)
 	copy(cmdlinebuf, rep)

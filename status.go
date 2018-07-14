@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/gokrazy/gokrazy/internal/bundled"
+	"github.com/gokrazy/internal/rootdev"
 
 	"golang.org/x/sys/unix"
 )
@@ -160,7 +161,7 @@ func initStatus(services []*service) {
 			Hostname       string
 		}{
 			Services:       services,
-			PermDev:        mustFindRootDevice() + "4",
+			PermDev:        rootdev.MustFind() + "4",
 			PermUsed:       int64(st.Bsize) * int64(st.Blocks-st.Bfree),
 			PermAvail:      int64(st.Bsize) * int64(st.Bavail),
 			PermTotal:      int64(st.Bsize) * int64(st.Blocks),
