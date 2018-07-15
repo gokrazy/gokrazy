@@ -33,14 +33,13 @@ func kexecReboot() error {
 		return err
 	}
 	defer kernel.Close()
-	cmdline, err := ioutil.ReadFile("/proc/cmdline")
+	cmdline, err := ioutil.ReadFile(filepath.Join(tmpdir, "cmdline.txt"))
 	if err != nil {
 		return err
 	}
-	rep := rootRe.ReplaceAllLiteral(cmdline, []byte("root="+rootdev.MustFind()+inactiveRootPartition))
 	// NUL-terminate cmdline
-	cmdlinebuf := make([]byte, len(rep)+1)
-	copy(cmdlinebuf, rep)
+	cmdlinebuf := make([]byte, len(cmdline)+1)
+	copy(cmdlinebuf, cmdline)
 	_, _, errno := unix.Syscall6(
 		unix.SYS_KEXEC_FILE_LOAD,
 		uintptr(kernel.Fd()), // kernel_fd
