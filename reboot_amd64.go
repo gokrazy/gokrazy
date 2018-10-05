@@ -6,16 +6,9 @@ import (
 	"os"
 	"path/filepath"
 	"syscall"
-	"unsafe"
 
 	"github.com/gokrazy/internal/rootdev"
 	"golang.org/x/sys/unix"
-)
-
-// TODO: get these constants into sys/unix
-const (
-	KEXEC_ARCH_DEFAULT      = (0 << 16)
-	KEXEC_FILE_NO_INITRAMFS = 0x00000004
 )
 
 func kexecReboot() error {
@@ -37,20 +30,11 @@ func kexecReboot() error {
 	if err != nil {
 		return err
 	}
-	// NUL-terminate cmdline
-	cmdlinebuf := make([]byte, len(cmdline)+1)
-	copy(cmdlinebuf, cmdline)
-	_, _, errno := unix.Syscall6(
-		unix.SYS_KEXEC_FILE_LOAD,
-		uintptr(kernel.Fd()), // kernel_fd
-		0,                    // initrd_fd
-		uintptr(len(cmdline)+1),                    // cmdline_len
-		uintptr(unsafe.Pointer(&cmdlinebuf[0])),    // cmdline
-		KEXEC_ARCH_DEFAULT|KEXEC_FILE_NO_INITRAMFS, // flags
-		0)
-	if errno != 0 {
-		// errno is syscall.ENOSYS on kernels without CONFIG_KEXEC_FILE_LOAD=y
-		return errno
+
+	flags := unix.KEXEC_ARCH_DEFAULT | unix.KEXEC_FILE_NO_INITRAMFS
+	if err := unix.KexecFileLoad(int(kernel.Fd()), 0, string(cmdline), flags); err != nil {
+		// err is syscall.ENOSYS on kernels without CONFIG_KEXEC_FILE_LOAD=y
+		return err
 	}
 
 	return unix.Reboot(unix.LINUX_REBOOT_CMD_KEXEC)
