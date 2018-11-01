@@ -15,7 +15,7 @@ would like. Hence, he is going Go-only where feasible.
 
 ## Installation
 
-[Install Go 1.8](https://golang.org/dl/) if you haven’t already.
+[Install the latest Go version](https://golang.org/dl/) if you haven’t already.
 
 Then, use the `go` tool to download and install `gokr-packer`:
 ```
@@ -27,7 +27,6 @@ go get -u github.com/gokrazy/tools/cmd/gokr-packer
 To re-partition and overwrite the SD card `/dev/sdb`, use:
 
 ```
-sudo setcap CAP_SYS_ADMIN,CAP_DAC_OVERRIDE=ep ~/go/bin/gokr-packer
 gokr-packer -overwrite=/dev/sdb github.com/gokrazy/hello
 ```
 
