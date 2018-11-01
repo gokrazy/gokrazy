@@ -17,6 +17,7 @@ import (
 	"os/exec"
 	"os/signal"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/gokrazy/gokrazy/internal/iface"
@@ -143,6 +144,30 @@ func Supervise(commands []*exec.Cmd) error {
 
 	if err := updateListeners("80"); err != nil {
 		return fmt.Errorf("updating listeners: %v", err)
+	}
+
+	if nl, err := listenNetlink(); err == nil {
+		go func() {
+			for {
+				msgs, err := nl.ReadMsgs()
+				if err != nil {
+					log.Printf("netlink.ReadMsgs: %v", err)
+					return
+				}
+
+				for _, m := range msgs {
+					if m.Header.Type != syscall.RTM_NEWADDR &&
+						m.Header.Type != syscall.RTM_DELADDR {
+						continue
+					}
+					if err := updateListeners("80"); err != nil {
+						log.Printf("updating listeners: %v", err)
+					}
+				}
+			}
+		}()
+	} else {
+		log.Printf("cannot listen for new IP addresses: %v", err)
 	}
 
 	go func() {
