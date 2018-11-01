@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	rootRe = regexp.MustCompile(`root=/dev/(?:mmcblk0p|sda)([2-3])`)
+	rootRe = regexp.MustCompile(`(?:root|ubd0)=/dev/(?:mmcblk0p|sda|loop0p)([2-3])`)
 
 	inactiveRootPartition string
 )
