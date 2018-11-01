@@ -2,11 +2,11 @@ package bundled
 
 // Table of contents
 var assets = map[string][]byte{
-	"assets/header.tmpl": assets_0,
-	"assets/footer.tmpl": assets_1,
+	"assets/header.tmpl":   assets_0,
+	"assets/footer.tmpl":   assets_1,
 	"assets/overview.tmpl": assets_2,
-	"assets/status.tmpl": assets_3,
-	"assets/favicon.ico": assets_4,
+	"assets/status.tmpl":   assets_3,
+	"assets/favicon.ico":   assets_4,
 }
 var assets_0 = []byte("<!DOCTYPE html>\n<html lang=\"en\">\n<title>{{ .Hostname }} — gokrazy</title>\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css\" integrity=\"sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=\" crossorigin=\"anonymous\" />\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css\" integrity=\"sha256-eU4xmpfQx1HSi5q1q2rHNcMEzTNJov7r2Wr/6zF3ANc=\" crossorigin=\"anonymous\" />\n<style type=\"text/css\">\n.progress-bar:nth-child(5n) {\n        background-color: #337ab7;\n}\n.progress-bar:nth-child(5n+1) {\n        background-color: #5cb85c;\n}\n.progress-bar:nth-child(5n+2) {\n        background-color: #5bc0de;\n}\n.progress-bar:nth-child(5n+3) {\n        background-color: #f0ad4e;\n}\n.progress-bar:nth-child(5n+4) {\n        background-color: #d9534f;\n}\n.lastlog {\n        text-overflow: ellipsis;\n        white-space: nowrap;\n        overflow: hidden;\n}\ntable {\n        table-layout: fixed;\n}\n</style>\n\n  <nav class=\"navbar navbar-default\">\n    <div class=\"container-fluid\">\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar-collapse-1\" aria-expanded=\"false\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n        <p style=\"width: 50ex; margin-top: 0.25em; font-size: 18px\"><a href=\"/\">gokrazy</a><br>\n        <small style=\"font-size: 11px\" class=\"text-muted\">version {{ .BuildTimestamp }}</small></p>\n      </div>\n\n      <div class=\"collapse navbar-collapse\" id=\"navbar-collapse-1\">\n        <ul class=\"nav navbar-nav\">\n        </ul>\n\n        <p class=\"navbar-text navbar-right\">\n          host “{{ .Hostname }}”\n        </p>\n      </div><!-- /.navbar-collapse -->\n    </div><!-- /.container-fluid -->\n  </nav>\n\n  <div class=\"container\">\n")
 var assets_1 = []byte("\n</div>\n\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js\" integrity=\"sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js\" integrity=\"sha256-eXHLyyVI+v6X1wbfg9NB05IWqOqY4E9185nHZgeDIhg=\" crossorigin=\"anonymous\"></script>\n\n</html>")
