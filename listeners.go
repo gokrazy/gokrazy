@@ -130,23 +130,31 @@ func updateListeners(port string) error {
 		if _, ok := listeners[host]; ok {
 			// confirm found
 			delete(vanished, host)
-		} else {
-			// add a new listener
-			srv := &http.Server{
-				Addr:    net.JoinHostPort(host, port),
-				Handler: http.HandlerFunc(authenticated),
-			}
-			listeners[host] = srv
-			go func(host string, srv *http.Server) {
-				err := srv.ListenAndServe()
-				log.Printf("listener for %q died: %v", host, err)
-				listenersMu.Lock()
-				defer listenersMu.Unlock()
-				delete(listeners, host)
-			}(host, srv)
+			continue
 		}
+		addr := net.JoinHostPort(host, port)
+		ln, err := net.Listen("tcp", addr)
+		if err != nil {
+			log.Println(err) // err includes enough context
+			continue
+		}
+		log.Printf("now listening on %s", addr)
+		// add a new listener
+		srv := &http.Server{
+			Handler: http.HandlerFunc(authenticated),
+		}
+		listeners[host] = srv
+		go func(host string, srv *http.Server) {
+			err := srv.Serve(ln)
+			log.Printf("serving on %s: %v", addr, err)
+			listenersMu.Lock()
+			defer listenersMu.Unlock()
+			delete(listeners, host)
+		}(host, srv)
+
 	}
 	for host := range vanished {
+		log.Printf("no longer listening on %s", net.JoinHostPort(host, port))
 		listeners[host].Close()
 		delete(listeners, host)
 	}
