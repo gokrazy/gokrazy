@@ -42,10 +42,10 @@ func (c *client) packet(xid uint32, opts []layers.DHCPOption) *layers.DHCPv4 {
 		Operation:    layers.DHCPOpRequest,
 		HardwareType: layers.LinkTypeEthernet,
 		HardwareLen:  uint8(len(layers.EthernetBroadcast)),
-		HardwareOpts: 0, // TODO: document
+		HardwareOpts: 0, // clients set this to zero (used by relay agents)
 		Xid:          xid,
 		Secs:         0, // TODO: fill in?
-		Flags:        0, // TODO: document
+		Flags:        0, // we can receive IP packets via unicast
 		ClientHWAddr: c.hardwareAddr,
 		ServerName:   nil,
 		File:         nil,
@@ -67,7 +67,7 @@ func (c *client) discover() (*layers.DHCPv4, error) {
 		return nil, err
 	}
 
-	// Look for DHCPOFFER packet (TODO: RFC)
+	// Look for DHCPOFFER packet (described in RFC2131 4.3.1):
 	c.conn.SetDeadline(time.Now().Add(5 * time.Second))
 	for {
 		offer, err := dhcp4.Read(c.conn)
