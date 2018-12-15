@@ -2,6 +2,7 @@ package gokrazy
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -137,6 +138,73 @@ func initStatus(services []*service) {
 			return
 		}
 		io.Copy(w, &buf)
+	})
+
+	svc2json := func(svc *service) interface{} {
+		return struct {
+			Stopped   bool
+			StartTime time.Time
+			Attempt   uint64
+			Pid       int
+			Path      string
+			Args      []string
+			Stdout    []string
+			Stderr    []string
+		}{
+			Stopped:   svc.stopped,
+			StartTime: svc.started,
+			Attempt:   svc.attempt,
+			Pid:       svc.process.Pid,
+			Path:      svc.cmd.Path,
+			Args:      svc.cmd.Args,
+			Stdout:    svc.Stdout.Lines(),
+			Stderr:    svc.Stderr.Lines(),
+		}
+	}
+
+	http.HandleFunc("/api/service", func(w http.ResponseWriter, r *http.Request) {
+		path := r.FormValue("path")
+		svc := findSvc(path)
+		if svc == nil {
+			http.Error(w, "service not found", http.StatusNotFound)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(svc2json(svc))
+	})
+
+	http.HandleFunc("/api/status", func(w http.ResponseWriter, r *http.Request) {
+		privateAddrs, err := PrivateInterfaceAddrs()
+		if err != nil {
+			log.Printf("could not get private addrs: %v", err)
+		}
+		publicAddrs, err := PublicInterfaceAddrs()
+		if err != nil {
+			log.Printf("could not get public addrs: %v", err)
+		}
+
+		d := struct {
+			MemInfo        interface{}
+			Hostname       string
+			PrivateAddrs   []string
+			PublicAddrs    []string
+			BuildTimestamp string
+			Services       []interface{}
+		}{
+			MemInfo:        parseMeminfo(),
+			Hostname:       hostname,
+			PrivateAddrs:   privateAddrs,
+			PublicAddrs:    publicAddrs,
+			BuildTimestamp: buildTimestamp,
+		}
+
+		for _, svc := range services {
+			d.Services = append(d.Services, svc2json(svc))
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(d)
 	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
