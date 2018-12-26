@@ -100,6 +100,8 @@ func initStatus(services []*service) {
 		}
 	})
 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+
 		token := xsrfTokenFromCookies(r.Cookies())
 		if token == 0 {
 			// Only generate a new XSRF token if the old one is expired, so that
@@ -140,6 +142,8 @@ func initStatus(services []*service) {
 	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+
 		var st unix.Statfs_t
 		if err := unix.Statfs("/perm", &st); err != nil {
 			log.Printf("could not stat /perm: %v", err)
