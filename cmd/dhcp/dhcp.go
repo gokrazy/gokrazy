@@ -61,7 +61,8 @@ func (c *client) discover() (*layers.DHCPv4, error) {
 		dhcp4.ParamsRequestOpt(
 			layers.DHCPOptDNS,
 			layers.DHCPOptRouter,
-			layers.DHCPOptSubnetMask),
+			layers.DHCPOptSubnetMask,
+			layers.DHCPOptDomainName),
 	})
 	if err := dhcp4.Write(c.conn, discover); err != nil {
 		return nil, err
@@ -97,7 +98,8 @@ func (c *client) request(last *layers.DHCPv4) (*layers.DHCPv4, error) {
 		dhcp4.ParamsRequestOpt(
 			layers.DHCPOptDNS,
 			layers.DHCPOptRouter,
-			layers.DHCPOptSubnetMask),
+			layers.DHCPOptSubnetMask,
+			layers.DHCPOptDomainName),
 	}, dhcp4.ServerID(last.Options)...))
 	if err := dhcp4.Write(c.conn, request); err != nil {
 		return nil, err
