@@ -8,39 +8,56 @@ import (
 	"sync"
 )
 
-var privateNets []net.IPNet
-var ipv6LinkLocal net.IPNet
+var (
+	privateNets   []net.IPNet
+	ipv6LinkLocal net.IPNet
+	gokrazyGdns   = func() *net.IPNet {
+		_, net, err := net.ParseCIDR("fdf5:3606:2a21::/48")
+		if err != nil {
+			log.Panic(err)
+		}
+		return net
+	}()
+)
+
+// PrivateNetworks contains the CIDR representation of all networks which
+// gokrazy considers private.
+var PrivateNetworks = []string{
+	// loopback: https://tools.ietf.org/html/rfc3330#section-2
+	"127.0.0.0/8",
+	// loopback: https://tools.ietf.org/html/rfc3513#section-2.4
+	"::1/128",
+
+	// reserved: https://tools.ietf.org/html/rfc1918#section-3
+	"10.0.0.0/8",
+	"172.16.0.0/12",
+	"192.168.0.0/16",
+	// reserved: https://tools.ietf.org/html/rfc4193#section-3.1
+	"fc00::/7",
+
+	// link-local: https://tools.ietf.org/html/rfc3927#section-1.2
+	"169.254.0.0/16",
+	// link-local: https://tools.ietf.org/html/rfc4291#section-2.4
+	"fe80::/10",
+}
 
 func init() {
-	var pn = []string{
-		// loopback: https://tools.ietf.org/html/rfc3330#section-2
-		"127.0.0.0/8",
-		// loopback: https://tools.ietf.org/html/rfc3513#section-2.4
-		"::1/128",
-
-		// reserved: https://tools.ietf.org/html/rfc1918#section-3
-		"10.0.0.0/8",
-		"172.16.0.0/12",
-		"192.168.0.0/16",
-		// reserved: https://tools.ietf.org/html/rfc4193#section-3.1
-		"fc00::/7",
-
-		// link-local: https://tools.ietf.org/html/rfc3927#section-1.2
-		"169.254.0.0/16",
-		// link-local: https://tools.ietf.org/html/rfc4291#section-2.4
-		"fe80::/10",
-	}
-	privateNets = make([]net.IPNet, len(pn))
-	for idx, s := range pn {
+	privateNets = make([]net.IPNet, len(PrivateNetworks))
+	for idx, s := range PrivateNetworks {
 		_, net, err := net.ParseCIDR(s)
 		if err != nil {
-			log.Panicf(err.Error())
+			log.Panic(err.Error())
 		}
 		privateNets[idx] = *net
 		if s == "fe80::/10" {
 			ipv6LinkLocal = *net
 		}
 	}
+}
+
+// IsInPrivateNet reports whether ip is in PrivateNetworks.
+func IsInPrivateNet(ip net.IP) bool {
+	return isPrivate("", ip)
 }
 
 func isPrivate(iface string, ipaddr net.IP) bool {
@@ -77,6 +94,10 @@ func interfaceAddrs(keep func(string, net.IP) bool) ([]string, error) {
 				return nil, err
 			}
 
+			if gokrazyGdns.Contains(ipaddr) {
+				continue
+			}
+
 			if !keep(i.Name, ipaddr) {
 				continue
 			}
@@ -95,9 +116,7 @@ func interfaceAddrs(keep func(string, net.IP) bool) ([]string, error) {
 // RFC3330, RFC3513, RFC3927, RFC4291) host addresses of all active
 // interfaces, suitable to be passed to net.JoinHostPort.
 func PrivateInterfaceAddrs() ([]string, error) {
-	return interfaceAddrs(func(iface string, addr net.IP) bool {
-		return isPrivate(iface, addr)
-	})
+	return interfaceAddrs(isPrivate)
 }
 
 // PublicInterfaceAddrs returns all public (excluding RFC1918, RFC4193,
