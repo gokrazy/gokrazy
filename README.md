@@ -24,10 +24,10 @@ go get -u github.com/gokrazy/tools/cmd/gokr-packer
 
 ## Overwriting an SD card for the Raspberry Pi 3
 
-To re-partition and overwrite the SD card `/dev/sdb`, use:
+To re-partition and overwrite the SD card `/dev/sdx`, use:
 
 ```
-gokr-packer -overwrite=/dev/sdb github.com/gokrazy/hello
+gokr-packer -overwrite=/dev/sdx github.com/gokrazy/hello
 ```
 
 Then, put the SD card into your Raspberry Pi 3 and power it up! Once
@@ -76,8 +76,8 @@ currently active file system) when updating.
 
 If you’d like to store permanent data (i.e. data which will not be
 overwritten on the next update), you’ll need to create an ext4 file
-system on the last partition. If your SD card is `/dev/sdb`, use
-`mkfs.ext4 /dev/sdb4`.
+system on the last partition. If your SD card is `/dev/sdx`, use
+`mkfs.ext4 /dev/sdx4`.
 
 # Customization
 
@@ -111,7 +111,7 @@ liking. When done, pack an image with your own init package:
 ```
 gokr-packer \
   -init_pkg=github.com/stapelberg/mediaserver/cmd/init \
-  -overwrite=/dev/sdb \
+  -overwrite=/dev/sdx \
   github.com/gokrazy/hello
 ```
 
