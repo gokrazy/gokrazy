@@ -69,7 +69,7 @@ func (c *client) discover() (*layers.DHCPv4, error) {
 	}
 
 	// Look for DHCPOFFER packet (described in RFC2131 4.3.1):
-	c.conn.SetDeadline(time.Now().Add(5 * time.Second))
+	c.conn.SetReadDeadline(time.Now().Add(5 * time.Second))
 	for {
 		offer, err := dhcp4.Read(c.conn)
 		if err != nil {
@@ -105,7 +105,7 @@ func (c *client) request(last *layers.DHCPv4) (*layers.DHCPv4, error) {
 		return nil, err
 	}
 
-	c.conn.SetDeadline(time.Now().Add(10 * time.Second))
+	c.conn.SetReadDeadline(time.Now().Add(10 * time.Second))
 	for {
 		// Look for DHCPACK packet (described in RFC2131 4.3.1):
 		ack, err := dhcp4.Read(c.conn)
