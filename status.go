@@ -94,11 +94,15 @@ var overviewTmpl = template.Must(template.Must(commonTmpls.Clone()).New("overvie
 var statusTmpl = template.Must(template.Must(commonTmpls.Clone()).New("statusTmpl").Parse(bundled.Asset("status.tmpl")))
 
 func initStatus(services []*service) {
-	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
-		if _, err := w.Write([]byte(bundled.Asset("favicon.ico"))); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	})
+	for _, fn := range []string{
+		"favicon.ico",
+		"bootstrap-3.3.7.min.css",
+		"bootstrap-table-1.11.0.min.css",
+		"bootstrap-table-1.11.0.min.js",
+		"jquery-3.1.1.min.js",
+	} {
+		http.Handle("/"+fn, bundled.HTTPHandlerFunc(fn))
+	}
 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
