@@ -1,6 +1,7 @@
 package gokrazy
 
 import (
+	"crypto/tls"
 	"log"
 	"net"
 	"net/http"
@@ -128,15 +129,26 @@ func PublicInterfaceAddrs() ([]string, error) {
 	})
 }
 
+// Wrapper to keep track of allocated servers per host
+type krazyServer struct {
+	srv  *http.Server
+	port string
+}
+
 var (
-	listeners   = make(map[string]*http.Server)
+	listeners   = make(map[string][]*krazyServer)
 	listenersMu sync.Mutex
 )
 
-func updateListeners(port string) error {
+// tlsEnabled: Indicate, if public or private addresses should be used
+// tlsConfig: tlsConfig. nil, if the listeners should not use https (e.g. for redirects)
+func updateListeners(port string, tlsEnabled bool, tlsConfig *tls.Config) error {
 	hosts, err := PrivateInterfaceAddrs()
 	if err != nil {
 		return err
+	}
+	if tlsEnabled {
+		hosts = []string{"::"}
 	}
 
 	listenersMu.Lock()
@@ -146,25 +158,55 @@ func updateListeners(port string) error {
 		vanished[host] = false
 	}
 	for _, host := range hosts {
-		if _, ok := listeners[host]; ok {
+		if servers, ok := listeners[host]; ok {
 			// confirm found
 			delete(vanished, host)
-			continue
+			cont := false
+			for _, server := range servers {
+				if server.port == port {
+					cont = true
+					break
+				}
+			}
+			if cont {
+				continue
+			}
 		}
 		addr := net.JoinHostPort(host, port)
 		ln, err := net.Listen("tcp", addr)
 		if err != nil {
 			log.Println(err) // err includes enough context
+			log.Println("(error on listen)")
 			continue
 		}
 		log.Printf("now listening on %s", addr)
 		// add a new listener
-		srv := &http.Server{
-			Handler: http.HandlerFunc(authenticated),
+		var srv *http.Server
+		if tlsEnabled && tlsConfig == nil {
+			// "Redirect" server
+			srv = &http.Server{
+				Handler:   http.HandlerFunc(httpsRedirect),
+				TLSConfig: tlsConfig,
+			}
+		} else {
+			// "Content" server
+			srv = &http.Server{
+				Handler:   http.HandlerFunc(authenticated),
+				TLSConfig: tlsConfig,
+			}
 		}
-		listeners[host] = srv
+		if _, ok := listeners[host]; ok {
+			listeners[host] = append(listeners[host], &krazyServer{srv, port})
+		} else {
+			listeners[host] = []*krazyServer{&krazyServer{srv, port}}
+		}
 		go func(host string, srv *http.Server) {
-			err := srv.Serve(ln)
+			var err error
+			if tlsEnabled && tlsConfig != nil {
+				err = srv.ServeTLS(ln, "", "")
+			} else {
+				err = srv.Serve(ln)
+			}
 			log.Printf("serving on %s: %v", addr, err)
 			listenersMu.Lock()
 			defer listenersMu.Unlock()
@@ -174,7 +216,9 @@ func updateListeners(port string) error {
 	}
 	for host := range vanished {
 		log.Printf("no longer listening on %s", net.JoinHostPort(host, port))
-		listeners[host].Close()
+		for _, server := range listeners[host] {
+			server.srv.Close()
+		}
 		delete(listeners, host)
 	}
 	return nil
