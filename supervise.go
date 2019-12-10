@@ -3,18 +3,83 @@ package gokrazy
 import (
 	"container/ring"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"log/syslog"
 	"net/http"
 	"net/url"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"syscall"
 	"time"
 )
+
+// remoteSyslogError throttles printing error messages about remote
+// syslog. Since a remote syslog writer is created for stdout and stderr of each
+// supervised process, error messages during early boot spam the serial console
+// without limiting. When the value is 0, a log message can be printed. A
+// background goroutine resets the value to 0 once a second.
+var remoteSyslogError uint32
+
+func init() {
+	go func() {
+		for range time.Tick(1 * time.Second) {
+			atomic.StoreUint32(&remoteSyslogError, 0)
+		}
+	}()
+}
+
+type remoteSyslogWriter struct {
+	raddr, tag string
+
+	lines *lineRingBuffer
+
+	syslogMu sync.Mutex
+	syslog   io.Writer
+}
+
+func (w *remoteSyslogWriter) establish() {
+	for {
+		sl, err := syslog.Dial("udp", w.raddr, syslog.LOG_INFO, w.tag)
+		if err != nil {
+			if atomic.SwapUint32(&remoteSyslogError, 1) == 0 {
+				log.Printf("remote syslog: %v", err)
+			}
+			time.Sleep(1 * time.Second)
+			continue
+		}
+		w.syslogMu.Lock()
+		defer w.syslogMu.Unlock()
+		// replay buffer in case any messages were sent before the connection
+		// could be established (before the network is ready)
+		for _, line := range w.lines.Lines() {
+			sl.Write([]byte(line + "\n"))
+		}
+		// send all future writes to syslog
+		w.syslog = sl
+		return
+	}
+}
+
+func (w *remoteSyslogWriter) Lines() []string {
+	return w.lines.Lines()
+}
+
+func (w *remoteSyslogWriter) Write(b []byte) (int, error) {
+	w.lines.Write(b)
+	w.syslogMu.Lock()
+	defer w.syslogMu.Unlock()
+	if w.syslog != nil {
+		w.syslog.Write(b)
+	}
+	return len(b), nil
+}
 
 type lineRingBuffer struct {
 	sync.RWMutex
@@ -58,12 +123,17 @@ func (lrb *lineRingBuffer) Lines() []string {
 	return lines
 }
 
+type lineswriter interface {
+	io.Writer
+	Lines() []string
+}
+
 type service struct {
 	stopped   bool
 	stoppedMu sync.RWMutex
 	cmd       *exec.Cmd
-	Stdout    *lineRingBuffer
-	Stderr    *lineRingBuffer
+	Stdout    lineswriter
+	Stderr    lineswriter
 	started   time.Time
 	startedMu sync.RWMutex
 	attempt   uint64
@@ -143,6 +213,35 @@ func (s *service) RSS() int64 {
 	return 0
 }
 
+var syslogRaddr string
+
+func initRemoteSyslog() {
+	b, err := ioutil.ReadFile("/perm/remote_syslog/target")
+	if err != nil {
+		if !os.IsNotExist(err) {
+			log.Print(err)
+		}
+		return
+	}
+	raddr := strings.TrimSpace(string(b))
+	log.Printf("sending process stdout/stderr to remote syslog %s", raddr)
+	syslogRaddr = raddr
+}
+
+func newLogWriter(tag string) lineswriter {
+	lb := newLineRingBuffer(100)
+	if syslogRaddr == "" {
+		return lb
+	}
+	wr := &remoteSyslogWriter{
+		raddr: syslogRaddr,
+		tag:   tag,
+		lines: lb,
+	}
+	go wr.establish()
+	return wr
+}
+
 func isDontSupervise(err error) bool {
 	ee, ok := err.(*exec.ExitError)
 	if !ok {
@@ -158,8 +257,9 @@ func isDontSupervise(err error) bool {
 }
 
 func supervise(s *service) {
-	s.Stdout = newLineRingBuffer(100)
-	s.Stderr = newLineRingBuffer(100)
+	tag := filepath.Base(s.cmd.Path)
+	s.Stdout = newLogWriter(tag)
+	s.Stderr = newLogWriter(tag)
 	l := log.New(s.Stderr, "", log.LstdFlags|log.Ldate|log.Ltime)
 	attempt := 0
 	for {

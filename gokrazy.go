@@ -116,6 +116,8 @@ func Boot(userBuildTimestamp string) error {
 		return err
 	}
 
+	initRemoteSyslog()
+
 	return nil
 }
 
