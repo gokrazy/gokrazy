@@ -94,7 +94,7 @@ func mountfs() error {
 		}
 	}
 
-	dev := rootdev.MustFind() + "4"
+	dev := rootdev.Partition(rootdev.Perm)
 	if err := syscall.Mount(dev, "/perm", "ext4", 0, ""); err != nil {
 		log.Printf("Could not mount permanent storage partition %s: %v", dev, err)
 	}

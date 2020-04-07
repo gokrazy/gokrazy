@@ -174,7 +174,7 @@ func initStatus(services []*service) {
 			Hostname       string
 		}{
 			Services:       services,
-			PermDev:        rootdev.MustFind() + "4",
+			PermDev:        rootdev.Partition(rootdev.Perm),
 			PermUsed:       int64(st.Bsize) * int64(st.Blocks-st.Bfree),
 			PermAvail:      int64(st.Bsize) * int64(st.Bavail),
 			PermTotal:      int64(st.Bsize) * int64(st.Blocks),

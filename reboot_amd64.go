@@ -17,7 +17,7 @@ func kexecReboot() error {
 		return err
 	}
 
-	if err := syscall.Mount(rootdev.MustFind()+"1", tmpdir, "vfat", 0, ""); err != nil {
+	if err := syscall.Mount(rootdev.Partition(rootdev.Boot), tmpdir, "vfat", 0, ""); err != nil {
 		return err
 	}
 

@@ -4,12 +4,10 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"regexp"
-	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -20,14 +18,10 @@ import (
 	"github.com/gokrazy/internal/rootdev"
 )
 
-var (
-	rootRe = regexp.MustCompile(`(?:root|ubd0)=/dev/(?:mmcblk0p|sda|loop0p)([2-3])`)
+var rootRe = regexp.MustCompile(`root=[^ ]+`)
 
-	inactiveRootPartition string
-)
-
-func switchRootPartition(newRootPartition string) error {
-	f, err := os.OpenFile(rootdev.MustFind()+"1", os.O_RDWR, 0600)
+func switchRootPartition(newRootPartition int) error {
+	f, err := os.OpenFile(rootdev.Partition(rootdev.Boot), os.O_RDWR, 0600)
 	if err != nil {
 		return err
 	}
@@ -51,7 +45,7 @@ func switchRootPartition(newRootPartition string) error {
 		return err
 	}
 
-	rep := rootRe.ReplaceAllLiteral(b, []byte("root="+rootdev.MustFind()+newRootPartition))
+	rep := rootRe.ReplaceAllLiteral(b, []byte("root="+rootdev.PartitionCmdline(newRootPartition)))
 	if _, err := f.Write(rep); err != nil {
 		return err
 	}
@@ -95,7 +89,7 @@ func nonConcurrentUpdateHandler(dest string) func(http.ResponseWriter, *http.Req
 	}
 }
 
-func nonConcurrentSwitchHandler(newRootPartition string) func(http.ResponseWriter, *http.Request) {
+func nonConcurrentSwitchHandler(newRootPartition int) func(http.ResponseWriter, *http.Request) {
 	var mu sync.Mutex
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -115,37 +109,17 @@ func nonConcurrentSwitchHandler(newRootPartition string) func(http.ResponseWrite
 }
 
 func initUpdate() error {
-	cmdline, err := ioutil.ReadFile("/proc/cmdline")
-	if err != nil {
-		return err
-	}
-
-	matches := rootRe.FindStringSubmatch(string(cmdline))
-	if matches == nil {
-		return fmt.Errorf("identify 2/3 partition: kernel command line %q did not match %v", string(cmdline), rootRe)
-	}
-
-	rootPartition := matches[1]
-	switch rootPartition {
-	case "2":
-		inactiveRootPartition = "3"
-	case "3":
-		inactiveRootPartition = "2"
-	default:
-		return fmt.Errorf("root partition %q (from %q) is unexpectedly neither 2 nor 3", rootPartition, matches[0])
-	}
-
-	http.HandleFunc("/update/boot", nonConcurrentUpdateHandler(rootdev.MustFind()+"1"))
-	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(strings.TrimSuffix(rootdev.MustFind(), "p")))
-	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.MustFind()+inactiveRootPartition))
-	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(inactiveRootPartition))
+	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(rootdev.BlockDevice()))
+	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(rootdev.InactiveRootPartition())))
+	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(rootdev.InactiveRootPartition()))
 	// bakery updates only the boot partition, which would reset the active root
 	// partition to 2.
-	updateHandler := nonConcurrentUpdateHandler(rootdev.MustFind() + "1")
+	updateHandler := nonConcurrentUpdateHandler(rootdev.Partition(rootdev.Boot))
+	http.HandleFunc("/update/boot", updateHandler)
 	http.HandleFunc("/update/bootonly", func(w http.ResponseWriter, r *http.Request) {
 		updateHandler(w, r)
-		if err := switchRootPartition(rootPartition); err != nil {
-			log.Printf("switching root partition to %q failed: %v", rootPartition, err)
+		if err := switchRootPartition(rootdev.ActiveRootPartition()); err != nil {
+			log.Printf("switching root partition to %d failed: %v", rootdev.ActiveRootPartition(), err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
