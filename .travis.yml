@@ -4,7 +4,7 @@ sudo: false
 
 language: go
 go:
-  - 1.12
+  - 1.14
 
 script:
   # Check whether files are syntactically correct.
