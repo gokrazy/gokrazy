@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/beevik/ntp v0.2.0
-	github.com/gokrazy/internal v0.0.0-20200407065509-37efc446ad44
+	github.com/gokrazy/internal v0.0.0-20200407075822-660ad467b7c9
 	github.com/google/go-cmp v0.4.0 // indirect
 	github.com/google/gopacket v1.1.16
 	github.com/mdlayher/raw v0.0.0-20190303161257-764d452d77af
