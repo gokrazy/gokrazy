@@ -109,6 +109,12 @@ func nonConcurrentSwitchHandler(newRootPartition int) func(http.ResponseWriter, 
 }
 
 func initUpdate() error {
+	// The /update/features handler is used for negotiation of individual
+	// feature support (e.g. PARTUUID= support) between the packer and update
+	// target.
+	http.HandleFunc("/update/features", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "partuuid,")
+	})
 	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(rootdev.BlockDevice()))
 	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(rootdev.InactiveRootPartition())))
 	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(rootdev.InactiveRootPartition()))
