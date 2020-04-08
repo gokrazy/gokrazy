@@ -47,9 +47,19 @@ table {
         <ul class="nav navbar-nav">
         </ul>
 
-        <p class="navbar-text navbar-right">
-          host “{{ .Hostname }}”
-        </p>
+        <table class="navbar-text navbar-right" style="border-spacing: 10px 0; border-collapse: separate">
+	  <tr>
+	    <th>host</th>
+	    <td>{{ .Hostname }}</td>
+	  </tr>
+	  {{ if (ne .Model "") }}
+	  <tr>
+	    <th>model</th>
+	    <td>{{ .Model }}</td>
+	  </tr>
+	  {{ end }}
+	</table>
+
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>

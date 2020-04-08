@@ -93,7 +93,38 @@ var overviewTmpl = template.Must(template.Must(commonTmpls.Clone()).New("overvie
 
 var statusTmpl = template.Must(template.Must(commonTmpls.Clone()).New("statusTmpl").Parse(bundled.Asset("status.tmpl")))
 
+// mustReadFile0 returns the file contents or an empty string if the file could
+// not be read. All trailing \0 bytes are stripped (as found in
+// /proc/device-tree/model).
+func mustReadFile0(filename string) string {
+	b, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return ""
+	}
+	if idx := bytes.IndexByte(b, 0); idx > -1 {
+		b = b[:idx]
+	}
+	return string(b)
+}
+
+func model() string {
+	// the supported Raspberry Pis have this file
+	model := mustReadFile0("/proc/device-tree/model")
+	if model == "" {
+		// The PC Engines apu2c4 (and other PCs) have this file instead:
+		vendor := mustReadFile0("/sys/class/dmi/id/board_vendor")
+		name := mustReadFile0("/sys/class/dmi/id/board_name")
+		if vendor == "" || name == "" {
+			return "" // unsupported platform
+		}
+		model = strings.TrimSpace(vendor) + " " + strings.TrimSpace(name)
+	}
+	return strings.TrimSpace(model)
+}
+
 func initStatus(services []*service) {
+	model := model()
+
 	for _, fn := range []string{
 		"favicon.ico",
 		"bootstrap-3.3.7.min.css",
@@ -132,11 +163,13 @@ func initStatus(services []*service) {
 			Service        *service
 			BuildTimestamp string
 			Hostname       string
+			Model          string
 			XsrfToken      int32
 		}{
 			Service:        svc,
 			BuildTimestamp: buildTimestamp,
 			Hostname:       hostname,
+			Model:          model,
 			XsrfToken:      token,
 		}); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -172,6 +205,7 @@ func initStatus(services []*service) {
 			BuildTimestamp string
 			Meminfo        map[string]int64
 			Hostname       string
+			Model          string
 		}{
 			Services:       services,
 			PermDev:        rootdev.Partition(rootdev.Perm),
@@ -183,6 +217,7 @@ func initStatus(services []*service) {
 			BuildTimestamp: buildTimestamp,
 			Meminfo:        parseMeminfo(),
 			Hostname:       hostname,
+			Model:          model,
 		}); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
