@@ -1,6 +1,7 @@
 package gokrazy
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"fmt"
 	"io"
@@ -46,6 +47,17 @@ func switchRootPartition(newRootPartition int) error {
 	}
 
 	rep := rootRe.ReplaceAllLiteral(b, []byte("root="+rootdev.PartitionCmdline(newRootPartition)))
+	if pad := length - int64(len(rep)); pad > 0 {
+		// The file content length can shrink when switching from PARTUUID= (the
+		// default) to /dev/mmcblk0p[23], on an older gokrazy installation.
+		// Because we overwrite the file in place and have no means to truncate
+		// it to a smaller length, we pad the command line with spaces instead.
+		// Note that we need to insert spaces before the trailing newline,
+		// otherwise the system won’t boot:
+		rep = bytes.ReplaceAll(rep,
+			[]byte{'\n'},
+			append(bytes.Repeat([]byte{' '}, int(pad)), '\n'))
+	}
 	if _, err := f.Write(rep); err != nil {
 		return err
 	}
