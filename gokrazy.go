@@ -121,6 +121,31 @@ func Boot(userBuildTimestamp string) error {
 	return nil
 }
 
+func tryStartShell() error {
+	var lastErr error
+	for _, shell := range []string{
+		"/tmp/serial-busybox/ash",
+		"/perm/sh",
+	} {
+		_, err := os.Stat(shell)
+		lastErr = err
+		if err != nil {
+			continue
+		}
+		log.Printf("starting shell %s upon input on serial console", shell)
+		sh := exec.Command(shell)
+		sh.Stdin = os.Stdin
+		sh.Stdout = os.Stdout
+		sh.Stderr = os.Stderr
+		if err := sh.Run(); err != nil {
+			log.Printf("sh: %v", err)
+			lastErr = err
+		}
+		return nil
+	}
+	return lastErr
+}
+
 // Supervise continuously restarts the processes specified in commands
 // unless they run DontStartOnBoot.
 //
@@ -190,15 +215,8 @@ func Supervise(commands []*exec.Cmd) error {
 				break
 			}
 
-			if _, err := os.Stat("/perm/sh"); err == nil {
-				sh := exec.Command("/perm/sh")
-				sh.Stdin = os.Stdin
-				sh.Stdout = os.Stdout
-				sh.Stderr = os.Stderr
-				if err := sh.Run(); err != nil {
-					log.Printf("sh: %v", err)
-				}
-			} else {
+			if err := tryStartShell(); err != nil {
+				log.Printf("could not start shell: %v", err)
 				if err := updateListeners("80"); err != nil {
 					log.Printf("updating listeners: %v", err)
 				}
