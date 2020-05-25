@@ -67,8 +67,8 @@ gokrazy uses the following partition table:
 num | size   | purpose                | file system
 ----|--------|------------------------|---------------
 1   | 100 MB | boot (kernel+firmware) | FAT16B
-2   | 500 MB | root2 (gokrazy+apps)   | FAT16B (but see [issue #10](https://github.com/gokrazy/gokrazy/issues/10))
-3   | 500 MB | root3 (gokrazy+apps)   | FAT16B (but see [issue #10](https://github.com/gokrazy/gokrazy/issues/10))
+2   | 500 MB | root2 (gokrazy+apps)   | SquashFS
+3   | 500 MB | root3 (gokrazy+apps)   | SquashFS
 4   | rest   | permanent data         | ext4
 
 The two root partitions are used alternatingly (to avoid modifying the
