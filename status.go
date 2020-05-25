@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -175,6 +176,12 @@ func initStatus(services []*service) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		status := "started"
+		if svc.Stopped() {
+			status = "stopped"
+		}
+		w.Header().Set("X-Gokrazy-Status", status)
+		w.Header().Set("X-Gokrazy-GOARCH", runtime.GOARCH)
 		io.Copy(w, &buf)
 	})
 
