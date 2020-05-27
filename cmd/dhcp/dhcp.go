@@ -9,11 +9,13 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net"
 	"os"
+	"path/filepath"
 	"strings"
 	"syscall"
 	"time"
@@ -127,6 +129,13 @@ func (c *client) request(last *layers.DHCPv4) (*layers.DHCPv4, error) {
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	var (
+		ifname = flag.String(
+			"interface",
+			"eth0",
+			"network interface to obtain a DHCP lease on")
+	)
+	flag.Parse()
 
 	// NOTE: cannot gokrazy.WaitForClock() here, since the clock can only be
 	// initialized once the network is up.
@@ -137,12 +146,12 @@ func main() {
 	}
 	hostname := string(utsname.Nodename[:bytes.IndexByte(utsname.Nodename[:], 0)])
 
-	eth0, err := net.InterfaceByName("eth0")
+	intf, err := net.InterfaceByName(*ifname)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	cs, err := iface.NewConfigSocket("eth0")
+	cs, err := iface.NewConfigSocket(*ifname)
 	if err != nil {
 		log.Fatalf("config socket: %v", err)
 	}
@@ -156,14 +165,14 @@ func main() {
 	// Wait for up to 10 seconds for the link to indicate it has a
 	// carrier.
 	for i := 0; i < 10; i++ {
-		b, err := ioutil.ReadFile("/sys/class/net/eth0/carrier")
+		b, err := ioutil.ReadFile(filepath.Join("/sys/class/net", *ifname, "carrier"))
 		if err == nil && strings.TrimSpace(string(b)) == "1" {
 			break
 		}
 		time.Sleep(1 * time.Second)
 	}
 
-	conn, err := raw.ListenPacket(eth0, syscall.ETH_P_IP, &raw.Config{
+	conn, err := raw.ListenPacket(intf, syscall.ETH_P_IP, &raw.Config{
 		LinuxSockDGRAM: true,
 	})
 	if err != nil {
@@ -172,8 +181,8 @@ func main() {
 
 	c := &client{
 		hostname:     hostname,
-		hardwareAddr: eth0.HardwareAddr,
-		generateXID:  dhcp4.XIDGenerator(eth0.HardwareAddr),
+		hardwareAddr: intf.HardwareAddr,
+		generateXID:  dhcp4.XIDGenerator(intf.HardwareAddr),
 		conn:         conn,
 	}
 	offer, err := c.discover()
