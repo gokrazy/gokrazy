@@ -273,6 +273,7 @@ func supervise(s *service) {
 		cmd := &exec.Cmd{
 			Path:   s.cmd.Path,
 			Args:   s.cmd.Args,
+			Env:    os.Environ(),
 			Stdout: s.Stdout,
 			Stderr: s.Stderr,
 			SysProcAttr: &syscall.SysProcAttr{
@@ -282,6 +283,12 @@ func supervise(s *service) {
 		if attempt == 0 {
 			cmd.Env = append(cmd.Env, "GOKRAZY_FIRST_START=1")
 		}
+		// Designate a subdirectory under /perm as $HOME.
+		// This mirrors what gokrazy system daemons and
+		// ported daemons would do, so setting $HOME
+		// increases the chance that third-party daemons
+		// just work.
+		cmd.Env = append(cmd.Env, "HOME=/perm/"+filepath.Base(s.cmd.Path))
 
 		attempt++
 
