@@ -231,6 +231,7 @@ func initStatus(services []*service) {
 			Meminfo        map[string]int64
 			Hostname       string
 			Model          string
+			PARTUUID       string
 		}{
 			Services:       services,
 			PermDev:        rootdev.Partition(rootdev.Perm),
@@ -243,6 +244,7 @@ func initStatus(services []*service) {
 			Meminfo:        parseMeminfo(),
 			Hostname:       hostname,
 			Model:          model,
+			PARTUUID:       rootdev.PARTUUID(),
 		}); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

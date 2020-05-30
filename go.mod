@@ -14,3 +14,5 @@ require (
 	golang.org/x/sys v0.0.0-20200406155108-e3b113bbe6a4
 	rsc.io/goversion v1.2.0
 )
+
+replace github.com/gokrazy/internal => /home/stream/gohack/github.com/gokrazy/internal
