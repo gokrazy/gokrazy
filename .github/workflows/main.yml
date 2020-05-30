@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Ensure all files were formatted as per gofmt
+      run: |
+        gofmt -l $(find . -name '*.go') >/dev/null
+
+    - name: run tests
+      run: go test ./...
+
+    - name: install gokr-packer
+      run: go get -u github.com/gokrazy/tools/cmd/gokr-packer
+
+    - name: generate gokrazy disk image
+      run: |
+        export PATH=$PATH:$(go env GOPATH)/bin
+        gokr-packer -overwrite=full.img -target_storage_bytes=1610612736 github.com/gokrazy/hello
