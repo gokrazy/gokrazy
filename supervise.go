@@ -129,6 +129,10 @@ type lineswriter interface {
 }
 
 type service struct {
+	// config (never updated)
+	ModuleInfo string
+
+	// state
 	stopped   bool
 	stoppedMu sync.RWMutex
 	cmd       *exec.Cmd
@@ -258,6 +262,12 @@ func isDontSupervise(err error) bool {
 
 func supervise(s *service) {
 	tag := filepath.Base(s.cmd.Path)
+	if modInfo, err := readModuleInfo(s.cmd.Path); err == nil {
+		s.ModuleInfo = modInfo
+	} else {
+		log.Printf("cannot read module info from %s: %v", s.cmd.Path, err)
+	}
+
 	s.Stdout = newLogWriter(tag)
 	s.Stderr = newLogWriter(tag)
 	l := log.New(s.Stderr, "", log.LstdFlags|log.Ldate|log.Ltime)

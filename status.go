@@ -17,6 +17,7 @@ import (
 
 	"github.com/gokrazy/gokrazy/internal/bundled"
 	"github.com/gokrazy/internal/rootdev"
+	"rsc.io/goversion/version"
 
 	"golang.org/x/sys/unix"
 )
@@ -121,6 +122,23 @@ func model() string {
 		model = strings.TrimSpace(vendor) + " " + strings.TrimSpace(name)
 	}
 	return strings.TrimSpace(model)
+}
+
+func readModuleInfo(path string) (string, error) {
+	v, err := version.ReadExe(path)
+	if err != nil {
+		return "", err
+	}
+	lines := strings.Split(strings.TrimSpace(v.ModuleInfo), "\n")
+	shortened := make([]string, len(lines))
+	for idx, line := range lines {
+		row := strings.Split(line, "\t")
+		if len(row) > 3 {
+			row = row[:3]
+		}
+		shortened[idx] = strings.Join(row, "\t")
+	}
+	return strings.Join(shortened, "\n"), nil
 }
 
 func initStatus(services []*service) {
