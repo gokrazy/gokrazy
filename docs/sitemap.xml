@@ -23,7 +23,15 @@
   </url>
   
   <url>
+    <loc>https://gokrazy.org/userguide/</loc>
+  </url>
+  
+  <url>
     <loc>https://gokrazy.org/modules/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gokrazy.org/userguide/remotesyslog/</loc>
   </url>
   
 </urlset>

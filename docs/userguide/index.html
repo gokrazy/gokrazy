@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>using Go modules</title>
+<title>gokrazy Userguide</title>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <link href="/jumbotron-narrow.css" rel="stylesheet">
@@ -35,7 +35,7 @@ body {
       <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
       
       
-      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      <li role="presentation" class="active"><a href="/userguide/">Userguide <span class="sr-only">(current)</span></a></li>
       
       
       <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
@@ -46,31 +46,18 @@ body {
 </div>
 
 
-      <div class="row">
-        <div class="col-lg-12">
-	  <h1>Using Go modules</h1>
+<h1 id="gokrazy-userguide">gokrazy Userguide</h1>
+<p>The gokrazy Userguide walks you through various topics.</p>
+<h2 id="userguide-contents">Userguide contents</h2>
 
-	  <h2>pull in repositories from your GOPATH</h2>
-	  <p>
-	    By default, Go modules will not look at <code>$GOPATH/src</code>,
-	    i.e. all packages passed to gokr-packer will be downloaded. If you
-	    had unpublished changes or packages in your <code>$GOPATH</code>,
-	    you can use the following steps to declare a Go module and pull it
-	    into the build:
-	  </p>
-	  <pre>IMPORTPATH=github.com/stapelberg/gibot-i3
-(cd $(go env GOPATH)/src/${IMPORTPATH?} && GO111MODULE=on go mod init ${IMPORTPATH?})
-go mod edit -require ${IMPORTPATH?}@v0.0.0
-go mod edit -replace ${IMPORTPATH?}=$(go env GOPATH)/src/${IMPORTPATH?}
-</pre>
 
-	  <h2>pull in local repositories</h2>
-	  <p>
-	    Please see <a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive">https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive</a>.
-	  </p>
-
-	</div>
-      </div>
+<ul>
+  
+  <li>
+    <a href="https://gokrazy.org/userguide/remotesyslog/">Using Remote Syslog to send gokrazy logs over the network</a>
+  </li>
+  
+</ul>
 
       <footer class="footer" style="text-align: center">
         <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>

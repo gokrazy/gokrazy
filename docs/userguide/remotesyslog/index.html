@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using Remote Syslog to send gokrazy logs over the network</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+<h1 id="using-remote-syslog-to-send-gokrazy-logs-over-the-network">Using Remote Syslog to send gokrazy logs over the network</h1>
+<p>If you update your gokrazy installations daily, as we recommend you do, logs
+will be cleared daily as a side effect of rebooting the device. You can use
+<a href="https://en.wikipedia.org/wiki/Syslog#Network_protocol">Remote Syslog</a> to
+persist logs elsewhere for later analysis.</p>
+<h2 id="client-side-gokrazy">Client side (gokrazy)</h2>
+<p>To enable remote syslog, you need to configure a target by creating the file
+<code>remote_syslog/target</code> on the permanent data partition.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># The following assumes you already created a file system</span>
+<span style="color:#75715e"># on the permanent data partition. Otherwise, please use:</span>
+<span style="color:#75715e"># sudo mkfs.ext4 /dev/disk/by-partuuid/2e18c40c-04</span>
+
+sudo mount /dev/disk/by-partuuid/2e18c40c-04 /mnt
+echo 10.0.0.76:514 | sudo tee /mnt/remote_syslog/target
+sudo umount /mnt
+</code></pre></div><p>I recommend using a (static) IP address for increased reliability, so that
+remote syslog works even when DNS does not.</p>
+<h2 id="server-side-syslog-ng">Server side (syslog-ng)</h2>
+<p>This is how I instruct <a href="https://en.wikipedia.org/wiki/Syslog-ng">syslog-ng</a> via
+its <code>/etc/syslog-ng/syslog-ng.conf</code> to write syslog messages it received from
+e.g. host <code>gokrazy</code> to <code>/var/log/remote/gokrazy-log</code>:</p>
+<pre><code>source net { network(ip(10.0.0.76) transport(&quot;udp&quot;)); };
+destination remote { file(&quot;/var/log/remote/${FULLHOST}-log&quot;); };
+log { source(net); destination(remote); };
+</code></pre>
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>

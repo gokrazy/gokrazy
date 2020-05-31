@@ -1,10 +1,4 @@
 {{ define "main" }}
-	    <div class="row">
-	      <div class="col-md-10">
-
-		{{- partial "nav.html" . -}}
-
-<h3>list template</h3>
 
 {{ .Content }}
 
@@ -16,17 +10,5 @@
   {{ end }}
 </ul>
 
-<hr>
-
-<p class="small">
-  © 2017 gokrazy authors (Michael Stapelberg and contributors)
-</p>
-	      </div>
-	      <div class="col-md-2">
-		<aside class="bd-toc">
-		  {{ .TableOfContents }}
-		</aside>
-	      </div>
-	    </div>
 {{ end }}
 
