@@ -8,6 +8,7 @@
 package gokrazy
 
 import (
+	"crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -19,15 +20,17 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gokrazy/gokrazy/internal/iface"
-
 	"golang.org/x/sys/unix"
+
+	"github.com/gokrazy/gokrazy/internal/iface"
 )
 
 var (
 	buildTimestamp = "uninitialized"
 	httpPassword   string
 	hostname       string
+	tlsConfig      *tls.Config
+	useTLS         bool
 )
 
 func configureLoopback() error {
@@ -62,6 +65,31 @@ func watchdog() {
 		}
 		time.Sleep(1 * time.Second)
 	}
+}
+
+func setupTLS() error {
+	if _, err := os.Stat("/etc/ssl/gokrazy-web.pem"); os.IsNotExist(err) {
+		return nil // Nothing to set up
+	}
+	cert, err := tls.LoadX509KeyPair("/etc/ssl/gokrazy-web.pem", "/etc/ssl/gokrazy-web.key.pem")
+	if err != nil {
+		return fmt.Errorf("failed loading certificate: %v", err)
+	}
+	useTLS = true
+	tlsConfig = &tls.Config{
+		Certificates:             []tls.Certificate{cert},
+		MinVersion:               tls.VersionTLS12,
+		CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
+		PreferServerCipherSuites: true,
+		CipherSuites: []uint16{
+			// required for http/2
+			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+			// See https://cipherlist.eu/
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+		},
+	}
+	return nil
 }
 
 // Boot configures basic system settings. More specifically, it:
@@ -117,7 +145,22 @@ func Boot(userBuildTimestamp string) error {
 	}
 
 	initRemoteSyslog()
+	if err := setupTLS(); err != nil {
+		return err
+	}
 
+	return nil
+}
+
+func updateListenerPairs(httpPort, httpsPort string, useTLS bool, tlsConfig *tls.Config) error {
+	if err := updateListeners(httpPort, useTLS, nil); err != nil {
+		return err
+	}
+	if useTLS {
+		if err := updateListeners(httpsPort, useTLS, tlsConfig); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -168,7 +211,7 @@ func Supervise(commands []*exec.Cmd) error {
 		return err
 	}
 
-	if err := updateListeners("80"); err != nil {
+	if err := updateListenerPairs("80", "443", useTLS, tlsConfig); err != nil {
 		return fmt.Errorf("updating listeners: %v", err)
 	}
 
@@ -186,7 +229,7 @@ func Supervise(commands []*exec.Cmd) error {
 						m.Header.Type != syscall.RTM_DELADDR {
 						continue
 					}
-					if err := updateListeners("80"); err != nil {
+					if err := updateListenerPairs("80", "443", useTLS, tlsConfig); err != nil {
 						log.Printf("updating listeners: %v", err)
 					}
 				}
@@ -201,7 +244,7 @@ func Supervise(commands []*exec.Cmd) error {
 		signal.Notify(c, unix.SIGHUP)
 
 		for range c {
-			if err := updateListeners("80"); err != nil {
+			if err := updateListenerPairs("80", "443", useTLS, tlsConfig); err != nil {
 				log.Printf("updating listeners: %v", err)
 			}
 		}
@@ -217,7 +260,7 @@ func Supervise(commands []*exec.Cmd) error {
 
 			if err := tryStartShell(); err != nil {
 				log.Printf("could not start shell: %v", err)
-				if err := updateListeners("80"); err != nil {
+				if err := updateListenerPairs("80", "443", useTLS, tlsConfig); err != nil {
 					log.Printf("updating listeners: %v", err)
 				}
 			}
