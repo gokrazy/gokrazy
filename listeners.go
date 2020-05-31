@@ -140,15 +140,11 @@ var (
 	listenersMu sync.Mutex
 )
 
-// tlsEnabled: Indicate, if public or private addresses should be used
 // tlsConfig: tlsConfig. nil, if the listeners should not use https (e.g. for redirects)
 func updateListeners(port string, tlsEnabled bool, tlsConfig *tls.Config) error {
 	hosts, err := PrivateInterfaceAddrs()
 	if err != nil {
 		return err
-	}
-	if tlsEnabled {
-		hosts = []string{"::"}
 	}
 
 	listenersMu.Lock()
@@ -175,8 +171,7 @@ func updateListeners(port string, tlsEnabled bool, tlsConfig *tls.Config) error 
 		addr := net.JoinHostPort(host, port)
 		ln, err := net.Listen("tcp", addr)
 		if err != nil {
-			log.Println(err) // err includes enough context
-			log.Println("(error on listen)")
+			log.Printf("listen: %v", err)
 			continue
 		}
 		log.Printf("now listening on %s", addr)
