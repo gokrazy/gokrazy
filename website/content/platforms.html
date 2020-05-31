@@ -1,0 +1,91 @@
+---
+layout: default
+title: gokrazy platforms
+aliases:
+  - /platforms.html
+menu:
+  main:
+    title: "Platforms"
+    weight: 10
+---
+
+      <div class="row">
+        <div class="col-lg-12">
+	  <h1>Supported platforms</h1>
+	  <p>
+	    <strong>bold</strong> appliances are tested in the CI setup on real
+	    hardware and gate new kernel and firmware versions, and hence can be
+	    considered supported.
+	  </p>
+
+	  <p>
+	    Regular appliances are supported in a best-effort way, i.e. they
+	    might be temporarily broken at HEAD.
+	  </p>
+
+	  <p>
+	    The leading <code>github.com</code> in front of package import paths has been omitted for space reasons.
+	  </p>
+	  
+	  <table width="100%" class="table table-striped">
+	    <thead>
+	    <tr>
+	      <th scope="col">Target</th>
+	      <th scope="col">Hardware</th>
+	      <th scope="col">GOARCH</th>
+	      <th scope="col">Kernel package</th>
+	      <th scope="col">Firmware package</th>
+	      <th scope="col">Appliances</th>
+	    </tr>
+	    </thead>
+
+	    <tbody>
+	    <tr>
+	      <td scope="row">apu2c4</td>
+	      <td>apu2c4</td>
+	      <td>amd64</td>
+	      <td><code><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></code></td>
+	      <td><code><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></code></td>
+	      <td>
+		<strong><code><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></code></strong><br>
+		<code><a href="https://github.com/rtr7/router7">rtr7/router7</a></code>
+	      </td>
+	    </tr>
+
+	    <tr>
+	      <td scope="row">x86-64</td>
+	      <td>qemu</td>
+	      <td>amd64</td>
+	      <td><code><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></code></td>
+	      <td><code><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></code></td>
+	      <td><strong><code><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></code></strong></td>
+	    </tr>
+
+	    <tr>
+	      <td scope="row">rpi3b</td>
+	      <td>raspi3b</td>
+	      <td>arm64</td>
+	      <td><code><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></code></td>
+	      <td><code><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></code></td>
+	      <td>
+		<strong><code><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></code></strong><br>
+		<code><a href="https://github.com/stapelberg/zkj-nas-tools">stapelberg/avr-x1100w</a></code><br>
+		<code><a href="https://github.com/stapelberg/zkj-nas-tools">stapelberg/dornröschen</a></code><br>
+		<code><a href="https://github.com/stapelberg/hmgo">stapelberg/hmgo</a></code><br>
+		<code><a href="https://github.com/stapelberg/scan2drive">stapelberg/scan2drive</a></code>
+	      </td>
+	    </tr>
+
+	    <tr>
+	      <td scope="row">rpi3b+</td>
+	      <td>raspi3b+</td>
+	      <td>arm64</td>
+	      <td><code><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></code></td>
+	      <td><code><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></code></td>
+	      <td><strong><code><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></code></strong></td>
+	    </tr>
+	    </tbody>
+	  </table>
+
+	</div>
+      </div>

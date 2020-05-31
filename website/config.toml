@@ -1,0 +1,19 @@
+baseURL = "https://gokrazy.org/"
+languageCode = "en-us"
+title = "gokrazy"
+theme = "gokrazy"
+disableKinds = ["RSS", "taxonomyTerm"]
+publishDir = "../docs/"
+enableRobotsTXT = true
+
+[markup.goldmark.renderer]
+# Required for e.g. <img> tags in markdown articles.
+unsafe = true
+
+[menu]
+
+  [[menu.main]]
+    name = "github"
+    title = "Source"
+    url = "https://github.com/gokrazy/gokrazy"
+    weight = 60

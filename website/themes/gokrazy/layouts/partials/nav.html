@@ -1,0 +1,9 @@
+<nav>
+  <ul class="nav nav-pills pull-right">
+      {{ $current := . }}
+      {{ range .Site.Menus.main }}
+      {{ $active := $current.IsMenuCurrent "main" . }}
+      <li role="presentation" class="{{ if $active }}active{{ end }}"><a href="{{ .URL }}">{{ .Title }} {{ if $active }}<span class="sr-only">(current)</span>{{ end }}</a></li>
+      {{ end }}
+  </ul>
+</nav>

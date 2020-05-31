@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>using Go modules</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+
+      <div class="row">
+        <div class="col-lg-12">
+	  <h1>Using Go modules</h1>
+
+	  <h2>pull in repositories from your GOPATH</h2>
+	  <p>
+	    By default, Go modules will not look at <code>$GOPATH/src</code>,
+	    i.e. all packages passed to gokr-packer will be downloaded. If you
+	    had unpublished changes or packages in your <code>$GOPATH</code>,
+	    you can use the following steps to declare a Go module and pull it
+	    into the build:
+	  </p>
+	  <pre>IMPORTPATH=github.com/stapelberg/gibot-i3
+(cd $(go env GOPATH)/src/${IMPORTPATH?} && GO111MODULE=on go mod init ${IMPORTPATH?})
+go mod edit -require ${IMPORTPATH?}@v0.0.0
+go mod edit -replace ${IMPORTPATH?}=$(go env GOPATH)/src/${IMPORTPATH?}
+</pre>
+
+	  <h2>pull in local repositories</h2>
+	  <p>
+	    Please see <a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive">https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive</a>.
+	  </p>
+
+	</div>
+      </div>
+
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>

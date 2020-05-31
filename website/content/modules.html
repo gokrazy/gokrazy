@@ -1,0 +1,30 @@
+---
+layout: default
+title: using Go modules
+---
+
+      <div class="row">
+        <div class="col-lg-12">
+	  <h1>Using Go modules</h1>
+
+	  <h2>pull in repositories from your GOPATH</h2>
+	  <p>
+	    By default, Go modules will not look at <code>$GOPATH/src</code>,
+	    i.e. all packages passed to gokr-packer will be downloaded. If you
+	    had unpublished changes or packages in your <code>$GOPATH</code>,
+	    you can use the following steps to declare a Go module and pull it
+	    into the build:
+	  </p>
+	  <pre>IMPORTPATH=github.com/stapelberg/gibot-i3
+(cd $(go env GOPATH)/src/${IMPORTPATH?} && GO111MODULE=on go mod init ${IMPORTPATH?})
+go mod edit -require ${IMPORTPATH?}@v0.0.0
+go mod edit -replace ${IMPORTPATH?}=$(go env GOPATH)/src/${IMPORTPATH?}
+</pre>
+
+	  <h2>pull in local repositories</h2>
+	  <p>
+	    Please see <a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive">https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive</a>.
+	  </p>
+
+	</div>
+      </div>

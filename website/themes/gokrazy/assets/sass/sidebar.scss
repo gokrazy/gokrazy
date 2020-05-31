@@ -1,0 +1,23 @@
+.bd-toc {
+    position: sticky;
+    top: 4rem;
+    height: calc(100vh - 4rem);
+    overflow-y: auto
+}
+
+.bd-toc ul {
+    list-style: none;
+    padding-left: 1em;
+    border-left: 1px solid #eee;
+}
+
+.bd-toc li {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/* TODO: move this to a separate style sheet */
+.bigbutton {
+    margin-left: 1em;
+    margin-right: 1em;
+}
