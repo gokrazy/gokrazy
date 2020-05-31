@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  format:
+  diskimage:
     runs-on: ubuntu-latest
 
     steps:
