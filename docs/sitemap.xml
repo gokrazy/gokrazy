@@ -3,6 +3,18 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://gokrazy.org/userguide/remotesyslog/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gokrazy.org/userguide/tls-for-untrusted-networks/</loc>
+  </url>
+  
+  <url>
+    <loc>https://gokrazy.org/userguide/unencrypted-wifi/</loc>
+  </url>
+  
+  <url>
     <loc>https://gokrazy.org/</loc>
   </url>
   
@@ -28,10 +40,6 @@
   
   <url>
     <loc>https://gokrazy.org/modules/</loc>
-  </url>
-  
-  <url>
-    <loc>https://gokrazy.org/userguide/remotesyslog/</loc>
   </url>
   
 </urlset>

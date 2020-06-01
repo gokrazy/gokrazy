@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connecting to unencrypted WiFi networks</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+<h1 id="connecting-to-unencrypted-wifi-networks">Connecting to unencrypted WiFi networks</h1>
+<p>Remember that using an unencrypted WiFi network means anyone in range can read
+your communication. Hence, we strongly recommend <a href="/userguide/tls-for-untrusted-networks/">using TLS for accessing the
+gokrazy web interface and doing
+updates</a>.</p>
+<p>To make gokrazy connect to a WiFi network, first include the
+<code>github.com/gokrazy/wifi</code> package in your <code>gokr-packer</code> command line, e.g.:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/wifi
+</code></pre></div><p>Then, configure the <code>wifi</code> program by creating the file <code>wifi.json</code> on the
+permanent data partition:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># The following assumes you already created a file system</span>
+<span style="color:#75715e"># on the permanent data partition. Otherwise, please use:</span>
+<span style="color:#75715e"># sudo mkfs.ext4 /dev/disk/by-partuuid/2e18c40c-04</span>
+
+sudo mount /dev/disk/by-partuuid/2e18c40c-04 /mnt
+echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;I/O Tee&#34;}&#39;</span> | sudo tee /mnt/wifi.json
+sudo umount /mnt
+</code></pre></div><p>After starting gokrazy, the <code>wifi</code> program will connect to the WiFi network <code>I/O Tee</code>:</p>
+<p><a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" align="right" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
+<h2 id="for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</h2>
+<p>In case you have trouble getting your Raspberry Pi to connect to your network,
+this is how I set up my <a href="https://openwrt.org/toh/tp-link/tl-wdr4300">TP-LINK
+TL-WDR4300</a> with <a href="https://openwrt.org/">OpenWrt
+19.07</a>:</p>
+<p><a href="/img/iotee.jpg"><img src="/img/iotee.thumb.jpg" srcset="/img/iotee.thumb.2x.jpg 2x,/img/iotee.thumb.3x.jpg 3x" width="700" align="right" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
+<p>The MAC address filter isn’t a security measure, but prevents others from
+accidentally joining this open network.</p>
+
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>

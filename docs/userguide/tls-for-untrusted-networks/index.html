@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using TLS in untrusted networks</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+<h1 id="using-tls-in-untrusted-networks">Using TLS in untrusted networks</h1>
+<p>Let’s assume that you have <a href="/quickstart/">installed gokrazy on a Raspberry Pi</a>
+and are currently successfully updating it over the network like so:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox
+</code></pre></div><h2 id="enabling-tls">Enabling TLS</h2>
+<p>To start using TLS, specify the <code>-tls=self-signed</code> flag, and set <code>-insecure</code> for
+the first update:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -insecure <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox
+</code></pre></div><p>The gokrazy packer will:</p>
+<ul>
+<li>generate a self-signed certificate</li>
+<li>include the certificate in the gokrazy installation</li>
+<li>verify the certificate fingerprint in future updates</li>
+</ul>
+<p>The gokrazy installation will start listening on TCP port 443 for HTTPS
+connections and redirect any HTTP traffic to HTTPS. When opening the gokrazy web
+interface in your browser, you will need to explicitly permit communication due
+to the self-signed certificate.</p>
+<p>For all future updates, remove the <code>-insecure</code> flag and keep the <code>-tls=self-signed</code> flag:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox
+</code></pre></div><p>You can now safely update your gokrazy installation over untrusted networks,
+such as <a href="/userguide/unencrypted-wifi/">unencrypted WiFi networks</a>.</p>
+<h2 id="disabling-tls">Disabling TLS</h2>
+<p>Just remove the <code>-tls</code> flag from your <code>gokr-packer</code> command line. After the next
+update, gokrazy will no longer contain the certificates and will serve
+unencrypted HTTP again.</p>
+
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>
