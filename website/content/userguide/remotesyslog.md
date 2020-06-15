@@ -1,6 +1,6 @@
 ---
 title: "Using Remote Syslog to send gokrazy logs over the network"
-weight: 10
+weight: 20
 ---
 
 # Using Remote Syslog to send gokrazy logs over the network

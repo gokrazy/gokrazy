@@ -1,6 +1,6 @@
 ---
 title: "Connecting to unencrypted WiFi networks"
-weight: 30
+weight: 40
 ---
 
 # Connecting to unencrypted WiFi networks

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Controlling a GPIO input/output pin</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+<h1 id="controlling-a-gpio-inputoutput-pin">Controlling a GPIO input/output pin</h1>
+<p>In this guide, we are using <a href="https://periph.io/">periph.io</a>, a library for
+peripheral I/O in Go, to set one of the Raspberry Pi’s General Purpose I/O
+(GPIO) pins to a logical high (3.3V) or low (0V) signal.</p>
+<p>periph.io supports the Raspberry Pi 3 and Raspberry Pi 4, starting with version
+<code>v3.6.4</code>.</p>
+<h2 id="connect-gpio-pins-based-on-pinout">Connect GPIO pins based on pinout</h2>
+<p><a href="https://pinout.xyz"><img src="/img/raspberry-pi-pinout.png" width="700" align="right" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
+<p>To verify the code is doing what we expect, let’s connect a multimeter as per
+<a href="https://pinout.xyz">pinout.xyz</a>’s pinout:</p>
+<ul>
+<li>pin number 18 (signal <code>BCM24</code>, labeled <code>24</code> in the pinout above)</li>
+<li>pin number 20 (signal <code>GND</code>)</li>
+</ul>
+<p>We need to set the multimeter to “Voltage measurement, DC (direct current)”.</p>
+<h2 id="setting-an-output-pin-signal">Setting an output pin signal</h2>
+<p>To set the pin high and low, alternatingly, with a 5 second frequency, we will
+be using the <code>hello-gpio</code> program, which is a slightly modified version of the
+example at <a href="https://periph.io/device/led/">periph.io/device/led</a>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;log&#34;</span>
+	<span style="color:#e6db74">&#34;time&#34;</span>
+
+	<span style="color:#e6db74">&#34;periph.io/x/periph/conn/gpio&#34;</span>
+	<span style="color:#e6db74">&#34;periph.io/x/periph/host&#34;</span>
+	<span style="color:#e6db74">&#34;periph.io/x/periph/host/rpi&#34;</span>
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doGPIO</span>() <span style="color:#66d9ef">error</span> {
+	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Loading periph.io drivers&#34;</span>)
+	<span style="color:#75715e">// Load periph.io drivers:
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">host</span>.<span style="color:#a6e22e">Init</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+	}
+	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Toggling GPIO forever&#34;</span>)
+	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTicker</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">Low</span>; ; <span style="color:#a6e22e">l</span> = !<span style="color:#a6e22e">l</span> {
+		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;setting GPIO pin number 18 (signal BCM24) to %v&#34;</span>, <span style="color:#a6e22e">l</span>)
+		<span style="color:#75715e">// Lookup a pin by its location on the board:
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rpi</span>.<span style="color:#a6e22e">P1_18</span>.<span style="color:#a6e22e">Out</span>(<span style="color:#a6e22e">l</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+		}
+		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">C</span>
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">doGPIO</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+	}
+}
+</code></pre></div><p>Install the program on your Raspberry Pi using gokrazy (see <a href="/quickstart/">Quickstart</a>):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello-gpio
+</code></pre></div><p>…and wait a few seconds for it to reboot.</p>
+<p>At this point, we should be able to see the high/low signal on the multimeter,
+alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
+<p><a href="/img/2020-06-15-gpio.jpg"><img src="/img/2020-06-15-gpio.thumb.jpg" srcset="/img/2020-06-15-gpio.thumb.2x.jpg 2x,/img/2020-06-15-gpio.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
+
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>

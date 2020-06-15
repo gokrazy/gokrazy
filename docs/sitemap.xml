@@ -3,6 +3,10 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://gokrazy.org/userguide/gpio/</loc>
+  </url>
+  
+  <url>
     <loc>https://gokrazy.org/userguide/remotesyslog/</loc>
   </url>
   

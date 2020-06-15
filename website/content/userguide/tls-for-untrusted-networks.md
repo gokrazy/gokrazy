@@ -1,6 +1,6 @@
 ---
 title: "Using TLS in untrusted networks"
-weight: 20
+weight: 30
 ---
 
 # Using TLS in untrusted networks
