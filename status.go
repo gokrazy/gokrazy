@@ -46,55 +46,6 @@ func parseMeminfo() map[string]int64 {
 	return vals
 }
 
-var commonTmpls = mustParseCommonTmpls()
-
-func mustParseCommonTmpls() *template.Template {
-	t := template.New("root")
-	t = template.Must(t.New("header").Parse(bundled.Asset("header.tmpl")))
-	t = template.Must(t.New("footer").Parse(bundled.Asset("footer.tmpl")))
-	return t
-}
-
-var overviewTmpl = template.Must(template.Must(commonTmpls.Clone()).New("overview").
-	Funcs(map[string]interface{}{
-		"restarting": func(t time.Time) bool {
-			return time.Since(t).Seconds() < 5
-		},
-
-		"last": func(stdout, stderr []string) string {
-			if len(stdout) == 0 && len(stderr) == 0 {
-				return ""
-			}
-			both := append(stdout, stderr...)
-			sort.Strings(both)
-			return both[len(both)-1]
-		},
-
-		"megabytes": func(val int64) string {
-			return fmt.Sprintf("%.1f MiB", float64(val)/1024/1024)
-		},
-
-		"gigabytes": func(val int64) string {
-			return fmt.Sprintf("%.1f GiB", float64(val)/1024/1024/1024)
-		},
-
-		"baseName": func(path string) string {
-			return filepath.Base(path)
-		},
-
-		"initRss": func() int64 {
-			return rssOfPid(1)
-		},
-
-		"rssPercentage": func(meminfo map[string]int64, rss int64) string {
-			used := float64(meminfo["MemTotal"] - meminfo["MemAvailable"])
-			return fmt.Sprintf("%.f", float64(rss)/used*100)
-		},
-	}).
-	Parse(bundled.Asset("overview.tmpl")))
-
-var statusTmpl = template.Must(template.Must(commonTmpls.Clone()).New("statusTmpl").Parse(bundled.Asset("status.tmpl")))
-
 // mustReadFile0 returns the file contents or an empty string if the file could
 // not be read. All trailing \0 bytes are stripped (as found in
 // /proc/device-tree/model).
@@ -143,6 +94,50 @@ func readModuleInfo(path string) (string, error) {
 
 func initStatus(services []*service) {
 	model := model()
+
+	commonTmpls := template.New("root")
+	commonTmpls = template.Must(commonTmpls.New("header").Parse(bundled.Asset("header.tmpl")))
+	commonTmpls = template.Must(commonTmpls.New("footer").Parse(bundled.Asset("footer.tmpl")))
+
+	overviewTmpl := template.Must(template.Must(commonTmpls.Clone()).New("overview").
+		Funcs(map[string]interface{}{
+			"restarting": func(t time.Time) bool {
+				return time.Since(t).Seconds() < 5
+			},
+
+			"last": func(stdout, stderr []string) string {
+				if len(stdout) == 0 && len(stderr) == 0 {
+					return ""
+				}
+				both := append(stdout, stderr...)
+				sort.Strings(both)
+				return both[len(both)-1]
+			},
+
+			"megabytes": func(val int64) string {
+				return fmt.Sprintf("%.1f MiB", float64(val)/1024/1024)
+			},
+
+			"gigabytes": func(val int64) string {
+				return fmt.Sprintf("%.1f GiB", float64(val)/1024/1024/1024)
+			},
+
+			"baseName": func(path string) string {
+				return filepath.Base(path)
+			},
+
+			"initRss": func() int64 {
+				return rssOfPid(1)
+			},
+
+			"rssPercentage": func(meminfo map[string]int64, rss int64) string {
+				used := float64(meminfo["MemTotal"] - meminfo["MemAvailable"])
+				return fmt.Sprintf("%.f", float64(rss)/used*100)
+			},
+		}).
+		Parse(bundled.Asset("overview.tmpl")))
+
+	statusTmpl := template.Must(template.Must(commonTmpls.Clone()).New("statusTmpl").Parse(bundled.Asset("status.tmpl")))
 
 	for _, fn := range []string{
 		"favicon.ico",
