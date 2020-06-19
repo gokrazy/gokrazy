@@ -58,6 +58,12 @@ table {
 	    <td>{{ .Model }}</td>
 	  </tr>
 	  {{ end }}
+	  {{ if .EEPROM }}
+	  <tr>
+	    <th>EEPROM<br>(SHA256)</th>
+	    <td>{{ shortenSHA256 .EEPROM.PieepromSHA256 }}<br>{{ shortenSHA256 .EEPROM.VL805SHA256 }}</td>
+	  </tr>
+	  {{ end }}
 	</table>
 
       </div><!-- /.navbar-collapse -->
