@@ -3,9 +3,9 @@
 
 # Overview
 
-gokrazy packs your Go application(s) into an SD card image for the
-Raspberry Pi 3 which — aside from the Linux kernel and proprietary
-Raspberry Pi bootloader — only contains Go software.
+gokrazy packs your Go application(s) into an SD card image for the Raspberry Pi
+3 or 4 which — aside from the Linux kernel and proprietary Raspberry Pi
+bootloader — only contains Go software.
 
 The motivation is that [@stapelberg](https://github.com/stapelberg)
 spends way more time on C software and their various issues than he
@@ -22,7 +22,7 @@ Then, use the `go` tool to download and install `gokr-packer`:
 go get -u github.com/gokrazy/tools/cmd/gokr-packer
 ```
 
-## Overwriting an SD card for the Raspberry Pi 3
+## Overwriting an SD card for the Raspberry Pi 3 or 4
 
 To re-partition and overwrite the SD card `/dev/sdx`, use:
 
@@ -30,10 +30,9 @@ To re-partition and overwrite the SD card `/dev/sdx`, use:
 gokr-packer -overwrite=/dev/sdx github.com/gokrazy/hello
 ```
 
-Then, put the SD card into your Raspberry Pi 3 and power it up! Once
-the Raspberry Pi 3 has booted (takes about 10 seconds), you should be
-able to reach the gokrazy web interface at the URL which `gokr-packer`
-printed.
+Then, put the SD card into your Raspberry Pi 3 or 4 and power it up! Once the
+Raspberry Pi 3 or 4 has booted (takes about 10 seconds), you should be able to
+reach the gokrazy web interface at the URL which `gokr-packer` printed.
 
 Under the hood, `gokr-packer`…
 
@@ -54,7 +53,7 @@ To update gokrazy, including the firmware and kernel binaries, use:
 go get -u github.com/gokrazy/tools/cmd/gokr-packer
 ```
 
-To update your gokrazy installation (running on a Raspberry Pi 3),
+To update your gokrazy installation (running on a Raspberry Pi 3 or 4),
 use:
 ```
 GOKRAZY_UPDATE=http://gokrazy:mysecretpassword@gokrazy/ gokr-packer github.com/gokrazy/hello
@@ -119,5 +118,6 @@ gokr-packer \
 
 * [github.com/gokrazy/gokrazy](https://github.com/gokrazy/gokrazy): system code, main issue tracker, documentation
 * [github.com/gokrazy/tools](https://github.com/gokrazy/tools): SD card image creation code, pulling in:
-    * [github.com/gokrazy/firmware](https://github.com/gokrazy/firmware): Raspberry Pi 3 firmware files
+    * [github.com/gokrazy/firmware](https://github.com/gokrazy/firmware): Raspberry Pi 3 or 4 firmware files
+    * [github.com/gokrazy/rpi-eeprom](https://github.com/gokrazy/rpi-eeprom): Raspberry Pi 4 EEPROM files
     * [github.com/gokrazy/kernel](https://github.com/gokrazy/kernel): pre-built kernel image and bootloader config
