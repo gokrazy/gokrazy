@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>gokrazy - a pure-Go userland for your Raspberry Pi 3 appliances</title>
+<title>gokrazy - a pure-Go userland for your Raspberry Pi 3 or 4 appliances</title>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <link href="/jumbotron-narrow.css" rel="stylesheet">
@@ -50,7 +50,7 @@ body {
 
       <div class="jumbotron" style="padding: 1em; padding-right: 0; padding-left: 2em; text-align: left">
         <img src="logo.svg" width="200" height="217" align="right" text="gokrazy 'crazy gopher' logo">
-        <h2>gokrazy is a pure-Go userland for your Raspberry Pi 3 appliances</h2>
+        <h2>gokrazy is a pure-Go userland for your Raspberry Pi 3/4 appliances</h2>
 	<p>
 	For a long time, we were unhappy with having to care about security
 	issues and Linux distribution maintenance on our various Raspberry Pis.
@@ -101,8 +101,9 @@ body {
 	  <p>
 	  Due to no C runtime environment being present, your code must compile
 	  with the environment variable <code>CGO_ENABLED=0</code>. To
-	  cross-compile for the Raspberry Pi 3, use <code>GOARCH=arm64</code>.
-	  If your program still builds, you’re good to go!
+	  cross-compile for the Raspberry Pi 3 or 4,
+	  use <code>GOARCH=arm64</code>. If your program still builds, you’re
+	  good to go!
 	  </p>
 
           <h4>Network updates</h4>

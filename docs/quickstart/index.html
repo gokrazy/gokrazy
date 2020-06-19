@@ -48,10 +48,10 @@ body {
 
       <div class="row">
         <div class="col-lg-12">
-	  <h1>Get a Raspberry Pi 3 (no other model)</h1>
+	  <h1>Get a Raspberry Pi 3 or 4 (no others)</h1>
 	  <p>
-	  Currently, the Raspberry Pi 3 is the <strong>only</strong>
-	  model supported. Many people assume the Raspberry Pi Zero W
+	  Currently, the Raspberry Pi 3 and Pi 4 are the <strong>only</strong>
+	  supported models. Many people assume the Raspberry Pi Zero W
 	  could be used as well. Unfortunately, it uses the older
 	  BCM2835 SoC, which is not arm64, so gokrazy won’t run on
 	  it. See
@@ -88,7 +88,7 @@ If your applications need to store persistent data, create a file system using e
 
 	mkfs.ext4 /dev/sdb4
 
-To boot gokrazy, plug the SD card into a Raspberry Pi 3 (no other model supported)
+To boot gokrazy, plug the SD card into a Raspberry Pi 3 or 4 (no other models supported)
 
 To interact with the device, gokrazy provides a web interface reachable at:
 
@@ -96,7 +96,7 @@ To interact with the device, gokrazy provides a web interface reachable at:
 
 There will be not be any other output (no HDMI, no serial console, etc.)</pre>
           <p>
-	  After booting from this SD card, your Raspberry Pi 3 will:
+	  After booting from this SD card, your Raspberry Pi 3 or 4 will:
 	  <ul>
 	  <li>obtain an IP address for hostname “gokrazy” via DHCP (IPv4) and SLAAC (IPv6)</li>
 	  <li>synchronize the clock using NTP</li>
