@@ -60,6 +60,10 @@ Under the hood, `gokr-packer`…
 To update gokrazy, including the firmware and kernel binaries, use:
 ```
 go get -u github.com/gokrazy/tools/cmd/gokr-packer
+go get -u github.com/gokrazy/gokrazy
+go get -u github.com/gokrazy/kernel
+go get -u github.com/gokrazy/firmware
+go get -u github.com/gokrazy/rpi-eeprom
 ```
 
 To update your gokrazy installation (running on a Raspberry Pi 3 or 4),
