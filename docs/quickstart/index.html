@@ -65,8 +65,17 @@ body {
 	  </p>
 
           <h1>Install the gokrazy packer</h1>
-	  <pre>INSTANCE=gokrazy/hello; mkdir -p ~/${INSTANCE?} && cd ~/${INSTANCE?} && echo module ${INSTANCE?} > go.mod
-go get -u github.com/gokrazy/tools/cmd/gokr-packer</pre>
+	  <p>
+	    Create a directory for this gokrazy instance and initialize a Go module:
+	  </p>
+	  <pre>INSTANCE=gokrazy/hello
+mkdir -p ~/${INSTANCE?}
+cd ~/${INSTANCE?}
+go mod init hello</pre>
+	  <p>
+	    Then, install the gokr-packer:
+	  </p>
+<pre>go get github.com/gokrazy/tools/cmd/gokr-packer@latest</pre>
 
           <h1>Overwrite an SD card with gokrazy</h1>
 	  <p>
