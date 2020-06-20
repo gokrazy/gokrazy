@@ -17,9 +17,18 @@ would like. Hence, he is going Go-only where feasible.
 
 [Install the latest Go version](https://golang.org/dl/) if you haven’t already.
 
-Then, use the `go` tool to download and install `gokr-packer`:
+Create a directory for this gokrazy instance and initialize a Go module:
+
 ```
-go get -u github.com/gokrazy/tools/cmd/gokr-packer
+INSTANCE=gokrazy/hello
+mkdir -p ~/${INSTANCE?}
+cd ~/${INSTANCE?}
+go mod init hello
+```
+
+Then, install `gokr-packer`:
+```
+go get github.com/gokrazy/tools/cmd/gokr-packer@latest
 ```
 
 ## Overwriting an SD card for the Raspberry Pi 3 or 4
