@@ -248,12 +248,14 @@ func initStatus(services []*service) {
 			Hostname       string
 			Model          string
 			XsrfToken      int32
+			EEPROM         *eepromVersion
 		}{
 			Service:        svc,
 			BuildTimestamp: buildTimestamp,
 			Hostname:       hostname,
 			Model:          model,
 			XsrfToken:      token,
+			EEPROM:         lastInstalledEepromVersion,
 		}); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
