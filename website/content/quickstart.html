@@ -65,7 +65,13 @@ To interact with the device, gokrazy provides a web interface reachable at:
 
 	http://gokrazy:<i>&lt;automatically-generated-random-password&gt;</i>@gokrazy/
 
-There will be not be any other output (no HDMI, no serial console, etc.)</pre>
+In addition, the following Linux consoles are set up:
+
+	1. foreground Linux console on the serial port (115200n8, pin 6, 8, 10 for GND, TX, RX), accepting input
+	2. secondary Linux framebuffer console on HDMI; shows Linux kernel message but no init system messages
+
+Use -serial_console=disabled to make gokrazy not touch the serial port,
+and instead make the framebuffer console on HDMI the foreground console</pre>
           <p>
 	  After booting from this SD card, your Raspberry Pi 3 or 4 will:
 	  <ul>
