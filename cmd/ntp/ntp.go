@@ -21,6 +21,7 @@ func set(rtc *os.File) error {
 	if err := syscall.Settimeofday(&tv); err != nil {
 		return err
 	}
+	log.Printf("clock set to %v", r.Time)
 
 	if rtc == nil {
 		return nil
