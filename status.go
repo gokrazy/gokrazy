@@ -62,7 +62,9 @@ func mustReadFile0(filename string) string {
 	return string(b)
 }
 
-func model() string {
+// Model returns a human readable description of the current device model,
+// e.g. “Raspberry Pi 4 Model B Rev 1.1” or “PC Engines apu2”.
+func Model() string {
 	// the supported Raspberry Pis have this file
 	model := mustReadFile0("/proc/device-tree/model")
 	if model == "" {
@@ -150,7 +152,7 @@ func lastInstalledEepromVersion() (*eepromVersion, error) {
 }
 
 func initStatus(services []*service) {
-	model := model()
+	model := Model()
 
 	lastInstalledEepromVersion, err := lastInstalledEepromVersion()
 	if err != nil {
