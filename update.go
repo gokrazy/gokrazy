@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -19,6 +20,7 @@ import (
 
 	"github.com/gokrazy/internal/fat"
 	"github.com/gokrazy/internal/rootdev"
+	"github.com/klauspost/compress/zstd"
 )
 
 var rootRe = regexp.MustCompile(`root=[^ ]+`)
@@ -100,7 +102,17 @@ func nonConcurrentUpdateHandler(dest string) func(http.ResponseWriter, *http.Req
 		default:
 			hash = sha256.New()
 		}
-		if err := streamRequestTo(dest, io.TeeReader(r.Body, hash)); err != nil {
+		rd := io.Reader(r.Body)
+		if strings.EqualFold(r.Header.Get("Content-Encoding"), "zstd") {
+			dec, err := zstd.NewReader(r.Body)
+			if err != nil {
+				log.Printf("updating %q failed: %v", dest, err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			rd = dec
+		}
+		if err := streamRequestTo(dest, io.TeeReader(rd, hash)); err != nil {
 			log.Printf("updating %q failed: %v", dest, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -133,7 +145,7 @@ func initUpdate() error {
 	// feature support (e.g. PARTUUID= support) between the packer and update
 	// target.
 	http.HandleFunc("/update/features", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "partuuid,updatehash,")
+		fmt.Fprintf(w, "partuuid,updatehash,zstd,")
 	})
 	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(rootdev.BlockDevice()))
 	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(rootdev.InactiveRootPartition())))
