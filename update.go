@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"fmt"
+	"hash"
+	"hash/crc32"
 	"io"
 	"log"
 	"net/http"
@@ -91,7 +93,13 @@ func nonConcurrentUpdateHandler(dest string) func(http.ResponseWriter, *http.Req
 		mu.Lock()
 		defer mu.Unlock()
 
-		hash := sha256.New()
+		var hash hash.Hash
+		switch r.Header.Get("X-Gokrazy-Update-Hash") {
+		case "crc32":
+			hash = crc32.NewIEEE()
+		default:
+			hash = sha256.New()
+		}
 		if err := streamRequestTo(dest, io.TeeReader(r.Body, hash)); err != nil {
 			log.Printf("updating %q failed: %v", dest, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -125,7 +133,7 @@ func initUpdate() error {
 	// feature support (e.g. PARTUUID= support) between the packer and update
 	// target.
 	http.HandleFunc("/update/features", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "partuuid,")
+		fmt.Fprintf(w, "partuuid,updatehash,")
 	})
 	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(rootdev.BlockDevice()))
 	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(rootdev.InactiveRootPartition())))
