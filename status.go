@@ -151,6 +151,21 @@ func lastInstalledEepromVersion() (*eepromVersion, error) {
 	return result, nil
 }
 
+func parseUtsname(u unix.Utsname) string {
+	if u == (unix.Utsname{}) {
+		// Empty utsname, no info to parse.
+		return "unknown"
+	}
+
+	str := func(b [65]byte) string {
+		// Trim all trailing NULL bytes.
+		return string(bytes.TrimRight(b[:], "\x00"))
+	}
+
+	return fmt.Sprintf("%s %s (%s)",
+		str(u.Sysname), str(u.Release), str(u.Machine))
+}
+
 func initStatus(services []*service) {
 	model := Model()
 
@@ -158,6 +173,12 @@ func initStatus(services []*service) {
 	if err != nil {
 		log.Printf("getting EEPROM version: %v", err)
 	}
+
+	var uname unix.Utsname
+	if err := unix.Uname(&uname); err != nil {
+		log.Printf("getting uname: %v", err)
+	}
+	kernel := parseUtsname(uname)
 
 	commonTmpls := template.New("root").Funcs(map[string]interface{}{
 		"shortenSHA256": func(hash string) string {
@@ -251,6 +272,7 @@ func initStatus(services []*service) {
 			Model          string
 			XsrfToken      int32
 			EEPROM         *eepromVersion
+			Kernel         string
 		}{
 			Service:        svc,
 			BuildTimestamp: buildTimestamp,
@@ -258,6 +280,7 @@ func initStatus(services []*service) {
 			Model:          model,
 			XsrfToken:      token,
 			EEPROM:         lastInstalledEepromVersion,
+			Kernel:         kernel,
 		}); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -301,6 +324,7 @@ func initStatus(services []*service) {
 			Model          string
 			PARTUUID       string
 			EEPROM         *eepromVersion
+			Kernel         string
 		}{
 			Services:       services,
 			PermDev:        rootdev.Partition(rootdev.Perm),
@@ -315,6 +339,7 @@ func initStatus(services []*service) {
 			Model:          model,
 			PARTUUID:       rootdev.PARTUUID(),
 			EEPROM:         lastInstalledEepromVersion,
+			Kernel:         kernel,
 		}); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

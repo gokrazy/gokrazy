@@ -52,6 +52,10 @@ table {
 	    <th>host</th>
 	    <td>{{ .Hostname }}</td>
 	  </tr>
+	  <tr>
+	    <th>kernel</th>
+	    <td>{{ .Kernel }}</td>
+	  </tr>
 	  {{ if (ne .Model "") }}
 	  <tr>
 	    <th>model</th>
