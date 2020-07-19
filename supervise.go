@@ -75,8 +75,11 @@ func (w *remoteSyslogWriter) Write(b []byte) (int, error) {
 	w.lines.Write(b)
 	w.syslogMu.Lock()
 	defer w.syslogMu.Unlock()
-	if w.syslog != nil {
-		w.syslog.Write(b)
+	if w.syslog == nil {
+		return len(b), nil
+	}
+	for _, line := range strings.Split(strings.TrimSpace(string(b)), "\n") {
+		w.syslog.Write([]byte(line + "\n"))
 	}
 	return len(b), nil
 }
