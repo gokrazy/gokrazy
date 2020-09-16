@@ -79,6 +79,18 @@ func Model() string {
 	return strings.TrimSpace(model)
 }
 
+// Firmware returns a firmware description for the PC Engines apu2 (and other PCs), e.g. “coreboot v4.11.0.6 (04/26/2020)”.
+func Firmware() string {
+	vendor := mustReadFile0("/sys/class/dmi/id/bios_vendor")
+	version := mustReadFile0("/sys/class/dmi/id/bios_version")
+	date := mustReadFile0("/sys/class/dmi/id/bios_date")
+	if vendor == "" || version == "" || date == "" {
+		return "" // unsupported platform
+	}
+	firmware := strings.TrimSpace(vendor) + " " + strings.TrimSpace(version) + " (" + strings.TrimSpace(date) + ")"
+	return strings.TrimSpace(firmware)
+}
+
 func readModuleInfo(path string) (string, error) {
 	v, err := version.ReadExe(path)
 	if err != nil {
@@ -168,6 +180,7 @@ func parseUtsname(u unix.Utsname) string {
 
 func initStatus(services []*service) {
 	model := Model()
+	firmware := Firmware()
 
 	lastInstalledEepromVersion, err := lastInstalledEepromVersion()
 	if err != nil {
@@ -270,6 +283,7 @@ func initStatus(services []*service) {
 			BuildTimestamp string
 			Hostname       string
 			Model          string
+			Firmware       string
 			XsrfToken      int32
 			EEPROM         *eepromVersion
 			Kernel         string
@@ -278,6 +292,7 @@ func initStatus(services []*service) {
 			BuildTimestamp: buildTimestamp,
 			Hostname:       hostname,
 			Model:          model,
+			Firmware:       firmware,
 			XsrfToken:      token,
 			EEPROM:         lastInstalledEepromVersion,
 			Kernel:         kernel,
@@ -322,6 +337,7 @@ func initStatus(services []*service) {
 			Meminfo        map[string]int64
 			Hostname       string
 			Model          string
+			Firmware       string
 			PARTUUID       string
 			EEPROM         *eepromVersion
 			Kernel         string
@@ -337,6 +353,7 @@ func initStatus(services []*service) {
 			Meminfo:        parseMeminfo(),
 			Hostname:       hostname,
 			Model:          model,
+			Firmware:       firmware,
 			PARTUUID:       rootdev.PARTUUID(),
 			EEPROM:         lastInstalledEepromVersion,
 			Kernel:         kernel,

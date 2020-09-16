@@ -39,38 +39,43 @@ table {
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <p style="width: 50ex; margin-top: 0.25em; font-size: 18px"><a href="/">gokrazy</a><br>
+        <p style="margin-top: 0.25em; font-size: 18px"><a href="/">gokrazy</a><br>
         <small style="font-size: 11px" class="text-muted">version {{ .BuildTimestamp }}</small></p>
       </div>
 
-      <div class="collapse navbar-collapse" id="navbar-collapse-1">
-        <ul class="nav navbar-nav">
-        </ul>
+      <div class="nav navbar-right hidden-xs">
+        <table class="navbar-text" style="border-spacing: 10px 0; border-collapse: separate">
+          <tr>
+            <th>host</th>
+            <td>{{ .Hostname }}</td>
+          </tr>
+          <tr>
+            <th>kernel</th>
+            <td>{{ .Kernel }}</td>
+          </tr>
+        </table>
+        <table class="navbar-text" style="border-spacing: 10px 0; border-collapse: separate">
+          {{ if (ne .Model "") }}
+          <tr>
+            <th>model</th>
+            <td>{{ .Model }}</td>
+          </tr>
+          {{ end }}
+          {{ if (ne .Firmware "") }}
+          <tr>
+            <th>firmware</th>
+            <td>{{ .Firmware }}</td>
+          </tr>
+          {{ end }}
+          {{ if .EEPROM }}
+          <tr>
+            <th>EEPROM<br>(SHA256)</th>
+            <td>{{ shortenSHA256 .EEPROM.PieepromSHA256 }}<br>{{ shortenSHA256 .EEPROM.VL805SHA256 }}</td>
+          </tr>
+          {{ end }}
+        </table>
 
-        <table class="navbar-text navbar-right" style="border-spacing: 10px 0; border-collapse: separate">
-	  <tr>
-	    <th>host</th>
-	    <td>{{ .Hostname }}</td>
-	  </tr>
-	  <tr>
-	    <th>kernel</th>
-	    <td>{{ .Kernel }}</td>
-	  </tr>
-	  {{ if (ne .Model "") }}
-	  <tr>
-	    <th>model</th>
-	    <td>{{ .Model }}</td>
-	  </tr>
-	  {{ end }}
-	  {{ if .EEPROM }}
-	  <tr>
-	    <th>EEPROM<br>(SHA256)</th>
-	    <td>{{ shortenSHA256 .EEPROM.PieepromSHA256 }}<br>{{ shortenSHA256 .EEPROM.VL805SHA256 }}</td>
-	  </tr>
-	  {{ end }}
-	</table>
-
-      </div><!-- /.navbar-collapse -->
+      </div><!-- /.nav.navbar-right -->
     </div><!-- /.container-fluid -->
   </nav>
 
