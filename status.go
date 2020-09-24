@@ -81,14 +81,20 @@ func Model() string {
 
 // Firmware returns a firmware description for the PC Engines apu2 (and other PCs), e.g. “coreboot v4.11.0.6 (04/26/2020)”.
 func Firmware() string {
+	var parts []string
 	vendor := mustReadFile0("/sys/class/dmi/id/bios_vendor")
-	version := mustReadFile0("/sys/class/dmi/id/bios_version")
-	date := mustReadFile0("/sys/class/dmi/id/bios_date")
-	if vendor == "" || version == "" || date == "" {
-		return "" // unsupported platform
+	if vendor != "" {
+		parts = append(parts, strings.TrimSpace(vendor))
 	}
-	firmware := strings.TrimSpace(vendor) + " " + strings.TrimSpace(version) + " (" + strings.TrimSpace(date) + ")"
-	return strings.TrimSpace(firmware)
+	version := mustReadFile0("/sys/class/dmi/id/bios_version")
+	if version != "" {
+		parts = append(parts, strings.TrimSpace(version))
+	}
+	date := mustReadFile0("/sys/class/dmi/id/bios_date")
+	if date != "" {
+		parts = append(parts, "("+strings.TrimSpace(date)+")")
+	}
+	return strings.Join(parts, " ")
 }
 
 func readModuleInfo(path string) (string, error) {
