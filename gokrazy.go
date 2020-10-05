@@ -20,6 +20,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/mdlayher/watchdog"
 	"golang.org/x/sys/unix"
 
 	"github.com/gokrazy/gokrazy/internal/iface"
@@ -51,17 +52,28 @@ func configureLoopback() error {
 	return cs.SetNetmask(net.IPMask([]byte{255, 0, 0, 0}))
 }
 
-// watchdog periodically pings the hardware watchdog.
-func watchdog() {
-	f, err := os.OpenFile("/dev/watchdog", os.O_WRONLY, 0)
+// runWatchdog periodically pings the hardware watchdog.
+func runWatchdog() {
+	d, err := watchdog.Open()
 	if err != nil {
 		log.Printf("disabling hardware watchdog, as it could not be opened: %v", err)
 		return
 	}
-	defer f.Close()
+	defer d.Close()
+
+	var timeout string
+	if t, err := d.Timeout(); err != nil {
+		// Assume the device cannot report the watchdog timeout.
+		timeout = "unknown"
+	} else {
+		timeout = t.String()
+	}
+
+	log.Printf("found hardware watchdog %q with timeout %s, pinging...", d.Identity, timeout)
+
 	for {
-		if _, _, errno := unix.Syscall(unix.SYS_IOCTL, f.Fd(), unix.WDIOC_KEEPALIVE, 0); errno != 0 {
-			log.Printf("hardware watchdog ping failed: %v", errno)
+		if err := d.Ping(); err != nil {
+			log.Printf("hardware watchdog ping failed: %v", err)
 		}
 		time.Sleep(1 * time.Second)
 	}
@@ -107,7 +119,7 @@ func setupTLS() error {
 // userBuildTimestamp will be exposed on the HTTP status handlers that
 // are set up by Supervise.
 func Boot(userBuildTimestamp string) error {
-	go watchdog()
+	go runWatchdog()
 
 	buildTimestamp = userBuildTimestamp
 
