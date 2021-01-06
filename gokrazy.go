@@ -16,6 +16,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -104,6 +105,19 @@ func setupTLS() error {
 	return nil
 }
 
+// readFile reads configuration files from /perm /etc or / and returns trimmed content as string
+func readFile(fileName string) (string, error) {
+	str, err := ioutil.ReadFile("/perm/" + fileName)
+	if err != nil {
+		str, err = ioutil.ReadFile("/etc/" + fileName)
+	}
+	if err != nil && os.IsNotExist(err) {
+		str, err = ioutil.ReadFile("/" + fileName)
+	}
+
+	return strings.TrimSpace(string(str)), err
+}
+
 // Boot configures basic system settings. More specifically, it:
 //
 //   - mounts /dev, /tmp, /proc, /sys and /perm file systems
@@ -139,18 +153,11 @@ func Boot(userBuildTimestamp string) error {
 	}
 	hostname = string(hostnameb)
 
-	pw, err := ioutil.ReadFile("/perm/gokr-pw.txt")
-	if err != nil {
-		pw, err = ioutil.ReadFile("/etc/gokr-pw.txt")
-	}
-	if err != nil && os.IsNotExist(err) {
-		pw, err = ioutil.ReadFile("/gokr-pw.txt")
-	}
+	pw, err := readFile("gokr-pw.txt")
 	if err != nil {
 		return fmt.Errorf("could read neither /perm/gokr-pw.txt, nor /etc/gokr-pw.txt, nor /gokr-pw.txt: %v", err)
 	}
-
-	httpPassword = strings.TrimSpace(string(pw))
+	httpPassword = pw
 
 	if err := configureLoopback(); err != nil {
 		return err
@@ -223,7 +230,17 @@ func Supervise(commands []*exec.Cmd) error {
 		return err
 	}
 
-	if err := updateListenerPairs("80", "443", useTLS, tlsConfig); err != nil {
+	httpPort, err := readFile("http-port.txt")
+	if _, numeric := strconv.Atoi(httpPort); err != nil || numeric != nil {
+		httpPort = "80"
+	}
+
+	httpsPort, err := readFile("https-port.txt")
+	if _, numeric := strconv.Atoi(httpsPort); err != nil || numeric != nil {
+		httpsPort = "443"
+	}
+
+	if err := updateListenerPairs(httpPort, httpsPort, useTLS, tlsConfig); err != nil {
 		return fmt.Errorf("updating listeners: %v", err)
 	}
 
@@ -241,7 +258,7 @@ func Supervise(commands []*exec.Cmd) error {
 						m.Header.Type != syscall.RTM_DELADDR {
 						continue
 					}
-					if err := updateListenerPairs("80", "443", useTLS, tlsConfig); err != nil {
+					if err := updateListenerPairs(httpPort, httpsPort, useTLS, tlsConfig); err != nil {
 						log.Printf("updating listeners: %v", err)
 					}
 				}
@@ -256,7 +273,7 @@ func Supervise(commands []*exec.Cmd) error {
 		signal.Notify(c, unix.SIGHUP)
 
 		for range c {
-			if err := updateListenerPairs("80", "443", useTLS, tlsConfig); err != nil {
+			if err := updateListenerPairs(httpPort, httpsPort, useTLS, tlsConfig); err != nil {
 				log.Printf("updating listeners: %v", err)
 			}
 		}
@@ -272,7 +289,7 @@ func Supervise(commands []*exec.Cmd) error {
 
 			if err := tryStartShell(); err != nil {
 				log.Printf("could not start shell: %v", err)
-				if err := updateListenerPairs("80", "443", useTLS, tlsConfig); err != nil {
+				if err := updateListenerPairs(httpPort, httpsPort, useTLS, tlsConfig); err != nil {
 					log.Printf("updating listeners: %v", err)
 				}
 			}
