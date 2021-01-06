@@ -105,8 +105,8 @@ func setupTLS() error {
 	return nil
 }
 
-// readFile reads configuration files from /perm /etc or / and returns trimmed content as string
-func readFile(fileName string) (string, error) {
+// readConfigFile reads configuration files from /perm /etc or / and returns trimmed content as string
+func readConfigFile(fileName string) (string, error) {
 	str, err := ioutil.ReadFile("/perm/" + fileName)
 	if err != nil {
 		str, err = ioutil.ReadFile("/etc/" + fileName)
@@ -116,6 +116,24 @@ func readFile(fileName string) (string, error) {
 	}
 
 	return strings.TrimSpace(string(str)), err
+}
+
+// readPortFromConfigFile reads port from config file
+func readPortFromConfigFile(fileName, defaultPort string) string {
+	port, err := readConfigFile(fileName)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			log.Printf("reading %s failed: %v", fileName, err)
+		}
+		return defaultPort
+	}
+
+	if _, err := strconv.Atoi(port); err != nil {
+		log.Printf("invalid port in %s: %v", fileName, err)
+		return defaultPort
+	}
+
+	return port
 }
 
 // Boot configures basic system settings. More specifically, it:
@@ -153,7 +171,7 @@ func Boot(userBuildTimestamp string) error {
 	}
 	hostname = string(hostnameb)
 
-	pw, err := readFile("gokr-pw.txt")
+	pw, err := readConfigFile("gokr-pw.txt")
 	if err != nil {
 		return fmt.Errorf("could read neither /perm/gokr-pw.txt, nor /etc/gokr-pw.txt, nor /gokr-pw.txt: %v", err)
 	}
@@ -230,15 +248,8 @@ func Supervise(commands []*exec.Cmd) error {
 		return err
 	}
 
-	httpPort, err := readFile("http-port.txt")
-	if _, numeric := strconv.Atoi(httpPort); err != nil || numeric != nil {
-		httpPort = "80"
-	}
-
-	httpsPort, err := readFile("https-port.txt")
-	if _, numeric := strconv.Atoi(httpsPort); err != nil || numeric != nil {
-		httpsPort = "443"
-	}
+	httpPort := readPortFromConfigFile("http-port.txt", "80")
+	httpsPort := readPortFromConfigFile("https-port.txt", "443")
 
 	if err := updateListenerPairs(httpPort, httpsPort, useTLS, tlsConfig); err != nil {
 		return fmt.Errorf("updating listeners: %v", err)
