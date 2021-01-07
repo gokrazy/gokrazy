@@ -141,7 +141,7 @@ var (
 )
 
 // tlsConfig: tlsConfig. nil, if the listeners should not use https (e.g. for redirects)
-func updateListeners(port string, tlsEnabled bool, tlsConfig *tls.Config) error {
+func updateListeners(port, redirectPort string, tlsEnabled bool, tlsConfig *tls.Config) error {
 	hosts, err := PrivateInterfaceAddrs()
 	if err != nil {
 		return err
@@ -180,7 +180,7 @@ func updateListeners(port string, tlsEnabled bool, tlsConfig *tls.Config) error 
 		if tlsEnabled && tlsConfig == nil {
 			// "Redirect" server
 			srv = &http.Server{
-				Handler:   http.HandlerFunc(httpsRedirect),
+				Handler:   http.HandlerFunc(httpsRedirect(redirectPort)),
 				TLSConfig: tlsConfig,
 			}
 		} else {
