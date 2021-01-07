@@ -180,9 +180,9 @@ func updateListeners(port string, tlsEnabled bool, tlsConfig *tls.Config) error 
 		if tlsEnabled && tlsConfig == nil {
 			// "Redirect" server
 			srv = &http.Server{
+				Handler:   http.HandlerFunc(httpsRedirect),
 				TLSConfig: tlsConfig,
 			}
-			srv.Handler = http.HandlerFunc(httpsRedirect(srv.Handler))
 		} else {
 			// "Content" server
 			srv = &http.Server{
