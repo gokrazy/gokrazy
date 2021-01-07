@@ -8,7 +8,7 @@ import (
 func httpsRedirect(w http.ResponseWriter, r *http.Request) {
 	host, _, _ := net.SplitHostPort(r.RemoteAddr)
 	ip := net.ParseIP(host)
-	if IsInPrivateNet(ip) {
+	if ip.IsLoopback() {
 		http.DefaultServeMux.ServeHTTP(w, r)
 		return
 	}
