@@ -190,11 +190,11 @@ func Boot(userBuildTimestamp string) error {
 }
 
 func updateListenerPairs(httpPort, httpsPort string, useTLS bool, tlsConfig *tls.Config) error {
-	if err := updateListeners(httpPort, useTLS, nil); err != nil {
+	if err := updateListeners(httpPort, httpsPort, useTLS, nil); err != nil {
 		return err
 	}
 	if useTLS {
-		if err := updateListeners(httpsPort, useTLS, tlsConfig); err != nil {
+		if err := updateListeners(httpsPort, "", useTLS, tlsConfig); err != nil {
 			return err
 		}
 	}
