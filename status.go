@@ -171,10 +171,6 @@ func jsonRequested(r *http.Request) bool {
 	return strings.Contains(strings.ToLower(r.Header.Get("Content-type")), "application/json")
 }
 
-func jsonRequested(r *http.Request) bool {
-	return strings.Contains(strings.ToLower(r.Header.Get("Content-type")), "application/json")
-}
-
 func initStatus(services []*service) {
 	model := Model()
 
