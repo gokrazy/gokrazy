@@ -2,6 +2,7 @@ package gokrazy
 
 import (
 	"container/ring"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -195,6 +196,24 @@ func (s *service) setProcess(p *os.Process) {
 	s.processMu.Lock()
 	defer s.processMu.Unlock()
 	s.process = p
+}
+
+func (s *service) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&struct {
+		Stopped   bool
+		StartTime time.Time
+		Attempt   uint64
+		Pid       int
+		Path      string
+		Args      []string
+	}{
+		Stopped:   s.stopped,
+		StartTime: s.started,
+		Attempt:   s.attempt,
+		Pid:       s.process.Pid,
+		Path:      s.cmd.Path,
+		Args:      s.cmd.Args,
+	})
 }
 
 func rssOfPid(pid int) int64 {

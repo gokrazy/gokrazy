@@ -2,6 +2,7 @@ package gokrazy
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -166,6 +167,10 @@ func parseUtsname(u unix.Utsname) string {
 		str(u.Sysname), str(u.Release), str(u.Machine))
 }
 
+func jsonRequested(r *http.Request) bool {
+	return strings.Contains(strings.ToLower(r.Header.Get("Content-type")), "application/json")
+}
+
 func initStatus(services []*service) {
 	model := Model()
 
@@ -188,6 +193,7 @@ func initStatus(services []*service) {
 			return hash
 		},
 	})
+
 	commonTmpls = template.Must(commonTmpls.New("header").Parse(bundled.Asset("header.tmpl")))
 	commonTmpls = template.Must(commonTmpls.New("footer").Parse(bundled.Asset("footer.tmpl")))
 
@@ -240,6 +246,7 @@ func initStatus(services []*service) {
 	} {
 		http.Handle("/"+fn, bundled.HTTPHandlerFunc(fn))
 	}
+
 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
@@ -264,6 +271,19 @@ func initStatus(services []*service) {
 			http.Error(w, "service not found", http.StatusNotFound)
 			return
 		}
+
+		if jsonRequested(r) {
+			b, err := json.Marshal(svc)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = fmt.Fprint(w, string(b))
+			return
+		}
+
 		var buf bytes.Buffer
 		if err := statusTmpl.Execute(&buf, struct {
 			Service        *service
@@ -309,8 +329,8 @@ func initStatus(services []*service) {
 		if err != nil {
 			log.Printf("could not get public addrs: %v", err)
 		}
-		var buf bytes.Buffer
-		if err := overviewTmpl.Execute(&buf, struct {
+
+		status := struct {
 			Services       []*service
 			PermDev        string
 			PermUsed       int64
@@ -340,7 +360,22 @@ func initStatus(services []*service) {
 			PARTUUID:       rootdev.PARTUUID(),
 			EEPROM:         lastInstalledEepromVersion,
 			Kernel:         kernel,
-		}); err != nil {
+		}
+
+		if jsonRequested(r) {
+			b, err := json.Marshal(status)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = fmt.Fprint(w, string(b))
+			return
+		}
+
+		var buf bytes.Buffer
+		if err := overviewTmpl.Execute(&buf, status); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
