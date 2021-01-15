@@ -144,7 +144,6 @@ type service struct {
 	Stderr    lineswriter
 	started   time.Time
 	startedMu sync.RWMutex
-	attempt   uint64
 	process   *os.Process
 	processMu sync.RWMutex
 }
@@ -202,15 +201,13 @@ func (s *service) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Stopped   bool
 		StartTime time.Time
-		Attempt   uint64
 		Pid       int
 		Path      string
 		Args      []string
 	}{
-		Stopped:   s.stopped,
-		StartTime: s.started,
-		Attempt:   s.attempt,
-		Pid:       s.process.Pid,
+		Stopped:   s.Stopped(),
+		StartTime: s.Started(),
+		Pid:       s.Process().Pid,
 		Path:      s.cmd.Path,
 		Args:      s.cmd.Args,
 	})
