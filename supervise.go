@@ -2,6 +2,7 @@ package gokrazy
 
 import (
 	"container/ring"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -143,7 +144,6 @@ type service struct {
 	Stderr    lineswriter
 	started   time.Time
 	startedMu sync.RWMutex
-	attempt   uint64
 	process   *os.Process
 	processMu sync.RWMutex
 }
@@ -195,6 +195,22 @@ func (s *service) setProcess(p *os.Process) {
 	s.processMu.Lock()
 	defer s.processMu.Unlock()
 	s.process = p
+}
+
+func (s *service) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&struct {
+		Stopped   bool
+		StartTime time.Time
+		Pid       int
+		Path      string
+		Args      []string
+	}{
+		Stopped:   s.Stopped(),
+		StartTime: s.Started(),
+		Pid:       s.Process().Pid,
+		Path:      s.cmd.Path,
+		Args:      s.cmd.Args,
+	})
 }
 
 func rssOfPid(pid int) int64 {
