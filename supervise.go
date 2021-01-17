@@ -286,12 +286,15 @@ func supervise(s *service) {
 		cmd := &exec.Cmd{
 			Path:   s.cmd.Path,
 			Args:   s.cmd.Args,
-			Env:    os.Environ(),
+			Env:    s.cmd.Env,
 			Stdout: s.Stdout,
 			Stderr: s.Stderr,
 			SysProcAttr: &syscall.SysProcAttr{
 				Unshareflags: syscall.CLONE_NEWNS,
 			},
+		}
+		if cmd.Env == nil {
+			cmd.Env = os.Environ() // for older gokr-packer versions
 		}
 		if attempt == 0 {
 			cmd.Env = append(cmd.Env, "GOKRAZY_FIRST_START=1")
