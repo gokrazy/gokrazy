@@ -280,7 +280,7 @@ func initStatus(services []*service) {
 			}
 
 			w.Header().Set("Content-Type", "application/json")
-			_, _ = fmt.Fprint(w, string(b))
+			_, _ = w.Write(b)
 			return
 		}
 
@@ -370,7 +370,7 @@ func initStatus(services []*service) {
 			}
 
 			w.Header().Set("Content-Type", "application/json")
-			_, _ = fmt.Fprint(w, string(b))
+			_, _ = w.Write(b)
 			return
 		}
 
