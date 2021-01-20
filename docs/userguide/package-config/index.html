@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Per-package configuration of build flags, environment variables and command-line flags</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+<h1 id="per-package-configuration">Per-package configuration</h1>
+<p>gokrazy will arrange for each included package to be started at boot. For
+example, given the following packer command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox
+</code></pre></div><p>…gokrazy will start the <code>hello</code>, <code>breakglass</code> and <code>serial-busybox</code> programs.</p>
+<p>This article shows how you can configure different aspects of individual
+packages.</p>
+<p>Each bit of configuration lives in its own directory: <code>flags</code>, <code>env</code> or
+<code>buildflags</code>.</p>
+<p>Within these directories, create a directory named after the package import
+path, then place your configuration in a text file: <code>flags.txt</code>, <code>env.txt</code> or
+<code>buildflags.txt</code>.</p>
+<h2 id="command-line-flags">Command-line flags</h2>
+<p>The <a href="https://github.com/gokrazy/breakglass">breakglass</a> package provides
+emergency/debugging access to a gokrazy installation.</p>
+<p>To enable SSH port forwardings to localhost, set the <code>-forward</code> flag to <code>loopback</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/github.com/gokrazy/breakglass
+echo <span style="color:#e6db74">&#39;-forward=loopback&#39;</span> &gt; flags/github.com/gokrazy/breakglass/flags.txt
+</code></pre></div><h2 id="environment-variables">Environment variables</h2>
+<p><a href="https://en.wikipedia.org/wiki/Environment_variable">Environment variables</a> such
+as the <a href="https://golang.org/pkg/runtime/">Go runtime’s <code>GODEBUG</code></a> variable can be
+set as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p env/github.com/gokrazy/breakglass
+echo <span style="color:#e6db74">&#39;GODEBUG=gctrace=1&#39;</span> &gt; env/github.com/gokrazy/breakglass/env.txt
+</code></pre></div><h2 id="go-build-flags">Go build flags</h2>
+<p>If you want to influence the build of the package at image-creation time (as
+opposed to runtime), you can specify flags to be passed to the Go build
+invocation.</p>
+<p>This example overwrites the value of the <a href="https://github.com/gokrazy/hello/blob/e33b5caa1a73b5e58e4d4f4b165d07e6ddf173a9/hello.go#L6"><code>world</code>
+variable</a>
+using the <a href="https://golang.org/cmd/link/"><code>-X</code> linker flag</a>, which is a common
+technique to embed version information:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p buildflags/github.com/gokrazy/hello
+echo <span style="color:#e6db74">&#39;-ldflags=-X main.world=Welt&#39;</span> &gt; buildflags/github.com/gokrazy/hello/buildflags.txt
+</code></pre></div>
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>
