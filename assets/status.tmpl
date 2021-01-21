@@ -25,9 +25,6 @@
 </tr>
 </table>
 
-  <h3>module info</h3>
-  <pre>{{ .Service.ModuleInfo }}</pre>
-
   <h3>stdout</h3>
   <pre>
   {{ range $idx, $line := .Service.Stdout.Lines -}}
@@ -41,6 +38,10 @@
     {{ $line }}
   {{ end }}
   </pre>
+
+  <h3>module info</h3>
+  <pre>{{ .Service.ModuleInfo }}</pre>
+
 </div>
 </div>
 
