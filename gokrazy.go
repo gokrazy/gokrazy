@@ -8,6 +8,7 @@
 package gokrazy
 
 import (
+	"bytes"
 	"crypto/tls"
 	"fmt"
 	"io/ioutil"
@@ -16,6 +17,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"syscall"
@@ -25,6 +27,7 @@ import (
 	"golang.org/x/sys/unix"
 
 	"github.com/gokrazy/gokrazy/internal/iface"
+	"github.com/gokrazy/internal/rootdev"
 )
 
 var (
@@ -136,6 +139,68 @@ func readPortFromConfigFile(fileName, defaultPort string) string {
 	return port
 }
 
+func switchToInactiveRoot() error {
+	// mount the inactive root partition on a temporary mountpoint
+	tmpmnt := filepath.Join(os.TempDir(), "mnt")
+	if err := os.MkdirAll(tmpmnt, 0755); err != nil {
+		return err
+	}
+
+	if err := syscall.Mount(rootdev.Partition(rootdev.InactiveRootPartition()), tmpmnt, "squashfs", syscall.MS_RDONLY, ""); err != nil {
+		return fmt.Errorf("mount inactive root: %v", err)
+	}
+
+	if err := os.Chdir(tmpmnt); err != nil {
+		return fmt.Errorf("chdir: %v", err)
+	}
+
+	if err := syscall.Mount(".", "/", "", syscall.MS_MOVE, ""); err != nil {
+		return fmt.Errorf("mount . /: %v", err)
+	}
+
+	if err := syscall.Chroot("."); err != nil {
+		return fmt.Errorf("chroot .: %v", err)
+	}
+
+	if err := os.Chdir("/"); err != nil {
+		return fmt.Errorf("chdir: %v", err)
+	}
+
+	if err := syscall.Exec("/gokrazy/init", []string{"/gokrazy/init"}, os.Environ()); err != nil {
+		return fmt.Errorf("exec(init): %v", err)
+	}
+	return nil
+}
+
+func maybeSwitchToInactive() {
+	cmdline, err := readCmdline()
+	if err != nil {
+		log.Print(err)
+		return
+	}
+
+	if !strings.Contains(string(cmdline), "gokrazy.try_boot_inactive=1") {
+		return
+	}
+	log.Printf("switching to inactive root partition")
+
+	// update the cmdline to have the device boot into the old environment next time
+	if err := modifyCmdline(func(b []byte) []byte {
+		return bytes.ReplaceAll(b,
+			[]byte("gokrazy.try_boot_inactive=1"),
+			[]byte("gokrazy.switch_on_boot=1"))
+	}); err != nil {
+		log.Print(err)
+		return
+	}
+
+	// switch to the inactive root partition instead
+	if err := switchToInactiveRoot(); err != nil {
+		log.Print(err)
+		return
+	}
+}
+
 // Boot configures basic system settings. More specifically, it:
 //
 //   - mounts /dev, /tmp, /proc, /sys and /perm file systems
@@ -151,6 +216,8 @@ func readPortFromConfigFile(fileName, defaultPort string) string {
 // userBuildTimestamp will be exposed on the HTTP status handlers that
 // are set up by Supervise.
 func Boot(userBuildTimestamp string) error {
+	// TODO: think about whether the watchdog needs a different setup during the
+	// update process
 	go runWatchdog()
 
 	buildTimestamp = userBuildTimestamp
@@ -158,6 +225,8 @@ func Boot(userBuildTimestamp string) error {
 	if err := mountfs(); err != nil {
 		return err
 	}
+
+	maybeSwitchToInactive()
 
 	hostnameb, err := ioutil.ReadFile("/etc/hostname")
 	if err != nil && os.IsNotExist(err) {
