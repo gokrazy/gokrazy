@@ -23,7 +23,31 @@ import (
 
 var rootRe = regexp.MustCompile(`root=[^ ]+`)
 
-func switchRootPartition(newRootPartition int) error {
+func readCmdline() ([]byte, error) {
+	f, err := os.OpenFile(rootdev.Partition(rootdev.Boot), os.O_RDWR, 0600)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	rd, err := fat.NewReader(f)
+	if err != nil {
+		return nil, err
+	}
+	offset, length, err := rd.Extents("/cmdline.txt")
+	if err != nil {
+		return nil, err
+	}
+	if _, err := f.Seek(offset, io.SeekStart); err != nil {
+		return nil, err
+	}
+	b := make([]byte, length)
+	if _, err := f.Read(b); err != nil {
+		return nil, err
+	}
+	return b, nil
+}
+
+func modifyCmdline(replace func([]byte) []byte) error {
 	f, err := os.OpenFile(rootdev.Partition(rootdev.Boot), os.O_RDWR, 0600)
 	if err != nil {
 		return err
@@ -48,8 +72,8 @@ func switchRootPartition(newRootPartition int) error {
 		return err
 	}
 
-	rep := rootRe.ReplaceAllLiteral(b, []byte("root="+rootdev.PartitionCmdline(newRootPartition)))
-	if pad := length - int64(len(rep)); pad > 0 {
+	rep := replace(b)
+	if pad := len(b) - len(rep); pad > 0 {
 		// The file content length can shrink when switching from PARTUUID= (the
 		// default) to /dev/mmcblk0p[23], on an older gokrazy installation.
 		// Because we overwrite the file in place and have no means to truncate
@@ -58,13 +82,28 @@ func switchRootPartition(newRootPartition int) error {
 		// otherwise the system won’t boot:
 		rep = bytes.ReplaceAll(rep,
 			[]byte{'\n'},
-			append(bytes.Repeat([]byte{' '}, int(pad)), '\n'))
+			append(bytes.Repeat([]byte{' '}, pad), '\n'))
 	}
+
 	if _, err := f.Write(rep); err != nil {
 		return err
 	}
 
 	return f.Close()
+}
+
+func switchRootPartition(newRootPartition int) error {
+	return modifyCmdline(func(b []byte) []byte {
+		return rootRe.ReplaceAllLiteral(b, []byte("root="+rootdev.PartitionCmdline(newRootPartition)))
+	})
+}
+
+func enableTestboot() error {
+	return modifyCmdline(func(b []byte) []byte {
+		return bytes.ReplaceAll(b,
+			[]byte{'\n'},
+			[]byte(" gokrazy.try_boot_inactive=1\n"))
+	})
 }
 
 func streamRequestTo(path string, r io.Reader) error {
@@ -128,6 +167,25 @@ func nonConcurrentSwitchHandler(newRootPartition int) func(http.ResponseWriter, 
 	}
 }
 
+func nonConcurrentTestbootHandler(newRootPartition int) func(http.ResponseWriter, *http.Request) {
+	var mu sync.Mutex
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "expected a POST request", http.StatusBadRequest)
+			return
+		}
+
+		mu.Lock()
+		defer mu.Unlock()
+
+		if err := enableTestboot(); err != nil {
+			log.Printf("enabling test-boot of new root partition %q failed: %v", newRootPartition, err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
 func initUpdate() error {
 	// The /update/features handler is used for negotiation of individual
 	// feature support (e.g. PARTUUID= support) between the packer and update
@@ -138,6 +196,7 @@ func initUpdate() error {
 	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(rootdev.BlockDevice()))
 	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(rootdev.InactiveRootPartition())))
 	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(rootdev.InactiveRootPartition()))
+	http.HandleFunc("/update/testboot", nonConcurrentTestbootHandler(rootdev.InactiveRootPartition()))
 	// bakery updates only the boot partition, which would reset the active root
 	// partition to 2.
 	updateHandler := nonConcurrentUpdateHandler(rootdev.Partition(rootdev.Boot))
