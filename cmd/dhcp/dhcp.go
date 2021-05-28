@@ -9,6 +9,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -127,6 +128,95 @@ func (c *client) request(last *layers.DHCPv4) (*layers.DHCPv4, error) {
 	}
 }
 
+func applyLease(cs iface.Configsocket, source string, lease dhcp4.Lease) error {
+	// Log the received DHCPACK packet:
+	details := []string{
+		fmt.Sprintf("IP %v", lease.IP),
+	}
+	if len(lease.Netmask) > 0 {
+		ipnet := net.IPNet{
+			IP:   lease.IP,
+			Mask: lease.Netmask,
+		}
+		details[0] = fmt.Sprintf("IP %v", ipnet.String())
+	}
+	if len(lease.Router) > 0 {
+		details = append(details, fmt.Sprintf("router %v", lease.Router))
+	}
+	if len(lease.DNS) > 0 {
+		details = append(details, fmt.Sprintf("DNS %v", lease.DNS))
+	}
+	if len(lease.Broadcast) > 0 {
+		details = append(details, fmt.Sprintf("broadcast %v", lease.Broadcast))
+	}
+
+	log.Printf("%s: %v", source, strings.Join(details, ", "))
+
+	// Apply the received settings:
+	if err := cs.SetAddress(lease.IP); err != nil {
+		return err
+	}
+	if len(lease.Netmask) > 0 {
+		if err := cs.SetNetmask(lease.Netmask); err != nil {
+			return fmt.Errorf("setNetmask(%v): %v", lease.Netmask, err)
+		}
+	}
+	if b := lease.Broadcast; len(b) > 0 {
+		if err := cs.SetBroadcast(b); err != nil {
+			return fmt.Errorf("setBroadcast(%v): %v", b, err)
+		}
+	}
+
+	if err := cs.Up(); err != nil {
+		return err
+	}
+
+	if r := lease.Router; len(r) > 0 {
+		if errno := cs.AddRoute(defaultDst, r, defaultNetmask); errno != 0 {
+			if errno == syscall.EEXIST {
+				if errno := cs.DelRoute(defaultDst, r, defaultNetmask); errno != 0 {
+					log.Printf("delRoute(%v): %v", r, errno)
+				}
+				if errno := cs.AddRoute(defaultDst, r, defaultNetmask); errno != 0 {
+					return fmt.Errorf("addRoute(%v): %v", r, errno)
+				}
+			} else {
+				return fmt.Errorf("addRoute(%v): %v", r, errno)
+			}
+		}
+	}
+
+	if len(lease.DNS) > 0 {
+		resolvConf := "/etc/resolv.conf"
+		if dest, err := os.Readlink("/etc/resolv.conf"); err == nil && dest == "/tmp/resolv.conf" {
+			resolvConf = "/tmp/resolv.conf"
+		}
+		// Get the symlink out of the way, if any.
+		if err := os.Remove(resolvConf); err != nil && !os.IsNotExist(err) {
+			return fmt.Errorf("resolv.conf: %v", err)
+		}
+		var lines []string
+		if domain := lease.Domain; domain != "" {
+			lines = append(lines, fmt.Sprintf("domain %s", domain))
+			lines = append(lines, fmt.Sprintf("search %s", domain))
+		}
+		for _, ns := range lease.DNS {
+			lines = append(lines, fmt.Sprintf("nameserver %v", ns))
+		}
+		if err := ioutil.WriteFile(resolvConf, []byte(strings.Join(lines, "\n")+"\n"), 0644); err != nil {
+			return fmt.Errorf("resolv.conf: %v", err)
+		}
+	}
+
+	// Notify init of new addresses
+	p, _ := os.FindProcess(1)
+	if err := p.Signal(syscall.SIGHUP); err != nil {
+		log.Printf("send SIGHUP to init: %v", err)
+	}
+
+	return nil
+}
+
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	var (
@@ -134,6 +224,11 @@ func main() {
 			"interface",
 			"eth0",
 			"network interface to obtain a DHCP lease on")
+
+		staticConfig = flag.String(
+			"static_network_config",
+			"",
+			"network configuration to apply instead of querying DHCP")
 	)
 	flag.Parse()
 
@@ -172,6 +267,37 @@ func main() {
 		time.Sleep(1 * time.Second)
 	}
 
+	if *staticConfig != "" {
+		var l dhcp4.Lease
+		if err := json.Unmarshal([]byte(*staticConfig), &l); err != nil {
+			log.Fatal(err)
+		}
+		if ones, bits := l.Netmask.Size(); ones == 0 && bits == 0 {
+			l.Netmask = net.CIDRMask(24, 32) // IPv4 /24
+		}
+		// When unmarshaling IP addresses from a string, Go does not use the
+		// compact IPv4 byte slice representation, but our interface
+		// configuration routines require that:
+		if l.IP != nil {
+			l.IP = l.IP.To4()
+		}
+		if l.Broadcast != nil {
+			l.Broadcast = l.Broadcast.To4()
+		}
+		if l.Router != nil {
+			l.Router = l.Router.To4()
+		}
+		for idx, dns := range l.DNS {
+			l.DNS[idx] = dns.To4()
+		}
+
+		if err := applyLease(cs, "-static_network_config", l); err != nil {
+			log.Fatal(err)
+		}
+		// Leave the process running indefinitely
+		time.Sleep(time.Duration(1<<63 - 1))
+	}
+
 	conn, err := raw.ListenPacket(intf, syscall.ETH_P_IP, &raw.Config{
 		LinuxSockDGRAM: true,
 	})
@@ -198,89 +324,8 @@ func main() {
 
 		lease := dhcp4.LeaseFromACK(last)
 
-		// Log the received DHCPACK packet:
-		details := []string{
-			fmt.Sprintf("IP %v", lease.IP),
-		}
-		if len(lease.Netmask) > 0 {
-			ipnet := net.IPNet{
-				IP:   lease.IP,
-				Mask: lease.Netmask,
-			}
-			details[0] = fmt.Sprintf("IP %v", ipnet.String())
-		}
-		if len(lease.Router) > 0 {
-			details = append(details, fmt.Sprintf("router %v", lease.Router))
-		}
-		if len(lease.DNS) > 0 {
-			details = append(details, fmt.Sprintf("DNS %v", lease.DNS))
-		}
-		if len(lease.Broadcast) > 0 {
-			details = append(details, fmt.Sprintf("broadcast %v", lease.Broadcast))
-		}
-
-		log.Printf("DHCPACK: %v", strings.Join(details, ", "))
-
-		// Apply the received settings:
-		if err := cs.SetAddress(lease.IP); err != nil {
+		if err := applyLease(cs, "DHCPACK", lease); err != nil {
 			log.Fatal(err)
-		}
-		if len(lease.Netmask) > 0 {
-			if err := cs.SetNetmask(lease.Netmask); err != nil {
-				log.Fatalf("setNetmask(%v): %v", lease.Netmask, err)
-			}
-		}
-		if b := lease.Broadcast; len(b) > 0 {
-			if err := cs.SetBroadcast(b); err != nil {
-				log.Fatalf("setBroadcast(%v): %v", b, err)
-			}
-		}
-
-		if err := cs.Up(); err != nil {
-			log.Fatal(err)
-		}
-
-		if r := lease.Router; len(r) > 0 {
-			if errno := cs.AddRoute(defaultDst, r, defaultNetmask); errno != 0 {
-				if errno == syscall.EEXIST {
-					if errno := cs.DelRoute(defaultDst, r, defaultNetmask); errno != 0 {
-						log.Printf("delRoute(%v): %v", r, errno)
-					}
-					if errno := cs.AddRoute(defaultDst, r, defaultNetmask); errno != 0 {
-						log.Fatalf("addRoute(%v): %v", r, errno)
-					}
-				} else {
-					log.Fatalf("addRoute(%v): %v", r, errno)
-				}
-			}
-		}
-
-		if len(lease.DNS) > 0 {
-			resolvConf := "/etc/resolv.conf"
-			if dest, err := os.Readlink("/etc/resolv.conf"); err == nil && dest == "/tmp/resolv.conf" {
-				resolvConf = "/tmp/resolv.conf"
-			}
-			// Get the symlink out of the way, if any.
-			if err := os.Remove(resolvConf); err != nil && !os.IsNotExist(err) {
-				log.Fatalf("resolv.conf: %v", err)
-			}
-			var lines []string
-			if domain := lease.Domain; domain != "" {
-				lines = append(lines, fmt.Sprintf("domain %s", domain))
-				lines = append(lines, fmt.Sprintf("search %s", domain))
-			}
-			for _, ns := range lease.DNS {
-				lines = append(lines, fmt.Sprintf("nameserver %v", ns))
-			}
-			if err := ioutil.WriteFile(resolvConf, []byte(strings.Join(lines, "\n")+"\n"), 0644); err != nil {
-				log.Fatalf("resolv.conf: %v", err)
-			}
-		}
-
-		// Notify init of new addresses
-		p, _ := os.FindProcess(1)
-		if err := p.Signal(syscall.SIGHUP); err != nil {
-			log.Printf("send SIGHUP to init: %v", err)
 		}
 
 		time.Sleep(lease.RenewalTime)
