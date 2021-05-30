@@ -21,6 +21,9 @@ var (
 	}()
 )
 
+// TODO: consider redefining PrivateNetworks using (net.IP).IsPrivate(),
+// IsLinkLocalUnicast() and IsLoopback() once Go 1.17 is widespread.
+
 // PrivateNetworks contains the CIDR representation of all networks which
 // gokrazy considers private.
 var PrivateNetworks = []string{
