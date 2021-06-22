@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -209,8 +210,12 @@ func initUpdate() error {
 	// The /update/features handler is used for negotiation of individual
 	// feature support (e.g. PARTUUID= support) between the packer and update
 	// target.
+	gpt := ""
+	if strings.Contains(rootdev.PARTUUID(), "-") {
+		gpt = ",gpt"
+	}
 	http.HandleFunc("/update/features", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "partuuid,updatehash,")
+		fmt.Fprintf(w, "partuuid,updatehash%s,", gpt)
 	})
 	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(rootdev.BlockDevice()))
 	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(rootdev.InactiveRootPartition())))
