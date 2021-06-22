@@ -47,20 +47,7 @@ func readCmdline() ([]byte, error) {
 	return b, nil
 }
 
-func modifyCmdline(replace func([]byte) []byte) error {
-	f, err := os.OpenFile(rootdev.Partition(rootdev.Boot), os.O_RDWR, 0600)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	rd, err := fat.NewReader(f)
-	if err != nil {
-		return err
-	}
-	offset, length, err := rd.Extents("/cmdline.txt")
-	if err != nil {
-		return err
-	}
+func modifyCmdlineFile(f *os.File, offset, length int64, replace func([]byte) []byte) error {
 	if _, err := f.Seek(offset, io.SeekStart); err != nil {
 		return err
 	}
@@ -89,6 +76,38 @@ func modifyCmdline(replace func([]byte) []byte) error {
 		return err
 	}
 
+	return nil
+}
+
+func modifyCmdline(replace func([]byte) []byte) error {
+	f, err := os.OpenFile(rootdev.Partition(rootdev.Boot), os.O_RDWR, 0600)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	rd, err := fat.NewReader(f)
+	if err != nil {
+		return err
+	}
+
+	offset, length, err := rd.Extents("/cmdline.txt")
+	if err != nil {
+		return err
+	}
+	if err := modifyCmdlineFile(f, offset, length, replace); err != nil {
+		return err
+	}
+
+	offset, length, err = rd.Extents("/loader/entries/gokrazy.conf")
+	if err != nil {
+		// This file might not be present yet when using a recent gokrazy
+		// installation with an older gokr-packer.
+		log.Printf("updating systemd-boot config: %v", err)
+		return nil
+	}
+	if err := modifyCmdlineFile(f, offset, length, replace); err != nil {
+		return err
+	}
 	return f.Close()
 }
 
