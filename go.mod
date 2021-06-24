@@ -1,6 +1,6 @@
 module github.com/gokrazy/gokrazy
 
-go 1.14
+go 1.16
 
 require (
 	github.com/beevik/ntp v0.2.0

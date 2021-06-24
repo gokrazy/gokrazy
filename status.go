@@ -17,7 +17,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gokrazy/gokrazy/internal/bundled"
+	"github.com/gokrazy/gokrazy/internal/assets"
 	"github.com/gokrazy/internal/fat"
 	"github.com/gokrazy/internal/rootdev"
 	"rsc.io/goversion/version"
@@ -185,20 +185,14 @@ func initStatus(services []*service) {
 	}
 	kernel := parseUtsname(uname)
 
-	commonTmpls := template.New("root").Funcs(map[string]interface{}{
-		"shortenSHA256": func(hash string) string {
-			if len(hash) > 10 {
-				return hash[:10]
-			}
-			return hash
-		},
-	})
-
-	commonTmpls = template.Must(commonTmpls.New("header").Parse(bundled.Asset("header.tmpl")))
-	commonTmpls = template.Must(commonTmpls.New("footer").Parse(bundled.Asset("footer.tmpl")))
-
-	overviewTmpl := template.Must(template.Must(commonTmpls.Clone()).New("overview").
+	templates := template.Must(template.New("root").
 		Funcs(map[string]interface{}{
+			"shortenSHA256": func(hash string) string {
+				if len(hash) > 10 {
+					return hash[:10]
+				}
+				return hash
+			},
 			"restarting": func(t time.Time) bool {
 				return time.Since(t).Seconds() < 5
 			},
@@ -233,19 +227,9 @@ func initStatus(services []*service) {
 				return fmt.Sprintf("%.f", float64(rss)/used*100)
 			},
 		}).
-		Parse(bundled.Asset("overview.tmpl")))
+		ParseFS(assets.Assets, "*.tmpl"))
 
-	statusTmpl := template.Must(template.Must(commonTmpls.Clone()).New("statusTmpl").Parse(bundled.Asset("status.tmpl")))
-
-	for _, fn := range []string{
-		"favicon.ico",
-		"bootstrap-3.3.7.min.css",
-		"bootstrap-table-1.11.0.min.css",
-		"bootstrap-table-1.11.0.min.js",
-		"jquery-3.1.1.min.js",
-	} {
-		http.Handle("/"+fn, bundled.HTTPHandlerFunc(fn))
-	}
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assets.Assets))))
 
 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -285,7 +269,7 @@ func initStatus(services []*service) {
 		}
 
 		var buf bytes.Buffer
-		if err := statusTmpl.Execute(&buf, struct {
+		if err := templates.ExecuteTemplate(&buf, "status.tmpl", struct {
 			Service        *service
 			BuildTimestamp string
 			Hostname       string
@@ -315,6 +299,10 @@ func initStatus(services []*service) {
 	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.Error(w, "not found", http.StatusNotFound)
+			return
+		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
 		var st unix.Statfs_t
@@ -381,7 +369,7 @@ func initStatus(services []*service) {
 		}
 
 		var buf bytes.Buffer
-		if err := overviewTmpl.Execute(&buf, status); err != nil {
+		if err := templates.ExecuteTemplate(&buf, "overview.tmpl", status); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
