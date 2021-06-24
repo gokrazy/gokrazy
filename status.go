@@ -330,6 +330,12 @@ func initStatus(services []*service) {
 			log.Printf("could not get public addrs: %v", err)
 		}
 
+		permUUID := rootdev.PARTUUID()
+		if strings.Contains(permUUID, "-") {
+			permUUID = strings.TrimSuffix(permUUID, "01") + "04"
+		} else {
+			permUUID += "-04"
+		}
 		status := struct {
 			Services       []*service
 			PermDev        string
@@ -342,7 +348,7 @@ func initStatus(services []*service) {
 			Meminfo        map[string]int64
 			Hostname       string
 			Model          string
-			PARTUUID       string
+			PermUUID       string
 			EEPROM         *eepromVersion
 			Kernel         string
 		}{
@@ -357,7 +363,7 @@ func initStatus(services []*service) {
 			Meminfo:        parseMeminfo(),
 			Hostname:       hostname,
 			Model:          model,
-			PARTUUID:       rootdev.PARTUUID(),
+			PermUUID:       permUUID,
 			EEPROM:         lastInstalledEepromVersion,
 			Kernel:         kernel,
 		}

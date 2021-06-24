@@ -65,8 +65,8 @@ unaccounted
 
 {{ if eq .PermAvail 0 }}
 
-{{ if ne .PARTUUID "" }}
-No permanent storage mounted. To create a filesystem for permanent storage, plug the SD card into a Linux computer and use <code>mkfs.ext4 /dev/disk/by-partuuid/{{ .PARTUUID }}-04</code>.
+{{ if ne .PermUUID "" }}
+No permanent storage mounted. To create a filesystem for permanent storage, plug the SD card into a Linux computer and use <code>mkfs.ext4 /dev/disk/by-partuuid/{{ .PermUUID }}</code>.
 {{ else }}
 No permanent storage mounted. To create a filesystem for permanent storage, plug the SD card into a Linux computer and, if your SD card is <code>/dev/sdb</code>, use <code>mkfs.ext4 /dev/sdb4</code>.
 {{ end }}
