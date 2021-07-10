@@ -103,7 +103,8 @@ module github.com/gokrazy/uefiboot
 		Architecture:    vmtest.QEMU_X86_64,
 		OperatingSystem: vmtest.OS_LINUX,
 		Params: []string{
-			"-enable-kvm", "-cpu", "host",
+			//"-enable-kvm",
+			//"-cpu", "host",
 			"-nodefaults",
 			"-m", "4G",
 			"-smp", "8", // required! system gets stuck without -smp
