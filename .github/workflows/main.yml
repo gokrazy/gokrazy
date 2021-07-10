@@ -29,7 +29,7 @@ jobs:
       run: sudo apt-get install qemu-system-x86
 
     - name: run tests
-      run: go test ./...
+      run: go test -v ./...
 
     - name: generate gokrazy disk image
       run: |
