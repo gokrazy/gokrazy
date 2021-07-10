@@ -22,11 +22,11 @@ jobs:
       run: |
         [ "$(gofmt -l $(find . -name '*.go') 2>&1)" = "" ]
 
-    - name: run tests
-      run: go test ./...
-
     - name: install gokr-packer
       run: go get -u github.com/gokrazy/tools/cmd/gokr-packer
+
+    - name: run tests
+      run: go test ./...
 
     - name: generate gokrazy disk image
       run: |
