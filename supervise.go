@@ -320,7 +320,11 @@ func supervise(s *service) {
 		// ported daemons would do, so setting $HOME
 		// increases the chance that third-party daemons
 		// just work.
-		cmd.Env = append(cmd.Env, "HOME=/perm/"+filepath.Base(s.cmd.Path))
+		homeDir := "/perm/" + filepath.Base(s.cmd.Path)
+		cmd.Env = append(cmd.Env, "HOME="+homeDir)
+		if _, err := os.Stat(homeDir); err == nil {
+			cmd.Dir = homeDir
+		}
 
 		attempt++
 
