@@ -1,6 +1,7 @@
 // Only build for (linux AND (amd64 OR arm64)) due to using
 // linux-specific syscalls with uint64 for “unsigned long”:
 
+//go:build linux && (amd64 || arm64)
 // +build linux
 // +build amd64 arm64
 
