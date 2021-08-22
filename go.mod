@@ -12,6 +12,6 @@ require (
 	github.com/rtr7/dhcp4 v0.0.0-20181120124042-778e8c2e24a5
 	github.com/stretchr/testify v1.5.1 // indirect
 	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
-	golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
+	golang.org/x/sys v0.0.0-20210820121016-41cdb8703e55
 	rsc.io/goversion v1.2.0
 )

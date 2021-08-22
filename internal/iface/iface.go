@@ -8,15 +8,6 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-// TODO: replace with unix.Ifreq APIs once sockaddrs are supported.
-
-// as per https://manpages.debian.org/jessie/manpages/netdevice.7.en.html
-type ifreqAddr struct {
-	name [16]byte
-	addr syscall.RawSockaddrInet4
-	pad  [8]byte
-}
-
 // as per http://lxr.free-electrons.com/source/include/uapi/linux/route.h#L30
 type rtentry struct {
 	pad1    uint64
@@ -30,7 +21,6 @@ type rtentry struct {
 type Configsocket struct {
 	fd    int
 	iface string
-	name  [16]byte
 }
 
 func NewConfigSocket(iface string) (Configsocket, error) {
@@ -39,31 +29,31 @@ func NewConfigSocket(iface string) (Configsocket, error) {
 		return Configsocket{}, err
 	}
 
-	cs := Configsocket{
-		fd: fd,
-		// TODO: temporary name duplication.
+	return Configsocket{
+		fd:    fd,
 		iface: iface,
-	}
-	copy(cs.name[:], []byte(iface))
-	return cs, nil
+	}, nil
 }
 
 func (cs Configsocket) Close() error {
 	return syscall.Close(cs.fd)
 }
 
-func (cs Configsocket) ifreqAddr(request uintptr, addr net.IP) error {
-	req := ifreqAddr{
-		name: cs.name,
-		addr: syscall.RawSockaddrInet4{
-			Family: syscall.AF_INET,
-		},
+func (cs Configsocket) ifreqAddr(request uint, addr net.IP) error {
+	ifr, err := unix.NewIfreq(cs.iface)
+	if err != nil {
+		return err
 	}
-	copy(req.addr.Addr[:], addr)
 
-	if _, _, errno := syscall.Syscall(syscall.SYS_IOCTL, uintptr(cs.fd), request, uintptr(unsafe.Pointer(&req))); errno != 0 {
-		return errno
+	// Ensure we use the 4-byte net.IP representation.
+	if err := ifr.SetInet4Addr(addr.To4()); err != nil {
+		return err
 	}
+
+	if err := unix.IoctlIfreq(cs.fd, request, ifr); err != nil {
+		return err
+	}
+
 	return nil
 }
 
