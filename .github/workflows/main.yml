@@ -26,7 +26,7 @@ jobs:
       run: go install github.com/gokrazy/tools/cmd/gokr-packer@latest
 
     - name: install qemu
-      run: sudo apt-get install qemu-system-x86
+      run: sudo apt update && sudo apt-get install qemu-system-x86
 
     - name: run tests
       run: go test -v ./...
