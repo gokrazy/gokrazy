@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using Tailscale with gokrazy</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+<h1 id="using-tailscale-with-gokrazy">Using Tailscale with gokrazy</h1>
+<p><a href="https://tailscale.com/">Tailscale</a>’s website reads:</p>
+<blockquote>
+<p>A secure network that just works</p>
+<p>Zero config VPN. Installs on any device in minutes, manages firewall rules for you, and works from anywhere.</p>
+</blockquote>
+<p>gokrazy-based devices are no exception! This guide shows you how to use
+Tailscale with gokrazy.</p>
+<p>Tailscale’s networking will come in handy when accessing your gokrazy server
+remotely (no static DHCP leases, port-forwarding and DynDNS required!), or even
+to secure your communication when gokrazy is <a href="/userguide/unencrypted-wifi/">connected to an unencrypted WiFi
+network</a>.</p>
+<h2 id="step-1-set-command-line-flags">Step 1. set command-line flags</h2>
+<p>We need to specify the following flags for the <code>tailscaled</code> daemon (see
+<a href="/userguide/package-config">“Per-package configuration”</a> if you’re unfamiliar
+with this mechanism):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/tailscale.com/cmd/tailscaled
+echo <span style="color:#e6db74">&#39;--state=/perm/tailscaled/state&#39;</span> &gt; flags/tailscale.com/cmd/tailscaled/flags.txt
+echo <span style="color:#e6db74">&#39;--tun=userspace-networking&#39;</span> &gt;&gt; flags/tailscale.com/cmd/tailscaled/flags.txt
+</code></pre></div><p><code>tailscaled</code> requires the <code>--state</code> flag, so we need to set it
+explicitly. <code>/perm/tailscaled</code> is the working directory of the <code>tailscaled</code>
+process and will contain the <code>tailscaled.sock</code> socket, so it makes sense to
+place the state file into the same directory.</p>
+<p>The <code>--tun=userspace-networking</code> flag selects the <a href="https://tailscale.com/kb/1112/userspace-networking/">Userspace
+networking</a> mode.</p>
+<p>It would be nice to use the <code>tun</code>-based networking eventually, but currently
+Tailscale requires components that gokrazy does not provide for <code>tun</code> mode. For
+accessing the services on your gokrazy installation, the Userspace networking
+mode works fine, though :)</p>
+<h2 id="step-2-include-the-tailscale-packages">Step 2. include the tailscale packages</h2>
+<p>In your <code>gokr-packer</code> invocation (see <a href="/quickstart/">Quickstart</a> if you don’t
+have one yet), include the Tailscale daemon and CLI Go packages:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  tailscale.com/cmd/tailscaled <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  tailscale.com/cmd/tailscale
+</code></pre></div><h2 id="step-3-authenticate">Step 3. authenticate</h2>
+<p>Log in to your gokrazy device interactively using
+<a href="https://github.com/gokrazy/breakglass">breakglass</a>, change to the
+<code>/perm/tailscaled</code> directory and run <code>tailscale up</code> to print the authentication
+link:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">% breakglass gokrazy
+breakglass# cd /perm/tailscaled
+breakglass# /user/tailscale up
+</code></pre></div>
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>
