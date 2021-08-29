@@ -309,7 +309,6 @@ func Supervise(commands []*exec.Cmd) error {
 	for idx, cmd := range commands {
 		services[idx] = &service{cmd: cmd}
 	}
-	superviseServices(services)
 
 	initStatus(services)
 
@@ -348,16 +347,21 @@ func Supervise(commands []*exec.Cmd) error {
 		log.Printf("cannot listen for new IP addresses: %v", err)
 	}
 
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, unix.SIGHUP)
 	go func() {
-		c := make(chan os.Signal, 1)
-		signal.Notify(c, unix.SIGHUP)
-
 		for range c {
 			if err := updateListenerPairs(httpPort, httpsPort, useTLS, tlsConfig); err != nil {
 				log.Printf("updating listeners: %v", err)
 			}
 		}
 	}()
+
+	// Only supervise services after the SIGHUP handler is set up, otherwise a
+	// particularly fast dhcp client (e.g. when running in qemu) might send
+	// SIGHUP before the signal handler is set up, thereby killing init and
+	// panic the system!
+	superviseServices(services)
 
 	go func() {
 		buf := make([]byte, 1)
