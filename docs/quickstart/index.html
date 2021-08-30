@@ -75,7 +75,7 @@ go mod init hello</pre>
 	  <p>
 	    Then, install the gokr-packer:
 	  </p>
-<pre>go get github.com/gokrazy/tools/cmd/gokr-packer@latest</pre>
+<pre>go install github.com/gokrazy/tools/cmd/gokr-packer@latest</pre>
 
           <h1>Overwrite an SD card with gokrazy</h1>
 	  <p>
@@ -85,7 +85,12 @@ go mod init hello</pre>
 	  To overwrite the entire SD card <code>/dev/sdb</code> with a gokrazy installation running a hello world program, use:
 	  </p>
 	  <pre>cd ~/gokrazy/hello
-gokr-packer -overwrite=/dev/sdb github.com/gokrazy/hello github.com/gokrazy/serial-busybox</pre>
+gokr-packer \
+  -overwrite=/dev/sdb \
+  -serial_console=disabled \
+  github.com/gokrazy/fbstatus \
+  github.com/gokrazy/hello \
+  github.com/gokrazy/serial-busybox</pre>
           <p>
 	  The <code>gokr-packer</code> command above will result in log output like this:
 	  </p>
@@ -105,23 +110,50 @@ To interact with the device, gokrazy provides a web interface reachable at:
 
 In addition, the following Linux consoles are set up:
 
-	1. foreground Linux console on the serial port (115200n8, pin 6, 8, 10 for GND, TX, RX), accepting input
-	2. secondary Linux framebuffer console on HDMI; shows Linux kernel message but no init system messages
-
-Use -serial_console=disabled to make gokrazy not touch the serial port,
-and instead make the framebuffer console on HDMI the foreground console</pre>
+	1. foreground Linux framebuffer console on HDMI
+</pre>
           <p>
-	  After booting from this SD card, your Raspberry Pi 3 or 4 will:
+	    After booting from this SD card, your Raspberry Pi 3 or 4 will:
+	  </p>
 	  <ul>
+          <li>display system status on the HDMI output</li>
 	  <li>obtain an IP address for hostname “gokrazy” via DHCP (IPv4) and SLAAC (IPv6)</li>
 	  <li>synchronize the clock using NTP</li>
 	  <li>expose a password-authenticated web interface on private IP addresses<br>
 	  (the default password can be recovered from <code>~/.config/gokrazy/http-password.txt</code>)</li>
 	  <li>supervise all installed programs (only the hello world program in this example)</li>
 	  </ul>
-	  The only way for you to interact with the device is via the
-	  web interface (unless the installed programs provide other
-	  ways). There will be no HDMI output, no serial console, etc.
+
+	  <p>
+	    The only way for you to interact with the device is via the
+	    web interface (unless the installed programs provide other
+	    ways).
+	  </p>
+
+	  <p>
+	    A good next program to try
+	    is <a href="https://github.com/gokrazy/breakglass">breakglass</a>,
+	    which allows you to run an interactive SSH session to explore the
+	    system.
+	  </p>
+
+	  <h2>Serial console</h2>
+	  <p>
+	    If you prefer the serial console, you can optionally connect a
+	    serial adapter to the Raspberry Pi and remove
+	    the <code>-serial_console=disabled</code> flag to make the primary
+	    Linux console end up on the serial console.
+
+	  </p>
+
+	  <p>
+	    When pressing <code>Enter</code> on the serial console, gokrazy will
+	    start the program <code>/perm/sh</code> if present. You can for
+	    example rename
+	    a <a href="https://github.com/gokrazy/serial-busybox/blob/master/third_party/busybox-1.31.1/busybox">statically
+	    linked <code>busybox</code> arm64 binary</a> to <code>sh</code>,
+	    store it in the SD card’s persistent data partition, and use it as
+	    an interactive shell.
 	  </p>
 	</div>
       </div>
