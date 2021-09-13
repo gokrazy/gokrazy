@@ -1,6 +1,6 @@
 ---
 title: "Using Tailscale with gokrazy"
-weight: 16
+weight: 17
 ---
 
 # Using Tailscale with gokrazy
