@@ -296,8 +296,9 @@ func supervise(s *service) {
 			time.Sleep(1 * time.Second)
 			continue
 		}
-
-		l.Printf("gokrazy: attempt %d, starting %+v", attempt, s.cmd.Args)
+		// quote and separate the args so stderr shows what cmd is actually executed
+		argstr := "['" + strings.Join(s.cmd.Args, `', '`) + `']`
+		l.Printf("gokrazy: attempt %d, starting %s", attempt, argstr)
 		s.setStarted(time.Now())
 		cmd := &exec.Cmd{
 			Path:   s.cmd.Path,
