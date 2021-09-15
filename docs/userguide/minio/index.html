@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>setting up MinIO on gokrazy</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+<h1 id="setting-up-minio-on-gokrazy">Setting up MinIO on gokrazy</h1>
+<p>Since MinIO is a storage solution, one needs to have the permanent storage with
+a filesystem that the linux kernel understands configured. Further instructions
+on how to do this can be found in the <a href="/quickstart/">Quickstart</a> article or the
+<code>gokr-packer</code> output.</p>
+<p>This article also assumes that you have an instance directory set up.
+(also see <a href="/quickstart/">Quickstart</a>)</p>
+<h2 id="configuring-the-env-vars-and-flags">Configuring the ENV Vars and flags</h2>
+<p>You can find a detailed description on how to set the flags and environment vars
+in the article <a href="/userguide/package-config/">per-package configuration</a>.</p>
+<p><code>${INSTANCE?}/env/github.com/minio/minio/env.txt</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-env" data-lang="env">MINIO_ROOT_USER<span style="color:#f92672">=</span>minio
+MINIO_ROOT_PASSWORD<span style="color:#f92672">=</span>minio-on-gokrazy
+HOME<span style="color:#f92672">=</span>/perm/minio
+</code></pre></div><p><code>${INSTANCE?}/flags/github.com/minio/minio/flags.txt</code></p>
+<pre><code>server
+--address
+:3001
+--console-address
+:3002
+/perm/minio/
+</code></pre><p>A few things can be noted here:</p>
+<ul>
+<li>
+<p>There are nice examples on the different (advanced) options in the minio docs
+or once you execute <code>minio server --help</code> if you have it installed locally</p>
+</li>
+<li>
+<p>The ports for the storage server and console do not have to be explicitly set,
+but for me the default port collided with another service (Port 9000). If no
+port is set the console just chooses an arbitrary free one.</p>
+</li>
+<li>
+<p>For some reason the <code>HOME</code> variable has to be set to the storage folder.
+See <a href="https://github.cgs.me/minio/minio/issues/12641">Issue #12641</a> on why that
+is the case.</p>
+</li>
+</ul>
+<h2 id="install-minio-to-your-gokrazy-device">Install MinIO to your gokrazy device</h2>
+<p>Via web &hellip;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">GOKRAZY_UPDATE<span style="color:#f92672">=</span>http://gokrazy:&lt;your-password-goes-here&gt;@gokrazy/ gokr-packer . <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    github.com/minio/minio
+</code></pre></div><p>&hellip; or directly to the SDCard</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer -overwrite<span style="color:#f92672">=</span>/dev/sdX . <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    github.com/minio/minio
+</code></pre></div><h2 id="test-whether-the-setup-was-successful">Test whether the setup was successful</h2>
+<p>If you have the <a href="https://github.com/minio/mc"><code>mc</code></a> command installed you can
+check out whether your installation of MinIO really works:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mc alias set gokrazy http://gokrazy:3001 minio miniostorage
+Added <span style="color:#e6db74">`</span>gokrazy<span style="color:#e6db74">`</span> successfully.
+$ mc ls gokrazy
+$ mc mb gokrazy/testbucket
+Bucket created successfully <span style="color:#e6db74">`</span>gokrazy/testbucket<span style="color:#e6db74">`</span>.
+$ mc ls gokrazy
+<span style="color:#f92672">[</span>2021-09-15 16:40:16 CEST<span style="color:#f92672">]</span>     0B testbucket/
+</code></pre></div><p>Also check out the output in the logs on the gokrazy webinterface and login into
+the MinIO management console (<a href="http://gokrazy:3002">http://gokrazy:3002</a> in this
+guide) to create service accounts view logs, bucket contents and more.</p>
+
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>
