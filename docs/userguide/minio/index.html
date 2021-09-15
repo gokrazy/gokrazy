@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>setting up MinIO on gokrazy</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+<h1 id="setting-up-minio-on-gokrazy">Setting up MinIO on gokrazy</h1>
+<p><a href="https://min.io/">MinIO</a> is high-performance object storage that is API
+compatible to Amazons <a href="https://aws.amazon.com/de/s3/">Simple Storage Service (S3)</a>,
+but is open source and written in Go. It can be used as a building block for
+applications involving file storage and file transmission and while its native
+to the cloud, it turns out one can also use it on gokrazy. :)</p>
+<p>Since MinIO is a storage solution, you need to enable permanent storage on your
+gokrazy installation by running the <code>mkfs</code> command that <code>gokr-packer</code> prints. For
+more details, see <a href="/quickstart/">Quickstart</a>.</p>
+<p>This article also assumes that you have an instance directory (with a <code>go.mod</code>)
+set up.</p>
+<h2 id="step-1-configuring-the-environment-variables-and-command-line-flags">Step 1: Configuring the environment variables and command-line flags</h2>
+<p>You can find a detailed description on how to set the flags and environment vars
+in the article <a href="/userguide/package-config/">per-package configuration</a>.</p>
+<p><code>${INSTANCE?}/env/github.com/minio/minio/env.txt</code></p>
+<pre><code class="language-env" data-lang="env">MINIO_ROOT_USER=minio
+MINIO_ROOT_PASSWORD=minio-on-gokrazy
+</code></pre><p><code>${INSTANCE?}/flags/github.com/minio/minio/flags.txt</code></p>
+<pre><code>server
+--address
+:3001
+--console-address
+:3002
+/perm/minio/
+</code></pre><p>A few things can be noted here:</p>
+<ul>
+<li>
+<p>There are nice practical examples on the different options once you execute
+<code>minio server --help</code> if you have it installed locally or more advanced use
+cases in the official
+<a href="https://docs.min.io/minio/baremetal/reference/minio-server/minio-server.html">MinIO docs</a>.</p>
+</li>
+<li>
+<p>The ports for the storage server and console do not have to be explicitly set,
+but for me the default port collided with another service (Port 9000). If no
+port is set the console just chooses an arbitrary free one.</p>
+</li>
+<li>
+<p>For some reason the <code>HOME</code> variable has to be set to the storage folder.
+See <a href="https://github.com/minio/minio/issues/12641">Issue #12641</a> on why that
+is the case. As default gokrazy sets <code>HOME</code> to <code>HOME=/perm/&lt;cmd&gt;</code>, so if you
+want to change your storage location to something different modify the
+<code>env.txt</code> accordingly.</p>
+</li>
+</ul>
+<h2 id="step-2-install-minio-to-your-gokrazy-device">Step 2: Install MinIO to your gokrazy device</h2>
+<p>In your <code>gokr-packer</code> invocation (see <a href="/quickstart/">Quickstart</a> if you don’t
+have one yet), include the MinIO package:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/minio/minio
+</code></pre></div><h2 id="step-3-test-whether-the-setup-was-successful">Step 3: Test whether the setup was successful</h2>
+<p>If you have the <a href="https://github.com/minio/mc"><code>mc</code></a> command installed you can
+check out whether your installation of MinIO really works:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mc alias set gokrazy http://gokrazy:3001 minio minio-on-gokrazy
+Added <span style="color:#e6db74">`</span>gokrazy<span style="color:#e6db74">`</span> successfully.
+$ mc ls gokrazy
+$ mc mb gokrazy/testbucket
+Bucket created successfully <span style="color:#e6db74">`</span>gokrazy/testbucket<span style="color:#e6db74">`</span>.
+$ mc ls gokrazy
+<span style="color:#f92672">[</span>2021-09-15 16:40:16 CEST<span style="color:#f92672">]</span>     0B testbucket/
+</code></pre></div><p>Also check out the output in the logs on the gokrazy webinterface and login into
+the MinIO management console (<a href="http://gokrazy:3002">http://gokrazy:3002</a> in this
+guide) to create service accounts view logs, bucket contents and more.</p>
+
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>
