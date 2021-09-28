@@ -5,15 +5,14 @@ weight: 50
 
 # Setting up MinIO on gokrazy
 
-Since MinIO is a storage solution, one needs to have the permanent storage with
-a filesystem that the linux kernel understands configured. Further instructions
-on how to do this can be found in the [Quickstart](/quickstart/) article or the
-`gokr-packer` output.
+Since MinIO is a storage solution, you need to enable permanent storage on your
+gokrazy installation by running the `mkfs` command that `gokr-packer` prints. For
+more details, see [Quickstart](/quickstart/).
 
-This article also assumes that you have an instance directory set up.
-(also see [Quickstart](/quickstart/))
+This article also assumes that you have an instance directory (with a `go.mod`)
+set up.
 
-## Configuring the ENV Vars and flags
+## Step 1: Configuring the environment variables and command-line flags
 
 You can find a detailed description on how to set the flags and environment vars
 in the article [per-package configuration](/userguide/package-config/).
@@ -22,7 +21,6 @@ in the article [per-package configuration](/userguide/package-config/).
 ```env
 MINIO_ROOT_USER=minio
 MINIO_ROOT_PASSWORD=minio-on-gokrazy
-HOME=/perm/minio
 ```
 
 `${INSTANCE?}/flags/github.com/minio/minio/flags.txt`
@@ -46,27 +44,25 @@ A few things can be noted here:
 
 * For some reason the `HOME` variable has to be set to the storage folder.
   See [Issue #12641](https://github.cgs.me/minio/minio/issues/12641) on why that
-  is the case.
+  is the case. As default gokrazy sets `HOME` to `HOME=/perm/<cmd>`, so if you
+  want to change your storage location to something diffrent modify the
+  `env.txt` accordingly.
 
-## Install MinIO to your gokrazy device
+## Step 2: Install MinIO to your gokrazy device
 
-Via web ...
+In your `gokr-packer` invocation (see [Quickstart](/quickstart/) if you don’t
+have one yet), include the MinIO package:
+
 ```shell
-GOKRAZY_UPDATE=http://gokrazy:<your-password-goes-here>@gokrazy/ gokr-packer . \
-    github.com/gokrazy/breakglass \
-    github.com/gokrazy/serial-busybox \
-    github.com/minio/minio
+gokr-packer \
+  -update=yes \
+  github.com/gokrazy/hello \
+  github.com/gokrazy/breakglass \
+  github.com/gokrazy/serial-busybox \
+  github.com/minio/minio
 ```
 
-... or directly to the SDCard
-```shell
-gokr-packer -overwrite=/dev/sdX . \
-    github.com/gokrazy/breakglass \
-    github.com/gokrazy/serial-busybox \
-    github.com/minio/minio
-```
-
-## Test whether the setup was successful
+## Step 3: Test whether the setup was successful
 
 If you have the [`mc`](https://github.com/minio/mc) command installed you can
 check out whether your installation of MinIO really works:
