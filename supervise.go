@@ -297,7 +297,7 @@ func supervise(s *service) {
 			continue
 		}
 
-		l.Printf("gokrazy: attempt %d, starting %+v", attempt, s.cmd.Args)
+		l.Printf("gokrazy: attempt %d, starting %q", attempt, s.cmd.Args)
 		s.setStarted(time.Now())
 		cmd := &exec.Cmd{
 			Path:   s.cmd.Path,
