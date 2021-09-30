@@ -46,6 +46,11 @@ body {
 </div>
 
 <h1 id="setting-up-minio-on-gokrazy">Setting up MinIO on gokrazy</h1>
+<p><a href="https://min.io/">MinIO</a> is high-performance object storage that is API
+compatible to Amazons <a href="https://aws.amazon.com/de/s3/">Simple Storage Service (S3)</a>,
+but is open source and written in Go. It can be used as a building block for
+applications involving file storage and file transmission and while its native
+to the cloud, it turns out one can also use it on gokrazy. :)</p>
 <p>Since MinIO is a storage solution, you need to enable permanent storage on your
 gokrazy installation by running the <code>mkfs</code> command that <code>gokr-packer</code> prints. For
 more details, see <a href="/quickstart/">Quickstart</a>.</p>
@@ -67,8 +72,10 @@ MINIO_ROOT_PASSWORD<span style="color:#f92672">=</span>minio-on-gokrazy
 </code></pre><p>A few things can be noted here:</p>
 <ul>
 <li>
-<p>There are nice examples on the different (advanced) options in the minio docs
-or once you execute <code>minio server --help</code> if you have it installed locally</p>
+<p>There are nice practical examples on the different options once you execute
+<code>minio server --help</code> if you have it installed locally or more advanced use
+cases in the official
+<a href="https://docs.min.io/minio/baremetal/reference/minio-server/minio-server.html">MinIO docs</a>.</p>
 </li>
 <li>
 <p>The ports for the storage server and console do not have to be explicitly set,
@@ -79,7 +86,7 @@ port is set the console just chooses an arbitrary free one.</p>
 <p>For some reason the <code>HOME</code> variable has to be set to the storage folder.
 See <a href="https://github.cgs.me/minio/minio/issues/12641">Issue #12641</a> on why that
 is the case. As default gokrazy sets <code>HOME</code> to <code>HOME=/perm/&lt;cmd&gt;</code>, so if you
-want to change your storage location to something diffrent modify the
+want to change your storage location to something different modify the
 <code>env.txt</code> accordingly.</p>
 </li>
 </ul>

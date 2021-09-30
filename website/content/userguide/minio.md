@@ -5,6 +5,12 @@ weight: 50
 
 # Setting up MinIO on gokrazy
 
+[MinIO](https://min.io/) is high-performance object storage that is API
+compatible to Amazons [Simple Storage Service (S3)](https://aws.amazon.com/de/s3/),
+but is open source and written in Go. It can be used as a building block for
+applications involving file storage and file transmission and while its native
+to the cloud, it turns out one can also use it on gokrazy. :)
+
 Since MinIO is a storage solution, you need to enable permanent storage on your
 gokrazy installation by running the `mkfs` command that `gokr-packer` prints. For
 more details, see [Quickstart](/quickstart/).
@@ -35,8 +41,10 @@ server
 
 A few things can be noted here:
 
-* There are nice examples on the different (advanced) options in the minio docs
-  or once you execute `minio server --help` if you have it installed locally
+* There are nice practical examples on the different options once you execute
+  `minio server --help` if you have it installed locally or more advanced use
+  cases in the official
+  [MinIO docs](https://docs.min.io/minio/baremetal/reference/minio-server/minio-server.html).
 
 * The ports for the storage server and console do not have to be explicitly set,
   but for me the default port collided with another service (Port 9000). If no
@@ -45,7 +53,7 @@ A few things can be noted here:
 * For some reason the `HOME` variable has to be set to the storage folder.
   See [Issue #12641](https://github.cgs.me/minio/minio/issues/12641) on why that
   is the case. As default gokrazy sets `HOME` to `HOME=/perm/<cmd>`, so if you
-  want to change your storage location to something diffrent modify the
+  want to change your storage location to something different modify the
   `env.txt` accordingly.
 
 ## Step 2: Install MinIO to your gokrazy device
