@@ -1,3 +1,6 @@
+//go:build linux
+// +build linux
+
 package iface
 
 import (
@@ -8,9 +11,9 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-// as per http://lxr.free-electrons.com/source/include/uapi/linux/route.h#L30
+// as per https://github.com/torvalds/linux/blob/7ddb58cb0ecae8e8b6181d736a87667cc9ab8389/include/uapi/linux/route.h#L31-L48
 type rtentry struct {
-	pad1    uint64
+	pad1    uint
 	dst     syscall.RawSockaddrInet4
 	gateway syscall.RawSockaddrInet4
 	genmask syscall.RawSockaddrInet4
