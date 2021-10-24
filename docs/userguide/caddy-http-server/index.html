@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>  <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setting up the Caddy HTTP server on gokrazy</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style type="text/css">
+body {
+  font-family: "Open Sans";
+}
+.table-striped>tr:nth-child(odd){
+   background-color:red;
+}
+</style>
+  </head>
+<body>
+	  <div class="container"><div class="header"><nav>
+  <ul class="nav nav-pills pull-right">
+      
+      
+      
+      <li role="presentation" class=""><a href="/">Home </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/platforms/">Platforms </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/quickstart/">Quickstart </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/showcase/">Showcase </a></li>
+      
+      
+      <li role="presentation" class=""><a href="/userguide/">Userguide </a></li>
+      
+      
+      <li role="presentation" class=""><a href="https://github.com/gokrazy/gokrazy">Source </a></li>
+      
+  </ul>
+</nav>
+<h3 class="text-muted">gokrazy</h3>
+</div>
+
+<h1 id="setting-up-caddy-on-gokrazy">Setting up Caddy on gokrazy</h1>
+<p><a href="https://caddyserver.com/">Caddy</a> is a powerful, enterprise-ready, open source
+web server with automatic HTTPS written in Go.</p>
+<h2 id="step-1-configuring-the-caddyfile-and-flags">Step 1: Configuring the Caddyfile and flags</h2>
+<p>Tell <code>caddy</code> to <strong>run</strong> its HTTP server, and where to find <a href="https://caddyserver.com/docs/caddyfile">its
+<code>Caddyfile</code></a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/github.com/caddyserver/caddy/v2/cmd/caddy
+cat &gt; flags/github.com/caddyserver/caddy/v2/cmd/caddy/flags.txt <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+</span><span style="color:#e6db74">run
+</span><span style="color:#e6db74">--config
+</span><span style="color:#e6db74">/etc/caddy/Caddyfile
+</span><span style="color:#e6db74">EOT</span>
+</code></pre></div><p>Include the config file in the gokrazy image at <code>/etc/caddy/Caddyfile</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy
+cat &gt; extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy/Caddyfile <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+</span><span style="color:#e6db74">http://:80 {
+</span><span style="color:#e6db74">	root * /tmp
+</span><span style="color:#e6db74">	file_server browse 
+</span><span style="color:#e6db74">}
+</span><span style="color:#e6db74">EOT</span>
+</code></pre></div><p><strong>Note:</strong> In the above <code>Caddyfile</code>, we have explicitly configured an HTTP
+listener to disable Caddy’s automatic HTTPS setup, so that your server will work
+without a publically reachable address.</p>
+<h2 id="step-2-install-caddy-to-your-gokrazy-device">Step 2: Install Caddy to your gokrazy device</h2>
+<p>In your <code>gokr-packer</code> invocation (see <a href="/quickstart/">Quickstart</a> if you don’t
+have one yet):</p>
+<ol>
+<li>include the caddy package</li>
+<li>set the <code>-http_port</code> flag to move the gokrazy web interface listening port
+out of the way and let caddy serve on TCP port 80. The special <code>-update=:80</code>
+syntax is the same as <code>-update=yes</code>, but forcing this update to happen via
+port 80. In later <code>gokr-packer</code> runs, use <code>-update=yes</code> instead.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>:80 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -http_port<span style="color:#f92672">=</span><span style="color:#ae81ff">1080</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/caddyserver/caddy/v2/cmd/caddy
+</code></pre></div><p><strong>Tip:</strong> When using <code>breakglass</code>, use the <code>-gokrazy_url=:1080</code> flag to overwrite
+the port.</p>
+
+      <footer class="footer" style="text-align: center">
+        <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
+      </footer>
+    </div>
+  </body>
+</html>
+</div>
+    </body>
+</html>

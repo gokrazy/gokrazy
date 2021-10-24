@@ -1,5 +1,5 @@
 ---
-title: "setting up MinIO on gokrazy"
+title: "Setting up MinIO object storage on gokrazy"
 weight: 50
 ---
 
