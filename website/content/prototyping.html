@@ -193,6 +193,12 @@ root@6e530a973d45:/# exit
 % docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libz.so.1 .</pre>
 
 	  <p>
+	    The above workflow is automated by
+	    the <a href="https://github.com/gokrazy/freeze"><code>freeze</code>
+	    tool</a>.
+	  </p>
+
+	  <p>
 	    Now we can copy the contents of the temporary directory to
 	    e.g. <code>/perm/tc</code> and run the <code>tc</code> command in
 	    breakglass:
