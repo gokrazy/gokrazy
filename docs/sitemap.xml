@@ -1,65 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>https://gokrazy.org/userguide/gpio/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/userguide/package-config/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/userguide/process-interface/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/userguide/tailscale/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/userguide/remotesyslog/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/userguide/tls-for-untrusted-networks/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/userguide/unencrypted-wifi/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/userguide/minio/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/platforms/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/prototyping/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/quickstart/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/showcase/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/userguide/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://gokrazy.org/modules/</loc>
   </url>
-  
 </urlset>

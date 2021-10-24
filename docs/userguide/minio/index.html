@@ -60,10 +60,10 @@ set up.</p>
 <p>You can find a detailed description on how to set the flags and environment vars
 in the article <a href="/userguide/package-config/">per-package configuration</a>.</p>
 <p><code>${INSTANCE?}/env/github.com/minio/minio/env.txt</code></p>
-<pre><code class="language-env" data-lang="env">MINIO_ROOT_USER=minio
-MINIO_ROOT_PASSWORD=minio-on-gokrazy
-</code></pre><p><code>${INSTANCE?}/flags/github.com/minio/minio/flags.txt</code></p>
-<pre><code>server
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-env" data-lang="env">MINIO_ROOT_USER<span style="color:#f92672">=</span>minio
+MINIO_ROOT_PASSWORD<span style="color:#f92672">=</span>minio-on-gokrazy
+</code></pre></div><p><code>${INSTANCE?}/flags/github.com/minio/minio/flags.txt</code></p>
+<pre tabindex="0"><code>server
 --address
 :3001
 --console-address
@@ -93,7 +93,7 @@ want to change your storage location to something different modify the
 <h2 id="step-2-install-minio-to-your-gokrazy-device">Step 2: Install MinIO to your gokrazy device</h2>
 <p>In your <code>gokr-packer</code> invocation (see <a href="/quickstart/">Quickstart</a> if you don’t
 have one yet), include the MinIO package:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
@@ -102,7 +102,7 @@ have one yet), include the MinIO package:</p>
 </code></pre></div><h2 id="step-3-test-whether-the-setup-was-successful">Step 3: Test whether the setup was successful</h2>
 <p>If you have the <a href="https://github.com/minio/mc"><code>mc</code></a> command installed you can
 check out whether your installation of MinIO really works:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mc alias set gokrazy http://gokrazy:3001 minio minio-on-gokrazy
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mc alias set gokrazy http://gokrazy:3001 minio minio-on-gokrazy
 Added <span style="color:#e6db74">`</span>gokrazy<span style="color:#e6db74">`</span> successfully.
 $ mc ls gokrazy
 $ mc mb gokrazy/testbucket

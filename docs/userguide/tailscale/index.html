@@ -61,7 +61,7 @@ network</a>.</p>
 <p>We need to specify the following flags for the <code>tailscaled</code> daemon (see
 <a href="/userguide/package-config">“Per-package configuration”</a> if you’re unfamiliar
 with this mechanism):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/tailscale.com/cmd/tailscaled
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/tailscale.com/cmd/tailscaled
 echo <span style="color:#e6db74">&#39;--state=/perm/tailscaled/state&#39;</span> &gt; flags/tailscale.com/cmd/tailscaled/flags.txt
 echo <span style="color:#e6db74">&#39;--tun=userspace-networking&#39;</span> &gt;&gt; flags/tailscale.com/cmd/tailscaled/flags.txt
 </code></pre></div><p><code>tailscaled</code> requires the <code>--state</code> flag, so we need to set it
@@ -77,7 +77,7 @@ mode works fine, though :)</p>
 <h2 id="step-2-include-the-tailscale-packages">Step 2. include the tailscale packages</h2>
 <p>In your <code>gokr-packer</code> invocation (see <a href="/quickstart/">Quickstart</a> if you don’t
 have one yet), include the Tailscale daemon and CLI Go packages:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
@@ -89,7 +89,7 @@ have one yet), include the Tailscale daemon and CLI Go packages:</p>
 <a href="https://github.com/gokrazy/breakglass">breakglass</a>, change to the
 <code>/perm/tailscaled</code> directory and run <code>tailscale up</code> to print the authentication
 link:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">% breakglass gokrazy
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">% breakglass gokrazy
 breakglass# cd /perm/tailscaled
 breakglass# /user/tailscale up
 </code></pre></div>

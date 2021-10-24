@@ -82,7 +82,7 @@ environment variable.</p>
 with <a href="https://pkg.go.dev/syscall#SysProcAttr">syscall.SysProcAttr</a> fields
 set. For example, this is how you would drop privileges to user <code>nobody</code>
 (uid/gid 65534):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// mustDropPrivileges re-executes the program in a child process,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// mustDropPrivileges re-executes the program in a child process,
 </span><span style="color:#75715e">// dropping root privileges to user nobody.
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">mustDropPrivileges</span>() {
 	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;NTP_PRIVILEGES_DROPPED&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;1&#34;</span> {

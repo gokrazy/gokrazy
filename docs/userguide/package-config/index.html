@@ -48,7 +48,7 @@ body {
 <h1 id="per-package-configuration">Per-package configuration</h1>
 <p>gokrazy will arrange for each included package to be started at boot. For
 example, given the following packer command:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
@@ -65,13 +65,13 @@ path, then place your configuration in a text file: <code>flags.txt</code>, <cod
 <p>The <a href="https://github.com/gokrazy/breakglass">breakglass</a> package provides
 emergency/debugging access to a gokrazy installation.</p>
 <p>To enable SSH port forwardings to localhost, set the <code>-forward</code> flag to <code>loopback</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/github.com/gokrazy/breakglass
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/github.com/gokrazy/breakglass
 echo <span style="color:#e6db74">&#39;-forward=loopback&#39;</span> &gt; flags/github.com/gokrazy/breakglass/flags.txt
 </code></pre></div><h2 id="environment-variables">Environment variables</h2>
 <p><a href="https://en.wikipedia.org/wiki/Environment_variable">Environment variables</a> such
 as the <a href="https://golang.org/pkg/runtime/">Go runtime’s <code>GODEBUG</code></a> variable can be
 set as follows:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p env/github.com/gokrazy/breakglass
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p env/github.com/gokrazy/breakglass
 echo <span style="color:#e6db74">&#39;GODEBUG=gctrace=1&#39;</span> &gt; env/github.com/gokrazy/breakglass/env.txt
 </code></pre></div><h2 id="go-build-flags">Go build flags</h2>
 <p>If you want to influence the build of the package at image-creation time (as
@@ -81,7 +81,7 @@ invocation.</p>
 variable</a>
 using the <a href="https://golang.org/cmd/link/"><code>-X</code> linker flag</a>, which is a common
 technique to embed version information:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p buildflags/github.com/gokrazy/hello
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p buildflags/github.com/gokrazy/hello
 echo <span style="color:#e6db74">&#39;-ldflags=-X main.world=Welt&#39;</span> &gt; buildflags/github.com/gokrazy/hello/buildflags.txt
 </code></pre></div>
       <footer class="footer" style="text-align: center">

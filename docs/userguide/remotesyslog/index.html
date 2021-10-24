@@ -53,7 +53,7 @@ persist logs elsewhere for later analysis.</p>
 <h2 id="client-side-gokrazy">Client side (gokrazy)</h2>
 <p>To enable remote syslog, you need to configure a target by creating the file
 <code>remote_syslog/target</code> on the permanent data partition.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># The following assumes you already created a file system</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># The following assumes you already created a file system</span>
 <span style="color:#75715e"># on the permanent data partition. Otherwise, please use:</span>
 <span style="color:#75715e"># sudo mkfs.ext4 /dev/disk/by-partuuid/2e18c40c-04</span>
 
@@ -66,7 +66,7 @@ remote syslog works even when DNS does not.</p>
 <p>This is how I instruct <a href="https://en.wikipedia.org/wiki/Syslog-ng">syslog-ng</a> via
 its <code>/etc/syslog-ng/syslog-ng.conf</code> to write syslog messages it received from
 e.g. host <code>gokrazy</code> to <code>/var/log/remote/gokrazy-log</code>:</p>
-<pre><code>source net { network(ip(10.0.0.76) transport(&quot;udp&quot;)); };
+<pre tabindex="0"><code>source net { network(ip(10.0.0.76) transport(&quot;udp&quot;)); };
 destination remote { file(&quot;/var/log/remote/${FULLHOST}-log&quot;); };
 log { source(net); destination(remote); };
 </code></pre>
