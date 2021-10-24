@@ -71,3 +71,24 @@ link:
 breakglass# cd /perm/tailscaled
 breakglass# /user/tailscale up
 ```
+
+## Optional: tailscale network for other programs
+
+(If you only want to connect to services on your gokrazy device, you don’t need
+this step.)
+
+To make the `github.com/stapelberg/dr` package able to connect to addresses on
+the tailscale network, we need to first enable [`tailscaled`’s HTTP
+proxy](https://tailscale.com/kb/1112/userspace-networking/#step-2-configure-your-application-to-use-socks5-or-http):
+
+```shell
+echo '--outbound-http-proxy-listen=localhost:9080' > flags/tailscale.com/cmd/tailscaled/flags.txt
+```
+
+And then set the proxy environment variables:
+
+```shell
+mkdir -p env/github.com/stapelberg/dr
+echo 'HTTPS_PROXY=localhost:9080' > env/github.com/stapelberg/dr/env.txt
+echo 'HTTP_PROXY=localhost:9080' >> env/github.com/stapelberg/dr/env.txt
+```

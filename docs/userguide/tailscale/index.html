@@ -92,6 +92,17 @@ link:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">% breakglass gokrazy
 breakglass# cd /perm/tailscaled
 breakglass# /user/tailscale up
+</code></pre></div><h2 id="optional-tailscale-network-for-other-programs">Optional: tailscale network for other programs</h2>
+<p>(If you only want to connect to services on your gokrazy device, you don’t need
+this step.)</p>
+<p>To make the <code>github.com/stapelberg/dr</code> package able to connect to addresses on
+the tailscale network, we need to first enable <a href="https://tailscale.com/kb/1112/userspace-networking/#step-2-configure-your-application-to-use-socks5-or-http"><code>tailscaled</code>’s HTTP
+proxy</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">echo <span style="color:#e6db74">&#39;--outbound-http-proxy-listen=localhost:9080&#39;</span> &gt; flags/tailscale.com/cmd/tailscaled/flags.txt
+</code></pre></div><p>And then set the proxy environment variables:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p env/github.com/stapelberg/dr
+echo <span style="color:#e6db74">&#39;HTTPS_PROXY=localhost:9080&#39;</span> &gt; env/github.com/stapelberg/dr/env.txt
+echo <span style="color:#e6db74">&#39;HTTP_PROXY=localhost:9080&#39;</span> &gt;&gt; env/github.com/stapelberg/dr/env.txt
 </code></pre></div>
       <footer class="footer" style="text-align: center">
         <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
