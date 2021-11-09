@@ -27,11 +27,11 @@ with this mechanism):
 
 ```shell
 mkdir -p flags/tailscale.com/cmd/tailscaled
-echo '--state=/perm/tailscaled/state' > flags/tailscale.com/cmd/tailscaled/flags.txt
+echo '--statedir=/perm/tailscaled/' > flags/tailscale.com/cmd/tailscaled/flags.txt
 echo '--tun=userspace-networking' >> flags/tailscale.com/cmd/tailscaled/flags.txt
 ```
 
-`tailscaled` requires the `--state` flag, so we need to set it
+`tailscaled` requires the `--statedir` flag, so we need to set it
 explicitly. `/perm/tailscaled` is the working directory of the `tailscaled`
 process and will contain the `tailscaled.sock` socket, so it makes sense to
 place the state file into the same directory.
@@ -92,3 +92,72 @@ mkdir -p env/github.com/stapelberg/dr
 echo 'HTTPS_PROXY=localhost:9080' > env/github.com/stapelberg/dr/env.txt
 echo 'HTTP_PROXY=localhost:9080' >> env/github.com/stapelberg/dr/env.txt
 ```
+
+## Optional: tailscale Go listener
+
+**Note:** you need to use tailscale at [commit
+b3abdc3](https://github.com/tailscale/tailscale/commit/b3abdc381d99bd9a7bdc8c084aaa174d7b45e881)
+or later for this to work!
+
+If you want to make a program listen on tailscale without listening on any other
+network interface, you can use the `tsnet` package (find this program at
+[github.com/gokrazy/tsnetdemo](https://github.com/gokrazy/tsnetdemo)):
+
+```go
+package main
+
+import (
+	"crypto/tls"
+	"flag"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	"tailscale.com/client/tailscale"
+	"tailscale.com/tsnet"
+)
+
+func main() {
+	os.Setenv("TAILSCALE_USE_WIP_CODE", "true")
+	// TODO: comment out this line to avoid having to re-login each time you start this program
+	os.Setenv("TS_LOGIN", "1")
+	os.Setenv("HOME", "/perm/tsnetdemo")
+	hostname := flag.String("hostname", "tsnetdemo", "tailscale hostname")
+	allowedUser := flag.String("allowed_user", "", "the name of a tailscale user to allow")
+	flag.Parse()
+	s := &tsnet.Server{
+		Hostname: *hostname,
+	}
+	log.Printf("starting tailscale listener on hostname %s", *hostname)
+	ln, err := s.Listen("tcp", ":443")
+	if err != nil {
+		log.Fatal(err)
+	}
+	ln = tls.NewListener(ln, &tls.Config{
+		GetCertificate: tailscale.GetCertificate,
+	})
+	httpsrv := &http.Server{
+		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			who, err := tailscale.WhoIs(r.Context(), r.RemoteAddr)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			if who.UserProfile.LoginName != *allowedUser || *allowedUser == "" {
+				err := fmt.Sprintf("you are logged in as %q, but -allowed_user flag does not match!", who.UserProfile.LoginName)
+				log.Printf("forbidden: %v", err)
+				http.Error(w, err, http.StatusForbidden)
+				return
+			}
+			fmt.Fprintf(w, "hey there, %q! this message is served via the tsnet package from gokrazy!", who.UserProfile.LoginName)
+		}),
+	}
+	log.Fatal(httpsrv.Serve(ln))
+}
+```
+
+1. Deploy this program to your gokrazy device
+1. Open the authentication URL from the log output
+1. Open the tsnetdemo host name in your tailscale in your Tailnet domain alias, e.g. https://tsnetdemo.monkey-turtle.ts.net
+1. Specify the `--allowed_user` flag to verify that tailscale authentication works as expected

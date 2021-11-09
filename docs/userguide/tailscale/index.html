@@ -62,9 +62,9 @@ network</a>.</p>
 <a href="/userguide/package-config">“Per-package configuration”</a> if you’re unfamiliar
 with this mechanism):</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/tailscale.com/cmd/tailscaled
-echo <span style="color:#e6db74">&#39;--state=/perm/tailscaled/state&#39;</span> &gt; flags/tailscale.com/cmd/tailscaled/flags.txt
+echo <span style="color:#e6db74">&#39;--statedir=/perm/tailscaled/&#39;</span> &gt; flags/tailscale.com/cmd/tailscaled/flags.txt
 echo <span style="color:#e6db74">&#39;--tun=userspace-networking&#39;</span> &gt;&gt; flags/tailscale.com/cmd/tailscaled/flags.txt
-</code></pre></div><p><code>tailscaled</code> requires the <code>--state</code> flag, so we need to set it
+</code></pre></div><p><code>tailscaled</code> requires the <code>--statedir</code> flag, so we need to set it
 explicitly. <code>/perm/tailscaled</code> is the working directory of the <code>tailscaled</code>
 process and will contain the <code>tailscaled.sock</code> socket, so it makes sense to
 place the state file into the same directory.</p>
@@ -103,7 +103,71 @@ proxy</a>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p env/github.com/stapelberg/dr
 echo <span style="color:#e6db74">&#39;HTTPS_PROXY=localhost:9080&#39;</span> &gt; env/github.com/stapelberg/dr/env.txt
 echo <span style="color:#e6db74">&#39;HTTP_PROXY=localhost:9080&#39;</span> &gt;&gt; env/github.com/stapelberg/dr/env.txt
-</code></pre></div>
+</code></pre></div><h2 id="optional-tailscale-go-listener">Optional: tailscale Go listener</h2>
+<p><strong>Note:</strong> you need to use tailscale at <a href="https://github.com/tailscale/tailscale/commit/b3abdc381d99bd9a7bdc8c084aaa174d7b45e881">commit
+b3abdc3</a>
+or later for this to work!</p>
+<p>If you want to make a program listen on tailscale without listening on any other
+network interface, you can use the <code>tsnet</code> package (find this program at
+<a href="https://github.com/gokrazy/tsnetdemo">github.com/gokrazy/tsnetdemo</a>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;crypto/tls&#34;</span>
+	<span style="color:#e6db74">&#34;flag&#34;</span>
+	<span style="color:#e6db74">&#34;fmt&#34;</span>
+	<span style="color:#e6db74">&#34;log&#34;</span>
+	<span style="color:#e6db74">&#34;net/http&#34;</span>
+	<span style="color:#e6db74">&#34;os&#34;</span>
+
+	<span style="color:#e6db74">&#34;tailscale.com/client/tailscale&#34;</span>
+	<span style="color:#e6db74">&#34;tailscale.com/tsnet&#34;</span>
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Setenv</span>(<span style="color:#e6db74">&#34;TAILSCALE_USE_WIP_CODE&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>)
+	<span style="color:#75715e">// TODO: comment out this line to avoid having to re-login each time you start this program
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Setenv</span>(<span style="color:#e6db74">&#34;TS_LOGIN&#34;</span>, <span style="color:#e6db74">&#34;1&#34;</span>)
+	<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Setenv</span>(<span style="color:#e6db74">&#34;HOME&#34;</span>, <span style="color:#e6db74">&#34;/perm/tsnetdemo&#34;</span>)
+	<span style="color:#a6e22e">hostname</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">String</span>(<span style="color:#e6db74">&#34;hostname&#34;</span>, <span style="color:#e6db74">&#34;tsnetdemo&#34;</span>, <span style="color:#e6db74">&#34;tailscale hostname&#34;</span>)
+	<span style="color:#a6e22e">allowedUser</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">String</span>(<span style="color:#e6db74">&#34;allowed_user&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;the name of a tailscale user to allow&#34;</span>)
+	<span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">Parse</span>()
+	<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">tsnet</span>.<span style="color:#a6e22e">Server</span>{
+		<span style="color:#a6e22e">Hostname</span>: <span style="color:#f92672">*</span><span style="color:#a6e22e">hostname</span>,
+	}
+	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;starting tailscale listener on hostname %s&#34;</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">hostname</span>)
+	<span style="color:#a6e22e">ln</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Listen</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#e6db74">&#34;:443&#34;</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+	}
+	<span style="color:#a6e22e">ln</span> = <span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">NewListener</span>(<span style="color:#a6e22e">ln</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">Config</span>{
+		<span style="color:#a6e22e">GetCertificate</span>: <span style="color:#a6e22e">tailscale</span>.<span style="color:#a6e22e">GetCertificate</span>,
+	})
+	<span style="color:#a6e22e">httpsrv</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{
+		<span style="color:#a6e22e">Handler</span>: <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+			<span style="color:#a6e22e">who</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tailscale</span>.<span style="color:#a6e22e">WhoIs</span>(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Context</span>(), <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RemoteAddr</span>)
+			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+				<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>(), <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusInternalServerError</span>)
+				<span style="color:#66d9ef">return</span>
+			}
+			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">who</span>.<span style="color:#a6e22e">UserProfile</span>.<span style="color:#a6e22e">LoginName</span> <span style="color:#f92672">!=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">allowedUser</span> <span style="color:#f92672">||</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">allowedUser</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span> {
+				<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;you are logged in as %q, but -allowed_user flag does not match!&#34;</span>, <span style="color:#a6e22e">who</span>.<span style="color:#a6e22e">UserProfile</span>.<span style="color:#a6e22e">LoginName</span>)
+				<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;forbidden: %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+				<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">err</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusForbidden</span>)
+				<span style="color:#66d9ef">return</span>
+			}
+			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;hey there, %q! this message is served via the tsnet package from gokrazy!&#34;</span>, <span style="color:#a6e22e">who</span>.<span style="color:#a6e22e">UserProfile</span>.<span style="color:#a6e22e">LoginName</span>)
+		}),
+	}
+	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">httpsrv</span>.<span style="color:#a6e22e">Serve</span>(<span style="color:#a6e22e">ln</span>))
+}
+</code></pre></div><ol>
+<li>Deploy this program to your gokrazy device</li>
+<li>Open the authentication URL from the log output</li>
+<li>Open the tsnetdemo host name in your tailscale in your Tailnet domain alias, e.g. <a href="https://tsnetdemo.monkey-turtle.ts.net">https://tsnetdemo.monkey-turtle.ts.net</a></li>
+<li>Specify the <code>--allowed_user</code> flag to verify that tailscale authentication works as expected</li>
+</ol>
+
       <footer class="footer" style="text-align: center">
         <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
       </footer>
