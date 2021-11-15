@@ -39,7 +39,7 @@ sudo umount /mnt
 After starting gokrazy, the `wifi` program will connect to the WiFi network `I/O
 Tee`:
 
-<a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" align="right" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a>
+<a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a>
 
 ## For debugging: known-working WiFi router setup
 
@@ -48,7 +48,7 @@ this is how I set up my [TP-LINK
 TL-WDR4300](https://openwrt.org/toh/tp-link/tl-wdr4300) with [OpenWrt
 19.07](https://openwrt.org/):
 
-<a href="/img/iotee.jpg"><img src="/img/iotee.thumb.jpg" srcset="/img/iotee.thumb.2x.jpg 2x,/img/iotee.thumb.3x.jpg 3x" width="700" align="right" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a>
+<a href="/img/iotee.jpg"><img src="/img/iotee.thumb.jpg" srcset="/img/iotee.thumb.2x.jpg 2x,/img/iotee.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a>
 
 The MAC address filter isn’t a security measure, but prevents others from
 accidentally joining this open network.

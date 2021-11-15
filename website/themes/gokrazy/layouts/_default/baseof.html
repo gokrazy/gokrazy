@@ -2,14 +2,15 @@
 <html>
     {{- partial "head.html" . -}}
     <body>
-	  <div class="container">
-
             {{- partial "header.html" . -}}
 
+	    <!-- TODO: how does one phrase padding-top: 0? -->
+	    <main class="container p-4 p-md-5 mb-4 pt-md-0">
 	    {{ block "main" . }}
 	    {{ end }}
+	    </main>
 
             {{- partial "footer.html" . -}}
-	  </div>
+
     </body>
 </html>
