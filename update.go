@@ -273,6 +273,7 @@ func initUpdate() error {
 		}()
 	})
 	http.HandleFunc("/uploadtemp/", uploadTemp)
+	http.HandleFunc("/divert", divert)
 
 	return nil
 }
@@ -323,5 +324,40 @@ func uploadTemp(w http.ResponseWriter, r *http.Request) {
 	}
 	if _, err := w.Write(b); err != nil {
 		log.Print(err)
+	}
+}
+
+func divert(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "expected a POST request", http.StatusBadRequest)
+		return
+	}
+
+	diversion := r.FormValue("diversion")
+	if diversion == "" {
+		http.Error(w, "diversion parameter is not set", http.StatusBadRequest)
+		return
+	}
+
+	path := r.FormValue("path")
+	svc := findSvc(path)
+	if svc == nil {
+		http.Error(w, "service not found", http.StatusNotFound)
+		return
+	}
+
+	// Ensure diversion binary is executable (/uploadtemp creates regular,
+	// non-executable files).
+	diversion = filepath.Join(os.TempDir(), diversion)
+	if err := os.Chmod(diversion, 0755); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	svc.setDiversion(diversion)
+
+	if err := restart(svc, syscall.SIGTERM); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 }

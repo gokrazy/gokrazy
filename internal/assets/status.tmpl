@@ -25,6 +25,12 @@
 </tr>
 </table>
 
+{{ if (ne .Service.Diverted "") }}
+<p>
+  Diverted: <code>{{ .Service.Diverted }}</code>
+</p>
+{{ end }}
+
   <h3>stdout</h3>
   <pre>
   {{ range $idx, $line := .Service.Stdout.Lines -}}

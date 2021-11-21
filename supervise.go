@@ -146,6 +146,21 @@ type service struct {
 	startedMu sync.RWMutex
 	process   *os.Process
 	processMu sync.RWMutex
+
+	diversionMu sync.Mutex
+	diversion   string
+}
+
+func (s *service) setDiversion(d string) {
+	s.diversionMu.Lock()
+	defer s.diversionMu.Unlock()
+	s.diversion = d
+}
+
+func (s *service) Diverted() string {
+	s.diversionMu.Lock()
+	defer s.diversionMu.Unlock()
+	return s.diversion
 }
 
 func (s *service) Name() string {
@@ -204,12 +219,14 @@ func (s *service) MarshalJSON() ([]byte, error) {
 		Pid       int
 		Path      string
 		Args      []string
+		Diverted  string
 	}{
 		Stopped:   s.Stopped(),
 		StartTime: s.Started(),
 		Pid:       s.Process().Pid,
 		Path:      s.cmd.Path,
 		Args:      s.cmd.Args,
+		Diverted:  s.Diverted(),
 	})
 }
 
@@ -297,8 +314,6 @@ func supervise(s *service) {
 			continue
 		}
 
-		l.Printf("gokrazy: attempt %d, starting %q", attempt, s.cmd.Args)
-		s.setStarted(time.Now())
 		cmd := &exec.Cmd{
 			Path:   s.cmd.Path,
 			Args:   s.cmd.Args,
@@ -308,6 +323,13 @@ func supervise(s *service) {
 			SysProcAttr: &syscall.SysProcAttr{
 				Unshareflags: syscall.CLONE_NEWNS,
 			},
+		}
+		if d := s.Diverted(); d != "" {
+			cmd.Path = d
+			args := make([]string, len(cmd.Args))
+			copy(args, cmd.Args)
+			args[0] = d
+			cmd.Args = args
 		}
 		if cmd.Env == nil {
 			cmd.Env = os.Environ() // for older gokr-packer versions
@@ -326,9 +348,15 @@ func supervise(s *service) {
 			cmd.Dir = homeDir
 		}
 
+		l.Printf("gokrazy: attempt %d, starting %q", attempt, cmd.Args)
+		s.setStarted(time.Now())
 		attempt++
 
 		if err := cmd.Start(); err != nil {
+			if d := s.Diverted(); os.IsNotExist(err) && d != "" {
+				l.Printf("gokrazy: removing no longer existing diversion %q", d)
+				s.setDiversion("")
+			}
 			l.Println("gokrazy: " + err.Error())
 		}
 
