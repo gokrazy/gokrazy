@@ -44,7 +44,7 @@ func mountCompat() error {
 }
 
 func mountfs() error {
-	if err := syscall.Mount("tmpfs", "/tmp", "tmpfs", syscall.MS_NOSUID|syscall.MS_NODEV|syscall.MS_RELATIME, "size=50M"); err != nil {
+	if err := syscall.Mount("tmpfs", "/tmp", "tmpfs", syscall.MS_NOSUID|syscall.MS_NODEV|syscall.MS_RELATIME, ""); err != nil {
 		return fmt.Errorf("tmpfs on /tmp: %v", err)
 	}
 
