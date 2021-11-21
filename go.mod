@@ -7,6 +7,7 @@ require (
 	github.com/beevik/ntp v0.2.0
 	github.com/gokrazy/internal v0.0.0-20210621162516-1b3b5687a06d
 	github.com/google/gopacket v1.1.16
+	github.com/google/renameio/v2 v2.0.0
 	github.com/mdlayher/raw v0.0.0-20190303161257-764d452d77af
 	github.com/mdlayher/watchdog v0.0.0-20201005150459-8bdc4f41966b
 	github.com/rtr7/dhcp4 v0.0.0-20181120124042-778e8c2e24a5

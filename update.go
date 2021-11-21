@@ -3,6 +3,7 @@ package gokrazy
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"hash"
 	"hash/crc32"
@@ -10,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"sync"
@@ -20,6 +22,7 @@ import (
 
 	"github.com/gokrazy/internal/fat"
 	"github.com/gokrazy/internal/rootdev"
+	"github.com/google/renameio/v2"
 )
 
 var rootRe = regexp.MustCompile(`root=[^ ]+`)
@@ -141,6 +144,21 @@ func streamRequestTo(path string, r io.Reader) error {
 	return f.Close()
 }
 
+// createFile is different from streamRequestTo in that it creates new files
+// (instead of just overwriting existing ones) and not syncing to disk, because
+// it is intended for the /uploadtemp handler.
+func createFile(path string, r io.Reader) error {
+	f, err := renameio.TempFile("", path)
+	if err != nil {
+		return err
+	}
+	defer f.Cleanup()
+	if _, err := io.Copy(f, r); err != nil {
+		return err
+	}
+	return f.CloseAtomicallyReplace()
+}
+
 func nonConcurrentUpdateHandler(dest string) func(http.ResponseWriter, *http.Request) {
 	var mu sync.Mutex
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -254,6 +272,56 @@ func initUpdate() error {
 			}
 		}()
 	})
+	http.HandleFunc("/uploadtemp/", uploadTemp)
 
 	return nil
+}
+
+func uploadTemp(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPut {
+		http.Error(w, "expected a PUT request", http.StatusBadRequest)
+		return
+	}
+	dest := strings.TrimPrefix(r.URL.Path, "/uploadtemp/")
+	log.Printf("uploadtemp dest=%q", dest)
+	if strings.Contains(dest, "/") {
+		// relative path in the temp directory
+		dest = filepath.Join(os.TempDir(), dest)
+		if err := os.MkdirAll(filepath.Dir(dest), 0700); err != nil {
+			log.Printf("updating %q failed: %v", dest, err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		// not relative, create a subdirectory underneath the temp directory
+		tmpdir, err := os.MkdirTemp("", "uploadtemp")
+		if err != nil {
+			log.Printf("updating %q failed: %v", dest, err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// tmpdir will intentionally not be deleted, as the caller of
+		// /uploadtemp will use the uploaded file afterwards.
+		dest = filepath.Join(tmpdir, dest)
+	}
+
+	if err := createFile(dest, r.Body); err != nil {
+		log.Printf("updating %q failed: %v", dest, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(struct {
+		Dest string `json:"dest"`
+	}{
+		Dest: dest,
+	})
+	if err != nil {
+		log.Print(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if _, err := w.Write(b); err != nil {
+		log.Print(err)
+	}
 }
