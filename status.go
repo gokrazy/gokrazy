@@ -171,6 +171,50 @@ func jsonRequested(r *http.Request) bool {
 	return strings.Contains(strings.ToLower(r.Header.Get("Content-type")), "application/json")
 }
 
+var templates = template.Must(template.New("root").
+	Funcs(map[string]interface{}{
+		"shortenSHA256": func(hash string) string {
+			if len(hash) > 10 {
+				return hash[:10]
+			}
+			return hash
+		},
+		"restarting": func(t time.Time) bool {
+			return time.Since(t).Seconds() < 5
+		},
+
+		"last": func(stdout, stderr []string) string {
+			if len(stdout) == 0 && len(stderr) == 0 {
+				return ""
+			}
+			both := append(stdout, stderr...)
+			sort.Strings(both)
+			return both[len(both)-1]
+		},
+
+		"megabytes": func(val int64) string {
+			return fmt.Sprintf("%.1f MiB", float64(val)/1024/1024)
+		},
+
+		"gigabytes": func(val int64) string {
+			return fmt.Sprintf("%.1f GiB", float64(val)/1024/1024/1024)
+		},
+
+		"baseName": func(path string) string {
+			return filepath.Base(path)
+		},
+
+		"initRss": func() int64 {
+			return rssOfPid(1)
+		},
+
+		"rssPercentage": func(meminfo map[string]int64, rss int64) string {
+			used := float64(meminfo["MemTotal"] - meminfo["MemAvailable"])
+			return fmt.Sprintf("%.f", float64(rss)/used*100)
+		},
+	}).
+	ParseFS(assets.Assets, "*.tmpl"))
+
 func initStatus(services []*service) {
 	model := Model()
 
@@ -184,50 +228,6 @@ func initStatus(services []*service) {
 		log.Printf("getting uname: %v", err)
 	}
 	kernel := parseUtsname(uname)
-
-	templates := template.Must(template.New("root").
-		Funcs(map[string]interface{}{
-			"shortenSHA256": func(hash string) string {
-				if len(hash) > 10 {
-					return hash[:10]
-				}
-				return hash
-			},
-			"restarting": func(t time.Time) bool {
-				return time.Since(t).Seconds() < 5
-			},
-
-			"last": func(stdout, stderr []string) string {
-				if len(stdout) == 0 && len(stderr) == 0 {
-					return ""
-				}
-				both := append(stdout, stderr...)
-				sort.Strings(both)
-				return both[len(both)-1]
-			},
-
-			"megabytes": func(val int64) string {
-				return fmt.Sprintf("%.1f MiB", float64(val)/1024/1024)
-			},
-
-			"gigabytes": func(val int64) string {
-				return fmt.Sprintf("%.1f GiB", float64(val)/1024/1024/1024)
-			},
-
-			"baseName": func(path string) string {
-				return filepath.Base(path)
-			},
-
-			"initRss": func() int64 {
-				return rssOfPid(1)
-			},
-
-			"rssPercentage": func(meminfo map[string]int64, rss int64) string {
-				used := float64(meminfo["MemTotal"] - meminfo["MemAvailable"])
-				return fmt.Sprintf("%.f", float64(rss)/used*100)
-			},
-		}).
-		ParseFS(assets.Assets, "*.tmpl"))
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assets.Assets))))
 
