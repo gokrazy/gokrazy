@@ -10,23 +10,27 @@ menu:
 
       <div class="row">
         <div class="col-lg-12">
-	  <h1>Get a Raspberry Pi 3 or 4 (no others)</h1>
+	  <h1>Quickstart</h1>
+
+	  <h2>Prep: pick a supported device</h2>
 	  <p>
-	  Currently, the Raspberry Pi 3 and Pi 4 are the <strong>only</strong>
-	  supported models. Many people assume the Raspberry Pi Zero W
-	  could be used as well. Unfortunately, it uses the older
-	  BCM2835 SoC, which is not arm64, so gokrazy won’t run on
-	  it. See
-	  also <a href="https://www.reddit.com/r/golang/comments/5xgf8u/gokrazy_a_purego_userland_for_your_raspberry_pi_3/dei7b2m/">stapelberg’s
-	  reddit comment about supported hardware</a>.
+	    Currently, the Raspberry Pi 4 B is the recommended platform for
+	    using gokrazy, but you can find
+	    other <a href="/platforms/">supported and upcoming platforms</a>.
 	  </p>
 
-	  <h1>Install Go</h1>
+	  <h2>Prep: Install Go</h2>
 	  <p>
-	  If you don’t already have Go installed, install the latest <a href="https://golang.org/dl/">Go</a> version.
+	    If you don’t already have Go installed, install the latest <a href="https://golang.org/dl/">Go</a> version.
 	  </p>
 
-          <h1>Install the gokrazy packer</h1>
+          <h2>Prep: Install the gokrazy packer</h2>
+	  <p>
+	    Now that you have a working Go installation, install the gokrazy packer (<code>gokr-packer</code>):
+	  </p>
+	  <pre>go install github.com/gokrazy/tools/cmd/gokr-packer@latest</pre>
+
+          <h2>Step 1: Create a directory for your gokrazy instance</h2>
 	  <p>
 	    Create a directory for this gokrazy instance and initialize a Go module:
 	  </p>
@@ -34,21 +38,23 @@ menu:
 mkdir -p ~/${INSTANCE?}
 cd ~/${INSTANCE?}
 go mod init hello</pre>
-	  <p>
-	    Then, install the gokr-packer:
-	  </p>
-<pre>go install github.com/gokrazy/tools/cmd/gokr-packer@latest</pre>
 
-          <h1>Overwrite an SD card with gokrazy</h1>
+          <h2>Step 2: Overwrite an SD card with gokrazy</h2>
 	  <p>
-	  Plug an SD card into your card reader and locate its device node by checking <code>dmesg | tail</code>. In this example, we’ll assume the SD card is accessible as <code>/dev/sdb</code>.
+	    Plug an SD card into your card reader and locate its device node by checking <code>dmesg | tail</code>.
 	  </p>
+
 	  <p>
-	  To overwrite the entire SD card <code>/dev/sdb</code> with a gokrazy installation running a hello world program, use:
+	    In this example, we’ll assume the SD card is accessible as <code>/dev/sdx</code>.
 	  </p>
+
+	  <p>
+	  To overwrite the entire SD card <code>/dev/sdx</code> with a gokrazy installation running a hello world program, use:
+	  </p>
+
 	  <pre>cd ~/gokrazy/hello
 gokr-packer \
-  -overwrite=/dev/sdb \
+  -overwrite=/dev/sdx \
   -serial_console=disabled \
   github.com/gokrazy/fbstatus \
   github.com/gokrazy/hello \
@@ -56,15 +62,50 @@ gokr-packer \
           <p>
 	  The <code>gokr-packer</code> command above will result in log output like this:
 	  </p>
-          <pre>2017/03/01 20:59:55 packer.go:85: installing [github.com/gokrazy/hello]
-2017/03/01 20:59:56 packer.go:131: partitioning /dev/sdb
-2017/03/01 20:59:56 parttable.go:40: device holds 15931539456 bytes
-2017/03/01 20:59:56 packer.go:139: waiting for /dev/sdb1 to appear
-If your applications need to store persistent data, create a file system using e.g.:
+          <pre>gokrazy packer v0.0.0-20211121205320-688793dda2da on GOARCH=amd64 GOOS=linux
 
-	mkfs.ext4 /dev/sdb4
+Build target: CGO_ENABLED=0 GOARCH=arm64 GOOS=linux
+Build timestamp: 2021-11-25T09:28:41+01:00
+Loading system CA certificates from /etc/ssl/certs/ca-certificates.crt
+Building 3 Go packages:
+
+  github.com/gokrazy/fbstatus
+
+  github.com/gokrazy/hello
+
+  github.com/gokrazy/serial-busybox
+
+[done] in 0.48s
+
+Feature summary:
+  use PARTUUID: true
+  use GPT PARTUUID: true
+2021/11/25 09:28:42 partitioning /dev/sdx (GPT + Hybrid MBR)
+2021/11/25 09:28:42 Using sudo to gain permission to format /dev/sdx
+2021/11/25 09:28:42 If you prefer, cancel and use: sudo setfacl -m u:${USER}:rw /dev/sdx
+2021/11/25 09:28:42 device holds 15931539456 bytes
+
+Creating boot file system
+Kernel directory: /home/michael/go/src/github.com/gokrazy/kernel
+EEPROM update summary:
+  pieeprom.upd (sig 5a07872332)
+  recovery.bin
+  vl805.bin (sig 3a46dda0da)
+[done: creating boot file system] in 0.11s, 66 MiB
+MBR summary:
+  LBAs: vmlinuz=52150 cmdline.txt=135442
+  PARTUUID: 2e18c40c
+
+Creating root file system
+[done: creating root file system] in 0.26s
+
+If your applications need to store persistent data, unplug and re-plug the SD card, then create a file system using e.g.:
+
+	mkfs.ext4 /dev/disk/by-partuuid/60c24cc1-f3f9-427a-8199-2e18c40c0004
 
 To boot gokrazy, plug the SD card into a Raspberry Pi 3 or 4 (no other models supported)
+
+Build complete!
 
 To interact with the device, gokrazy provides a web interface reachable at:
 
@@ -74,11 +115,16 @@ In addition, the following Linux consoles are set up:
 
 	1. foreground Linux framebuffer console on HDMI
 </pre>
+
+	  <p>It is safe to unplug your SD card once <code>gokr-packer</code> returns.</p>
+
+	  <h2>Step 3: Boot gokrazy</h2>
+
           <p>
-	    After booting from this SD card, your Raspberry Pi 3 or 4 will:
+	    After booting from this SD card, your device will:
 	  </p>
 	  <ul>
-          <li>display system status on the HDMI output</li>
+          <li>display system status on the monitor connected via HDMI, if any</li>
 	  <li>obtain an IP address for hostname “gokrazy” via DHCP (IPv4) and SLAAC (IPv6)</li>
 	  <li>synchronize the clock using NTP</li>
 	  <li>expose a password-authenticated web interface on private IP addresses<br>
@@ -87,35 +133,53 @@ In addition, the following Linux consoles are set up:
 	  </ul>
 
 	  <p>
-	    The only way for you to interact with the device is via the
-	    web interface (unless the installed programs provide other
-	    ways).
+	    To interact with your device, you can:
+	  </p>
+	  <ol>
+	    <li>
+	      Open the gokrazy web interface in your browser (easiest option)
+	    </li>
+	    <li>
+	      Attach a serial console (see below)
+	    </li>
+	    <li>
+	      Install
+	      <a href="https://github.com/gokrazy/breakglass">breakglass</a> via
+	      the gokrazy packer, which allows you to start an interactive SSH
+	      session.
+	    </li>
+	  </ol>
+
+	  <p>
+	    Congratulations! 🎉 You now have a working gokrazy installation!
 	  </p>
 
 	  <p>
-	    A good next program to try
-	    is <a href="https://github.com/gokrazy/breakglass">breakglass</a>,
-	    which allows you to run an interactive SSH session to explore the
-	    system.
+	    Next, see the <a href="/userguide/">Userguide</a> for details on how
+	    to user other programs.
 	  </p>
 
-	  <h2>Serial console</h2>
+	  <h2>Optional: Using the serial console</h2>
 	  <p>
 	    If you prefer the serial console, you can optionally connect a
 	    serial adapter to the Raspberry Pi and remove
 	    the <code>-serial_console=disabled</code> flag to make the primary
 	    Linux console end up on the serial console.
-
 	  </p>
 
 	  <p>
 	    When pressing <code>Enter</code> on the serial console, gokrazy will
-	    start the program <code>/perm/sh</code> if present. You can for
-	    example rename
-	    a <a href="https://github.com/gokrazy/serial-busybox/blob/master/third_party/busybox-1.31.1/busybox">statically
-	    linked <code>busybox</code> arm64 binary</a> to <code>sh</code>,
-	    store it in the SD card’s persistent data partition, and use it as
-	    an interactive shell.
+	    interactively start either:
+	  </p>
+	  <ol>
+	    <li>
+	      <code>/tmp/serial-busybox/ash</code> (provided by
+	      the <a href="https://github.com/gokrazy/serial-busybox">serial-busybox</a>
+	      package)
+	    </li>
+	    <li>
+	      <code>/perm/sh</code>, if present (supplied by you, the user)
+	    </li>
 	  </p>
 	</div>
       </div>
