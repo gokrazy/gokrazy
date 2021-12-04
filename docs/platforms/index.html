@@ -1,227 +1,1012 @@
 <!DOCTYPE html>
-<html>  <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>gokrazy platforms</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-<style type="text/css">
-body {
-  font-family: "Open Sans";
-}
-.table-striped>tr:nth-child(odd){
-   background-color:red;
-}
-code {
-    color: #c7254e;
-    background-color: #f9f2f4;
-    padding: 2px 4px;
-    border-radius: 4px;
-    font-size: 90%;
-}
-pre {
-    display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 13px;
-    line-height: 1.42857143;
-    color: #333;
-    word-break: break-all;
-    word-wrap: break-word;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-.highlight pre {
-  background-color: inherit;
-  color: #f8f8f2;
-}
-.highlight code {
-  background-color: inherit;
-}
- 
-.footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
-}
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.89.0-DEV" />
+    <meta name="description" content="">
 
-</style>
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Hardware and CI :: gokrazy</title>
+
+    
+    <link href="/css/nucleus.css?1638641407" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1638641407" rel="stylesheet">
+    <link href="/css/hybrid.css?1638641407" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1638641407" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1638641407" rel="stylesheet">
+    <link href="/css/auto-complete.css?1638641407" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1638641407" rel="stylesheet">
+    <link href="/css/theme.css?1638641407" rel="stylesheet">
+    <link href="/css/tabs.css?1638641407" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1638641407" rel="stylesheet">
+    
+    
+
+    <script src="/js/jquery-3.3.1.min.js?1638641407"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
+      
+    </style>
+    
   </head>
-<body>
-  <div class="container">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-        <span class="fs-4">gokrazy</span>
-      </a><ul class="nav nav-pills">
-  
-  
-  
-  <li class="nav-item"><a href="/" class="nav-link ">Home</a></li>
-  
-  
-  <li class="nav-item"><a href="/platforms/" class="nav-link active">Platforms</a></li>
-  
-  
-  <li class="nav-item"><a href="/quickstart/" class="nav-link ">Quickstart</a></li>
-  
-  
-  <li class="nav-item"><a href="/showcase/" class="nav-link ">Showcase</a></li>
-  
-  
-  <li class="nav-item"><a href="/userguide/" class="nav-link ">Userguide</a></li>
-  
-  
-  <li class="nav-item"><a href="https://github.com/gokrazy/gokrazy" class="nav-link ">Source</a></li>
-  
-</ul>
-</header>
-  </div>
+  <body class="" data-url="/platforms/">
+    <nav id="sidebar" class="">
 
-	    <main class="container p-4 p-md-5 mb-4 pt-md-0">
-	    
 
-<div class="p-4 p-md-5 mb-4 text-dark rounded bg-light row">
-  <div class="col-md-6 px-0">
-    <h1 class="display-6 fst-italic">Recommended platform: Raspberry Pi 4 B</h1>
-    <p class="lead my-3">gokrazy development happens primarily on the Raspberry Pi 4 B.</p>
-  </div>
-  <div class="col-md-6 px-0 text-end">
-    <img src="/img/pi4b.jpg" width="200">
-  </div>
+
+  <div id="header-wrapper">
+    <div id="header">
+      <img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<h2>All currently supported platforms</h1>
+<script type="text/javascript" src="/js/lunr.min.js?1638641407"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1638641407"></script>
+<script type="text/javascript">
+    
+        var baseurl = "https:\/\/gokrazy.org\/";
+    
+</script>
+<script type="text/javascript" src="/js/search.js?1638641407"></script>
 
-<div class="p-4 container text-center">
-  <div class="row">
-    <div class="col">
-      <img src="/img/apu2c4.jpg" width="150"><br>
-      PC Engines APU
-    </div>
-    <div class="col">
-      <img src="/img/pi3b.jpg" width="150">
-      <br>
-      Raspberry Pi 3 B
-    </div>
-    <div class="col">
-      <img src="/img/pi3b.jpg" width="150">
-      <br>
-      Raspberry Pi 3 B+
-    </div>
-    <div class="col">
-      <img src="/img/pi4b.jpg" width="150">
-      <br>
-      Raspberry Pi 4 B
-    </div>
-    <div class="col">
-      <img src="/img/pizero2w.jpg" width="150">
-      <br>
-      <strong>Work In Progress</strong>:<br>
-      Raspberry Pi Zero 2 W
-    </div>
+    
   </div>
+  
+    <section id="homelinks">
+      <ul>
+        <li>
+            <a class="padding" href='/'><i class='fas fa-home'></i> Home</a>
+        </li>
+      </ul>
+    </section>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/showcase/" title="Showcase" class="dd-item
+        
+        
+        
+        ">
+      <a href="/showcase/">
+          <b>1. </b>Showcase
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/quickstart/" title="Quickstart" class="dd-item
+        
+        
+        
+        ">
+      <a href="/quickstart/">
+          <b>2. </b>Quickstart
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/userguide/" title="Userguide" class="dd-item
+        
+        
+        
+        ">
+      <a href="/userguide/">
+          <b>3. </b>Userguide
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
+        <a href="/userguide/gpio/">
+        Input/output via GPIO pins
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/package-config/" title="Package config: flags and environment variables" class="dd-item ">
+        <a href="/userguide/package-config/">
+        Flags and environment variables
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/process-interface/" title="gokrazy process interface / requirements" class="dd-item ">
+        <a href="/userguide/process-interface/">
+        gokrazy process interface / requirements
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/remotesyslog/" title="Remote Syslog: sending gokrazy logs over the network" class="dd-item ">
+        <a href="/userguide/remotesyslog/">
+        Remote Syslog
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
+        <a href="/userguide/tls-for-untrusted-networks/">
+        Using TLS in untrusted networks
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/unencrypted-wifi/" title="Connecting to unencrypted WiFi networks" class="dd-item ">
+        <a href="/userguide/unencrypted-wifi/">
+        Unencrypted WiFi
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/modules/" title="Working with Go modules" class="dd-item ">
+        <a href="/userguide/modules/">
+        Working with Go modules
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/userguide/install/" title="Installation" class="dd-item
+        
+        
+        
+        ">
+      <a href="/userguide/install/">
+          How do I install X on gokrazy?
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/install/tailscale/" title="Tailscale VPN" class="dd-item ">
+        <a href="/userguide/install/tailscale/">
+        Tailscale VPN
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/install/caddy-http-server/" title="Caddy HTTP server" class="dd-item ">
+        <a href="/userguide/install/caddy-http-server/">
+        Caddy HTTP server
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/install/minio/" title="MinIO object storage" class="dd-item ">
+        <a href="/userguide/install/minio/">
+        MinIO object storage
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/platforms/" title="Hardware and CI" class="dd-item
+        parent
+        active
+        
+        ">
+      <a href="/platforms/">
+          <b>4. </b>Hardware and CI
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/prototyping/" title="Non-Go Prototyping" class="dd-item
+        
+        
+        
+        ">
+      <a href="/prototyping/">
+          <b>5. </b>Non-Go Prototyping
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li>
+                  <a class="padding" href="https://github.com/gokrazy/gokrazy"><i class='fab fa-github'></i> GitHub repo</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/platforms/_index.markdown" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            <a href='/'>gokrazy</a> > Hardware and CI
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#recommended-raspberry-pi-4-b">Recommended: Raspberry Pi 4 B</a></li>
+    <li><a href="#all-currently-supported-platforms">All currently supported platforms</a>
+      <ul>
+        <li><a href="#raspberry-pi-4-b">Raspberry Pi 4 B</a></li>
+        <li><a href="#pc-engines-apu">PC Engines APU</a></li>
+        <li><a href="#raspberry-pi-zero-2-w-work-in-progress">Raspberry Pi Zero 2 W (Work In Progress)</a></li>
+        <li><a href="#raspberry-pi-3-b-and-3-b">Raspberry Pi 3 B and 3 B+</a></li>
+      </ul>
+    </li>
+    <li><a href="#continuous-integration-ci">Continuous Integration (CI)</a></li>
+  </ul>
+</nav>
+    </div>
 </div>
 
-<h2>Continuous Integration (CI)</h2>
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Hardware and CI
+            </h1>
+          
 
-<div class="p-4">
+        
 
-<p>
-  Appliances which are marked in <strong>bold</strong> are tested in the CI
-  setup on real hardware and gate new kernel and firmware versions, and hence
-  can be considered supported.
-</p>
 
-<p>
-  Non-bold appliances are supported in a best-effort way, meaning they might be
-  temporarily broken at HEAD.
-</p>
 
-<p>
-  The leading <code>github.com</code> in front of package import paths has been omitted for space reasons.
-</p>
+	<h2 id="recommended-raspberry-pi-4-b">Recommended: Raspberry Pi 4 B</h2>
+<p>gokrazy development happens primarily on the Raspberry Pi 4 B.</p>
+<figure><img src="/img/pi4b.jpg" width="200" height="200"/>
+</figure>
 
-<table width="100%" class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Target</th>
-      <th scope="col">Hardware</th>
-      <th scope="col">GOARCH</th>
-      <th scope="col">Kernel package</th>
-      <th scope="col">Firmware package</th>
-      <th scope="col">Appliances</th>
-    </tr>
-  </thead>
+<!--<img src="/img/pi4b.jpg" width="200" align="right">-->
+<h2 id="all-currently-supported-platforms">All currently supported platforms</h2>
+<h3 id="raspberry-pi-4-b">Raspberry Pi 4 B</h3>
+<figure><img src="/img/pi4b.jpg" width="150"/>
+</figure>
 
-  <tbody>
-    <tr>
-      <td scope="row">apu2c4</td>
-      <td>apu2c4</td>
-      <td>amd64</td>
-      <td><code><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></code></td>
-      <td><code><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></code></td>
-      <td>
-	<strong><code><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></code></strong><br>
-	<code><a href="https://github.com/rtr7/router7">rtr7/router7</a></code>
-      </td>
-    </tr>
+<h3 id="pc-engines-apu">PC Engines APU</h3>
+<figure><img src="/img/apu2c4.jpg" width="150"/>
+</figure>
 
-    <tr>
-      <td scope="row">x86-64</td>
-      <td>qemu</td>
-      <td>amd64</td>
-      <td><code><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></code></td>
-      <td><code><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></code></td>
-      <td><strong><code><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></code></strong></td>
-    </tr>
+<h3 id="raspberry-pi-zero-2-w-work-in-progress">Raspberry Pi Zero 2 W (Work In Progress)</h3>
+<figure><img src="/img/pizero2w.jpg" width="150"/>
+</figure>
 
-    <tr>
-      <td scope="row">rpi4b</td>
-      <td>raspi4b</td>
-      <td>arm64</td>
-      <td><code><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></code></td>
-      <td><code><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></code></td>
-      <td>
-	<strong><code><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></code></strong><br>
-	<code><a href="https://github.com/stapelberg/zkj-nas-tools">stapelberg/avr-x1100w</a></code><br>
-	<code><a href="https://github.com/stapelberg/zkj-nas-tools">stapelberg/dornröschen</a></code><br>
-	<code><a href="https://github.com/stapelberg/hmgo">stapelberg/hmgo</a></code><br>
-	<code><a href="https://github.com/stapelberg/scan2drive">stapelberg/scan2drive</a></code>
-      </td>
-    </tr>
+<h3 id="raspberry-pi-3-b-and-3-b">Raspberry Pi 3 B and 3 B+</h3>
+<figure><img src="/img/pi3b.jpg" width="150"/>
+</figure>
 
-    <tr>
-      <td scope="row">rpi3b</td>
-      <td>raspi3b</td>
-      <td>arm64</td>
-      <td><code><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></code></td>
-      <td><code><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></code></td>
-      <td><strong><code><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></code></strong></td>
-    </tr>
-
-    <tr>
-      <td scope="row">rpi3b+</td>
-      <td>raspi3b+</td>
-      <td>arm64</td>
-      <td><code><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></code></td>
-      <td><code><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></code></td>
-      <td><strong><code><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></code></strong></td>
-    </tr>
-  </tbody>
+<h2 id="continuous-integration-ci">Continuous Integration (CI)</h2>
+<p>Appliances which are marked in <strong>bold</strong> are tested in the CI
+setup on real hardware and gate new kernel and firmware versions, and hence
+can be considered supported.</p>
+<p>Non-bold appliances are supported in a best-effort way, meaning they might be
+temporarily broken at HEAD.</p>
+<p>The leading <code>github.com</code> in front of package import paths has been omitted for space reasons.</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Hardware</th>
+<th>GOARCH</th>
+<th>Kernel package</th>
+<th>Firmware package</th>
+<th>Appliances</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apu2c4</td>
+<td>apu2c4</td>
+<td>amd64</td>
+<td><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></td>
+<td><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></td>
+<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><a href="https://github.com/rtr7/router7">rtr7/router7</a></td>
+</tr>
+<tr>
+<td>x86-64</td>
+<td>qemu</td>
+<td>amd64</td>
+<td><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></td>
+<td><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></td>
+<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong></td>
+</tr>
+<tr>
+<td>rpi4b</td>
+<td>raspi4b</td>
+<td>arm64</td>
+<td><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></td>
+<td><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></td>
+<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong><br><a href="https://github.com/stapelberg/hmgo">stapelberg/hmgo</a><br><a href="https://github.com/stapelberg/scan2drive">stapelberg/scan2drive</a></td>
+</tr>
+<tr>
+<td>rpi3b</td>
+<td>raspi3b</td>
+<td>arm64</td>
+<td><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></td>
+<td><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></td>
+<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong></td>
+</tr>
+<tr>
+<td>rpi3b+</td>
+<td>raspi3b+</td>
+<td>arm64</td>
+<td><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></td>
+<td><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></td>
+<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong></td>
+</tr>
+</tbody>
 </table>
 
-</div>
 
 
-	    </main><div class="container">
 
-  <footer class="footer" style="text-align: center">
-    <p>© 2017 gokrazy authors (Michael Stapelberg and contributors)</p>
-  </footer>
-</div>
-</body>
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/userguide/install/minio/" title="MinIO object storage"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/prototyping/" title="Non-Go Prototyping" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1638641407"></script>
+    <script src="/js/perfect-scrollbar.min.js?1638641407"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1638641407"></script>
+    <script src="/js/jquery.sticky.js?1638641407"></script>
+    <script src="/js/featherlight.min.js?1638641407"></script>
+    <script src="/js/highlight.pack.js?1638641407"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1638641407"></script>
+    <script src="/js/learn.js?1638641407"></script>
+    <script src="/js/hugo-learn.js?1638641407"></script>
+    
+        
+            <script src="/mermaid/mermaid.js?1638641407"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
 </html>

@@ -1,9 +1,8 @@
 ---
 title: "Controlling a GPIO input/output pin"
+menuTitle: "Input/output via GPIO pins"
 weight: 10
 ---
-
-# Controlling a GPIO input/output pin
 
 In this guide, we are using [periph.io](https://periph.io/), a library for
 peripheral I/O in Go, to set one of the Raspberry Pi’s General Purpose I/O

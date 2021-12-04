@@ -1,9 +1,8 @@
 ---
-title: "Per-package configuration of build flags, environment variables and command-line flags"
+title: "Package config: flags and environment variables"
+menuTitle: "Flags and environment variables"
 weight: 15
 ---
-
-# Per-package configuration
 
 gokrazy will arrange for each included package to be started at boot. For
 example, given the following packer command:

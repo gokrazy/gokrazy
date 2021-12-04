@@ -2,36 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://gokrazy.org/showcase/</loc>
+  </url><url>
+    <loc>https://gokrazy.org/quickstart/</loc>
+  </url><url>
+    <loc>https://gokrazy.org/userguide/</loc>
+  </url><url>
+    <loc>https://gokrazy.org/platforms/</loc>
+  </url><url>
+    <loc>https://gokrazy.org/prototyping/</loc>
+  </url><url>
     <loc>https://gokrazy.org/userguide/gpio/</loc>
   </url><url>
     <loc>https://gokrazy.org/userguide/package-config/</loc>
   </url><url>
     <loc>https://gokrazy.org/userguide/process-interface/</loc>
   </url><url>
-    <loc>https://gokrazy.org/userguide/tailscale/</loc>
+    <loc>https://gokrazy.org/userguide/install/tailscale/</loc>
   </url><url>
     <loc>https://gokrazy.org/userguide/remotesyslog/</loc>
   </url><url>
     <loc>https://gokrazy.org/userguide/tls-for-untrusted-networks/</loc>
   </url><url>
-    <loc>https://gokrazy.org/userguide/caddy-http-server/</loc>
+    <loc>https://gokrazy.org/userguide/install/caddy-http-server/</loc>
   </url><url>
     <loc>https://gokrazy.org/userguide/unencrypted-wifi/</loc>
   </url><url>
-    <loc>https://gokrazy.org/userguide/minio/</loc>
+    <loc>https://gokrazy.org/userguide/modules/</loc>
+  </url><url>
+    <loc>https://gokrazy.org/userguide/install/</loc>
+  </url><url>
+    <loc>https://gokrazy.org/userguide/install/minio/</loc>
   </url><url>
     <loc>https://gokrazy.org/</loc>
-  </url><url>
-    <loc>https://gokrazy.org/platforms/</loc>
-  </url><url>
-    <loc>https://gokrazy.org/prototyping/</loc>
-  </url><url>
-    <loc>https://gokrazy.org/quickstart/</loc>
-  </url><url>
-    <loc>https://gokrazy.org/showcase/</loc>
-  </url><url>
-    <loc>https://gokrazy.org/userguide/</loc>
-  </url><url>
-    <loc>https://gokrazy.org/modules/</loc>
   </url>
 </urlset>

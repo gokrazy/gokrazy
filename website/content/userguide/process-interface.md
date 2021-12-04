@@ -3,12 +3,12 @@ title: "gokrazy process interface / requirements"
 weight: 16
 ---
 
-# gokrazy process interface / requirements
-
 ## Process supervision
 
-**Tip:** You can find the corresponding code in
-[func `gokrazy.supervise`](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/gokrazy/gokrazy%24+type:symbol+%5Esupervise%24&patternType=regexp&case=yes).
+{{% notice tip %}}
+You can find the corresponding code in
+[func gokrazy.supervise](https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/gokrazy/gokrazy%24+type:symbol+%5Esupervise%24&patternType=regexp&case=yes).
+{{% /notice %}}
 
 gokrazy’s init process (pid 1) supervises all the binaries the user specified via `gokr-packer` flags.
 

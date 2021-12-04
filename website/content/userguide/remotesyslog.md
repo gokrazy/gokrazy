@@ -1,9 +1,8 @@
 ---
-title: "Using Remote Syslog to send gokrazy logs over the network"
+title: "Remote Syslog: sending gokrazy logs over the network"
+menuTitle: "Remote Syslog"
 weight: 20
 ---
-
-# Using Remote Syslog to send gokrazy logs over the network
 
 If you update your gokrazy installations daily, as we recommend you do, logs
 will be cleared daily as a side effect of rebooting the device. You can use

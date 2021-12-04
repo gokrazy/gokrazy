@@ -3,8 +3,6 @@ title: "Using TLS in untrusted networks"
 weight: 30
 ---
 
-# Using TLS in untrusted networks
-
 Let’s assume that you have [installed gokrazy on a Raspberry Pi](/quickstart/)
 and are currently successfully updating it over the network like so:
 

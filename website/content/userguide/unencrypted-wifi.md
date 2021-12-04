@@ -1,9 +1,8 @@
 ---
 title: "Connecting to unencrypted WiFi networks"
+menuTitle: "Unencrypted WiFi"
 weight: 40
 ---
-
-# Connecting to unencrypted WiFi networks
 
 Remember that using an unencrypted WiFi network means anyone in range can read
 your communication. Hence, we strongly recommend [using TLS for accessing the

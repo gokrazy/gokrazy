@@ -1,7 +1,7 @@
 baseURL = "https://gokrazy.org/"
 languageCode = "en-us"
 title = "gokrazy"
-theme = "gokrazy"
+theme = "hugo-theme-learn"
 disableKinds = ["RSS", "taxonomyTerm"]
 publishDir = "../docs/"
 enableRobotsTXT = true
@@ -10,10 +10,15 @@ enableRobotsTXT = true
 # Required for e.g. <img> tags in markdown articles.
 unsafe = true
 
-[menu]
+[params]
+  disableInlineCopyToClipBoard = true
+  editURL = "https://github.com/gokrazy/gokrazy/tree/master/website/content/"
 
-  [[menu.main]]
-    name = "github"
-    title = "Source"
-    url = "https://github.com/gokrazy/gokrazy"
-    weight = 60
+# TODO(later): change color to grey for logo?
+
+[[menu.shortcuts]]
+name = "<i class='fab fa-github'></i> GitHub repo"
+identifier = "ds"
+url = "https://github.com/gokrazy/gokrazy"
+weight = 10
+
