@@ -72,6 +72,10 @@ func (w *remoteSyslogWriter) Lines() []string {
 	return w.lines.Lines()
 }
 
+func (w *remoteSyslogWriter) Stream() (<-chan string, func()) {
+	return w.lines.Stream()
+}
+
 func (w *remoteSyslogWriter) Write(b []byte) (int, error) {
 	w.lines.Write(b)
 	w.syslogMu.Lock()
@@ -89,11 +93,13 @@ type lineRingBuffer struct {
 	sync.RWMutex
 	remainder string
 	r         *ring.Ring
+	streams   map[chan string]struct{}
 }
 
 func newLineRingBuffer(size int) *lineRingBuffer {
 	return &lineRingBuffer{
-		r: ring.New(size),
+		r:       ring.New(size),
+		streams: make(map[chan string]struct{}),
 	}
 }
 
@@ -107,7 +113,16 @@ func (lrb *lineRingBuffer) Write(b []byte) (int, error) {
 			break
 		}
 
-		lrb.r.Value = text[:idx]
+		line := text[:idx]
+		lrb.r.Value = line
+		for stream := range lrb.streams {
+			select {
+			case stream <- line:
+			default:
+				// If receiver channel is blocking, skip. This means streams
+				// will miss log lines if they are full.
+			}
+		}
 		lrb.r = lrb.r.Next()
 		text = text[idx+1:]
 	}
@@ -127,9 +142,35 @@ func (lrb *lineRingBuffer) Lines() []string {
 	return lines
 }
 
+// Stream generates a new channel which will stream any logged lines, including everything currently
+// in the ring buffer. Deregister the stream by calling the close function.
+func (lrb *lineRingBuffer) Stream() (<-chan string, func()) {
+	lrb.Lock()
+	defer lrb.Unlock()
+
+	// Need a chan that has at least len(ring) entries in it, otherwise populating it with existing
+	// contents of the ring will block forever.
+	stream := make(chan string, 101)
+	lrb.r.Do(func(x interface{}) {
+		if x != nil {
+			stream <- x.(string)
+		}
+	})
+	lrb.streams[stream] = struct{}{}
+
+	return stream, func() {
+		lrb.Lock()
+		defer lrb.Unlock()
+
+		delete(lrb.streams, stream)
+		close(stream)
+	}
+}
+
 type lineswriter interface {
 	io.Writer
 	Lines() []string
+	Stream() (<-chan string, func())
 }
 
 type service struct {
