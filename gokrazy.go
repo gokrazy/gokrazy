@@ -310,7 +310,7 @@ func Supervise(commands []*exec.Cmd) error {
 		services[idx] = &service{cmd: cmd}
 	}
 
-	initStatus(services)
+	initStatus()
 
 	if err := initUpdate(); err != nil {
 		return err

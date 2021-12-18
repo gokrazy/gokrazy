@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -342,8 +343,13 @@ func divert(w http.ResponseWriter, r *http.Request) {
 	path := r.FormValue("path")
 	svc := findSvc(path)
 	if svc == nil {
-		http.Error(w, "service not found", http.StatusNotFound)
-		return
+		log.Printf("adding new service in-memory to make diversion work")
+		cmd := exec.Command(path)
+		svc = &service{cmd: cmd}
+		services.Lock()
+		services.S = append(services.S, svc)
+		services.Unlock()
+		go supervise(svc)
 	}
 
 	// Ensure diversion binary is executable (/uploadtemp creates regular,

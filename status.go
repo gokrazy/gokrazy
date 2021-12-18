@@ -219,7 +219,7 @@ var templates = template.Must(template.New("root").
 	}).
 	ParseFS(assets.Assets, "*.tmpl"))
 
-func initStatus(services []*service) {
+func initStatus() {
 	model := Model()
 
 	lastInstalledEepromVersion, err := lastInstalledEepromVersion()
@@ -380,6 +380,8 @@ func initStatus(services []*service) {
 		} else {
 			permUUID += "-04"
 		}
+		services.Lock()
+		defer services.Unlock()
 		status := struct {
 			Services       []*service
 			PermDev        string
@@ -396,7 +398,7 @@ func initStatus(services []*service) {
 			EEPROM         *eepromVersion
 			Kernel         string
 		}{
-			Services:       services,
+			Services:       services.S,
 			PermDev:        rootdev.Partition(rootdev.Perm),
 			PermUsed:       int64(st.Bsize) * int64(st.Blocks-st.Bfree),
 			PermAvail:      int64(st.Bsize) * int64(st.Bavail),

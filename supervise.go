@@ -416,12 +416,17 @@ func supervise(s *service) {
 	}
 }
 
-var services []*service
+var services struct {
+	sync.Mutex
+	S []*service
+}
 
 // killSupervisedServices is called before rebooting when upgrading, allowing
 // processes to terminate in an orderly fashion.
 func killSupervisedServices() {
-	for _, s := range services {
+	services.Lock()
+	defer services.Unlock()
+	for _, s := range services.S {
 		if s.Stopped() {
 			continue
 		}
@@ -435,7 +440,9 @@ func killSupervisedServices() {
 }
 
 func findSvc(path string) *service {
-	for _, s := range services {
+	services.Lock()
+	defer services.Unlock()
+	for _, s := range services.S {
 		if s.cmd.Path == path {
 			return s
 		}
@@ -513,8 +520,10 @@ func stopstartHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func superviseServices(svc []*service) {
-	services = svc
-	for _, s := range services {
+	services.Lock()
+	services.S = svc
+	defer services.Unlock()
+	for _, s := range services.S {
 		go supervise(s)
 	}
 
