@@ -345,7 +345,7 @@ func divert(w http.ResponseWriter, r *http.Request) {
 	if svc == nil {
 		log.Printf("adding new service in-memory to make diversion work")
 		cmd := exec.Command(path)
-		svc = &service{cmd: cmd}
+		svc = NewService(cmd).s
 		services.Lock()
 		services.S = append(services.S, svc)
 		services.Unlock()

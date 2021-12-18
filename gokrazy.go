@@ -295,7 +295,37 @@ func tryStartShell() error {
 	return lastErr
 }
 
-// Supervise continuously restarts the processes specified in commands
+// Service is a gokrazy service.
+type Service struct {
+	// TODO: refactor the fields of service into this type, but
+	// visibility-restricted.
+	s *service
+}
+
+// NewService constructs a new gokrazy service from the specified command.
+func NewService(cmd *exec.Cmd) *Service {
+	return &Service{&service{cmd: cmd}}
+}
+
+// NewStoppedService is like NewService, but the created gokrazy service will
+// not be supervised, i.e. remain stopped on boot.
+func NewStoppedService(cmd *exec.Cmd) *Service {
+	return &Service{&service{cmd: cmd, stopped: true}}
+}
+
+// Supervise runs SuperviseServices, creating services from commands.
+//
+// Deprecated: newer versions of gokr-packer run gokrazy.SuperviseServices()
+// instead
+func Supervise(commands []*exec.Cmd) error {
+	services := make([]*Service, len(commands))
+	for idx, cmd := range commands {
+		services[idx] = &Service{&service{cmd: cmd}}
+	}
+	return SuperviseServices(services)
+}
+
+// SuperviseServices continuously restarts the processes specified in services
 // unless they run DontStartOnBoot.
 //
 // Password-protected HTTP handlers are installed, allowing to inspect
@@ -304,10 +334,10 @@ func tryStartShell() error {
 //
 // HTTP is served on PrivateInterfaceAddrs(). New IP addresses will be
 // picked up upon receiving SIGHUP.
-func Supervise(commands []*exec.Cmd) error {
-	services := make([]*service, len(commands))
-	for idx, cmd := range commands {
-		services[idx] = &service{cmd: cmd}
+func SuperviseServices(services []*Service) error {
+	unwrapped := make([]*service, len(services))
+	for idx, svc := range services {
+		unwrapped[idx] = svc.s
 	}
 
 	initStatus()
@@ -361,7 +391,7 @@ func Supervise(commands []*exec.Cmd) error {
 	// particularly fast dhcp client (e.g. when running in qemu) might send
 	// SIGHUP before the signal handler is set up, thereby killing init and
 	// panic the system!
-	superviseServices(services)
+	superviseServices(unwrapped)
 
 	go func() {
 		buf := make([]byte, 1)
