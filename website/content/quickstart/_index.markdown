@@ -27,7 +27,16 @@ Now that you have a working Go installation, install the gokrazy packer (<code>g
 go install github.com/gokrazy/tools/cmd/gokr-packer@latest
 ```
 
-## Step 1: Create a directory for your gokrazy instance
+## Step 1: Insert an SD card
+
+Run `watch -d1 ls -l '/dev/disk/by-id/*'` and insert an SD card. Copy the
+highlighted device name:
+
+<script id="asciicast-G0PosAYGvUSnB3htMpLIz0p68" src="https://asciinema.org/a/G0PosAYGvUSnB3htMpLIz0p68.js" async></script>
+
+In this example, we’ll assume the SD card is accessible as <code>/dev/sdx</code>.
+
+## Step 2: Create a gokrazy instance and overwrite an SD card with gokrazy
 
 Create a directory for this gokrazy instance and initialize a Go module:
 
@@ -38,16 +47,9 @@ cd ~/${INSTANCE?}
 go mod init hello
 ```
 
-## Step 2: Overwrite an SD card with gokrazy
-
-Plug an SD card into your card reader and locate its device node by checking <code>dmesg | tail</code>.
-
-In this example, we’ll assume the SD card is accessible as <code>/dev/sdx</code>.
-
 To overwrite the entire SD card <code>/dev/sdx</code> with a gokrazy installation running a hello world program, use:
 
 ```shell
-cd ~/gokrazy/hello
 gokr-packer \
   -overwrite=/dev/sdx \
   -serial_console=disabled \
@@ -56,7 +58,13 @@ gokr-packer \
   github.com/gokrazy/serial-busybox
 ```
 
-The <code>gokr-packer</code> command above will result in log output like this:
+<script id="asciicast-3DFZZaNvXuhHrSjnHRywT8KyO" src="https://asciinema.org/a/3DFZZaNvXuhHrSjnHRywT8KyO.js" async></script>
+
+<details>
+
+<summary style="display: list-item">
+Click here to show the <code>gokr-packer</code> log output
+</summary>
 
 ```text
 gokrazy packer v0.0.0-20211121205320-688793dda2da on GOARCH=amd64 GOOS=linux
@@ -112,6 +120,8 @@ In addition, the following Linux consoles are set up:
 
 	1. foreground Linux framebuffer console on HDMI
 ```
+
+</details>
 
 It is safe to unplug your SD card once <code>gokr-packer</code> returns.
 
