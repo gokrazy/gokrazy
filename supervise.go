@@ -254,6 +254,10 @@ func (s *service) setProcess(p *os.Process) {
 }
 
 func (s *service) MarshalJSON() ([]byte, error) {
+	pid := 0
+	if proc := s.Process(); proc != nil {
+		pid = proc.Pid
+	}
 	return json.Marshal(&struct {
 		Stopped   bool
 		StartTime time.Time
@@ -264,7 +268,7 @@ func (s *service) MarshalJSON() ([]byte, error) {
 	}{
 		Stopped:   s.Stopped(),
 		StartTime: s.Started(),
-		Pid:       s.Process().Pid,
+		Pid:       pid,
 		Path:      s.cmd.Path,
 		Args:      s.cmd.Args,
 		Diverted:  s.Diverted(),
