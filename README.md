@@ -89,7 +89,9 @@ currently active file system) when updating.
 If you’d like to store permanent data (i.e. data which will not be
 overwritten on the next update), you’ll need to create an ext4 file
 system on the last partition. If your SD card is `/dev/sdx`, use
-`mkfs.ext4 /dev/sdx4`.
+`mkfs.ext4 /dev/sdx4`. After you successfully created the new filesystem
+on the forth partition, gokrazy will automatically mount the filesystem
+under `/perm` during startup. Use this mount directory to store your permanent data.
 
 # Customization
 
