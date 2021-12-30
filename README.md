@@ -136,3 +136,27 @@ gokr-packer \
     * [github.com/gokrazy/firmware](https://github.com/gokrazy/firmware): Raspberry Pi 3 or 4 firmware files
     * [github.com/gokrazy/rpi-eeprom](https://github.com/gokrazy/rpi-eeprom): Raspberry Pi 4 EEPROM files
     * [github.com/gokrazy/kernel](https://github.com/gokrazy/kernel): pre-built kernel image and bootloader config
+
+# Documentation
+
+[gokrazy.org](https://gokrazy.org) uses [hugo](https://gohugo.io/) for creating and generating the website.
+You can find the hugo install instructions here: [Install Hugo](https://gohugo.io/getting-started/installing/).
+With hugo you can write documentation in Markdown and generate a static website from it.
+
+The `./website` directory is hugos root directory. In order to serve the documentation on your localhost or re-generate the website, switch the directory to `./website`.
+
+Run the hugo webserver:
+
+```bash
+hugo serve
+```
+
+Generate the website:
+
+```bash
+hugo
+```
+
+The updated website content will be stored in the `./docs` directory.
+Do not update anything here manually.
+
