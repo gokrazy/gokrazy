@@ -21,6 +21,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
+	"github.com/gokrazy/internal/deviceconfig"
 	"github.com/gokrazy/internal/fat"
 	"github.com/gokrazy/internal/rootdev"
 	"github.com/google/renameio/v2"
@@ -130,12 +131,19 @@ func enableTestboot() error {
 	})
 }
 
-func streamRequestTo(path string, r io.Reader) error {
+func streamRequestTo(path string, offset int64, r io.Reader) error {
 	f, err := os.OpenFile(path, os.O_WRONLY, 0600)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
+
+	if offset > 0 {
+		if _, err := f.Seek(offset, io.SeekStart); err != nil {
+			return err
+		}
+	}
+
 	if _, err := io.Copy(f, r); err != nil {
 		return err
 	}
@@ -161,6 +169,10 @@ func createFile(path string, r io.Reader) error {
 }
 
 func nonConcurrentUpdateHandler(dest string) func(http.ResponseWriter, *http.Request) {
+	return nonConcurrentLimitedUpdateHandler(dest, 0, 0)
+}
+
+func nonConcurrentLimitedUpdateHandler(dest string, offset int64, maxLength int64) func(http.ResponseWriter, *http.Request) {
 	var mu sync.Mutex
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPut {
@@ -178,7 +190,13 @@ func nonConcurrentUpdateHandler(dest string) func(http.ResponseWriter, *http.Req
 		default:
 			hash = sha256.New()
 		}
-		if err := streamRequestTo(dest, io.TeeReader(r.Body, hash)); err != nil {
+
+		var reader io.Reader = r.Body
+		if maxLength > 0 {
+			reader = io.LimitReader(reader, maxLength)
+		}
+
+		if err := streamRequestTo(dest, offset, io.TeeReader(reader, hash)); err != nil {
 			log.Printf("updating %q failed: %v", dest, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -225,6 +243,34 @@ func nonConcurrentTestbootHandler(newRootPartition int) func(http.ResponseWriter
 	}
 }
 
+type extraUpdateHandler struct {
+	name      string
+	device    string
+	offset    int64
+	maxLength int64
+}
+
+var extraUpdateHandlers []*extraUpdateHandler
+
+func setupDeviceSpecifics() {
+	modelName := Model()
+	cfg, ok := deviceconfig.DeviceConfigs[modelName]
+	if !ok {
+		return
+	}
+
+	log.Printf("setting up device-specific update handlers for %q", modelName)
+
+	for _, rootDevFile := range cfg.RootDeviceFiles {
+		extraUpdateHandlers = append(extraUpdateHandlers, &extraUpdateHandler{
+			name:      rootDevFile.Name,
+			device:    rootdev.BlockDevice(),
+			offset:    rootDevFile.Offset,
+			maxLength: rootDevFile.MaxLength,
+		})
+	}
+}
+
 func initUpdate() error {
 	// The /update/features handler is used for negotiation of individual
 	// feature support (e.g. PARTUUID= support) between the packer and update
@@ -240,6 +286,11 @@ func initUpdate() error {
 	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(rootdev.InactiveRootPartition())))
 	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(rootdev.InactiveRootPartition()))
 	http.HandleFunc("/update/testboot", nonConcurrentTestbootHandler(rootdev.InactiveRootPartition()))
+
+	for _, extraUpdateHandler := range extraUpdateHandlers {
+		http.HandleFunc(fmt.Sprintf("/update/device-specific/%s", extraUpdateHandler.name), nonConcurrentLimitedUpdateHandler(extraUpdateHandler.device, extraUpdateHandler.offset, extraUpdateHandler.maxLength))
+	}
+
 	// bakery updates only the boot partition, which would reset the active root
 	// partition to 2.
 	updateHandler := nonConcurrentUpdateHandler(rootdev.Partition(rootdev.Boot))
