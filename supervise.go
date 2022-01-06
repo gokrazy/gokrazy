@@ -353,6 +353,19 @@ func supervise(s *service) {
 	s.Stderr = newLogWriter(tag)
 	l := log.New(s.Stderr, "", log.LstdFlags|log.Ldate|log.Ltime)
 	attempt := 0
+
+	// Wait for clock to be updated via ntp for services
+	// that need correct time. This can be enabled
+	// by setting GOKRAZY_WAIT_FOR_CLOCK environment
+	// variable as 1 using env.txt
+	for _, e := range s.cmd.Env {
+		if e == "GOKRAZY_WAIT_FOR_CLOCK=1" {
+			l.Print("gokrazy: waiting for clock to be synced")
+			WaitForClock()
+			break
+		}
+	}
+
 	for {
 		if s.Stopped() {
 			time.Sleep(1 * time.Second)
