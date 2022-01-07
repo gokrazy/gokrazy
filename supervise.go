@@ -357,9 +357,15 @@ func supervise(s *service) {
 	// Wait for clock to be updated via ntp for services
 	// that need correct time. This can be enabled
 	// by setting GOKRAZY_WAIT_FOR_CLOCK environment
-	// variable as 1 using env.txt
-	for _, e := range s.cmd.Env {
-		if e == "GOKRAZY_WAIT_FOR_CLOCK=1" {
+	// variable as 1 using env.txt.
+	// Also allow only user services to be able to use this
+	// feature and avoid waiting forever on ntp service
+	// or any other gokrazy services accidentally.
+	if strings.HasPrefix(s.cmd.Path, "/user/") {
+		for _, e := range s.cmd.Env {
+			if e != "GOKRAZY_WAIT_FOR_CLOCK=1" {
+				continue
+			}
 			l.Print("gokrazy: waiting for clock to be synced")
 			WaitForClock()
 			break
