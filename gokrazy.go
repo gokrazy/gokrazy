@@ -313,6 +313,12 @@ func NewStoppedService(cmd *exec.Cmd) *Service {
 	return &Service{&service{cmd: cmd, stopped: true}}
 }
 
+// NewDelayedService is like NewService, but the created gokrazy service
+// will wait for clock, i.e. blocked till the clock is accurate.
+func NewDelayedService(cmd *exec.Cmd) *Service {
+	return &Service{&service{cmd: cmd, waitForClock: true}}
+}
+
 // Supervise runs SuperviseServices, creating services from commands.
 //
 // Deprecated: newer versions of gokr-packer run gokrazy.SuperviseServices()
