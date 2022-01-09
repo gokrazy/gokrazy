@@ -242,7 +242,15 @@ func (s *service) Signal(signal syscall.Signal) error {
 	s.processMu.RLock()
 	defer s.processMu.RUnlock()
 	if s.process != nil {
-		return s.process.Signal(signal)
+		// Use syscall.Kill instead of s.process.Signal as the latter returns
+		// “os: process already finished” when the process exited.
+		err := syscall.Kill(s.process.Pid, signal)
+		if errno, ok := err.(syscall.Errno); ok {
+			if errno == syscall.ESRCH {
+				return nil // no such process, nothing to signal
+			}
+		}
+		return err
 	}
 	return nil // no process, nothing to signal
 }
