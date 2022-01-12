@@ -143,9 +143,10 @@ gokr-packer \
 You can find the hugo install instructions here: [Install Hugo](https://gohugo.io/getting-started/installing/).
 With hugo you can write documentation in Markdown and generate a static website from it.
 
-The `./website` directory is hugos root directory. In order to serve the documentation on your localhost or re-generate the website, switch the directory to `./website`.
+The `website` subdirectory is hugo’s root directory. In order to preview the
+documentation or to re-generate the website, switch the directory to `website`.
 
-Run the hugo webserver:
+To preview the website, run the hugo webserver:
 
 ```bash
 hugo serve
