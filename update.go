@@ -309,16 +309,31 @@ func initUpdate() error {
 			return
 		}
 
+		doneCh := make(chan struct{})
 		go func() {
 			killSupervisedServices()
+			close(doneCh)
+		}()
 
-			// give the HTTP response some time to be sent; allow processes some time to terminate
-			time.Sleep(1 * time.Second)
+		atLeast1Second := time.After(time.Second)
 
+		go func() {
+			select {
+			case <-doneCh:
+				log.Println("All processes shut down")
+			case <-time.After(15 * time.Second):
+				log.Println("Timed out waiting for processes to shut down")
+			}
+
+			// give the HTTP response some time to be sent
+			<-atLeast1Second
+
+			log.Println("Unmounting /perm")
 			if err := syscall.Unmount("/perm", unix.MNT_FORCE); err != nil {
 				log.Printf("unmounting /perm failed: %v", err)
 			}
 
+			log.Println("Rebooting")
 			if err := reboot(); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
