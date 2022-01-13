@@ -427,8 +427,9 @@ func supervise(s *service) {
 		s.state.Set(Running)
 		s.setProcess(cmd.Process)
 
+		pid := s.process.Pid
+
 		err := cmd.Wait()
-		s.state.Set(Stopped)
 		if err != nil {
 			if isDontSupervise(err) {
 				l.Println("gokrazy: process should not be supervised, stopping")
@@ -438,6 +439,22 @@ func supervise(s *service) {
 		} else {
 			l.Printf("gokrazy: exited successfully")
 		}
+
+		for {
+			if pid <= 0 {
+				// Sanity check pid value.
+				// Sending 0 for pid in Wait4 has special meaning, which we don't want.
+				break
+			}
+
+			// Wait4 return the pid of a process that exited,
+			// or -1 if there are no processes to be waited on (or error).
+			wpid, _ := syscall.Wait4(-pid, nil, 0, nil)
+			if wpid == -1 {
+				break
+			}
+		}
+		s.state.Set(Stopped)
 		time.Sleep(1 * time.Second)
 	}
 }
