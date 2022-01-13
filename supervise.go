@@ -191,6 +191,8 @@ type service struct {
 	diversionMu sync.Mutex
 	diversion   string
 
+	waitForClock bool
+
 	state *processState
 }
 
@@ -369,6 +371,16 @@ func supervise(s *service) {
 	s.Stderr = newLogWriter(tag)
 	l := log.New(s.Stderr, "", log.LstdFlags|log.Ldate|log.Ltime)
 	attempt := 0
+
+	// Wait for clock to be updated via ntp for services
+	// that need correct time. This can be enabled
+	// by adding a settings file named waitforclock.txt under
+	// waitforclock/<package> directory.
+	if strings.HasPrefix(s.cmd.Path, "/user/") && s.waitForClock {
+		l.Print("gokrazy: waiting for clock to be synced")
+		WaitForClock()
+	}
+
 	for {
 		if s.Stopped() {
 			time.Sleep(1 * time.Second)
