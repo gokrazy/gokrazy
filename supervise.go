@@ -192,6 +192,8 @@ type service struct {
 	diversion   string
 
 	waitForClock bool
+
+	state *processState
 }
 
 func (s *service) setDiversion(d string) {
@@ -222,6 +224,10 @@ func (s *service) setStopped(val bool) {
 	s.stopped = val
 }
 
+func (s *service) waitTillStopped() {
+	s.state.WaitTill(Stopped)
+}
+
 func (s *service) Started() time.Time {
 	s.startedMu.RLock()
 	defer s.startedMu.RUnlock()
@@ -244,7 +250,15 @@ func (s *service) Signal(signal syscall.Signal) error {
 	s.processMu.RLock()
 	defer s.processMu.RUnlock()
 	if s.process != nil {
-		return s.process.Signal(signal)
+		// Use syscall.Kill instead of s.process.Signal as the latter returns
+		// “os: process already finished” when the process exited.
+		err := syscall.Kill(-s.process.Pid, signal)
+		if errno, ok := err.(syscall.Errno); ok {
+			if errno == syscall.ESRCH {
+				return nil // no such process, nothing to signal
+			}
+		}
+		return err
 	}
 	return nil // no process, nothing to signal
 }
@@ -351,6 +365,8 @@ func supervise(s *service) {
 		log.Printf("cannot read module info from %s: %v", s.cmd.Path, err)
 	}
 
+	s.state = NewProcessState()
+
 	s.Stdout = newLogWriter(tag)
 	s.Stderr = newLogWriter(tag)
 	l := log.New(s.Stderr, "", log.LstdFlags|log.Ldate|log.Ltime)
@@ -379,6 +395,9 @@ func supervise(s *service) {
 			Stderr: s.Stderr,
 			SysProcAttr: &syscall.SysProcAttr{
 				Unshareflags: syscall.CLONE_NEWNS,
+				// create a new process group for each service to make it easier to terminate all its
+				// processes with a single signal.
+				Setpgid: true,
 			},
 		}
 		if d := s.Diverted(); d != "" {
@@ -417,9 +436,12 @@ func supervise(s *service) {
 			l.Println("gokrazy: " + err.Error())
 		}
 
+		s.state.Set(Running)
 		s.setProcess(cmd.Process)
 
-		if err := cmd.Wait(); err != nil {
+		err := cmd.Wait()
+		s.state.Set(Stopped)
+		if err != nil {
 			if isDontSupervise(err) {
 				l.Println("gokrazy: process should not be supervised, stopping")
 				s.setStopped(true)
@@ -447,11 +469,16 @@ func killSupervisedServices() {
 			continue
 		}
 
-		s.setStopped(true)
+		// NOTE: Stopping can be inaccurate if the process exited after the check above.
+		// In that case, `state.Set(Stopping)` will be ignored - see `processState.Set()`.
+		s.state.Set(Stopping)
 
-		if p := s.Process(); p != nil {
-			p.Signal(syscall.SIGTERM)
-		}
+		s.setStopped(true)
+		s.Signal(syscall.SIGTERM)
+	}
+
+	for _, s := range services.S {
+		s.waitTillStopped()
 	}
 }
 

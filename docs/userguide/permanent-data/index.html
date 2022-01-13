@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Hardware and CI :: gokrazy</title>
+    <title>Access permanent data :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1642026123" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/platforms/">
+  <body class="" data-url="/userguide/permanent-data/">
     <nav id="sidebar" class="">
 
 
@@ -139,7 +139,7 @@
   
     
     <li data-nav-id="/userguide/" title="Userguide" class="dd-item
-        
+        parent
         
         
         ">
@@ -314,7 +314,7 @@
  
   
     
-      <li data-nav-id="/userguide/permanent-data/" title="Access permanent data" class="dd-item ">
+      <li data-nav-id="/userguide/permanent-data/" title="Access permanent data" class="dd-item active">
         <a href="/userguide/permanent-data/">
         Access permanent data
         
@@ -442,8 +442,8 @@
   
     
     <li data-nav-id="/platforms/" title="Hardware and CI" class="dd-item
-        parent
-        active
+        
+        
         
         ">
       <a href="/platforms/">
@@ -520,7 +520,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/platforms/_index.markdown" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/permanent-data.markdown" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -547,7 +547,13 @@
             
           
           
-            <a href='/'>gokrazy</a> > Hardware and CI
+            
+            
+          
+          
+            <a href='/'>gokrazy</a> > <a href='/userguide/'>Userguide</a> > Access permanent data
+          
+        
           
         
           
@@ -560,16 +566,9 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#recommended-raspberry-pi-4-b">Recommended: Raspberry Pi 4 B</a></li>
-    <li><a href="#all-currently-supported-platforms">All currently supported platforms</a>
-      <ul>
-        <li><a href="#raspberry-pi-4-b">Raspberry Pi 4 B</a></li>
-        <li><a href="#pc-engines-apu">PC Engines APU</a></li>
-        <li><a href="#raspberry-pi-zero-2-w-work-in-progress">Raspberry Pi Zero 2 W (Work In Progress)</a></li>
-        <li><a href="#raspberry-pi-3-b-and-3-b">Raspberry Pi 3 B and 3 B+</a></li>
-      </ul>
-    </li>
-    <li><a href="#continuous-integration-ci">Continuous Integration (CI)</a></li>
+    <li><a href="#create-the-filesystem">Create the filesystem</a></li>
+    <li><a href="#permanent-data-in-action">Permanent data in action</a></li>
+    <li><a href="#manual-inspectionmodification">Manual inspection/modification</a></li>
   </ul>
 </nav>
     </div>
@@ -587,112 +586,95 @@
           
             <h1>
               
-              Hardware and CI
+              Access permanent data
             </h1>
           
 
         
 
 
+<h2 id="create-the-filesystem">Create the filesystem</h2>
+<p>gokrazy provides a handy way to create the permanent data filesystem on the fourth partition of your gokrazy installation.
+The <a href="https://github.com/gokrazy/mkfs">gokrazy/mkfs</a> program will create the filesystem.
+To actually access the permanent data partition from your own program, gokrazy will mount the partition under <code>/perm</code> directory during the startup.</p>
+<p>You can either include this program in your <code>gokr-packer</code> command line:</p>
+<pre tabindex="0"><code>gokr-packer \
+  -overwrite=/dev/sdx \
+  -serial_console=disabled \
+  github.com/gokrazy/fbstatus \
+  github.com/gokrazy/hello \
+  github.com/gokrazy/serial-busybox \
+  github.com/gokrazy/mkfs
+</code></pre><p>…or, if you want to run it only once without otherwise including it in your
+installation, you can use <code>gok run</code>:</p>
+<pre tabindex="0"><code>git clone https://github.com/gokrazy/mkfs
+cd mkfs
+gok run -i bakery
+</code></pre><h2 id="permanent-data-in-action">Permanent data in action</h2>
+<p>The Go program demonstrates the functionality of the permanent data mount:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
-	<h2 id="recommended-raspberry-pi-4-b">Recommended: Raspberry Pi 4 B</h2>
-<p>gokrazy development happens primarily on the Raspberry Pi 4 B.</p>
-<figure><img src="/img/pi4b.jpg" width="200" height="200"/>
-</figure>
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;encoding/json&#34;</span>
+	<span style="color:#e6db74">&#34;errors&#34;</span>
+	<span style="color:#e6db74">&#34;fmt&#34;</span>
+	<span style="color:#e6db74">&#34;io/fs&#34;</span>
+	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+	<span style="color:#e6db74">&#34;os&#34;</span>
+)
 
-<!--<img src="/img/pi4b.jpg" width="200" align="right">-->
-<h2 id="all-currently-supported-platforms">All currently supported platforms</h2>
-<h3 id="raspberry-pi-4-b">Raspberry Pi 4 B</h3>
-<figure><img src="/img/pi4b.jpg" width="150"/>
-</figure>
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">config</span> = <span style="color:#e6db74">&#34;/perm/my-example/config.json&#34;</span>
 
-<h3 id="pc-engines-apu">PC Engines APU</h3>
-<figure><img src="/img/apu2c4.jpg" width="150"/>
-</figure>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Config</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">FilesToCreate</span> <span style="color:#66d9ef">int</span> <span style="color:#e6db74">`json:&#34;files_to_create&#34;`</span>
+}
 
-<h3 id="raspberry-pi-zero-2-w-work-in-progress">Raspberry Pi Zero 2 W (Work In Progress)</h3>
-<figure><img src="/img/pizero2w.jpg" width="150"/>
-</figure>
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stat</span>(<span style="color:#a6e22e">config</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">fsErr</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">ErrNotExist</span>
+		<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">As</span>(<span style="color:#a6e22e">err</span>, <span style="color:#a6e22e">fsErr</span>) {
+			panic(<span style="color:#a6e22e">err</span>)
+		}
 
-<h3 id="raspberry-pi-3-b-and-3-b">Raspberry Pi 3 B and 3 B+</h3>
-<figure><img src="/img/pi3b.jpg" width="150"/>
-</figure>
+		<span style="color:#a6e22e">content</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Config</span>{<span style="color:#a6e22e">FilesToCreate</span>: <span style="color:#ae81ff">4</span>})
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			panic(<span style="color:#a6e22e">err</span>)
+		}
 
-<h2 id="continuous-integration-ci">Continuous Integration (CI)</h2>
-<p>Appliances which are marked in <strong>bold</strong> are tested in the CI
-setup on real hardware and gate new kernel and firmware versions, and hence
-can be considered supported.</p>
-<p>Non-bold appliances are supported in a best-effort way, meaning they might be
-temporarily broken at HEAD.</p>
-<p>The leading <code>github.com</code> in front of package import paths has been omitted for space reasons.</p>
-<table>
-<thead>
-<tr>
-<th>Target</th>
-<th>Hardware</th>
-<th>GOARCH</th>
-<th>Kernel package</th>
-<th>Firmware package</th>
-<th>Appliances</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>apu2c4</td>
-<td>apu2c4</td>
-<td>amd64</td>
-<td><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></td>
-<td><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></td>
-<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><a href="https://github.com/rtr7/router7">rtr7/router7</a></td>
-</tr>
-<tr>
-<td>x86-64</td>
-<td>qemu</td>
-<td>amd64</td>
-<td><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></td>
-<td><a href="https://github.com/rtr7/kernel">rtr7/kernel</a></td>
-<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong></td>
-</tr>
-<tr>
-<td>rpi4b</td>
-<td>raspi4b</td>
-<td>arm64</td>
-<td><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></td>
-<td><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></td>
-<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong><br><a href="https://github.com/stapelberg/hmgo">stapelberg/hmgo</a><br><a href="https://github.com/stapelberg/scan2drive">stapelberg/scan2drive</a></td>
-</tr>
-<tr>
-<td>rpi3b</td>
-<td>raspi3b</td>
-<td>arm64</td>
-<td><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></td>
-<td><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></td>
-<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong></td>
-</tr>
-<tr>
-<td>rpi3b+</td>
-<td>raspi3b+</td>
-<td>arm64</td>
-<td><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></td>
-<td><a href="https://github.com/gokrazy/firmware">gokrazy/firmware</a></td>
-<td><strong><a href="https://github.com/gokrazy/bakery">gokrazy/bakery/cmd/bake</a></strong></td>
-</tr>
-</tbody>
-</table>
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">WriteFile</span>(<span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">content</span>, <span style="color:#ae81ff">0600</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			panic(<span style="color:#a6e22e">err</span>)
+		}
+	}
+
+	<span style="color:#a6e22e">content</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#a6e22e">config</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">c</span> <span style="color:#a6e22e">Config</span>
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">content</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">FilesToCreate</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">WriteFile</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;/perm/my-example/%d.txt&#34;</span>, <span style="color:#a6e22e">i</span>), []byte(<span style="color:#e6db74">&#34;gokrazy rocks&#34;</span>), <span style="color:#ae81ff">0600</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			panic(<span style="color:#a6e22e">err</span>)
+		}
+	}
+}
+
+</code></pre></div><h2 id="manual-inspectionmodification">Manual inspection/modification</h2>
+<p>You can inspect and modify the data on the permanent data filesystem manually.
+This can be handy if you need e.g. to pass a configuration file for your application.
+To access the filesystem put the SD card into your PC/notebook. Your OS will likely mount the filesystem automatically.
+Copy the file to the permanent data filesystem.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir /path/to-mounted/filesystem/my-example
+sudo cp config.json /path/to-mounted/filesystem/my-example
+</code></pre></div><p>If you want to access files on the permanent data filesystem you may need the <a href="https://en.wikipedia.org/wiki/Sudo">sudo</a> capability.</p>
 
 
-
-
-
-<footer class=" footline" >
+<footer class="footline">
 	
 </footer>
 
@@ -762,6 +744,7 @@ temporarily broken at HEAD.</p>
             
                 
                     
+                    
                 
                 
 
@@ -776,6 +759,9 @@ temporarily broken at HEAD.</p>
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -889,6 +875,39 @@ temporarily broken at HEAD.</p>
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
                 
                 
 
@@ -913,35 +932,6 @@ temporarily broken at HEAD.</p>
                     
 
                     
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
             
         
                     
@@ -972,7 +962,6 @@ temporarily broken at HEAD.</p>
             
                 
                     
-                    
                 
                 
 
@@ -988,9 +977,6 @@ temporarily broken at HEAD.</p>
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -1012,10 +998,10 @@ temporarily broken at HEAD.</p>
 	 
 	 
 		
-			<a class="nav nav-prev" href="/userguide/install/minio/" title="MinIO object storage"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/userguide/modules/" title="Working with Go modules"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/prototyping/" title="Non-Go Prototyping" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/userguide/install/" title="Installation" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -1047,3 +1033,4 @@ temporarily broken at HEAD.</p>
 
   </body>
 </html>
+

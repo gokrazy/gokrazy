@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/anatol/vmtest v0.0.0-20210623221036-69fc760fbd4b
 	github.com/beevik/ntp v0.2.0
-	github.com/gokrazy/internal v0.0.0-20210621162516-1b3b5687a06d
+	github.com/gokrazy/internal v0.0.0-20220111191949-698f19a074ef
 	github.com/google/gopacket v1.1.16
 	github.com/google/renameio/v2 v2.0.0
 	github.com/mdlayher/raw v0.0.0-20190303161257-764d452d77af

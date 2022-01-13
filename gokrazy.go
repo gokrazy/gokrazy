@@ -347,6 +347,7 @@ func SuperviseServices(services []*Service) error {
 	}
 
 	initStatus()
+	setupDeviceSpecifics()
 
 	if err := initUpdate(); err != nil {
 		return err
