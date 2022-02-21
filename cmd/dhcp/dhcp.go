@@ -17,7 +17,7 @@ import (
 
 	"github.com/gokrazy/gokrazy/internal/iface"
 	"github.com/google/gopacket/layers"
-	"github.com/mdlayher/raw"
+	"github.com/mdlayher/packet"
 	"github.com/rtr7/dhcp4"
 	"golang.org/x/sys/unix"
 )
@@ -292,9 +292,7 @@ func main() {
 		time.Sleep(time.Duration(1<<63 - 1))
 	}
 
-	conn, err := raw.ListenPacket(intf, syscall.ETH_P_IP, &raw.Config{
-		LinuxSockDGRAM: true,
-	})
+	conn, err := packet.Listen(intf, packet.Datagram, unix.ETH_P_IP, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
