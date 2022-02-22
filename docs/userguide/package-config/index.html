@@ -9,23 +9,23 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Package config: flags and environment variables :: gokrazy</title>
+    <title>Package config: flags, environment variables, … :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1642026123" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1642026123" rel="stylesheet">
-    <link href="/css/hybrid.css?1642026123" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1642026123" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1642026123" rel="stylesheet">
-    <link href="/css/auto-complete.css?1642026123" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1642026123" rel="stylesheet">
-    <link href="/css/theme.css?1642026123" rel="stylesheet">
-    <link href="/css/tabs.css?1642026123" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1642026123" rel="stylesheet">
+    <link href="/css/nucleus.css?1645517803" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1645517803" rel="stylesheet">
+    <link href="/css/hybrid.css?1645517803" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1645517803" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1645517803" rel="stylesheet">
+    <link href="/css/auto-complete.css?1645517803" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1645517803" rel="stylesheet">
+    <link href="/css/theme.css?1645517803" rel="stylesheet">
+    <link href="/css/tabs.css?1645517803" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1645517803" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1642026123"></script>
+    <script src="/js/jquery-3.3.1.min.js?1645517803"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1642026123"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1642026123"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1645517803"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1645517803"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1642026123"></script>
+<script type="text/javascript" src="/js/search.js?1645517803"></script>
 
     
   </div>
@@ -188,9 +188,9 @@
  
   
     
-      <li data-nav-id="/userguide/package-config/" title="Package config: flags and environment variables" class="dd-item active">
+      <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, …" class="dd-item active">
         <a href="/userguide/package-config/">
-        Flags and environment variables
+        Package config: flags, environment variables, …
         
         </a>
     </li>
@@ -551,7 +551,7 @@
             
           
           
-            <a href='/'>gokrazy</a> > <a href='/userguide/'>Userguide</a> > Package config: flags and environment variables
+            <a href='/'>gokrazy</a> > <a href='/userguide/'>Userguide</a> > Package config: flags, environment variables, …
           
         
           
@@ -566,9 +566,10 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#command-line-flags">Command-line flags</a></li>
-    <li><a href="#environment-variables">Environment variables</a></li>
-    <li><a href="#go-build-flags">Go build flags</a></li>
+    <li><a href="#flags">Command-line flags</a></li>
+    <li><a href="#env">Environment variables</a></li>
+    <li><a href="#buildflags">Go build flags</a></li>
+    <li><a href="#extrafiles">Extra files</a></li>
   </ul>
 </nav>
     </div>
@@ -586,7 +587,7 @@
           
             <h1>
               
-              Package config: flags and environment variables
+              Package config: flags, environment variables, …
             </h1>
           
 
@@ -603,24 +604,29 @@ example, given the following packer command:</p>
 </code></pre></div><p>…gokrazy will start the <code>hello</code>, <code>breakglass</code> and <code>serial-busybox</code> programs.</p>
 <p>This article shows how you can configure different aspects of individual
 packages.</p>
-<p>Each bit of configuration lives in its own directory: <code>flags</code>, <code>env</code> or
-<code>buildflags</code>.</p>
+<p>Each bit of configuration lives in its own directory:</p>
+<ul>
+<li><code>flags</code> for <a href="#flags">Command-line flags</a></li>
+<li><code>env</code> for <a href="#env">Environment variables</a></li>
+<li><code>buildflags</code> for <a href="#buildflags">Go build flags</a></li>
+<li><code>extrafiles</code> for <a href="#extrafiles">Extra files</a></li>
+</ul>
 <p>Within these directories, create a directory named after the package import
 path, then place your configuration in a text file: <code>flags.txt</code>, <code>env.txt</code> or
 <code>buildflags.txt</code>.</p>
-<h2 id="command-line-flags">Command-line flags</h2>
+<h2 id="flags">Command-line flags</h2>
 <p>The <a href="https://github.com/gokrazy/breakglass">breakglass</a> package provides
 emergency/debugging access to a gokrazy installation.</p>
 <p>To enable SSH port forwardings to localhost, set the <code>-forward</code> flag to <code>loopback</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/github.com/gokrazy/breakglass
 echo <span style="color:#e6db74">&#39;-forward=loopback&#39;</span> &gt; flags/github.com/gokrazy/breakglass/flags.txt
-</code></pre></div><h2 id="environment-variables">Environment variables</h2>
+</code></pre></div><h2 id="env">Environment variables</h2>
 <p><a href="https://en.wikipedia.org/wiki/Environment_variable">Environment variables</a> such
 as the <a href="https://golang.org/pkg/runtime/">Go runtime’s <code>GODEBUG</code></a> variable can be
 set as follows:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p env/github.com/gokrazy/breakglass
 echo <span style="color:#e6db74">&#39;GODEBUG=gctrace=1&#39;</span> &gt; env/github.com/gokrazy/breakglass/env.txt
-</code></pre></div><h2 id="go-build-flags">Go build flags</h2>
+</code></pre></div><h2 id="buildflags">Go build flags</h2>
 <p>If you want to influence the build of the package at image-creation time (as
 opposed to runtime), you can specify flags to be passed to the Go build
 invocation.</p>
@@ -630,6 +636,16 @@ using the <a href="https://golang.org/cmd/link/"><code>-X</code> linker flag</a>
 technique to embed version information:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p buildflags/github.com/gokrazy/hello
 echo <span style="color:#e6db74">&#39;-ldflags=-X main.world=Welt&#39;</span> &gt; buildflags/github.com/gokrazy/hello/buildflags.txt
+</code></pre></div><h2 id="extrafiles">Extra files</h2>
+<p>If your program needs extra files to be present in gokrazy’s root file system
+image at a specific location, you can add them with the <code>extrafiles</code> mechanism:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy
+cat &gt; extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy/Caddyfile <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+</span><span style="color:#e6db74">http://:80 {
+</span><span style="color:#e6db74">	root * /tmp
+</span><span style="color:#e6db74">	file_server browse 
+</span><span style="color:#e6db74">}
+</span><span style="color:#e6db74">EOT</span>
 </code></pre></div>
 
 <footer class="footline">
@@ -969,19 +985,19 @@ echo <span style="color:#e6db74">&#39;-ldflags=-X main.world=Welt&#39;</span> &g
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1642026123"></script>
-    <script src="/js/perfect-scrollbar.min.js?1642026123"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1642026123"></script>
-    <script src="/js/jquery.sticky.js?1642026123"></script>
-    <script src="/js/featherlight.min.js?1642026123"></script>
-    <script src="/js/highlight.pack.js?1642026123"></script>
+    <script src="/js/clipboard.min.js?1645517803"></script>
+    <script src="/js/perfect-scrollbar.min.js?1645517803"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1645517803"></script>
+    <script src="/js/jquery.sticky.js?1645517803"></script>
+    <script src="/js/featherlight.min.js?1645517803"></script>
+    <script src="/js/highlight.pack.js?1645517803"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1642026123"></script>
-    <script src="/js/learn.js?1642026123"></script>
-    <script src="/js/hugo-learn.js?1642026123"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1645517803"></script>
+    <script src="/js/learn.js?1645517803"></script>
+    <script src="/js/hugo-learn.js?1645517803"></script>
     
         
-            <script src="/mermaid/mermaid.js?1642026123"></script>
+            <script src="/mermaid/mermaid.js?1645517803"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
