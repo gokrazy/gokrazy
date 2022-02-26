@@ -428,18 +428,19 @@ func supervise(s *service) {
 		s.setStarted(time.Now())
 		attempt++
 
+		pid := -1
 		if err := cmd.Start(); err != nil {
 			if d := s.Diverted(); os.IsNotExist(err) && d != "" {
 				l.Printf("gokrazy: removing no longer existing diversion %q", d)
 				s.setDiversion("")
 			}
 			l.Println("gokrazy: " + err.Error())
+		} else {
+			pid = cmd.Process.Pid
 		}
 
 		s.state.Set(Running)
 		s.setProcess(cmd.Process)
-
-		pid := s.process.Pid
 
 		err := cmd.Wait()
 		if err != nil {
