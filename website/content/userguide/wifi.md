@@ -1,13 +1,20 @@
 ---
-title: "Connecting to unencrypted WiFi networks"
-menuTitle: "Unencrypted WiFi"
+title: "Connecting to WiFi networks"
+menuTitle: "Connecting to WiFi"
 weight: 40
+aliases:
+  - /userguide/unencrypted-wifi/
 ---
 
-Remember that using an unencrypted WiFi network means anyone in range can read
+Since March 2022, gokrazy supports both encrypted and unencrypted WiFi networks!
+🎉
+
+{{% notice warning %}}
+Remember that using an **unencrypted WiFi** network means anyone in range can read
 your communication. Hence, we strongly recommend [using TLS for accessing the
 gokrazy web interface and doing
 updates](/userguide/tls-for-untrusted-networks/).
+{{% /notice %}}
 
 To make gokrazy connect to a WiFi network, first include the
 `github.com/gokrazy/wifi` package in your `gokr-packer` command line, e.g.:
@@ -31,12 +38,17 @@ permanent data partition:
 # sudo mkfs.ext4 /dev/disk/by-partuuid/2e18c40c-04
 
 sudo mount /dev/disk/by-partuuid/2e18c40c-04 /mnt
-echo '{"ssid": "I/O Tee"}' | sudo tee /mnt/wifi.json
+
+# To connect to an unencrypted WiFi network, specify no psk:
+echo '{"ssid": "My unencrypted WiFi"}' | sudo tee /mnt/wifi.json
+
+# Or, to connect to an encrypted WiFi network, specify the psk:
+echo '{"ssid": "Secure WiFi", "psk": "secret"}' | sudo tee /mnt/wifi.json
+
 sudo umount /mnt
 ```
 
-After starting gokrazy, the `wifi` program will connect to the WiFi network `I/O
-Tee`:
+After starting gokrazy, the `wifi` program will connect to the configured WiFi network:
 
 <a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a>
 
