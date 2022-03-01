@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Controlling a GPIO input/output pin :: gokrazy</title>
+    <title>Connecting to WiFi networks :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1646120817" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/userguide/gpio/">
+  <body class="" data-url="/userguide/wifi/">
     <nav id="sidebar" class="">
 
 
@@ -167,7 +167,7 @@
  
   
     
-      <li data-nav-id="/userguide/gpio/" title="Controlling a GPIO input/output pin" class="dd-item active">
+      <li data-nav-id="/userguide/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
         <a href="/userguide/gpio/">
         Input/output via GPIO pins
         
@@ -272,7 +272,7 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item active">
         <a href="/userguide/wifi/">
         Connecting to WiFi
         
@@ -520,7 +520,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/gpio.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/wifi.md" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -551,7 +551,7 @@
             
           
           
-            <a href='/'>gokrazy</a> > <a href='/userguide/'>Userguide</a> > Controlling a GPIO input/output pin
+            <a href='/'>gokrazy</a> > <a href='/userguide/'>Userguide</a> > Connecting to WiFi networks
           
         
           
@@ -566,8 +566,7 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#connect-gpio-pins-based-on-pinout">Connect GPIO pins based on pinout</a></li>
-    <li><a href="#setting-an-output-pin-signal">Setting an output pin signal</a></li>
+    <li><a href="#for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</a></li>
   </ul>
 </nav>
     </div>
@@ -585,77 +584,56 @@
           
             <h1>
               
-              Controlling a GPIO input/output pin
+              Connecting to WiFi networks
             </h1>
           
 
         
 
 
-<p>In this guide, we are using <a href="https://periph.io/">periph.io</a>, a library for
-peripheral I/O in Go, to set one of the Raspberry Pi’s General Purpose I/O
-(GPIO) pins to a logical high (3.3V) or low (0V) signal.</p>
-<p>periph.io supports the Raspberry Pi 3 and Raspberry Pi 4, starting with version
-<code>v3.6.4</code>.</p>
-<h2 id="connect-gpio-pins-based-on-pinout">Connect GPIO pins based on pinout</h2>
-<p><a href="https://pinout.xyz"><img src="/img/raspberry-pi-pinout.png" width="700" align="right" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
-<p>To verify the code is doing what we expect, let’s connect a multimeter as per
-<a href="https://pinout.xyz">pinout.xyz</a>’s pinout:</p>
-<ul>
-<li>pin number 18 (signal <code>BCM24</code>, labeled <code>24</code> in the pinout above)</li>
-<li>pin number 20 (signal <code>GND</code>)</li>
-</ul>
-<p>We need to set the multimeter to “Voltage measurement, DC (direct current)”.</p>
-<h2 id="setting-an-output-pin-signal">Setting an output pin signal</h2>
-<p>To set the pin high and low, alternatingly, with a 5 second frequency, we will
-be using the <code>hello-gpio</code> program, which is a slightly modified version of the
-example at <a href="https://periph.io/device/led/">periph.io/device/led</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<p>Since March 2022, gokrazy supports both encrypted and unencrypted WiFi networks!
+🎉</p>
 
-<span style="color:#f92672">import</span> (
-	<span style="color:#e6db74">&#34;log&#34;</span>
-	<span style="color:#e6db74">&#34;time&#34;</span>
+<div class="notices warning" ><p>Remember that using an <strong>unencrypted WiFi</strong> network means anyone in range can read
+your communication. Hence, we strongly recommend <a href="/userguide/tls-for-untrusted-networks/">using TLS for accessing the
+gokrazy web interface and doing
+updates</a>.</p>
+</div>
 
-	<span style="color:#e6db74">&#34;periph.io/x/periph/conn/gpio&#34;</span>
-	<span style="color:#e6db74">&#34;periph.io/x/periph/host&#34;</span>
-	<span style="color:#e6db74">&#34;periph.io/x/periph/host/rpi&#34;</span>
-)
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doGPIO</span>() <span style="color:#66d9ef">error</span> {
-	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Loading periph.io drivers&#34;</span>)
-	<span style="color:#75715e">// Load periph.io drivers:
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">host</span>.<span style="color:#a6e22e">Init</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-	}
-	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Toggling GPIO forever&#34;</span>)
-	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTicker</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">Low</span>; ; <span style="color:#a6e22e">l</span> = !<span style="color:#a6e22e">l</span> {
-		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;setting GPIO pin number 18 (signal BCM24) to %v&#34;</span>, <span style="color:#a6e22e">l</span>)
-		<span style="color:#75715e">// Lookup a pin by its location on the board:
-</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rpi</span>.<span style="color:#a6e22e">P1_18</span>.<span style="color:#a6e22e">Out</span>(<span style="color:#a6e22e">l</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-		}
-		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">C</span>
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">doGPIO</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-	}
-}
-</code></pre></div><p>Install the program on your Raspberry Pi using gokrazy (see <a href="/quickstart/">Quickstart</a>):</p>
+<p>To make gokrazy connect to a WiFi network, first include the
+<code>github.com/gokrazy/wifi</code> package in your <code>gokr-packer</code> command line, e.g.:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello-gpio
-</code></pre></div><p>…and wait a few seconds for it to reboot.</p>
-<p>At this point, we should be able to see the high/low signal on the multimeter,
-alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
-<p><a href="/img/2020-06-15-gpio.jpg"><img src="/img/2020-06-15-gpio.thumb.jpg" srcset="/img/2020-06-15-gpio.thumb.2x.jpg 2x,/img/2020-06-15-gpio.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/wifi
+</code></pre></div><p>Then, configure the <code>wifi</code> program by creating the file <code>wifi.json</code> on the
+permanent data partition:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># The following assumes you already created a file system</span>
+<span style="color:#75715e"># on the permanent data partition. Otherwise, please use:</span>
+<span style="color:#75715e"># sudo mkfs.ext4 /dev/disk/by-partuuid/2e18c40c-04</span>
+
+sudo mount /dev/disk/by-partuuid/2e18c40c-04 /mnt
+
+<span style="color:#75715e"># To connect to an unencrypted WiFi network, specify no psk:</span>
+echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;My unencrypted WiFi&#34;}&#39;</span> | sudo tee /mnt/wifi.json
+
+<span style="color:#75715e"># Or, to connect to an encrypted WiFi network, specify the psk:</span>
+echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;Secure WiFi&#34;, &#34;psk&#34;: &#34;secret&#34;}&#39;</span> | sudo tee /mnt/wifi.json
+
+sudo umount /mnt
+</code></pre></div><p>After starting gokrazy, the <code>wifi</code> program will connect to the configured WiFi network:</p>
+<p><a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
+<h2 id="for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</h2>
+<p>In case you have trouble getting your Raspberry Pi to connect to your network,
+this is how I set up my <a href="https://openwrt.org/toh/tp-link/tl-wdr4300">TP-LINK
+TL-WDR4300</a> with <a href="https://openwrt.org/">OpenWrt
+19.07</a>:</p>
+<p><a href="/img/iotee.jpg"><img src="/img/iotee.thumb.jpg" srcset="/img/iotee.thumb.2x.jpg 2x,/img/iotee.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
+<p>The MAC address filter isn’t a security measure, but prevents others from
+accidentally joining this open network.</p>
 
 
 <footer class="footline">
@@ -744,23 +722,6 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                         
                         
                     
@@ -843,6 +804,26 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -979,10 +960,10 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
 	 
 	 
 		
-			<a class="nav nav-prev" href="/userguide/" title="Userguide"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/userguide/package-config/" title="Package config: flags, environment variables, …" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/userguide/modules/" title="Working with Go modules" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
