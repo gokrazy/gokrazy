@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.89.0-DEV" />
+    <meta name="generator" content="Hugo 0.93.1" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Controlling a GPIO input/output pin :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1646120817" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1646120817" rel="stylesheet">
-    <link href="/css/hybrid.css?1646120817" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1646120817" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1646120817" rel="stylesheet">
-    <link href="/css/auto-complete.css?1646120817" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1646120817" rel="stylesheet">
-    <link href="/css/theme.css?1646120817" rel="stylesheet">
-    <link href="/css/tabs.css?1646120817" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1646120817" rel="stylesheet">
+    <link href="/css/nucleus.css?1646335597" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1646335597" rel="stylesheet">
+    <link href="/css/hybrid.css?1646335597" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1646335597" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1646335597" rel="stylesheet">
+    <link href="/css/auto-complete.css?1646335597" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1646335597" rel="stylesheet">
+    <link href="/css/theme.css?1646335597" rel="stylesheet">
+    <link href="/css/tabs.css?1646335597" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1646335597" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1646120817"></script>
+    <script src="/js/jquery-3.3.1.min.js?1646335597"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1646120817"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1646120817"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1646335597"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1646335597"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1646120817"></script>
+<script type="text/javascript" src="/js/search.js?1646335597"></script>
 
     
   </div>
@@ -610,49 +610,49 @@ peripheral I/O in Go, to set one of the Raspberry Pi’s General Purpose I/O
 <p>To set the pin high and low, alternatingly, with a 5 second frequency, we will
 be using the <code>hello-gpio</code> program, which is a slightly modified version of the
 example at <a href="https://periph.io/device/led/">periph.io/device/led</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-
-<span style="color:#f92672">import</span> (
-	<span style="color:#e6db74">&#34;log&#34;</span>
-	<span style="color:#e6db74">&#34;time&#34;</span>
-
-	<span style="color:#e6db74">&#34;periph.io/x/periph/conn/gpio&#34;</span>
-	<span style="color:#e6db74">&#34;periph.io/x/periph/host&#34;</span>
-	<span style="color:#e6db74">&#34;periph.io/x/periph/host/rpi&#34;</span>
-)
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doGPIO</span>() <span style="color:#66d9ef">error</span> {
-	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Loading periph.io drivers&#34;</span>)
-	<span style="color:#75715e">// Load periph.io drivers:
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">host</span>.<span style="color:#a6e22e">Init</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-	}
-	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Toggling GPIO forever&#34;</span>)
-	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTicker</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">Low</span>; ; <span style="color:#a6e22e">l</span> = !<span style="color:#a6e22e">l</span> {
-		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;setting GPIO pin number 18 (signal BCM24) to %v&#34;</span>, <span style="color:#a6e22e">l</span>)
-		<span style="color:#75715e">// Lookup a pin by its location on the board:
-</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rpi</span>.<span style="color:#a6e22e">P1_18</span>.<span style="color:#a6e22e">Out</span>(<span style="color:#a6e22e">l</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-		}
-		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">C</span>
-	}
-	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">doGPIO</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-	}
-}
-</code></pre></div><p>Install the program on your Raspberry Pi using gokrazy (see <a href="/quickstart/">Quickstart</a>):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello-gpio
-</code></pre></div><p>…and wait a few seconds for it to reboot.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;periph.io/x/periph/conn/gpio&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;periph.io/x/periph/host&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;periph.io/x/periph/host/rpi&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doGPIO</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Loading periph.io drivers&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Load periph.io drivers:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">host</span>.<span style="color:#a6e22e">Init</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Toggling GPIO forever&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTicker</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">Low</span>; ; <span style="color:#a6e22e">l</span> = !<span style="color:#a6e22e">l</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;setting GPIO pin number 18 (signal BCM24) to %v&#34;</span>, <span style="color:#a6e22e">l</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Lookup a pin by its location on the board:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rpi</span>.<span style="color:#a6e22e">P1_18</span>.<span style="color:#a6e22e">Out</span>(<span style="color:#a6e22e">l</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">C</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">doGPIO</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Install the program on your Raspberry Pi using gokrazy (see <a href="/quickstart/">Quickstart</a>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello-gpio
+</span></span></code></pre></div><p>…and wait a few seconds for it to reboot.</p>
 <p>At this point, we should be able to see the high/low signal on the multimeter,
 alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
 <p><a href="/img/2020-06-15-gpio.jpg"><img src="/img/2020-06-15-gpio.thumb.jpg" srcset="/img/2020-06-15-gpio.thumb.2x.jpg 2x,/img/2020-06-15-gpio.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
@@ -992,19 +992,19 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1646120817"></script>
-    <script src="/js/perfect-scrollbar.min.js?1646120817"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1646120817"></script>
-    <script src="/js/jquery.sticky.js?1646120817"></script>
-    <script src="/js/featherlight.min.js?1646120817"></script>
-    <script src="/js/highlight.pack.js?1646120817"></script>
+    <script src="/js/clipboard.min.js?1646335597"></script>
+    <script src="/js/perfect-scrollbar.min.js?1646335597"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1646335597"></script>
+    <script src="/js/jquery.sticky.js?1646335597"></script>
+    <script src="/js/featherlight.min.js?1646335597"></script>
+    <script src="/js/highlight.pack.js?1646335597"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1646120817"></script>
-    <script src="/js/learn.js?1646120817"></script>
-    <script src="/js/hugo-learn.js?1646120817"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1646335597"></script>
+    <script src="/js/learn.js?1646335597"></script>
+    <script src="/js/hugo-learn.js?1646335597"></script>
     
         
-            <script src="/mermaid/mermaid.js?1646120817"></script>
+            <script src="/mermaid/mermaid.js?1646335597"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

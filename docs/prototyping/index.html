@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.89.0-DEV" />
+    <meta name="generator" content="Hugo 0.93.1" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Non-Go Prototyping :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1646120817" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1646120817" rel="stylesheet">
-    <link href="/css/hybrid.css?1646120817" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1646120817" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1646120817" rel="stylesheet">
-    <link href="/css/auto-complete.css?1646120817" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1646120817" rel="stylesheet">
-    <link href="/css/theme.css?1646120817" rel="stylesheet">
-    <link href="/css/tabs.css?1646120817" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1646120817" rel="stylesheet">
+    <link href="/css/nucleus.css?1646335597" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1646335597" rel="stylesheet">
+    <link href="/css/hybrid.css?1646335597" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1646335597" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1646335597" rel="stylesheet">
+    <link href="/css/auto-complete.css?1646335597" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1646335597" rel="stylesheet">
+    <link href="/css/theme.css?1646335597" rel="stylesheet">
+    <link href="/css/tabs.css?1646335597" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1646335597" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1646120817"></script>
+    <script src="/js/jquery-3.3.1.min.js?1646335597"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1646120817"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1646120817"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1646335597"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1646335597"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1646120817"></script>
+<script type="text/javascript" src="/js/search.js?1646335597"></script>
 
     
   </div>
@@ -616,67 +616,67 @@ to download the “Standalone Linux Binaries” release from
 <a href="https://grafana.com/grafana/download?platform=arm"><a href="https://grafana.com/grafana/download?platform=arm">https://grafana.com/grafana/download?platform=arm</a></a>. Note
 that I am serving the file from my computer because my busybox
 version supports neither HTTPS nor DNS.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">/tmp/breakglass531810560 # wget http://10.0.0.76:4080/grafana-5.3.2.linux-arm64.tar.gz
-/tmp/breakglass531810560 # tar xf grafana-5.3.2.linux-arm64.tar.gz
-</code></pre></div><p>We cannot start Grafana yet, as its binary is dynamically
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/tmp/breakglass531810560 # wget http://10.0.0.76:4080/grafana-5.3.2.linux-arm64.tar.gz
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560 # tar xf grafana-5.3.2.linux-arm64.tar.gz
+</span></span></code></pre></div><p>We cannot start Grafana yet, as its binary is dynamically
 linked. One way to fix this is to place the sources which correspond
 to the release you just unpacked (e.g. from
 <a href="https://github.com/grafana/grafana/tree/v5.3.2"><a href="https://github.com/grafana/grafana/tree/v5.3.2">https://github.com/grafana/grafana/tree/v5.3.2</a></a>)
 in your <code>$GOPATH</code> and recompile the binaries:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">GOARCH<span style="color:#f92672">=</span>arm64 CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> CC<span style="color:#f92672">=</span>aarch64-linux-gnu-gcc go install <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -ldflags <span style="color:#e6db74">&#34;-linkmode external -extldflags -static&#34;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/grafana/grafana/pkg/cmd/...
-</code></pre></div><p>Note that it is usually easier to set the environment
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>arm64 CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> CC<span style="color:#f92672">=</span>aarch64-linux-gnu-gcc go install <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -ldflags <span style="color:#e6db74">&#34;-linkmode external -extldflags -static&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/grafana/grafana/pkg/cmd/...
+</span></span></code></pre></div><p>Note that it is usually easier to set the environment
 variable <code>CGO_ENABLED=0</code> to get a statically linked
 binary, but Grafana uses sqlite3, which is written in C, so we
 resort to the <code>-ldflags</code> variant.</p>
 <p>At this point, we can start Grafana from breakglass:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">/tmp/breakglass531810560 # cd grafana-5.3.2
-/tmp/breakglass531810560/grafana-5.3.2 # wget http://10.0.0.76:4080/grafana-server
-/tmp/breakglass531810560/grafana-5.3.2 # install -m 755 grafana-server bin/ &amp;&amp; rm grafana-server
-/tmp/breakglass531810560/grafana-5.3.2 # ./bin/grafana-server
-INFO[10-30|19:27:51] Starting Grafana                         logger=server version=5.0.0 commit=NA compiled=2018-10-30T19:27:51+0100
-…
-</code></pre></div><p>To have gokrazy start Grafana, we can use a Go package like this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-
-<span style="color:#f92672">import</span> (
-  <span style="color:#e6db74">&#34;log&#34;</span>
-  <span style="color:#e6db74">&#34;syscall&#34;</span>
-)
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">bin</span> = <span style="color:#e6db74">&#34;/perm/grafana/bin/grafana-server&#34;</span>
-  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">Exec</span>(<span style="color:#a6e22e">bin</span>, []<span style="color:#66d9ef">string</span>{<span style="color:#a6e22e">bin</span>, <span style="color:#e6db74">&#34;-homepath=/perm/grafana&#34;</span>}, <span style="color:#66d9ef">nil</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-  }
-}
-</code></pre></div><h2 id="c-software-wireguard">C software: WireGuard</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/tmp/breakglass531810560 # cd grafana-5.3.2
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560/grafana-5.3.2 # wget http://10.0.0.76:4080/grafana-server
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560/grafana-5.3.2 # install -m 755 grafana-server bin/ &amp;&amp; rm grafana-server
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560/grafana-5.3.2 # ./bin/grafana-server
+</span></span><span style="display:flex;"><span>INFO[10-30|19:27:51] Starting Grafana                         logger=server version=5.0.0 commit=NA compiled=2018-10-30T19:27:51+0100
+</span></span><span style="display:flex;"><span>…
+</span></span></code></pre></div><p>To have gokrazy start Grafana, we can use a Go package like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;syscall&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">bin</span> = <span style="color:#e6db74">&#34;/perm/grafana/bin/grafana-server&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">Exec</span>(<span style="color:#a6e22e">bin</span>, []<span style="color:#66d9ef">string</span>{<span style="color:#a6e22e">bin</span>, <span style="color:#e6db74">&#34;-homepath=/perm/grafana&#34;</span>}, <span style="color:#66d9ef">nil</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="c-software-wireguard">C software: WireGuard</h2>
 <p>WireGuard is a modern VPN tunnel, which consists of a Linux kernel
 module and a configuration
 tool. See <a href="https://github.com/rtr7/kernel/commit/c7afbc1fd2efdb9e1149d271c4d2be59cc5c98f4">rtr7/kernel@c7afbc1f</a>
 for how the kernel module was added to the router7 kernel.</p>
 <p>The configuration tool can be statically cross-compiled. We can run
 Debian in a Docker container to not mess with our host system:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">% mkdir /tmp/wg
-% cd /tmp/wg
-% docker run -t -i debian
-root@d1728eaaa6e1:/# dpkg --add-architecture arm64
-root@d1728eaaa6e1:/# apt update
-root@d1728eaaa6e1:/# apt install libmnl-dev:arm64 libelf-dev:arm64 linux-headers-amd64 crossbuild-essential-arm64 pkg-config wget
-root@d1728eaaa6e1:/# wget https://git.zx2c4.com/WireGuard/snapshot/WireGuard-0.0.20181018.tar.xz
-root@d1728eaaa6e1:/# tar xf WireGuard-0.0.20181018.tar.xz
-root@d1728eaaa6e1:/# cd WireGuard-0.0.20181018/src/tools
-root@d1728eaaa6e1:/# make CC=aarch64-linux-gnu-gcc LDFLAGS=-static
-root@d1728eaaa6e1:/# exit
-% docker cp -L d1728eaaa6e1:/WireGuard-0.0.20181018/src/tools/wg .
-</code></pre></div><p>Now we can copy and run the <code>wg</code> binary via breakglass:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">/tmp/breakglass531810560 # wget http://10.0.0.76:4080/wg
-/tmp/breakglass531810560 # chmod +x wg
-/tmp/breakglass531810560 # ./wg --help
-Usage: ./wg &lt;cmd&gt; [&lt;args&gt;]
-…
-</code></pre></div><h2 id="c-software-tc">C software: tc</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>% mkdir /tmp/wg
+</span></span><span style="display:flex;"><span>% cd /tmp/wg
+</span></span><span style="display:flex;"><span>% docker run -t -i debian
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# dpkg --add-architecture arm64
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# apt update
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# apt install libmnl-dev:arm64 libelf-dev:arm64 linux-headers-amd64 crossbuild-essential-arm64 pkg-config wget
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# wget https://git.zx2c4.com/WireGuard/snapshot/WireGuard-0.0.20181018.tar.xz
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# tar xf WireGuard-0.0.20181018.tar.xz
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# cd WireGuard-0.0.20181018/src/tools
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# make CC=aarch64-linux-gnu-gcc LDFLAGS=-static
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# exit
+</span></span><span style="display:flex;"><span>% docker cp -L d1728eaaa6e1:/WireGuard-0.0.20181018/src/tools/wg .
+</span></span></code></pre></div><p>Now we can copy and run the <code>wg</code> binary via breakglass:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/tmp/breakglass531810560 # wget http://10.0.0.76:4080/wg
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560 # chmod +x wg
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560 # ./wg --help
+</span></span><span style="display:flex;"><span>Usage: ./wg &lt;cmd&gt; [&lt;args&gt;]
+</span></span><span style="display:flex;"><span>…
+</span></span></code></pre></div><h2 id="c-software-tc">C software: tc</h2>
 <p>Linux’s Traffic Control system (used e.g. for traffic shaping) is
 configured with the <code>tc</code> tool.</p>
 <p><code>tc</code> is a special case in that it requires to be
@@ -688,38 +688,38 @@ change queueing disciplines.</p>
 to copy not only the <code>tc</code> binary, but also the dynamic
 loader and all required shared libraries. We can run Debian in a
 Docker container to not mess with our host system:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">% mkdir /tmp/iproute
-% cd /tmp/iproute
-% docker run -t -i debian
-root@6e530a973d45:/# dpkg --add-architecture arm64
-root@6e530a973d45:/# apt update
-root@6e530a973d45:/# apt install iproute2:arm64 qemu-user-static
-root@6e530a973d45:/# LD_TRACE_LOADED_OBJECTS=1 qemu-aarch64-static /sbin/tc
-	libelf.so.1 =&gt; /usr/lib/aarch64-linux-gnu/libelf.so.1 (0x00000040008a6000)
-	libm.so.6 =&gt; /lib/aarch64-linux-gnu/libm.so.6 (0x00000040008cb000)
-	libdl.so.2 =&gt; /lib/aarch64-linux-gnu/libdl.so.2 (0x0000004000976000)
-	libc.so.6 =&gt; /lib/aarch64-linux-gnu/libc.so.6 (0x0000004000989000)
-	/lib/ld-linux-aarch64.so.1 (0x0000004000870000)
-	libz.so.1 =&gt; /lib/aarch64-linux-gnu/libz.so.1 (0x0000004000ad3000)
-root@6e530a973d45:/# exit
-% docker cp -L 6e530a973d45:/sbin/tc .
-% docker cp -L 6e530a973d45:/lib/ld-linux-aarch64.so.1 .
-% docker cp -L 6e530a973d45:/usr/lib/aarch64-linux-gnu/libelf.so.1 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libm.so.6 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libdl.so.2 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libc.so.6 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libz.so.1 .
-</code></pre></div><p>The above workflow is automated by
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>% mkdir /tmp/iproute
+</span></span><span style="display:flex;"><span>% cd /tmp/iproute
+</span></span><span style="display:flex;"><span>% docker run -t -i debian
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# dpkg --add-architecture arm64
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# apt update
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# apt install iproute2:arm64 qemu-user-static
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# LD_TRACE_LOADED_OBJECTS=1 qemu-aarch64-static /sbin/tc
+</span></span><span style="display:flex;"><span>	libelf.so.1 =&gt; /usr/lib/aarch64-linux-gnu/libelf.so.1 (0x00000040008a6000)
+</span></span><span style="display:flex;"><span>	libm.so.6 =&gt; /lib/aarch64-linux-gnu/libm.so.6 (0x00000040008cb000)
+</span></span><span style="display:flex;"><span>	libdl.so.2 =&gt; /lib/aarch64-linux-gnu/libdl.so.2 (0x0000004000976000)
+</span></span><span style="display:flex;"><span>	libc.so.6 =&gt; /lib/aarch64-linux-gnu/libc.so.6 (0x0000004000989000)
+</span></span><span style="display:flex;"><span>	/lib/ld-linux-aarch64.so.1 (0x0000004000870000)
+</span></span><span style="display:flex;"><span>	libz.so.1 =&gt; /lib/aarch64-linux-gnu/libz.so.1 (0x0000004000ad3000)
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# exit
+</span></span><span style="display:flex;"><span>% docker cp -L 6e530a973d45:/sbin/tc .
+</span></span><span style="display:flex;"><span>% docker cp -L 6e530a973d45:/lib/ld-linux-aarch64.so.1 .
+</span></span><span style="display:flex;"><span>% docker cp -L 6e530a973d45:/usr/lib/aarch64-linux-gnu/libelf.so.1 .
+</span></span><span style="display:flex;"><span>% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libm.so.6 .
+</span></span><span style="display:flex;"><span>% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libdl.so.2 .
+</span></span><span style="display:flex;"><span>% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libc.so.6 .
+</span></span><span style="display:flex;"><span>% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libz.so.1 .
+</span></span></code></pre></div><p>The above workflow is automated by
 the <a href="https://github.com/gokrazy/freeze"><code>freeze</code>
 tool</a>.</p>
 <p>Now we can copy the contents of the temporary directory to
 e.g. <code>/perm/tc</code> and run the <code>tc</code> command in
 breakglass:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">/tmp/breakglass531810560 # wget -O- http://10.0.0.76:4080/tc.tar | tar xf -
-/tmp/breakglass531810560 # LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
-Usage: tc [ OPTIONS ] OBJECT { COMMAND | help }
-…
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/tmp/breakglass531810560 # wget -O- http://10.0.0.76:4080/tc.tar | tar xf -
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560 # LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
+</span></span><span style="display:flex;"><span>Usage: tc [ OPTIONS ] OBJECT { COMMAND | help }
+</span></span><span style="display:flex;"><span>…
+</span></span></code></pre></div>
 
 
 
@@ -1054,19 +1054,19 @@ Usage: tc [ OPTIONS ] OBJECT { COMMAND | help }
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1646120817"></script>
-    <script src="/js/perfect-scrollbar.min.js?1646120817"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1646120817"></script>
-    <script src="/js/jquery.sticky.js?1646120817"></script>
-    <script src="/js/featherlight.min.js?1646120817"></script>
-    <script src="/js/highlight.pack.js?1646120817"></script>
+    <script src="/js/clipboard.min.js?1646335597"></script>
+    <script src="/js/perfect-scrollbar.min.js?1646335597"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1646335597"></script>
+    <script src="/js/jquery.sticky.js?1646335597"></script>
+    <script src="/js/featherlight.min.js?1646335597"></script>
+    <script src="/js/highlight.pack.js?1646335597"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1646120817"></script>
-    <script src="/js/learn.js?1646120817"></script>
-    <script src="/js/hugo-learn.js?1646120817"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1646335597"></script>
+    <script src="/js/learn.js?1646335597"></script>
+    <script src="/js/hugo-learn.js?1646335597"></script>
     
         
-            <script src="/mermaid/mermaid.js?1646120817"></script>
+            <script src="/mermaid/mermaid.js?1646335597"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
