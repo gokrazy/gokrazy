@@ -29,24 +29,23 @@ gokr-packer \
   github.com/gokrazy/wifi
 ```
 
-Then, configure the `wifi` program by creating the file `wifi.json` on the
-permanent data partition:
+Then, configure the `wifi` program by creating the file `wifi.json` as [extra
+file](/userguide/package-config/#extrafiles):
 
 ```shell
-# The following assumes you already created a file system
-# on the permanent data partition. Otherwise, please use:
-# sudo mkfs.ext4 /dev/disk/by-partuuid/2e18c40c-04
-
-sudo mount /dev/disk/by-partuuid/2e18c40c-04 /mnt
+mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
 
 # To connect to an unencrypted WiFi network, specify no psk:
-echo '{"ssid": "My unencrypted WiFi"}' | sudo tee /mnt/wifi.json
+echo '{"ssid": "My unencrypted WiFi"}' \
+  > extrafiles/github.com/gokrazy/wifi/etc/wifi.json
 
-# Or, to connect to an encrypted WiFi network, specify the psk:
-echo '{"ssid": "Secure WiFi", "psk": "secret"}' | sudo tee /mnt/wifi.json
-
-sudo umount /mnt
+# OR, to connect to an encrypted WiFi network, specify the psk:
+echo '{"ssid": "Secure WiFi", "psk": "secret"}' \
+  > extrafiles/github.com/gokrazy/wifi/etc/wifi.json
 ```
+
+Alternatively, you can also create the `wifi.json` manually on the permanent
+data partition with path `/perm/wifi.json`.
 
 After starting gokrazy, the `wifi` program will connect to the configured WiFi network:
 
