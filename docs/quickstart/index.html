@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.89.0-DEV" />
+    <meta name="generator" content="Hugo 0.93.1" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Quickstart :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1646120817" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1646120817" rel="stylesheet">
-    <link href="/css/hybrid.css?1646120817" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1646120817" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1646120817" rel="stylesheet">
-    <link href="/css/auto-complete.css?1646120817" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1646120817" rel="stylesheet">
-    <link href="/css/theme.css?1646120817" rel="stylesheet">
-    <link href="/css/tabs.css?1646120817" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1646120817" rel="stylesheet">
+    <link href="/css/nucleus.css?1646335597" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1646335597" rel="stylesheet">
+    <link href="/css/hybrid.css?1646335597" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1646335597" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1646335597" rel="stylesheet">
+    <link href="/css/auto-complete.css?1646335597" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1646335597" rel="stylesheet">
+    <link href="/css/theme.css?1646335597" rel="stylesheet">
+    <link href="/css/tabs.css?1646335597" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1646335597" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1646120817"></script>
+    <script src="/js/jquery-3.3.1.min.js?1646335597"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1646120817"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1646120817"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1646335597"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1646335597"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1646120817"></script>
+<script type="text/javascript" src="/js/search.js?1646335597"></script>
 
     
   </div>
@@ -600,83 +600,83 @@ other <a href="/platforms/">supported and upcoming platforms</a>.</p>
 <p>If you don’t already have Go installed, install the latest <a href="https://golang.org/dl/">Go</a> version.</p>
 <h2 id="prep-install-the-gokrazy-packer">Prep: Install the gokrazy packer</h2>
 <p>Now that you have a working Go installation, install the gokrazy packer (<code>gokr-packer</code>):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">go install github.com/gokrazy/tools/cmd/gokr-packer@latest
-</code></pre></div><h2 id="step-1-insert-an-sd-card">Step 1: Insert an SD card</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>go install github.com/gokrazy/tools/cmd/gokr-packer@latest
+</span></span></code></pre></div><h2 id="step-1-insert-an-sd-card">Step 1: Insert an SD card</h2>
 <p>Run <code>watch -d1 ls -l '/dev/disk/by-id/*'</code> and insert an SD card. Copy the
 highlighted device name:</p>
 <script id="asciicast-G0PosAYGvUSnB3htMpLIz0p68" src="https://asciinema.org/a/G0PosAYGvUSnB3htMpLIz0p68.js" async></script>
 <p>In this example, we’ll assume the SD card is accessible as <code>/dev/sdx</code>.</p>
 <h2 id="step-2-create-a-gokrazy-instance-and-overwrite-an-sd-card-with-gokrazy">Step 2: Create a gokrazy instance and overwrite an SD card with gokrazy</h2>
 <p>Create a directory for this gokrazy instance and initialize a Go module:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">INSTANCE<span style="color:#f92672">=</span>gokrazy/hello
-mkdir -p ~/<span style="color:#e6db74">${</span>INSTANCE?<span style="color:#e6db74">}</span>
-cd ~/<span style="color:#e6db74">${</span>INSTANCE?<span style="color:#e6db74">}</span>
-go mod init hello
-</code></pre></div><p>To overwrite the entire SD card <code>/dev/sdx</code> with a gokrazy installation running a hello world program, use:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -overwrite<span style="color:#f92672">=</span>/dev/sdx <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -serial_console<span style="color:#f92672">=</span>disabled <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/fbstatus <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox
-</code></pre></div><script id="asciicast-3DFZZaNvXuhHrSjnHRywT8KyO" src="https://asciinema.org/a/3DFZZaNvXuhHrSjnHRywT8KyO.js" async></script>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>INSTANCE<span style="color:#f92672">=</span>gokrazy/hello
+</span></span><span style="display:flex;"><span>mkdir -p ~/<span style="color:#e6db74">${</span>INSTANCE?<span style="color:#e6db74">}</span>
+</span></span><span style="display:flex;"><span>cd ~/<span style="color:#e6db74">${</span>INSTANCE?<span style="color:#e6db74">}</span>
+</span></span><span style="display:flex;"><span>go mod init hello
+</span></span></code></pre></div><p>To overwrite the entire SD card <code>/dev/sdx</code> with a gokrazy installation running a hello world program, use:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -overwrite<span style="color:#f92672">=</span>/dev/sdx <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -serial_console<span style="color:#f92672">=</span>disabled <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/fbstatus <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox
+</span></span></code></pre></div><script id="asciicast-3DFZZaNvXuhHrSjnHRywT8KyO" src="https://asciinema.org/a/3DFZZaNvXuhHrSjnHRywT8KyO.js" async></script>
 <details>
 <summary style="display: list-item">
 Click here to show the <code>gokr-packer</code> log output
 </summary>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">gokrazy packer v0.0.0-20211121205320-688793dda2da on GOARCH=amd64 GOOS=linux
-
-Build target: CGO_ENABLED=0 GOARCH=arm64 GOOS=linux
-Build timestamp: 2021-11-25T09:28:41+01:00
-Loading system CA certificates from /etc/ssl/certs/ca-certificates.crt
-Building 3 Go packages:
-
-  github.com/gokrazy/fbstatus
-
-  github.com/gokrazy/hello
-
-  github.com/gokrazy/serial-busybox
-
-[done] in 0.48s
-
-Feature summary:
-  use PARTUUID: true
-  use GPT PARTUUID: true
-2021/11/25 09:28:42 partitioning /dev/sdx (GPT + Hybrid MBR)
-2021/11/25 09:28:42 Using sudo to gain permission to format /dev/sdx
-2021/11/25 09:28:42 If you prefer, cancel and use: sudo setfacl -m u:${USER}:rw /dev/sdx
-2021/11/25 09:28:42 device holds 15931539456 bytes
-
-Creating boot file system
-Kernel directory: /home/michael/go/src/github.com/gokrazy/kernel
-EEPROM update summary:
-  pieeprom.upd (sig 5a07872332)
-  recovery.bin
-  vl805.bin (sig 3a46dda0da)
-[done: creating boot file system] in 0.11s, 66 MiB
-MBR summary:
-  LBAs: vmlinuz=52150 cmdline.txt=135442
-  PARTUUID: 2e18c40c
-
-Creating root file system
-[done: creating root file system] in 0.26s
-
-If your applications need to store persistent data, unplug and re-plug the SD card, then create a file system using e.g.:
-
-	mkfs.ext4 /dev/disk/by-partuuid/60c24cc1-f3f9-427a-8199-2e18c40c0004
-
-To boot gokrazy, plug the SD card into a Raspberry Pi 3 or 4 (no other models supported)
-
-Build complete!
-
-To interact with the device, gokrazy provides a web interface reachable at:
-
-	http://gokrazy:&lt;i&gt;&amp;lt;automatically-generated-random-password&amp;gt;&lt;/i&gt;@gokrazy/
-
-In addition, the following Linux consoles are set up:
-
-	1. foreground Linux framebuffer console on HDMI
-</code></pre></div></details>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>gokrazy packer v0.0.0-20211121205320-688793dda2da on GOARCH=amd64 GOOS=linux
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Build target: CGO_ENABLED=0 GOARCH=arm64 GOOS=linux
+</span></span><span style="display:flex;"><span>Build timestamp: 2021-11-25T09:28:41+01:00
+</span></span><span style="display:flex;"><span>Loading system CA certificates from /etc/ssl/certs/ca-certificates.crt
+</span></span><span style="display:flex;"><span>Building 3 Go packages:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  github.com/gokrazy/fbstatus
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  github.com/gokrazy/hello
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  github.com/gokrazy/serial-busybox
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[done] in 0.48s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Feature summary:
+</span></span><span style="display:flex;"><span>  use PARTUUID: true
+</span></span><span style="display:flex;"><span>  use GPT PARTUUID: true
+</span></span><span style="display:flex;"><span>2021/11/25 09:28:42 partitioning /dev/sdx (GPT + Hybrid MBR)
+</span></span><span style="display:flex;"><span>2021/11/25 09:28:42 Using sudo to gain permission to format /dev/sdx
+</span></span><span style="display:flex;"><span>2021/11/25 09:28:42 If you prefer, cancel and use: sudo setfacl -m u:${USER}:rw /dev/sdx
+</span></span><span style="display:flex;"><span>2021/11/25 09:28:42 device holds 15931539456 bytes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Creating boot file system
+</span></span><span style="display:flex;"><span>Kernel directory: /home/michael/go/src/github.com/gokrazy/kernel
+</span></span><span style="display:flex;"><span>EEPROM update summary:
+</span></span><span style="display:flex;"><span>  pieeprom.upd (sig 5a07872332)
+</span></span><span style="display:flex;"><span>  recovery.bin
+</span></span><span style="display:flex;"><span>  vl805.bin (sig 3a46dda0da)
+</span></span><span style="display:flex;"><span>[done: creating boot file system] in 0.11s, 66 MiB
+</span></span><span style="display:flex;"><span>MBR summary:
+</span></span><span style="display:flex;"><span>  LBAs: vmlinuz=52150 cmdline.txt=135442
+</span></span><span style="display:flex;"><span>  PARTUUID: 2e18c40c
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Creating root file system
+</span></span><span style="display:flex;"><span>[done: creating root file system] in 0.26s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>If your applications need to store persistent data, unplug and re-plug the SD card, then create a file system using e.g.:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	mkfs.ext4 /dev/disk/by-partuuid/60c24cc1-f3f9-427a-8199-2e18c40c0004
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>To boot gokrazy, plug the SD card into a Raspberry Pi 3 or 4 (no other models supported)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Build complete!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>To interact with the device, gokrazy provides a web interface reachable at:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	http://gokrazy:&lt;i&gt;&amp;lt;automatically-generated-random-password&amp;gt;&lt;/i&gt;@gokrazy/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>In addition, the following Linux consoles are set up:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	1. foreground Linux framebuffer console on HDMI
+</span></span></code></pre></div></details>
 <p>It is safe to unplug your SD card once <code>gokr-packer</code> returns.</p>
 <h2 id="step-3-boot-gokrazy">Step 3: Boot gokrazy</h2>
 <p>After booting from this SD card, your device will:</p>
@@ -1045,19 +1045,19 @@ interactively start either:</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1646120817"></script>
-    <script src="/js/perfect-scrollbar.min.js?1646120817"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1646120817"></script>
-    <script src="/js/jquery.sticky.js?1646120817"></script>
-    <script src="/js/featherlight.min.js?1646120817"></script>
-    <script src="/js/highlight.pack.js?1646120817"></script>
+    <script src="/js/clipboard.min.js?1646335597"></script>
+    <script src="/js/perfect-scrollbar.min.js?1646335597"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1646335597"></script>
+    <script src="/js/jquery.sticky.js?1646335597"></script>
+    <script src="/js/featherlight.min.js?1646335597"></script>
+    <script src="/js/highlight.pack.js?1646335597"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1646120817"></script>
-    <script src="/js/learn.js?1646120817"></script>
-    <script src="/js/hugo-learn.js?1646120817"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1646335597"></script>
+    <script src="/js/learn.js?1646335597"></script>
+    <script src="/js/hugo-learn.js?1646335597"></script>
     
         
-            <script src="/mermaid/mermaid.js?1646120817"></script>
+            <script src="/mermaid/mermaid.js?1646335597"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

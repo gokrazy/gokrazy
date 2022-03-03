@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.89.0-DEV" />
+    <meta name="generator" content="Hugo 0.93.1" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Caddy HTTP server :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1646120817" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1646120817" rel="stylesheet">
-    <link href="/css/hybrid.css?1646120817" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1646120817" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1646120817" rel="stylesheet">
-    <link href="/css/auto-complete.css?1646120817" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1646120817" rel="stylesheet">
-    <link href="/css/theme.css?1646120817" rel="stylesheet">
-    <link href="/css/tabs.css?1646120817" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1646120817" rel="stylesheet">
+    <link href="/css/nucleus.css?1646335597" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1646335597" rel="stylesheet">
+    <link href="/css/hybrid.css?1646335597" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1646335597" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1646335597" rel="stylesheet">
+    <link href="/css/auto-complete.css?1646335597" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1646335597" rel="stylesheet">
+    <link href="/css/theme.css?1646335597" rel="stylesheet">
+    <link href="/css/tabs.css?1646335597" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1646335597" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1646120817"></script>
+    <script src="/js/jquery-3.3.1.min.js?1646335597"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1646120817"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1646120817"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1646335597"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1646335597"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1646120817"></script>
+<script type="text/javascript" src="/js/search.js?1646335597"></script>
 
     
   </div>
@@ -603,21 +603,21 @@ web server with automatic HTTPS written in Go.</p>
 <h2 id="step-1-configuring-the-caddyfile-and-flags">Step 1: Configuring the Caddyfile and flags</h2>
 <p>Tell <code>caddy</code> to <strong>run</strong> its HTTP server, and where to find <a href="https://caddyserver.com/docs/caddyfile">its
 Caddyfile</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/github.com/caddyserver/caddy/v2/cmd/caddy
-cat &gt; flags/github.com/caddyserver/caddy/v2/cmd/caddy/flags.txt <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
-</span><span style="color:#e6db74">run
-</span><span style="color:#e6db74">--config
-</span><span style="color:#e6db74">/etc/caddy/Caddyfile
-</span><span style="color:#e6db74">EOT</span>
-</code></pre></div><p>Include the config file in the gokrazy image at <code>/etc/caddy/Caddyfile</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy
-cat &gt; extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy/Caddyfile <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
-</span><span style="color:#e6db74">http://:80 {
-</span><span style="color:#e6db74">	root * /tmp
-</span><span style="color:#e6db74">	file_server browse 
-</span><span style="color:#e6db74">}
-</span><span style="color:#e6db74">EOT</span>
-</code></pre></div><p><strong>Note:</strong> In the above <code>Caddyfile</code>, we have explicitly configured an HTTP
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p flags/github.com/caddyserver/caddy/v2/cmd/caddy
+</span></span><span style="display:flex;"><span>cat &gt; flags/github.com/caddyserver/caddy/v2/cmd/caddy/flags.txt <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">--config
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/etc/caddy/Caddyfile
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span>
+</span></span></code></pre></div><p>Include the config file in the gokrazy image at <code>/etc/caddy/Caddyfile</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy
+</span></span><span style="display:flex;"><span>cat &gt; extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy/Caddyfile <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">http://:80 {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">	root * /tmp
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">	file_server browse 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span>
+</span></span></code></pre></div><p><strong>Note:</strong> In the above <code>Caddyfile</code>, we have explicitly configured an HTTP
 listener to disable Caddy’s automatic HTTPS setup, so that your server will work
 without a publically reachable address.</p>
 <h2 id="step-2-install-caddy-to-your-gokrazy-device">Step 2: Install Caddy to your gokrazy device</h2>
@@ -630,14 +630,14 @@ out of the way and let caddy serve on TCP port 80. The special <code>-update=:80
 syntax is the same as <code>-update=yes</code>, but forcing this update to happen via
 port 80. In later <code>gokr-packer</code> runs, use <code>-update=yes</code> instead.</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>:80 <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -http_port<span style="color:#f92672">=</span><span style="color:#ae81ff">1080</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/caddyserver/caddy/v2/cmd/caddy
-</code></pre></div><p><strong>Tip:</strong> When using <code>breakglass</code>, use the <code>-gokrazy_url=:1080</code> flag to overwrite
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>:80 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -http_port<span style="color:#f92672">=</span><span style="color:#ae81ff">1080</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/caddyserver/caddy/v2/cmd/caddy
+</span></span></code></pre></div><p><strong>Tip:</strong> When using <code>breakglass</code>, use the <code>-gokrazy_url=:1080</code> flag to overwrite
 the port.</p>
 
 
@@ -982,19 +982,19 @@ the port.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1646120817"></script>
-    <script src="/js/perfect-scrollbar.min.js?1646120817"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1646120817"></script>
-    <script src="/js/jquery.sticky.js?1646120817"></script>
-    <script src="/js/featherlight.min.js?1646120817"></script>
-    <script src="/js/highlight.pack.js?1646120817"></script>
+    <script src="/js/clipboard.min.js?1646335597"></script>
+    <script src="/js/perfect-scrollbar.min.js?1646335597"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1646335597"></script>
+    <script src="/js/jquery.sticky.js?1646335597"></script>
+    <script src="/js/featherlight.min.js?1646335597"></script>
+    <script src="/js/highlight.pack.js?1646335597"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1646120817"></script>
-    <script src="/js/learn.js?1646120817"></script>
-    <script src="/js/hugo-learn.js?1646120817"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1646335597"></script>
+    <script src="/js/learn.js?1646335597"></script>
+    <script src="/js/hugo-learn.js?1646335597"></script>
     
         
-            <script src="/mermaid/mermaid.js?1646120817"></script>
+            <script src="/mermaid/mermaid.js?1646335597"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
