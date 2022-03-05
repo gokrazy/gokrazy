@@ -12,6 +12,7 @@ require (
 	github.com/mdlayher/watchdog v0.0.0-20201005150459-8bdc4f41966b
 	github.com/rtr7/dhcp4 v0.0.0-20220221221838-73f36ca31019
 	github.com/stretchr/testify v1.5.1 // indirect
+	github.com/vishvananda/netlink v1.1.0
 	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
 	golang.org/x/sys v0.0.0-20220209214540-3681064d5158
 	rsc.io/goversion v1.2.0

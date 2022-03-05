@@ -15,17 +15,20 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gokrazy/gokrazy/internal/iface"
 	"github.com/google/gopacket/layers"
 	"github.com/mdlayher/packet"
 	"github.com/rtr7/dhcp4"
+	"github.com/vishvananda/netlink"
 	"golang.org/x/sys/unix"
 )
 
-var (
-	defaultDst     = net.IP([]byte{0, 0, 0, 0})
-	defaultNetmask = net.IPMask([]byte{0, 0, 0, 0})
-)
+var defaultDst = func() *net.IPNet {
+	_, net, err := net.ParseCIDR("0.0.0.0/0")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return net
+}()
 
 type client struct {
 	hostname     string
@@ -122,8 +125,16 @@ func (c *client) request(last *layers.DHCPv4) (*layers.DHCPv4, error) {
 	}
 }
 
-func applyLease(cs iface.Configsocket, source string, lease dhcp4.Lease) error {
+func priorityFromName(ifname string) int {
+	if strings.HasPrefix(ifname, "eth") {
+		return 1
+	}
+	return 5 // wlan0 and others
+}
+
+func applyLease(nl *netlink.Handle, ifname string, source string, lease dhcp4.Lease) error {
 	// Log the received DHCPACK packet:
+	addrstr := lease.IP.String() + "/24"
 	details := []string{
 		fmt.Sprintf("IP %v", lease.IP),
 	}
@@ -133,6 +144,7 @@ func applyLease(cs iface.Configsocket, source string, lease dhcp4.Lease) error {
 			Mask: lease.Netmask,
 		}
 		details[0] = fmt.Sprintf("IP %v", ipnet.String())
+		addrstr = ipnet.String()
 	}
 	if len(lease.Router) > 0 {
 		details = append(details, fmt.Sprintf("router %v", lease.Router))
@@ -146,37 +158,41 @@ func applyLease(cs iface.Configsocket, source string, lease dhcp4.Lease) error {
 
 	log.Printf("%s: %v", source, strings.Join(details, ", "))
 
+	l, err := nl.LinkByName(ifname)
+	if err != nil {
+		return fmt.Errorf("LinkByName: %v", err)
+	}
+
 	// Apply the received settings:
-	if err := cs.SetAddress(lease.IP); err != nil {
+	addr, err := netlink.ParseAddr(addrstr)
+	if err != nil {
 		return err
 	}
-	if len(lease.Netmask) > 0 {
-		if err := cs.SetNetmask(lease.Netmask); err != nil {
-			return fmt.Errorf("setNetmask(%v): %v", lease.Netmask, err)
-		}
+	if err := nl.AddrReplace(l, addr); err != nil {
+		return fmt.Errorf("AddrReplace: %v", err)
 	}
-	if b := lease.Broadcast; len(b) > 0 {
-		if err := cs.SetBroadcast(b); err != nil {
-			return fmt.Errorf("setBroadcast(%v): %v", b, err)
+
+	if l.Attrs().OperState != netlink.OperUp {
+		if err := nl.LinkSetUp(l); err != nil {
+			return fmt.Errorf("LinkSetUp: %v", err)
 		}
 	}
 
-	if err := cs.Up(); err != nil {
-		return err
+	// Adjust the priority of the network routes on this interface; the kernel
+	// adds at least one based on the configured address.
+	if err := changeRoutePriority(nl, l, priorityFromName(ifname)); err != nil {
+		return fmt.Errorf("changeRoutePriority: %v", err)
 	}
 
 	if r := lease.Router; len(r) > 0 {
-		if errno := cs.AddRoute(defaultDst, r, defaultNetmask); errno != 0 {
-			if errno == syscall.EEXIST {
-				if errno := cs.DelRoute(defaultDst, r, defaultNetmask); errno != 0 {
-					log.Printf("delRoute(%v): %v", r, errno)
-				}
-				if errno := cs.AddRoute(defaultDst, r, defaultNetmask); errno != 0 {
-					return fmt.Errorf("addRoute(%v): %v", r, errno)
-				}
-			} else {
-				return fmt.Errorf("addRoute(%v): %v", r, errno)
-			}
+		err = nl.RouteReplace(&netlink.Route{
+			LinkIndex: l.Attrs().Index,
+			Dst:       defaultDst,
+			Gw:        r,
+			Priority:  priorityFromName(ifname),
+		})
+		if err != nil {
+			return fmt.Errorf("RouteReplace: %v", err)
 		}
 	}
 
@@ -211,6 +227,56 @@ func applyLease(cs iface.Configsocket, source string, lease dhcp4.Lease) error {
 	return nil
 }
 
+func changeRoutePriority(nl *netlink.Handle, l netlink.Link, priority int) error {
+	routes, err := nl.RouteList(l, netlink.FAMILY_V4)
+	if err != nil {
+		return fmt.Errorf("netlink.RouteList: %v", err)
+	}
+	for _, route := range routes {
+		if route.Priority == priority {
+			continue // no change necessary
+		}
+		newRoute := route // copy
+		log.Printf("adjusting route [dst=%v src=%v gw=%v] priority to %d", route.Dst, route.Src, route.Gw, priority)
+		newRoute.Flags = 0 // prevent "invalid argument" error
+		newRoute.Priority = priority
+		if err := nl.RouteReplace(&newRoute); err != nil {
+			return fmt.Errorf("RouteReplace: %v", err)
+		}
+		if err := nl.RouteDel(&route); err != nil {
+			return fmt.Errorf("RouteDel: %v", err)
+		}
+	}
+	return nil
+}
+
+func deprioritizeRoutesWhenDown(nl *netlink.Handle, ifname string) {
+	last := netlink.LinkOperState(netlink.OperUp)
+	for range time.Tick(1 * time.Second) {
+		l, err := nl.LinkByName(ifname)
+		if err != nil {
+			log.Printf("netlink.LinkByName: %v", err)
+			continue
+		}
+		operState := l.Attrs().OperState
+		if last == operState {
+			continue // no change
+		}
+		last = operState
+		if operState == netlink.OperDown {
+			log.Printf("lost carrier on interface %s, de-prioritizing routes", ifname)
+			if err := changeRoutePriority(nl, l, 1024); err != nil {
+				log.Print(err)
+			}
+		} else {
+			log.Printf("regained carrier on interface %s, re-prioritizing routes", ifname)
+			if err := changeRoutePriority(nl, l, priorityFromName(ifname)); err != nil {
+				log.Print(err)
+			}
+		}
+	}
+}
+
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	var (
@@ -235,20 +301,26 @@ func main() {
 	}
 	hostname := string(utsname.Nodename[:bytes.IndexByte(utsname.Nodename[:], 0)])
 
+	nl, err := netlink.NewHandle(netlink.FAMILY_V4)
+	if err != nil {
+		log.Fatal(err)
+	}
+	go deprioritizeRoutesWhenDown(nl, *ifname)
+
 	intf, err := net.InterfaceByName(*ifname)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	cs, err := iface.NewConfigSocket(*ifname)
-	if err != nil {
-		log.Fatalf("config socket: %v", err)
-	}
-	defer cs.Close()
-
 	// Ensure the interface is up so that we can send DHCP packets.
-	if err := cs.Up(); err != nil {
-		log.Fatal(err)
+	l, err := nl.LinkByName(*ifname)
+	if err != nil {
+		log.Fatalf("LinkByName: %v", err)
+	}
+	if l.Attrs().OperState != netlink.OperUp {
+		if err := nl.LinkSetUp(l); err != nil {
+			log.Fatalf("LinkSetUp: %v", err)
+		}
 	}
 
 	// Wait for up to 10 seconds for the link to indicate it has a
@@ -285,7 +357,7 @@ func main() {
 			l.DNS[idx] = dns.To4()
 		}
 
-		if err := applyLease(cs, "-static_network_config", l); err != nil {
+		if err := applyLease(nl, *ifname, "-static_network_config", l); err != nil {
 			log.Fatal(err)
 		}
 		// Leave the process running indefinitely
@@ -316,7 +388,7 @@ func main() {
 
 		lease := dhcp4.LeaseFromACK(last)
 
-		if err := applyLease(cs, "DHCPACK", lease); err != nil {
+		if err := applyLease(nl, *ifname, "DHCPACK", lease); err != nil {
 			log.Fatal(err)
 		}
 
