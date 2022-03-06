@@ -30,49 +30,43 @@ table {
 }
 </style>
 
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <div style="clear: left;">
+        <p style="float: left;"><img src = "assets/gokrazy-logo.svg" alt="the gokrazy logo: a mad gopher" width="70px"/></p>
         <p style="width: 50ex; margin-top: 0.25em; font-size: 18px"><a href="/">gokrazy</a><br>
         <small style="font-size: 11px" class="text-muted">version {{ .BuildTimestamp }}</small></p>
       </div>
+    </div>
 
-      <div class="collapse navbar-collapse" id="navbar-collapse-1">
-        <ul class="nav navbar-nav">
-        </ul>
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+      <table class="navbar-text navbar-right" style="border-spacing: 10px 0; border-collapse: separate">
+        <tr>
+          <th>host</th>
+          <td>{{ .Hostname }}</td>
+        </tr>
+        <tr>
+          <th>kernel</th>
+          <td>{{ .Kernel }}</td>
+        </tr>
+        {{ if (ne .Model "") }}
+        <tr>
+          <th>model</th>
+          <td>{{ .Model }}</td>
+        </tr>
+        {{ end }}
+        {{ if .EEPROM }}
+        <tr>
+          <th>EEPROM<br>(SHA256)</th>
+          <td>{{ shortenSHA256 .EEPROM.PieepromSHA256 }}<br>{{ shortenSHA256 .EEPROM.VL805SHA256 }}</td>
+        </tr>
+        {{ end }}
+      </table>
 
-        <table class="navbar-text navbar-right" style="border-spacing: 10px 0; border-collapse: separate">
-	  <tr>
-	    <th>host</th>
-	    <td>{{ .Hostname }}</td>
-	  </tr>
-	  <tr>
-	    <th>kernel</th>
-	    <td>{{ .Kernel }}</td>
-	  </tr>
-	  {{ if (ne .Model "") }}
-	  <tr>
-	    <th>model</th>
-	    <td>{{ .Model }}</td>
-	  </tr>
-	  {{ end }}
-	  {{ if .EEPROM }}
-	  <tr>
-	    <th>EEPROM<br>(SHA256)</th>
-	    <td>{{ shortenSHA256 .EEPROM.PieepromSHA256 }}<br>{{ shortenSHA256 .EEPROM.VL805SHA256 }}</td>
-	  </tr>
-	  {{ end }}
-	</table>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
-
-  <div class="container">
+<div class="container">
