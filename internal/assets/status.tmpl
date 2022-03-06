@@ -1,61 +1,66 @@
 {{ template "header.tmpl" . }}
 
 <div class="row">
-<div class="col-md-12">
-<table>
-<tr>
-<th>Name</th>
-<th>Started</th>
-<th>Actions</th>
-</tr>
-<tr>
-<td><a href="#{{ .Service.Name }}">{{ .Service.Name }}</a></td>
-<td>{{ .Service.Started }}</td>
-<td>
-  <form method="POST" action="/restart">
-    <input type="hidden" name="xsrftoken" value="{{ .XsrfToken }}">
-    <input type="hidden" name="path" value="{{ .Service.Name }}">
-    <input type="submit" value="restart">
-  </form>
-  <form method="POST" action="/stop">
-    <input type="hidden" name="xsrftoken" value="{{ .XsrfToken }}">
-    <input type="hidden" name="path" value="{{ .Service.Name }}">
-    <input type="submit" value="stop">
-  </form></td>
-</tr>
-</table>
+  <div class="col-md-12">
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Started</th>
+        <th>Actions</th>
+      </tr>
+      <tr>
+        <td><a href="#{{ .Service.Name }}">{{ .Service.Name }}</a></td>
+        <td>{{ .Service.Started.Format "Mon Jan _2 15:04:05 MST 2006" }}</td>
+        <td>
+          <div style="float: left; margin-right: 5px">
+            <form method="POST" action="/restart">
+              <input type="hidden" name="xsrftoken" value="{{ .XsrfToken }}">
+              <input type="hidden" name="path" value="{{ .Service.Name }}">
+              <input type="submit" value="restart">
+            </form>
+          </div>
+          <div style="float: left;">
+            <form method="POST" action="/stop">
+              <input type="hidden" name="xsrftoken" value="{{ .XsrfToken }}">
+              <input type="hidden" name="path" value="{{ .Service.Name }}">
+              <input type="submit" value="stop">
+            </form>
+          </div>
+        </td>
+      </tr>
+    </table>
 
-{{ if (ne .Service.Diverted "") }}
-<p>
-  Diverted: <code>{{ .Service.Diverted }}</code>
-</p>
-{{ end }}
+    {{ if (ne .Service.Diverted "") }}
+    <p>
+      Diverted: <code>{{ .Service.Diverted }}</code>
+    </p>
+    {{ end }}
 
-  <h3>stdout</h3>
-  <pre id="stdout"></pre>
+    <h3>stdout</h3>
+    <pre id="stdout"></pre>
 
-  <h3>stderr</h3>
-  <pre id="stderr"></pre>
+    <h3>stderr</h3>
+    <pre id="stderr"></pre>
 
-  <h3>module info</h3>
-  <pre>{{ .Service.ModuleInfo }}</pre>
+    <h3>module info</h3>
+    <pre>{{ .Service.ModuleInfo }}</pre>
 
-</div>
+  </div>
 </div>
 
 {{ template "footer.tmpl" . }}
 
 <script>
-	const maxLines = 101;
-	new EventSource("/log?path={{ .Service.Name }}&stream=stderr", { withCredentials: true }).onmessage = function(e) {
-		// Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
-		// This is extremely inefficient, since we're splitting into component lines and joining them
-		// back each time a line is added.
-		var txt = document.getElementById("stderr").innerText + e.data + "\n";
-		document.getElementById("stderr").innerText = txt.split('\n').slice(-maxLines).join('\n')
-	};
-	new EventSource("/log?path={{ .Service.Name }}&stream=stdout", { withCredentials: true }).onmessage = function(e) {
-		var txt = document.getElementById("stdout").innerText + e.data + "\n";
-		document.getElementById("stdout").innerText = txt.split('\n').slice(-maxLines).join('\n')
-	};
+    const maxLines = 101;
+    new EventSource("/log?path={{ .Service.Name }}&stream=stderr", { withCredentials: true }).onmessage = function(e) {
+        // Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
+        // This is extremely inefficient, since we're splitting into component lines and joining them
+        // back each time a line is added.
+        var txt = document.getElementById("stderr").innerText + e.data + "\n";
+        document.getElementById("stderr").innerText = txt.split('\n').slice(-maxLines).join('\n')
+    };
+    new EventSource("/log?path={{ .Service.Name }}&stream=stdout", { withCredentials: true }).onmessage = function(e) {
+        var txt = document.getElementById("stdout").innerText + e.data + "\n";
+        document.getElementById("stdout").innerText = txt.split('\n').slice(-maxLines).join('\n')
+    };
 </script>
