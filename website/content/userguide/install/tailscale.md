@@ -85,8 +85,7 @@ Navigate to [Tailscale console] and open Settings / Keys. Generate auth key.
 ```shell
 cat > flags/tailscale.com/cmd/tailscale/flags.txt <<EOF
 up
---auth-key
-tskey-AAAAAAAAAAAA-AAAAAAAAAAAAAAAAAAAAAA
+--auth-key=tskey-AAAAAAAAAAAA-AAAAAAAAAAAAAAAAAAAAAA
 EOF
 ```
 
