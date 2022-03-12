@@ -188,12 +188,33 @@ type service struct {
 	process   *os.Process
 	processMu sync.RWMutex
 
+	attemptMu sync.Mutex
+	attempt   int
+
 	diversionMu sync.Mutex
 	diversion   string
 
 	waitForClock bool
 
 	state *processState
+}
+
+func (s *service) resetAttempts() {
+	s.attemptMu.Lock()
+	defer s.attemptMu.Unlock()
+	s.attempt = 0
+}
+
+func (s *service) Attempts() int {
+	s.attemptMu.Lock()
+	defer s.attemptMu.Unlock()
+	return s.attempt
+}
+
+func (s *service) increaseAttempts() {
+	s.attemptMu.Lock()
+	defer s.attemptMu.Unlock()
+	s.attempt++
 }
 
 func (s *service) setDiversion(d string) {
@@ -370,7 +391,6 @@ func supervise(s *service) {
 	s.Stdout = newLogWriter(tag)
 	s.Stderr = newLogWriter(tag)
 	l := log.New(s.Stderr, "", log.LstdFlags|log.Ldate|log.Ltime)
-	attempt := 0
 
 	// Wait for clock to be updated via ntp for services
 	// that need correct time. This can be enabled
@@ -410,7 +430,7 @@ func supervise(s *service) {
 		if cmd.Env == nil {
 			cmd.Env = os.Environ() // for older gokr-packer versions
 		}
-		if attempt == 0 {
+		if s.Attempts() == 0 {
 			cmd.Env = append(cmd.Env, "GOKRAZY_FIRST_START=1")
 		}
 		// Designate a subdirectory under /perm as $HOME.
@@ -424,9 +444,9 @@ func supervise(s *service) {
 			cmd.Dir = homeDir
 		}
 
-		l.Printf("gokrazy: attempt %d, starting %q", attempt, cmd.Args)
+		l.Printf("gokrazy: attempt %d, starting %q", s.Attempts(), cmd.Args)
 		s.setStarted(time.Now())
-		attempt++
+		s.increaseAttempts()
 
 		pid := -1
 		if err := cmd.Start(); err != nil {
@@ -512,6 +532,8 @@ func findSvc(path string) *service {
 }
 
 func restart(s *service, signal syscall.Signal) error {
+	s.resetAttempts()
+
 	if s.Stopped() {
 		s.setStopped(false) // start process in next supervise iteration
 		return nil
