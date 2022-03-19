@@ -260,6 +260,12 @@ func Boot(userBuildTimestamp string) error {
 		log.Printf("creating serial symlink failed: %v", err)
 	}
 
+	// create a /dev/ttyAMA0 symlink to /dev/ttyS0 so that software which does
+	// not yet use /dev/serial0 keeps working without changes.
+	if err := os.Symlink("/dev/ttyS0", "/dev/ttyAMA0"); err != nil && !os.IsExist(err) {
+		log.Printf("creating compatibility symlink /dev/ttyAMA0 -> /dev/ttyS0 failed: %v", err)
+	}
+
 	return nil
 }
 
