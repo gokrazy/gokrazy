@@ -19,66 +19,39 @@ remotely (no static DHCP leases, port-forwarding and DynDNS required!), or even
 to secure your communication when gokrazy is [connected to an unencrypted WiFi
 network](/userguide/unencrypted-wifi/).
 
-## Step 1. set command-line flags
-
-We need to specify the following flags for the `tailscaled` daemon (see [Package
-config: flags and environment variables](/userguide/package-config) if you’re
-unfamiliar with this mechanism):
-
-```shell
-mkdir -p flags/tailscale.com/cmd/tailscaled
-cat > flags/tailscale.com/cmd/tailscaled/flags.txt <<EOF
---statedir=/perm/tailscaled/
---tun=userspace-networking
-EOF
-
-mkdir -p flags/tailscale.com/cmd/tailscale
-echo 'up' > flags/tailscale.com/cmd/tailscale/flags.txt
-```
-
-Tailscale requires a writable directory used by `tailscaled` to store its state.
-It is used to persist authentication over reboots and for control socket
-`tailscaled.sock`.
-
-The `--tun=userspace-networking` flag selects the [Userspace
-networking](https://tailscale.com/kb/1112/userspace-networking/) mode because
+{{% notice note %}}
+Tailscale currently uses [Userspace networking] mode on gokrazy, because
 for `tun` mode, Tailscale currently requires components that gokrazy does not
 provide. For accessing the services on your gokrazy installation, the Userspace
 networking mode works fine, though 🥳 .
 
-## Step 2. include the tailscale packages
+[Userspace networking]: https://tailscale.com/kb/1112/userspace-networking/ "Userspace networking mode (for containers)"
+{{% /notice %}}
 
-In your `gokr-packer` invocation (see [Quickstart](/quickstart/) if you don’t
-have one yet), include the Tailscale daemon and CLI Go packages:
+
+## Requirements
+ * Package `tailscale.com` v1.22.1 or later (latest version used automatically unless you have the package already in go.mod)
+ * Volume `/perm/` needs to be initialized (instructions use `github.com/gokrazy/mkfs` to initialize)
+to persist authentication over reboots.
+
+
+## Step 1. set command-line flags
+
+We need to specify the following flags for the `tailscale` to bring up
+connection (see [Package
+config: flags and environment variables](/userguide/package-config) if you’re
+unfamiliar with this mechanism):
+
+**Option A: interactive authentication**
 
 ```shell
-gokr-packer \
-  -update=yes \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/mkfs \
-  tailscale.com/cmd/tailscaled \
-  tailscale.com/cmd/tailscale
+mkdir -p flags/tailscale.com/cmd/tailscale
+cat > flags/tailscale.com/cmd/tailscale/flags.txt <<EOF
+up
+EOF
 ```
 
-We include mkfs to create filesystem on the /perm partition. mkfs only needs
-to be done once.
-
-## Step 3a. authenticate interactively
-
-1. Navigate to your gokrazy web interface with browser using the URL displayed
-by gokr-packer.
-1. Open the service `/user/tailscale` and find the login URL.
-1. Open the link with browser and log in to Tailscale and authorize the client.
-
-You are now connected to Tailscale and you can access your gokrazy instance
-over Tailscale. It will stay authenticated until its key expires.
-
-You may optionally disable key expiry from [Tailscale console] for the gokrazy
-instance to not require new login every 3 months.
-
-[Tailscale console]: https://login.tailscale.com/ "Tailscale management console login.tailscale.com"
-
-## Step 3b. authenticate an unattended installation
+**Option B: unattended authentication with auth key**
 
 Navigate to [Tailscale console] and open Settings / Keys. Generate auth key.
 
@@ -89,12 +62,45 @@ up
 EOF
 ```
 
-Now when the Gokrazy starts up, it will authenticate using the auth key
-and will not require interaction. You can make the key reusable and use this to
-install a fleet of many Gokrazy appliances.
+## Step 2. include the tailscale packages
 
-You may optionally disable key expiry from [Tailscale console] for the gokrazy
-instance to not require new login every 3 months.
+In your `gokr-packer` invocation (see [Quickstart](/quickstart/) if you don’t
+have one yet), include the Tailscale daemon `tailscaled` and CLI `tailscale`
+Go packages:
+
+```shell
+gokr-packer \
+  -update=yes \
+  github.com/gokrazy/hello \
+  github.com/gokrazy/mkfs \
+  tailscale.com/cmd/tailscaled \
+  tailscale.com/cmd/tailscale
+```
+
+We include `mkfs` to automatically initialize filesystem on the `/perm`
+partition on first boot.
+
+## Step 3. authenticate (interactive only)
+
+Skip this step if you are using option B with auth key.
+
+1. Navigate to your gokrazy web interface with browser using the URL displayed
+by gokr-packer.
+1. Open the service `/user/tailscale` and find the login URL.
+1. Open the link with browser and log in to Tailscale and authorize the client.
+
+## Step 4. disable key expiry (optional)
+
+You are now connected to Tailscale and you can access your gokrazy instance
+over Tailscale.
+
+{{% notice note %}}
+Tailscale requires re-authentication periodically.
+You can disable key expiry from [Tailscale console] for the gokrazy
+instance to not require login every 3 months.
+
+[Tailscale console]: https://login.tailscale.com/ "Tailscale management console login.tailscale.com"
+{{% /notice %}}
 
 ## Optional: tailscale network for other programs
 
@@ -131,10 +137,6 @@ There is an example program at
 [github.com/gokrazy/tsnetdemo](https://github.com/gokrazy/tsnetdemo):
 
 [tsnet Tailscale as a library]: https://pkg.go.dev/tailscale.com/tsnet "Package tsnet provides Tailscale as a library. It is an experimental work in progress."
-
-{{% notice note %}}
-You need to use module `tailscale.com` v1.18.0 later for this to work!
-{{% /notice %}}
 
 
 ```go
