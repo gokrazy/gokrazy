@@ -255,7 +255,27 @@ func Boot(userBuildTimestamp string) error {
 		return err
 	}
 
+	// create /dev/serial0 symlink in /dev, which was mounted by mountfs() earlier
+	if err := createSerialSymlink(); err != nil {
+		log.Printf("creating serial symlink failed: %v", err)
+	}
+
 	return nil
+}
+
+func createSerialSymlink() error {
+	uart0, uart0err := ioutil.ReadFile("/proc/device-tree/aliases/uart0")
+	uart1, uart1err := ioutil.ReadFile("/proc/device-tree/aliases/uart1")
+	serial0, serial0err := ioutil.ReadFile("/proc/device-tree/aliases/serial0")
+	if uart0err == nil && serial0err == nil && bytes.Equal(uart0, serial0) {
+		// old kernel (before https://github.com/gokrazy/gokrazy/issues/49)
+		return os.Symlink("/dev/ttyAMA0", "/dev/serial0")
+	} else if os.IsNotExist(uart1err) ||
+		(uart1err == nil && serial0err == nil && bytes.Equal(uart1, serial0)) {
+		// new kernel (after https://github.com/gokrazy/gokrazy/issues/49)
+		return os.Symlink("/dev/ttyS0", "/dev/serial0")
+	}
+	return fmt.Errorf("unexpected device tree state: uart0=%s, %v / uart1=%s, %v / serial0=%s, %v", string(uart0), uart0err, string(uart1), uart1err, string(serial0), serial0err)
 }
 
 func updateListenerPairs(httpPort, httpsPort string, useTLS bool, tlsConfig *tls.Config) error {
