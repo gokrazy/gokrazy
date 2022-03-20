@@ -12,20 +12,20 @@
     <title>Non-Go Prototyping :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1647766516" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1647766516" rel="stylesheet">
-    <link href="/css/hybrid.css?1647766516" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1647766516" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1647766516" rel="stylesheet">
-    <link href="/css/auto-complete.css?1647766516" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1647766516" rel="stylesheet">
-    <link href="/css/theme.css?1647766516" rel="stylesheet">
-    <link href="/css/tabs.css?1647766516" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1647766516" rel="stylesheet">
+    <link href="/css/nucleus.css?1647776834" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1647776834" rel="stylesheet">
+    <link href="/css/hybrid.css?1647776834" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1647776834" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1647776834" rel="stylesheet">
+    <link href="/css/auto-complete.css?1647776834" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1647776834" rel="stylesheet">
+    <link href="/css/theme.css?1647776834" rel="stylesheet">
+    <link href="/css/tabs.css?1647776834" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1647776834" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1647766516"></script>
+    <script src="/js/jquery-3.3.1.min.js?1647776834"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1647766516"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1647766516"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1647776834"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1647776834"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1647766516"></script>
+<script type="text/javascript" src="/js/search.js?1647776834"></script>
 
     
   </div>
@@ -705,39 +705,49 @@ dynamically linked. The different queueing disciplines are
 implemented as plugins, and statically linking <code>tc</code>
 results in a binary which starts but won’t be able to display or
 change queueing disciplines.</p>
-<p>Because gokrazy doesn’t include a C runtime environment, we’ll need
-to copy not only the <code>tc</code> binary, but also the dynamic
-loader and all required shared libraries. We can run Debian in a
-Docker container to not mess with our host system:</p>
+<p>Because gokrazy doesn’t include a C runtime environment, we’ll need to copy not
+only the <code>tc</code> binary, but also the dynamic loader and all required
+shared libraries. We can run Debian in a Docker container to not mess with our
+host system, and use the <a
+href="https://github.com/gokrazy/freeze"><code>freeze</code> tool</a> to
+automate the tedious parts of the process:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">% mkdir /tmp/iproute
 % cd /tmp/iproute
-% docker run -t -i debian
+% docker run -t -i debian:bookworm
 root@6e530a973d45:/# dpkg --add-architecture arm64
 root@6e530a973d45:/# apt update
-root@6e530a973d45:/# apt install iproute2:arm64 qemu-user-static
-root@6e530a973d45:/# LD_TRACE_LOADED_OBJECTS=1 qemu-aarch64-static /sbin/tc
-	libelf.so.1 =&gt; /usr/lib/aarch64-linux-gnu/libelf.so.1 (0x00000040008a6000)
-	libm.so.6 =&gt; /lib/aarch64-linux-gnu/libm.so.6 (0x00000040008cb000)
-	libdl.so.2 =&gt; /lib/aarch64-linux-gnu/libdl.so.2 (0x0000004000976000)
-	libc.so.6 =&gt; /lib/aarch64-linux-gnu/libc.so.6 (0x0000004000989000)
-	/lib/ld-linux-aarch64.so.1 (0x0000004000870000)
-	libz.so.1 =&gt; /lib/aarch64-linux-gnu/libz.so.1 (0x0000004000ad3000)
+root@6e530a973d45:/# apt install iproute2:arm64 qemu-user-static golang-go ca-certificates
+root@6e530a973d45:/# go install github.com/gokrazy/freeze/cmd/...@latest
+root@6e530a973d45:/# ~/go/bin/freeze -wrap=qemu-aarch64-static $(which tc)
+2022/03/20 11:45:46 /sbin/tc
+2022/03/20 11:45:46 Copying tc together with its 12 ELF shared library dependencies
+2022/03/20 11:45:46 [cp /sbin/tc /tmp/freeze2237965672/tc]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libbpf.so.0.7.0 /tmp/freeze2237965672/libbpf.so.0]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libelf-0.186.so /tmp/freeze2237965672/libelf.so.1]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libmnl.so.0.2.0 /tmp/freeze2237965672/libmnl.so.0]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libbsd.so.0.11.5 /tmp/freeze2237965672/libbsd.so.0]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libcap.so.2.44 /tmp/freeze2237965672/libcap.so.2]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libm-2.33.so /tmp/freeze2237965672/libm.so.6]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libdl-2.33.so /tmp/freeze2237965672/libdl.so.2]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libxtables.so.12.4.0 /tmp/freeze2237965672/libxtables.so.12]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libc-2.33.so /tmp/freeze2237965672/libc.so.6]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/ld-2.33.so /tmp/freeze2237965672/ld-linux-aarch64.so.1]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libz.so.1.2.11 /tmp/freeze2237965672/libz.so.1]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libmd.so.0.0.5 /tmp/freeze2237965672/libmd.so.0]
+2022/03/20 11:45:46 [tar cf /tmp/freeze2237965672.tar freeze2237965672]
+2022/03/20 11:45:46 Download freeze2237965672.tar to your gokrazy device and run:
+	LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
 root@6e530a973d45:/# exit
-% docker cp -L 6e530a973d45:/sbin/tc .
-% docker cp -L 6e530a973d45:/lib/ld-linux-aarch64.so.1 .
-% docker cp -L 6e530a973d45:/usr/lib/aarch64-linux-gnu/libelf.so.1 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libm.so.6 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libdl.so.2 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libc.so.6 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libz.so.1 .
-</code></pre></div><p>The above workflow is automated by
-the <a href="https://github.com/gokrazy/freeze"><code>freeze</code>
-tool</a>.</p>
-<p>Now we can copy the contents of the temporary directory to
+% mkdir /tmp/freeze
+% cd /tmp/freeze
+% docker cp 6e530a973d45:/tmp/freeze2237965672.tar .
+% caddy file-server -listen=:4080
+</code></pre></div><p>Now we can copy the contents of the temporary directory to
 e.g. <code>/perm/tc</code> and run the <code>tc</code> command in
 breakglass:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">/tmp/breakglass531810560 # wget -O- http://10.0.0.76:4080/tc.tar | tar xf -
-/tmp/breakglass531810560 # LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">/tmp/breakglass531810560 # wget -O- http://10.0.0.76:4080/freeze2237965672.tar | tar xf -
+/tmp/breakglass531810560 # cd freeze2237965672
+/tmp/breakglass531810560/freeze2237965672 # LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
 Usage: tc [ OPTIONS ] OBJECT { COMMAND | help }
 …
 </code></pre></div>
@@ -1091,19 +1101,19 @@ Usage: tc [ OPTIONS ] OBJECT { COMMAND | help }
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1647766516"></script>
-    <script src="/js/perfect-scrollbar.min.js?1647766516"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1647766516"></script>
-    <script src="/js/jquery.sticky.js?1647766516"></script>
-    <script src="/js/featherlight.min.js?1647766516"></script>
-    <script src="/js/highlight.pack.js?1647766516"></script>
+    <script src="/js/clipboard.min.js?1647776834"></script>
+    <script src="/js/perfect-scrollbar.min.js?1647776834"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1647776834"></script>
+    <script src="/js/jquery.sticky.js?1647776834"></script>
+    <script src="/js/featherlight.min.js?1647776834"></script>
+    <script src="/js/highlight.pack.js?1647776834"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1647766516"></script>
-    <script src="/js/learn.js?1647766516"></script>
-    <script src="/js/hugo-learn.js?1647766516"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1647776834"></script>
+    <script src="/js/learn.js?1647776834"></script>
+    <script src="/js/hugo-learn.js?1647776834"></script>
     
         
-            <script src="/mermaid/mermaid.js?1647766516"></script>
+            <script src="/mermaid/mermaid.js?1647776834"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

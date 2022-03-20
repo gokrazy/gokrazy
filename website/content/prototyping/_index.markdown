@@ -141,46 +141,55 @@ implemented as plugins, and statically linking <code>tc</code>
 results in a binary which starts but won’t be able to display or
 change queueing disciplines.
 
-Because gokrazy doesn’t include a C runtime environment, we’ll need
-to copy not only the <code>tc</code> binary, but also the dynamic
-loader and all required shared libraries. We can run Debian in a
-Docker container to not mess with our host system:
+Because gokrazy doesn’t include a C runtime environment, we’ll need to copy not
+only the <code>tc</code> binary, but also the dynamic loader and all required
+shared libraries. We can run Debian in a Docker container to not mess with our
+host system, and use the <a
+href="https://github.com/gokrazy/freeze"><code>freeze</code> tool</a> to
+automate the tedious parts of the process:
 	  
 ```text
 % mkdir /tmp/iproute
 % cd /tmp/iproute
-% docker run -t -i debian
+% docker run -t -i debian:bookworm
 root@6e530a973d45:/# dpkg --add-architecture arm64
 root@6e530a973d45:/# apt update
-root@6e530a973d45:/# apt install iproute2:arm64 qemu-user-static
-root@6e530a973d45:/# LD_TRACE_LOADED_OBJECTS=1 qemu-aarch64-static /sbin/tc
-	libelf.so.1 => /usr/lib/aarch64-linux-gnu/libelf.so.1 (0x00000040008a6000)
-	libm.so.6 => /lib/aarch64-linux-gnu/libm.so.6 (0x00000040008cb000)
-	libdl.so.2 => /lib/aarch64-linux-gnu/libdl.so.2 (0x0000004000976000)
-	libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000004000989000)
-	/lib/ld-linux-aarch64.so.1 (0x0000004000870000)
-	libz.so.1 => /lib/aarch64-linux-gnu/libz.so.1 (0x0000004000ad3000)
+root@6e530a973d45:/# apt install iproute2:arm64 qemu-user-static golang-go ca-certificates
+root@6e530a973d45:/# go install github.com/gokrazy/freeze/cmd/...@latest
+root@6e530a973d45:/# ~/go/bin/freeze -wrap=qemu-aarch64-static $(which tc)
+2022/03/20 11:45:46 /sbin/tc
+2022/03/20 11:45:46 Copying tc together with its 12 ELF shared library dependencies
+2022/03/20 11:45:46 [cp /sbin/tc /tmp/freeze2237965672/tc]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libbpf.so.0.7.0 /tmp/freeze2237965672/libbpf.so.0]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libelf-0.186.so /tmp/freeze2237965672/libelf.so.1]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libmnl.so.0.2.0 /tmp/freeze2237965672/libmnl.so.0]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libbsd.so.0.11.5 /tmp/freeze2237965672/libbsd.so.0]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libcap.so.2.44 /tmp/freeze2237965672/libcap.so.2]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libm-2.33.so /tmp/freeze2237965672/libm.so.6]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libdl-2.33.so /tmp/freeze2237965672/libdl.so.2]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libxtables.so.12.4.0 /tmp/freeze2237965672/libxtables.so.12]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libc-2.33.so /tmp/freeze2237965672/libc.so.6]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/ld-2.33.so /tmp/freeze2237965672/ld-linux-aarch64.so.1]
+2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libz.so.1.2.11 /tmp/freeze2237965672/libz.so.1]
+2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libmd.so.0.0.5 /tmp/freeze2237965672/libmd.so.0]
+2022/03/20 11:45:46 [tar cf /tmp/freeze2237965672.tar freeze2237965672]
+2022/03/20 11:45:46 Download freeze2237965672.tar to your gokrazy device and run:
+	LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
 root@6e530a973d45:/# exit
-% docker cp -L 6e530a973d45:/sbin/tc .
-% docker cp -L 6e530a973d45:/lib/ld-linux-aarch64.so.1 .
-% docker cp -L 6e530a973d45:/usr/lib/aarch64-linux-gnu/libelf.so.1 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libm.so.6 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libdl.so.2 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libc.so.6 .
-% docker cp -L 6e530a973d45:/lib/aarch64-linux-gnu/libz.so.1 .
+% mkdir /tmp/freeze
+% cd /tmp/freeze
+% docker cp 6e530a973d45:/tmp/freeze2237965672.tar .
+% caddy file-server -listen=:4080
 ```
 	  
-The above workflow is automated by
-the <a href="https://github.com/gokrazy/freeze"><code>freeze</code>
-tool</a>.
-
 Now we can copy the contents of the temporary directory to
 e.g. <code>/perm/tc</code> and run the <code>tc</code> command in
 breakglass:
 	  
 ```text
-/tmp/breakglass531810560 # wget -O- http://10.0.0.76:4080/tc.tar | tar xf -
-/tmp/breakglass531810560 # LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
+/tmp/breakglass531810560 # wget -O- http://10.0.0.76:4080/freeze2237965672.tar | tar xf -
+/tmp/breakglass531810560 # cd freeze2237965672
+/tmp/breakglass531810560/freeze2237965672 # LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
 Usage: tc [ OPTIONS ] OBJECT { COMMAND | help }
 …
 ```
