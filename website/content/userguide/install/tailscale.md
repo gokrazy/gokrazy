@@ -53,7 +53,12 @@ EOF
 
 **Option B: unattended authentication with auth key**
 
-Navigate to [Tailscale console] and open Settings / Keys. Generate auth key.
+Alternatively,
+navigate to [Tailscale console] and open Settings / Keys. Generate auth key.
+
+Include the key to tailscale flags:
+
+[Tailscale console]: https://login.tailscale.com/ "Tailscale management console login.tailscale.com"
 
 ```shell
 cat > flags/tailscale.com/cmd/tailscale/flags.txt <<EOF
@@ -77,7 +82,7 @@ gokr-packer \
   tailscale.com/cmd/tailscale
 ```
 
-We include `mkfs` to automatically initialize filesystem on the `/perm`
+We include `mkfs` to automatically initialize a filesystem on the `/perm`
 partition on first boot.
 
 ## Step 3. authenticate (interactive only)
