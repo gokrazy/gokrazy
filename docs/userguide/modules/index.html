@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.93.1" />
+    <meta name="generator" content="Hugo 0.89.0-DEV" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Working with Go modules :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1646335597" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1646335597" rel="stylesheet">
-    <link href="/css/hybrid.css?1646335597" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1646335597" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1646335597" rel="stylesheet">
-    <link href="/css/auto-complete.css?1646335597" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1646335597" rel="stylesheet">
-    <link href="/css/theme.css?1646335597" rel="stylesheet">
-    <link href="/css/tabs.css?1646335597" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1646335597" rel="stylesheet">
+    <link href="/css/nucleus.css?1647766516" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1647766516" rel="stylesheet">
+    <link href="/css/hybrid.css?1647766516" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1647766516" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1647766516" rel="stylesheet">
+    <link href="/css/auto-complete.css?1647766516" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1647766516" rel="stylesheet">
+    <link href="/css/theme.css?1647766516" rel="stylesheet">
+    <link href="/css/tabs.css?1647766516" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1647766516" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1646335597"></script>
+    <script src="/js/jquery-3.3.1.min.js?1647766516"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1646335597"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1646335597"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1647766516"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1647766516"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1646335597"></script>
+<script type="text/javascript" src="/js/search.js?1647766516"></script>
 
     
   </div>
@@ -275,6 +275,27 @@
       <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
         <a href="/userguide/wifi/">
         Connecting to WiFi
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item ">
+        <a href="/userguide/bluetooth/">
+        Using Bluetooth
         
         </a>
     </li>
@@ -598,11 +619,11 @@ i.e. all packages passed to gokr-packer will be downloaded. If you
 had unpublished changes or packages in your <code>$GOPATH</code>,
 you can use the following steps to declare a Go module and pull it
 into the build:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>IMPORTPATH<span style="color:#f92672">=</span>github.com/stapelberg/gibot-i3
-</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>cd <span style="color:#66d9ef">$(</span>go env GOPATH<span style="color:#66d9ef">)</span>/src/<span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span> <span style="color:#f92672">&amp;&amp;</span> GO111MODULE<span style="color:#f92672">=</span>on go mod init <span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>go mod edit -require <span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span>@v0.0.0
-</span></span><span style="display:flex;"><span>go mod edit -replace <span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span><span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>go env GOPATH<span style="color:#66d9ef">)</span>/src/<span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span>
-</span></span></code></pre></div><h2 id="pull-in-local-repositories">pull in local repositories</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">IMPORTPATH<span style="color:#f92672">=</span>github.com/stapelberg/gibot-i3
+<span style="color:#f92672">(</span>cd <span style="color:#66d9ef">$(</span>go env GOPATH<span style="color:#66d9ef">)</span>/src/<span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span> <span style="color:#f92672">&amp;&amp;</span> GO111MODULE<span style="color:#f92672">=</span>on go mod init <span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span><span style="color:#f92672">)</span>
+go mod edit -require <span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span>@v0.0.0
+go mod edit -replace <span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span><span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>go env GOPATH<span style="color:#66d9ef">)</span>/src/<span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span>
+</code></pre></div><h2 id="pull-in-local-repositories">pull in local repositories</h2>
 <p>Please see <a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive"><a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive">https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive</a></a>.</p>
 
 
@@ -791,6 +812,22 @@ into the build:</p>
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                     
                 
                 
@@ -930,7 +967,7 @@ into the build:</p>
 	 
 	 
 		
-			<a class="nav nav-prev" href="/userguide/wifi/" title="Connecting to WiFi networks"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/userguide/bluetooth/" title="Using Bluetooth"> <i class="fa fa-chevron-left"></i></a>
 		
 		
 			<a class="nav nav-next" href="/userguide/permanent-data/" title="Access permanent data" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
@@ -943,19 +980,19 @@ into the build:</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1646335597"></script>
-    <script src="/js/perfect-scrollbar.min.js?1646335597"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1646335597"></script>
-    <script src="/js/jquery.sticky.js?1646335597"></script>
-    <script src="/js/featherlight.min.js?1646335597"></script>
-    <script src="/js/highlight.pack.js?1646335597"></script>
+    <script src="/js/clipboard.min.js?1647766516"></script>
+    <script src="/js/perfect-scrollbar.min.js?1647766516"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1647766516"></script>
+    <script src="/js/jquery.sticky.js?1647766516"></script>
+    <script src="/js/featherlight.min.js?1647766516"></script>
+    <script src="/js/highlight.pack.js?1647766516"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1646335597"></script>
-    <script src="/js/learn.js?1646335597"></script>
-    <script src="/js/hugo-learn.js?1646335597"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1647766516"></script>
+    <script src="/js/learn.js?1647766516"></script>
+    <script src="/js/hugo-learn.js?1647766516"></script>
     
         
-            <script src="/mermaid/mermaid.js?1646335597"></script>
+            <script src="/mermaid/mermaid.js?1647766516"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

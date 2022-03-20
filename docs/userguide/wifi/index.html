@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.93.1" />
+    <meta name="generator" content="Hugo 0.89.0-DEV" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Connecting to WiFi networks :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1646335597" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1646335597" rel="stylesheet">
-    <link href="/css/hybrid.css?1646335597" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1646335597" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1646335597" rel="stylesheet">
-    <link href="/css/auto-complete.css?1646335597" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1646335597" rel="stylesheet">
-    <link href="/css/theme.css?1646335597" rel="stylesheet">
-    <link href="/css/tabs.css?1646335597" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1646335597" rel="stylesheet">
+    <link href="/css/nucleus.css?1647766516" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1647766516" rel="stylesheet">
+    <link href="/css/hybrid.css?1647766516" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1647766516" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1647766516" rel="stylesheet">
+    <link href="/css/auto-complete.css?1647766516" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1647766516" rel="stylesheet">
+    <link href="/css/theme.css?1647766516" rel="stylesheet">
+    <link href="/css/tabs.css?1647766516" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1647766516" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1646335597"></script>
+    <script src="/js/jquery-3.3.1.min.js?1647766516"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1646335597"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1646335597"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1647766516"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1647766516"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1646335597"></script>
+<script type="text/javascript" src="/js/search.js?1647766516"></script>
 
     
   </div>
@@ -275,6 +275,27 @@
       <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item active">
         <a href="/userguide/wifi/">
         Connecting to WiFi
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item ">
+        <a href="/userguide/bluetooth/">
+        Using Bluetooth
         
         </a>
     </li>
@@ -602,25 +623,25 @@ updates</a>.</p>
 
 <p>To make gokrazy connect to a WiFi network, first include the
 <code>github.com/gokrazy/wifi</code> package in your <code>gokr-packer</code> command line, e.g.:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/wifi
-</span></span></code></pre></div><p>Then, configure the <code>wifi</code> program by creating the file <code>wifi.json</code> as <a href="/userguide/package-config/#extrafiles">extra
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/wifi
+</code></pre></div><p>Then, configure the <code>wifi</code> program by creating the file <code>wifi.json</code> as <a href="/userguide/package-config/#extrafiles">extra
 file</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># To connect to an unencrypted WiFi network, specify no psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;My unencrypted WiFi&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># OR, to connect to an encrypted WiFi network, specify the psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;Secure WiFi&#34;, &#34;psk&#34;: &#34;secret&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
-</span></span></code></pre></div><p>Alternatively, you can also create the <code>wifi.json</code> manually on the permanent
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
+
+<span style="color:#75715e"># To connect to an unencrypted WiFi network, specify no psk:</span>
+echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;My unencrypted WiFi&#34;}&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
+
+<span style="color:#75715e"># OR, to connect to an encrypted WiFi network, specify the psk:</span>
+echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;Secure WiFi&#34;, &#34;psk&#34;: &#34;secret&#34;}&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
+</code></pre></div><p>Alternatively, you can also create the <code>wifi.json</code> manually on the permanent
 data partition with path <code>/perm/wifi.json</code>.</p>
 <p>After starting gokrazy, the <code>wifi</code> program will connect to the configured WiFi network:</p>
 <p><a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
@@ -863,6 +884,22 @@ accidentally joining this open network.</p>
                     
 
                     
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
                         
             
             
@@ -961,7 +998,7 @@ accidentally joining this open network.</p>
 			<a class="nav nav-prev" href="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/userguide/modules/" title="Working with Go modules" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/userguide/bluetooth/" title="Using Bluetooth" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -971,19 +1008,19 @@ accidentally joining this open network.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1646335597"></script>
-    <script src="/js/perfect-scrollbar.min.js?1646335597"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1646335597"></script>
-    <script src="/js/jquery.sticky.js?1646335597"></script>
-    <script src="/js/featherlight.min.js?1646335597"></script>
-    <script src="/js/highlight.pack.js?1646335597"></script>
+    <script src="/js/clipboard.min.js?1647766516"></script>
+    <script src="/js/perfect-scrollbar.min.js?1647766516"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1647766516"></script>
+    <script src="/js/jquery.sticky.js?1647766516"></script>
+    <script src="/js/featherlight.min.js?1647766516"></script>
+    <script src="/js/highlight.pack.js?1647766516"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1646335597"></script>
-    <script src="/js/learn.js?1646335597"></script>
-    <script src="/js/hugo-learn.js?1646335597"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1647766516"></script>
+    <script src="/js/learn.js?1647766516"></script>
+    <script src="/js/hugo-learn.js?1647766516"></script>
     
         
-            <script src="/mermaid/mermaid.js?1646335597"></script>
+            <script src="/mermaid/mermaid.js?1647766516"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

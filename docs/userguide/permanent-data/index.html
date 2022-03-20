@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.93.1" />
+    <meta name="generator" content="Hugo 0.89.0-DEV" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Access permanent data :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1646335597" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1646335597" rel="stylesheet">
-    <link href="/css/hybrid.css?1646335597" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1646335597" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1646335597" rel="stylesheet">
-    <link href="/css/auto-complete.css?1646335597" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1646335597" rel="stylesheet">
-    <link href="/css/theme.css?1646335597" rel="stylesheet">
-    <link href="/css/tabs.css?1646335597" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1646335597" rel="stylesheet">
+    <link href="/css/nucleus.css?1647766516" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1647766516" rel="stylesheet">
+    <link href="/css/hybrid.css?1647766516" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1647766516" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1647766516" rel="stylesheet">
+    <link href="/css/auto-complete.css?1647766516" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1647766516" rel="stylesheet">
+    <link href="/css/theme.css?1647766516" rel="stylesheet">
+    <link href="/css/tabs.css?1647766516" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1647766516" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1646335597"></script>
+    <script src="/js/jquery-3.3.1.min.js?1647766516"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1646335597"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1646335597"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1647766516"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1647766516"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1646335597"></script>
+<script type="text/javascript" src="/js/search.js?1647766516"></script>
 
     
   </div>
@@ -275,6 +275,27 @@
       <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
         <a href="/userguide/wifi/">
         Connecting to WiFi
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item ">
+        <a href="/userguide/bluetooth/">
+        Using Bluetooth
         
         </a>
     </li>
@@ -612,65 +633,66 @@ cd mkfs
 gok run -i bakery
 </code></pre><h2 id="permanent-data-in-action">Permanent data in action</h2>
 <p>The Go program demonstrates the functionality of the permanent data mount:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;encoding/json&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;errors&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/fs&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">config</span> = <span style="color:#e6db74">&#34;/perm/my-example/config.json&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Config</span> <span style="color:#66d9ef">struct</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">FilesToCreate</span> <span style="color:#66d9ef">int</span> <span style="color:#e6db74">`json:&#34;files_to_create&#34;`</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stat</span>(<span style="color:#a6e22e">config</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fsErr</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">ErrNotExist</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">As</span>(<span style="color:#a6e22e">err</span>, <span style="color:#a6e22e">fsErr</span>) {
-</span></span><span style="display:flex;"><span>			panic(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">content</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Config</span>{<span style="color:#a6e22e">FilesToCreate</span>: <span style="color:#ae81ff">4</span>})
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>			panic(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">WriteFile</span>(<span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">content</span>, <span style="color:#ae81ff">0600</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>			panic(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">content</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#a6e22e">config</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		panic(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">c</span> <span style="color:#a6e22e">Config</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">content</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		panic(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">FilesToCreate</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">WriteFile</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;/perm/my-example/%d.txt&#34;</span>, <span style="color:#a6e22e">i</span>), []byte(<span style="color:#e6db74">&#34;gokrazy rocks&#34;</span>), <span style="color:#ae81ff">0600</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>			panic(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h2 id="manual-inspectionmodification">Manual inspection/modification</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;encoding/json&#34;</span>
+	<span style="color:#e6db74">&#34;errors&#34;</span>
+	<span style="color:#e6db74">&#34;fmt&#34;</span>
+	<span style="color:#e6db74">&#34;io/fs&#34;</span>
+	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+	<span style="color:#e6db74">&#34;os&#34;</span>
+)
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">config</span> = <span style="color:#e6db74">&#34;/perm/my-example/config.json&#34;</span>
+
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Config</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">FilesToCreate</span> <span style="color:#66d9ef">int</span> <span style="color:#e6db74">`json:&#34;files_to_create&#34;`</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stat</span>(<span style="color:#a6e22e">config</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">fsErr</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">ErrNotExist</span>
+		<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">As</span>(<span style="color:#a6e22e">err</span>, <span style="color:#a6e22e">fsErr</span>) {
+			panic(<span style="color:#a6e22e">err</span>)
+		}
+
+		<span style="color:#a6e22e">content</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Config</span>{<span style="color:#a6e22e">FilesToCreate</span>: <span style="color:#ae81ff">4</span>})
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			panic(<span style="color:#a6e22e">err</span>)
+		}
+
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">WriteFile</span>(<span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">content</span>, <span style="color:#ae81ff">0600</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			panic(<span style="color:#a6e22e">err</span>)
+		}
+	}
+
+	<span style="color:#a6e22e">content</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#a6e22e">config</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">c</span> <span style="color:#a6e22e">Config</span>
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">content</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">FilesToCreate</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">WriteFile</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;/perm/my-example/%d.txt&#34;</span>, <span style="color:#a6e22e">i</span>), []byte(<span style="color:#e6db74">&#34;gokrazy rocks&#34;</span>), <span style="color:#ae81ff">0600</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			panic(<span style="color:#a6e22e">err</span>)
+		}
+	}
+}
+
+</code></pre></div><h2 id="manual-inspectionmodification">Manual inspection/modification</h2>
 <p>You can inspect and modify the data on the permanent data filesystem manually.
 This can be handy if you need e.g. to pass a configuration file for your application.
 To access the filesystem put the SD card into your PC/notebook. Your OS will likely mount the filesystem automatically.
 Copy the file to the permanent data filesystem.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir /path/to-mounted/filesystem/my-example
-</span></span><span style="display:flex;"><span>sudo cp config.json /path/to-mounted/filesystem/my-example
-</span></span></code></pre></div><p>If you want to access files on the permanent data filesystem you may need the <a href="https://en.wikipedia.org/wiki/Sudo">sudo</a> capability.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir /path/to-mounted/filesystem/my-example
+sudo cp config.json /path/to-mounted/filesystem/my-example
+</code></pre></div><p>If you want to access files on the permanent data filesystem you may need the <a href="https://en.wikipedia.org/wiki/Sudo">sudo</a> capability.</p>
 
 
 <footer class="footline">
@@ -761,6 +783,22 @@ Copy the file to the permanent data filesystem.</p>
                     
                         
                         
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
@@ -1010,19 +1048,19 @@ Copy the file to the permanent data filesystem.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1646335597"></script>
-    <script src="/js/perfect-scrollbar.min.js?1646335597"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1646335597"></script>
-    <script src="/js/jquery.sticky.js?1646335597"></script>
-    <script src="/js/featherlight.min.js?1646335597"></script>
-    <script src="/js/highlight.pack.js?1646335597"></script>
+    <script src="/js/clipboard.min.js?1647766516"></script>
+    <script src="/js/perfect-scrollbar.min.js?1647766516"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1647766516"></script>
+    <script src="/js/jquery.sticky.js?1647766516"></script>
+    <script src="/js/featherlight.min.js?1647766516"></script>
+    <script src="/js/highlight.pack.js?1647766516"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1646335597"></script>
-    <script src="/js/learn.js?1646335597"></script>
-    <script src="/js/hugo-learn.js?1646335597"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1647766516"></script>
+    <script src="/js/learn.js?1647766516"></script>
+    <script src="/js/hugo-learn.js?1647766516"></script>
     
         
-            <script src="/mermaid/mermaid.js?1646335597"></script>
+            <script src="/mermaid/mermaid.js?1647766516"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
