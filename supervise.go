@@ -173,6 +173,14 @@ type lineswriter interface {
 	Stream() (<-chan string, func())
 }
 
+type supervisionMode int
+
+const (
+	superviseLoop supervisionMode = iota
+	superviseOnce
+	superviseDone
+)
+
 type service struct {
 	// config (never updated)
 	ModuleInfo string
@@ -190,6 +198,9 @@ type service struct {
 
 	diversionMu sync.Mutex
 	diversion   string
+
+	supervisionMu sync.Mutex
+	supervision   supervisionMode
 
 	waitForClock bool
 
@@ -210,6 +221,18 @@ func (s *service) Diverted() string {
 
 func (s *service) Name() string {
 	return s.cmd.Args[0]
+}
+
+func (s *service) supervisionMode() supervisionMode {
+	s.supervisionMu.Lock()
+	defer s.supervisionMu.Unlock()
+	return s.supervision
+}
+
+func (s *service) setSupervisionMode(mode supervisionMode) {
+	s.supervisionMu.Lock()
+	defer s.supervisionMu.Unlock()
+	s.supervision = mode
 }
 
 func (s *service) Stopped() bool {
@@ -453,6 +476,14 @@ func supervise(s *service) {
 			l.Printf("gokrazy: exited successfully")
 		}
 
+		if s.supervisionMode() == superviseOnce {
+			s.setSupervisionMode(superviseDone)
+			if !s.Stopped() {
+				l.Println("gokrazy: running process only once, stopping")
+				s.setStopped(true)
+			}
+		}
+
 		for {
 			if pid <= 0 {
 				// Sanity check pid value.
@@ -563,6 +594,11 @@ func stopstartHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.URL.Path == "/restart" {
+		if r.FormValue("supervise") == "once" {
+			s.setSupervisionMode(superviseOnce)
+		} else {
+			s.setSupervisionMode(superviseLoop)
+		}
 		err = restart(s, signal)
 	} else {
 		err = stop(s, signal)
