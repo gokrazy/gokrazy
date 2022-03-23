@@ -87,3 +87,17 @@ power supply, the others were measured with a random USB power supply.
 | raspi3b+    | 2.5W        |
 | raspi4b     | 2.8W        |
 | raspizero2w | 0.8W        |
+
+## Hardware Support
+
+| Hardware    | WiFi                 | Bluetooth              |
+|-------------|----------------------|------------------------|
+| apu2c4      | needs card, untested | needs dongle, untested |
+| raspi3b     | [open or WPA-PSK]    | [limited]              |
+| raspi3b+    | [open or WPA-PSK]    | [limited]              |
+| raspi4b     | [open or WPA-PSK]    | [limited]              |
+| raspizero2w | [open only!]         | [limited]              |
+
+[open or WPA-PSK]: /userguide/wifi/
+[open only!]: /userguide/wifi/
+[limited]: /userguide/bluetooth/
