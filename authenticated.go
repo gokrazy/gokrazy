@@ -1,6 +1,7 @@
 package gokrazy
 
 import (
+	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
 	"net/http"
@@ -30,7 +31,7 @@ func authenticated(w http.ResponseWriter, r *http.Request) {
 	username, password, found := strings.Cut(string(b), ":")
 	if !found ||
 		username != "gokrazy" ||
-		password != httpPassword {
+		subtle.ConstantTimeCompare([]byte(password), []byte(httpPassword)) != 1 {
 		w.Header().Set("WWW-Authenticate", `Basic realm="gokrazy"`)
 		http.Error(w, "invalid username/password", http.StatusUnauthorized)
 		return
