@@ -22,6 +22,7 @@ func authenticated(w http.ResponseWriter, r *http.Request) {
 
 	b, err := base64.StdEncoding.DecodeString(s[1])
 	if err != nil {
+		w.Header().Set("WWW-Authenticate", `Basic realm="gokrazy"`)
 		http.Error(w, fmt.Sprintf("could not decode Authorization header as base64: %v", err), http.StatusUnauthorized)
 		return
 	}
@@ -30,6 +31,7 @@ func authenticated(w http.ResponseWriter, r *http.Request) {
 	if len(pair) != 2 ||
 		pair[0] != "gokrazy" ||
 		pair[1] != httpPassword {
+		w.Header().Set("WWW-Authenticate", `Basic realm="gokrazy"`)
 		http.Error(w, "invalid username/password", http.StatusUnauthorized)
 		return
 	}
