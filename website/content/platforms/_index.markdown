@@ -63,6 +63,35 @@ The leading <code>github.com</code> in front of package import paths has been om
 [stapelberg/hmgo]: https://github.com/stapelberg/hmgo
 [stapelberg/scan2drive]: https://github.com/stapelberg/scan2drive
 
+## Community-supported platforms
+
+To use an alternative kernel (or firmware), adjust the `-kernel_package` flag (or `-firmware_package` flag) of the `gokr-packer` tool, to point to the package:
+
+```
+GOARCH=arm gokr-packer \
+    -kernel_package=github.com/gokrazy-community/kernel-rpi-os-32/dist \
+    -firmware_package=github.com/gokrazy-community/firmware-rpi/dist \
+    github.com/gokrazy/hello
+```
+
+Please report any issue to their respective repostitory.
+
+### Alternative kernels
+
+| Kernel package                                       | Architecture  | Supported platforms     | Releases policy                 |
+|------------------------------------------------------|---------------|-------------------------|---------------------------------|
+| [github.com/gokrazy-community/kernel-rpi-os-32/dist] | ARMv6 32 bits | All Raspberry Pi Models | Following Raspberry Pi releases |
+
+[github.com/gokrazy-community/kernel-rpi-os-32/dist]: https://github.com/gokrazy-community/kernel-rpi-os-32
+
+### Alternative firmwares
+
+| Firmware package                                 | Architecture  | Supported platforms     | Releases policy                 |
+|--------------------------------------------------|---------------|-------------------------|---------------------------------|
+| [github.com/gokrazy-community/firmware-rpi/dist] | ARMv6 32 bits | All Raspberry Pi Models | Following Raspberry Pi releases |
+
+[github.com/gokrazy-community/firmware-rpi/dist]: https://github.com/gokrazy-community/firmware-rpi
+
 ## Performance
 
 The JPEG encoding column is the result of running scan2drive’s [`neonjpeg`
