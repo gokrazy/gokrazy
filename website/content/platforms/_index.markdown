@@ -96,7 +96,7 @@ power supply, the others were measured with a random USB power supply.
 | raspi3b     | [open or WPA-PSK]    | [limited]              |
 | raspi3b+    | [open or WPA-PSK]    | [limited]              |
 | raspi4b     | [open or WPA-PSK]    | [limited]              |
-| raspizero2w | [open only!]         | [limited]              |
+| raspizero2w | [open or WPA-PSK]    | [limited]              |
 
 [open or WPA-PSK]: /userguide/wifi/
 [open only!]: /userguide/wifi/
