@@ -101,3 +101,34 @@ power supply, the others were measured with a random USB power supply.
 [open or WPA-PSK]: /userguide/wifi/
 [open only!]: /userguide/wifi/
 [limited]: /userguide/bluetooth/
+
+## Community-supported platforms {#community}
+
+Independently from the official gokrazy
+[kernel](https://github.com/gokrazy/kernel) and
+[firmware](https://github.com/gokrazy/firmware), people of our community provide
+alternative kernels and firmwares, in order to run gokrazy on unsupported
+platform or to provide new features. They may not be as thoroughly tested as the
+official platforms. Please report any issue to their respective repostitory.
+
+### Community-supported Raspberry Pi OS 32-bit kernel/firmware
+
+gokrazy’s official kernel is an upstream Linux kernel (directly from kernel.org)
+that supports ARMv8 64-bit machines, meaning the Raspberry Pi 3 and newer. The
+primary reason for using the upstream kernel is so that security fixes can be
+immediately pulled in without having to wait on third parties.
+
+The community-supported [github.com/gokrazy-community/kernel-rpi-os-32] kernel
+on the other hand is the Raspberry Pi OS kernel (provided by the Raspberry Pi
+foundation) that supports ARMv6 32-bit machines, which includes all Raspberry
+Pis. The corresponding firmware for this kernel is
+[github.com/gokrazy-community/firmware-rpi].
+
+This kernel might generally be useful if you want to use hardware peripherals
+that are not yet supported in the upstream Linux kernel.
+
+This kernel is the only choice for you if you have a Raspberry Pi that’s older
+than the Raspberry Pi 3, but you still want to use gokrazy with it.
+
+[github.com/gokrazy-community/kernel-rpi-os-32]: https://github.com/gokrazy-community/kernel-rpi-os-32
+[github.com/gokrazy-community/firmware-rpi]: https://github.com/gokrazy-community/firmware-rpi
