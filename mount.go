@@ -74,6 +74,18 @@ func mountfs() error {
 		return fmt.Errorf("devpts: %v", err)
 	}
 
+	if err := os.MkdirAll("/dev/shm", 0755); err != nil {
+		return fmt.Errorf("mkdir /dev/shm: %v", err)
+	}
+
+	if err := syscall.Mount("tmpfs", "/dev/shm", "tmpfs", 0, ""); err != nil {
+		return fmt.Errorf("tmpfs on /dev/shm: %v", err)
+	}
+
+	if err := syscall.Mount("tmpfs", "/run", "tmpfs", 0, ""); err != nil {
+		log.Printf("tmpfs on /run: %v", err)
+	}
+
 	// /proc is useful for exposing process details and for
 	// interactive debugging sessions.
 	if err := syscall.Mount("proc", "/proc", "proc", 0, ""); err != nil {
