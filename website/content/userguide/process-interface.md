@@ -22,8 +22,8 @@ More specifically, gokrazy:
 	* Extra command-line flags or environment variables can be specified using
       [per-package configuration](/userguide/package-config/).
 1. When your binary’s process exits, gokrazy restarts it!
-	* If the process exits with status code `125`, gokrazy will stop
-      supervision. Exiting with status code `125` when the
+	* If the process exits with status code `0` (or `125`), gokrazy will stop
+      supervision. Exiting immediately with status code `0` when the
       `GOKRAZY_FIRST_START=1` environment variable is set means “don’t start the
       program on boot”
 
