@@ -473,7 +473,8 @@ func supervise(s *service) {
 			}
 			l.Println("gokrazy: " + err.Error())
 		} else {
-			l.Printf("gokrazy: exited successfully")
+			l.Printf("gokrazy: exited successfully, stopping")
+			s.setStopped(true)
 		}
 
 		if s.supervisionMode() == superviseOnce {
