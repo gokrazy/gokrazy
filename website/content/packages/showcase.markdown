@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Showcase
-pre: "<b>1. </b>"
 aliases:
   - /showcase.html
+  - /showcase/
 weight: 1
 ---
 
@@ -72,8 +72,7 @@ and monitoring.
 [**MinIO**](https://min.io/) is a high performance, S3-compatible, cloud native
 object storage service.
 
-See also [Userguide → Installation → MinIO](/userguide/install/minio/).
-
+See also [Available packages → MinIO](/packages/minio/).
 
 ## No Go software for your idea?
 

@@ -3,6 +3,7 @@ title: "MinIO object storage"
 weight: 50
 aliases: 
   - /userguide/minio/
+  - /userguide/install/minio/
 ---
 
 [MinIO](https://min.io/) is high-performance object storage that is API

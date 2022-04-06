@@ -1,7 +1,9 @@
 ---
 layout: default
 title: Working with Go modules
-weight: 41
+weight: 30
+aliases:
+  - /userguide/modules/
 ---
 
 ## pull in repositories from your GOPATH

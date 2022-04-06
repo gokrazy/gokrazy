@@ -1,6 +1,8 @@
 ---
-title: "gokrazy process interface / requirements"
-weight: 16
+title: "Process interface / requirements"
+weight: 10
+aliases:
+  - /userguide/process-interface/
 ---
 
 ## Process supervision
@@ -15,17 +17,17 @@ gokrazy’s init process (pid 1) supervises all the binaries the user specified 
 More specifically, gokrazy:
 
 1. Starts your binary using Go’s `os/exec.Command` API.
-    * [`unshare(CLONE_NEWNS)`](https://manpages.debian.org/unshare.2) is used so
-      that each process operates in its own [mount
-      namespace](https://manpages.debian.org/mount_namespaces.7).
-    * The `stdout` and `stderr` file descriptors are hooked up to a ring buffer and can be viewed via gokrazy’s web interface.
-	* Extra command-line flags or environment variables can be specified using
-      [per-package configuration](/userguide/package-config/).
+   - [`unshare(CLONE_NEWNS)`](https://manpages.debian.org/unshare.2) is used so
+     that each process operates in its own [mount
+     namespace](https://manpages.debian.org/mount_namespaces.7).
+   - The `stdout` and `stderr` file descriptors are hooked up to a ring buffer and can be viewed via gokrazy’s web interface.
+   - Extra command-line flags or environment variables can be specified using
+     [per-package configuration](/userguide/package-config/).
 1. When your binary’s process exits, gokrazy restarts it!
-	* If the process exits with status code `0` (or `125`), gokrazy will stop
-      supervision. Exiting immediately with status code `0` when the
-      `GOKRAZY_FIRST_START=1` environment variable is set means “don’t start the
-      program on boot”
+   - If the process exits with status code `0` (or `125`), gokrazy will stop
+     supervision. Exiting immediately with status code `0` when the
+     `GOKRAZY_FIRST_START=1` environment variable is set means “don’t start the
+     program on boot”
 
 ## Environment variables
 
@@ -34,7 +36,7 @@ gokrazy sets the `HOME` environment variable to `HOME=/perm/<cmd>`, where
 is started with `HOME=/perm/tailscaled`.
 
 When your binary is first started, gokrazy sets the `GOKRAZY_FIRST_START=1`
-environment variable. 
+environment variable.
 
 ## Privilege dropping / security
 

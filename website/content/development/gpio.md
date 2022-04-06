@@ -1,7 +1,9 @@
 ---
 title: "Controlling a GPIO input/output pin"
 menuTitle: "Input/output via GPIO pins"
-weight: 10
+weight: 20
+aliases:
+  - /userguide/gpio/
 ---
 
 In this guide, we are using [periph.io](https://periph.io/), a library for
@@ -18,8 +20,8 @@ periph.io supports the Raspberry Pi 3 and Raspberry Pi 4, starting with version
 To verify the code is doing what we expect, let’s connect a multimeter as per
 [pinout.xyz](https://pinout.xyz)’s pinout:
 
-* pin number 18 (signal `BCM24`, labeled `24` in the pinout above)
-* pin number 20 (signal `GND`)
+- pin number 18 (signal `BCM24`, labeled `24` in the pinout above)
+- pin number 20 (signal `GND`)
 
 We need to set the multimeter to “Voltage measurement, DC (direct current)”.
 
@@ -84,4 +86,3 @@ At this point, we should be able to see the high/low signal on the multimeter,
 alternating between 3.3V (high) and 0V (low) every 5 seconds:
 
 <a href="/img/2020-06-15-gpio.jpg"><img src="/img/2020-06-15-gpio.thumb.jpg" srcset="/img/2020-06-15-gpio.thumb.2x.jpg 2x,/img/2020-06-15-gpio.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a>
-

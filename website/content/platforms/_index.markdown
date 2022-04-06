@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Hardware and CI
-pre: "<b>4. </b>"
-weight: 4
+title: Supported platforms
+pre: "<b>2. </b>"
+weight: 2
 aliases:
   - /platforms.html
 ---
@@ -45,7 +45,7 @@ temporarily broken at HEAD.
 The leading <code>github.com</code> in front of package import paths has been omitted for space reasons.
 
 | Target    | Hardware    | GOARCH | Kernel package   | Firmware package   | Appliances                                                                    |
-|-----------|-------------|--------|------------------|--------------------|-------------------------------------------------------------------------------|
+| --------- | ----------- | ------ | ---------------- | ------------------ | ----------------------------------------------------------------------------- |
 | apu2c4    | apu2c4      | amd64  | [rtr7/kernel]    | [rtr7/kernel]      | **[gokrazy/bakery/cmd/bake]**                                                 |
 |           |             |        |                  |                    | [rtr7/router7]                                                                |
 | x86-64    | qemu        | amd64  | [rtr7/kernel]    | [rtr7/kernel]      | **[gokrazy/bakery/cmd/bake]**                                                 |
@@ -53,7 +53,6 @@ The leading <code>github.com</code> in front of package import paths has been om
 | rpi3b     | raspi3b     | arm64  | [gokrazy/kernel] | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**                                                 |
 | rpi3b+    | raspi3b+    | arm64  | [gokrazy/kernel] | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**                                                 |
 | rpizero2w | raspizero2w | arm64  | [gokrazy/kernel] | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**                                                 |
-
 
 [rtr7/kernel]: https://github.com/rtr7/kernel
 [gokrazy/bakery/cmd/bake]: https://github.com/gokrazy/bakery
@@ -69,7 +68,7 @@ The JPEG encoding column is the result of running scan2drive’s [`neonjpeg`
 micro-benchmark](https://github.com/stapelberg/scan2drive/blob/1205954672323cf4f8a0619b57e3d107eba66af0/internal/neonjpeg/bench_test.go).
 
 | Hardware    | JPEG encoding |
-|-------------|---------------|
+| ----------- | ------------- |
 | raspi4b     | 0.69s         |
 | raspi3b     | 1.22s         |
 | raspizero2w | 1.47s         |
@@ -81,7 +80,7 @@ with measurement feature. The Raspberry Pi 4 was using the original Raspberry Pi
 power supply, the others were measured with a random USB power supply.
 
 | Hardware    | Power Usage |
-|-------------|-------------|
+| ----------- | ----------- |
 | apu2c4      | 4.0W        |
 | raspi3b     | 1.5W        |
 | raspi3b+    | 2.5W        |
@@ -91,7 +90,7 @@ power supply, the others were measured with a random USB power supply.
 ## Hardware Support
 
 | Hardware    | WiFi                 | Bluetooth              |
-|-------------|----------------------|------------------------|
+| ----------- | -------------------- | ---------------------- |
 | apu2c4      | needs card, untested | needs dongle, untested |
 | raspi3b     | [open or WPA-PSK]    | [limited]              |
 | raspi3b+    | [open or WPA-PSK]    | [limited]              |
