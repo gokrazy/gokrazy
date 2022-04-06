@@ -115,5 +115,9 @@ func mountfs() error {
 		}
 	}
 
+	if err := syscall.Mount("cgroup2", "/sys/fs/cgroup", "cgroup2", 0, ""); err != nil {
+		log.Printf("cgroup2 on /sys/fs/cgroup: %v", err)
+	}
+
 	return nil
 }
