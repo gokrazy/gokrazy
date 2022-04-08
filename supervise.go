@@ -417,7 +417,6 @@ func supervise(s *service) {
 			Stdout: s.Stdout,
 			Stderr: s.Stderr,
 			SysProcAttr: &syscall.SysProcAttr{
-				Unshareflags: syscall.CLONE_NEWNS,
 				// create a new process group for each service to make it easier to terminate all its
 				// processes with a single signal.
 				Setpgid: true,
