@@ -12,6 +12,7 @@ unsafe = true
 
 [params]
   disableInlineCopyToClipBoard = true
+  disableNextPrev = true
   editURL = "https://github.com/gokrazy/gokrazy/tree/master/website/content/"
 
 # TODO(later): change color to grey for logo?
