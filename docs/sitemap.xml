@@ -34,9 +34,11 @@
   </url><url>
     <loc>https://gokrazy.org/userguide/permanent-data/</loc>
   </url><url>
-    <loc>https://gokrazy.org/userguide/install/</loc>
-  </url><url>
     <loc>https://gokrazy.org/userguide/install/minio/</loc>
+  </url><url>
+    <loc>https://gokrazy.org/userguide/rsync-backups/</loc>
+  </url><url>
+    <loc>https://gokrazy.org/userguide/install/</loc>
   </url><url>
     <loc>https://gokrazy.org/</loc>
   </url>

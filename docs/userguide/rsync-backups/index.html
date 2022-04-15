@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Using Bluetooth :: gokrazy</title>
+    <title>Permanent data backup with the gokrazy rsyncd :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1650034108" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/userguide/bluetooth/">
+  <body class="" data-url="/userguide/rsync-backups/">
     <nav id="sidebar" class="">
 
 
@@ -293,7 +293,7 @@
  
   
     
-      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item active">
+      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item ">
         <a href="/userguide/bluetooth/">
         Using Bluetooth
         
@@ -356,7 +356,7 @@
  
   
     
-      <li data-nav-id="/userguide/rsync-backups/" title="Permanent data backup with the gokrazy rsyncd" class="dd-item ">
+      <li data-nav-id="/userguide/rsync-backups/" title="Permanent data backup with the gokrazy rsyncd" class="dd-item active">
         <a href="/userguide/rsync-backups/">
         Data backup with rsync
         
@@ -562,7 +562,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/bluetooth.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/rsync-backups.markdown" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -593,7 +593,7 @@
             
           
           
-            <a href='/'>gokrazy</a> > <a href='/userguide/'>Userguide</a> > Using Bluetooth
+            <a href='/'>gokrazy</a> > <a href='/userguide/'>Userguide</a> > Permanent data backup with the gokrazy rsyncd
           
         
           
@@ -608,7 +608,10 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#example-program">Example program</a></li>
+    <li><a href="#configure">Step 1. Configure the gokrazy rsync daemon</a></li>
+    <li><a href="#install">Step 2. Install the gokrazy rsync daemon</a></li>
+    <li><a href="#ssh">Step 3. Configure SSH from the backup machine</a></li>
+    <li><a href="#cron">Step 4. Configure a daily cron job</a></li>
   </ul>
 </nav>
     </div>
@@ -626,43 +629,80 @@
           
             <h1>
               
-              Using Bluetooth
+              Permanent data backup with the gokrazy rsyncd
             </h1>
           
 
         
 
 
-<p>gokrazy has limited support for Bluetooth. The usual Bluetooth utilities (bluez)
-have a lot of dependencies that are not available on gokrazy and those are out
-of scope here. But the basic Bluetooth hardware are supported on low level. This
-is useful in particular for applications using Bluetooth LE natively in Go.</p>
-<p>To enable Bluetooth in gokrazy, first include the
-<code>github.com/gokrazy/bluetooth</code> package in your <code>gokr-packer</code> command line, e.g.:</p>
+<p>I like to periodically back up all scans from my <a href="/showcase/">scan2drive
+appliance</a> to my PC. The PC is backed up as well, so that
+automatically distributes my scans to multiple machines in case one of them
+fails.</p>
+<p>A convenient way to set up an efficient partial or full backup of a gokrazy
+device’s permanent data partition is to use <a href="https://github.com/gokrazy/rsync">the gokrazy rsync
+daemon</a>. This article walks you through how I
+have set up my backup, but many variants are possible to cater to different
+requirements.</p>
+<p>(You don’t typically need backups of your gokrazy device’s root partition
+because it can be built reproducibly any time using Go.)</p>
+<h2 id="configure">Step 1. Configure the gokrazy rsync daemon</h2>
+<p>In your gokrazy instance directory (see <a href="/quickstart/">Quickstart</a> if you don’t
+have one yet), create a <a href="/userguide/package-config/">package flag config file</a>
+to start gokrazy rsync as a daemon:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/github.com/gokrazy/rsync/cmd/gokr-rsyncd
+cat &gt; flags/github.com/gokrazy/rsync/cmd/gokr-rsyncd/flags.txt <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+</span><span style="color:#e6db74">--gokr.config=/etc/gokr-rsyncd.toml
+</span><span style="color:#e6db74">--daemon
+</span><span style="color:#e6db74">EOT</span>
+</code></pre></div><p>In the daemon config file, configure an authorized SSH listener and which rsync modules to serve:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p extrafiles/github.com/gokrazy/rsync/cmd/gokr-rsyncd/etc
+cat &gt; extrafiles/github.com/gokrazy/rsync/cmd/gokr-rsyncd/etc/gokr-rsyncd.toml <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+</span><span style="color:#e6db74">dont_namespace = true 
+</span><span style="color:#e6db74">[[listener]]
+</span><span style="color:#e6db74">  [listener.authorized_ssh]
+</span><span style="color:#e6db74">    address = &#34;scan2drive.lan:22873&#34;
+</span><span style="color:#e6db74">    authorized_keys = &#34;/etc/gokr-rsyncd.authorized_keys&#34;
+</span><span style="color:#e6db74">[[module]]
+</span><span style="color:#e6db74">  name = &#34;scans&#34;
+</span><span style="color:#e6db74">  path = &#34;/perm/scans&#34;
+</span><span style="color:#e6db74">EOT</span>
+</code></pre></div><p>Finally, create the authorized keys file that determines who can access the rsync daemon:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">cat &gt; extrafiles/github.com/gokrazy/rsync/cmd/gokr-rsyncd/etc/gokr-rsyncd.authorized_keys <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+</span><span style="color:#e6db74">ssh-ed25519 […] michael@midna
+</span><span style="color:#e6db74">EOT</span>
+</code></pre></div><h2 id="install">Step 2. Install the gokrazy rsync daemon</h2>
+<p>Include the gokrazy rsync daemon <code>gokr-rsyncd</code> in your gokr-packer invocation,
+for example:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -serial_console<span style="color:#f92672">=</span>disabled <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/fbstatus <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/bluetooth
-</code></pre></div><p>The <code>github.com/gokrazy/bluetooth</code> package loads the appropriate kernel modules
-and firmware required.</p>
-<h2 id="example-program">Example program</h2>
-<p>As demo we&rsquo;re using <a href="https://gitlab.com/jtaimisto/bluewalker">bluewalker</a> Bluetooth LE scanner utility just to show
-that Bluetooth is working.</p>
-<p>First, prepare command line flags.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p flags/gitlab.com/jtaimisto/bluewalker
-echo <span style="color:#e6db74">&#39;-device=hci0&#39;</span> &gt; flags/gitlab.com/jtaimisto/bluewalker/flags.txt
-</code></pre></div><p>Then, deploy as usual.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gokr-packer <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  github.com/gokrazy/bluetooth <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  gitlab.com/jtaimisto/bluewalker
-</code></pre></div><p>Once deployed with gokr-packer, you can see Bluetooth events being received
-in the bluewalker output.</p>
-<p><img src="/img/2022-03-09-bluetooth-bluewalker.png" alt="Bluewalker output in gokrazy web interface"></p>
-
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  github.com/gokrazy/rsync/cmd/gokr-rsyncd
+</code></pre></div><h2 id="ssh">Step 3. Configure SSH from the backup machine</h2>
+<p>On your PC (not the gokrazy instance), add an SSH configuration stanza to your
+<code>~/.ssh/config</code> to configure the custom port (22873 for ssh+rsync) and which
+passwordless identity file to use (for the <a href="#cron">cron job in step 4</a>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Host scan2drive-backup
+    Hostname scan2drive.lan
+    Port 22873
+    IdentityFile ~/.ssh/id_ed25519_scan2drivebackup
+</code></pre></div><p>Now you should be able to run rsync via SSH as usual:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/
+</code></pre></div><h2 id="cron">Step 4. Configure a daily cron job</h2>
+<p>First, install <a href="https://github.com/stapelberg/rsyncprom">the <code>rsync-prom</code> tool</a>
+to monitor your periodic transfer with <a href="https://prometheus.io/">Prometheus</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">go install github.com/stapelberg/rsyncprom/cmd/rsync-prom@latest
+</code></pre></div><p>Then wrap the above rsync command in an rsync-prom invocation in a shell script called <code>scan2drive-backup-sync.sh</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/sh
+</span><span style="color:#75715e"></span>SSH_AUTH_SOCK<span style="color:#f92672">=</span> ~/go/bin/rsync-prom --instance<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;scan2drive@midna&#34;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/
+</code></pre></div><p>Finally, run <code>crontab -e</code> and run the script at your convenience, like so:</p>
+<pre tabindex="0"><code>30 07 * * * /home/michael/scan2drive-backup-sync.sh
+</code></pre>
 
 <footer class="footline">
 	
@@ -849,26 +889,6 @@ in the bluewalker output.</p>
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -916,6 +936,26 @@ in the bluewalker output.</p>
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
