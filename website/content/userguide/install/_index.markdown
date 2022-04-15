@@ -2,7 +2,7 @@
 title: "Installation"
 menuTitle: "How do I install X on gokrazy?"
 chapter: true
-weight: 50
+weight: 60
 ---
 
 # Installation
