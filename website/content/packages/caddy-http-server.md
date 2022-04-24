@@ -3,6 +3,7 @@ title: "Caddy HTTP server"
 weight: 31
 aliases: 
   - /userguide/caddy-http-server/
+  - /userguide/install/caddy-http-server/
 ---
 
 [Caddy](https://caddyserver.com/) is a powerful, enterprise-ready, open source

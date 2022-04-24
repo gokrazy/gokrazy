@@ -1,7 +1,7 @@
 ---
-title: "Package config: flags, environment variables, …"
-menuTitle: "Package config: flags, environment variables, …"
-weight: 15
+title: "Package config: flags, environment variables, extra files"
+menuTitle: "Flags, environment variables, …"
+weight: 10
 ---
 
 gokrazy will arrange for each included package to be started at boot. For
@@ -21,10 +21,11 @@ This article shows how you can configure different aspects of individual
 packages.
 
 Each bit of configuration lives in its own directory:
-* `flags` for [Command-line flags](#flags)
-* `env` for [Environment variables](#env)
-* `buildflags` for [Go build flags](#buildflags)
-* `extrafiles` for [Extra files](#extrafiles)
+
+- `flags` for [Command-line flags](#flags)
+- `env` for [Environment variables](#env)
+- `buildflags` for [Go build flags](#buildflags)
+- `extrafiles` for [Extra files](#extrafiles)
 
 Within these directories, create a directory named after the package import
 path, then place your configuration in a text file: `flags.txt`, `env.txt` or
@@ -79,7 +80,7 @@ mkdir -p extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy
 cat > extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy/Caddyfile <<'EOT'
 http://:80 {
 	root * /tmp
-	file_server browse 
+	file_server browse
 }
 EOT
 ```

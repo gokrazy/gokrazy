@@ -3,6 +3,7 @@ title: "Tailscale VPN"
 weight: 17
 aliases:
   - /userguide/tailscale/
+  - /userguide/install/tailscale/
 ---
 
 [Tailscale](https://tailscale.com/)’s website reads:

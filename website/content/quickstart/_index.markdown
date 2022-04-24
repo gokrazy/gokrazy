@@ -1,8 +1,8 @@
 +++
 title = "Quickstart"
 chapter = false
-pre = "<b>2. </b>"
-weight = 2
+pre = "<b>1. </b>"
+weight = 1
 #aliases:
 #  - /quickstart.html
 +++
@@ -13,11 +13,9 @@ Currently, the Raspberry Pi 4 B is the recommended platform for
 using gokrazy, but you can find
 other <a href="/platforms/">supported and upcoming platforms</a>.
 
-
 ## Prep: Install Go
 
 If you don’t already have Go installed, install the latest <a href="https://golang.org/dl/">Go</a> version.
-
 
 ## Prep: Install the gokrazy packer
 
@@ -127,16 +125,14 @@ It is safe to unplug your SD card once <code>gokr-packer</code> returns.
 
 ## Step 3: Boot gokrazy
 
-
 After booting from this SD card, your device will:
 
-* display system status on the monitor connected via HDMI, if any
-* obtain an IP address for hostname “gokrazy” via DHCP (IPv4) and SLAAC (IPv6)
-* synchronize the clock using NTP
-* expose a password-authenticated web interface on private IP addresses<br>
+- display system status on the monitor connected via HDMI, if any
+- obtain an IP address for hostname “gokrazy” via DHCP (IPv4) and SLAAC (IPv6)
+- synchronize the clock using NTP
+- expose a password-authenticated web interface on private IP addresses<br>
   (the default password can be recovered from <code>~/.config/gokrazy/http-password.txt</code>)
-* supervise all installed programs (only the hello world program in this example)
-
+- supervise all installed programs (only the hello world program in this example)
 
 To interact with your device, you can:
 
@@ -146,7 +142,7 @@ To interact with your device, you can:
 
 Congratulations! 🎉 You now have a working gokrazy installation!
 
-Next, see the [Userguide](/userguide/) for details on how to user other
+Next, see the [Configuration guide](/userguide/) for details on how to user other
 programs.
 
 ## Optional: Using the serial console

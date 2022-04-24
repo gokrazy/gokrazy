@@ -5,7 +5,7 @@ weight: 50
 ---
 
 I like to periodically back up all scans from my [scan2drive
-appliance](/showcase/) to my PC. The PC is backed up as well, so that
+appliance](/packages/showcase/) to my PC. The PC is backed up as well, so that
 automatically distributes my scans to multiple machines in case one of them
 fails.
 
