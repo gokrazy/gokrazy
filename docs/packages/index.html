@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Connecting to WiFi networks :: gokrazy</title>
+    <title>Available packages :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1650806413" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/userguide/wifi/">
+  <body class="" data-url="/packages/">
     <nav id="sidebar" class="">
 
 
@@ -139,7 +139,7 @@
   
     
     <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        parent
+        
         
         
         ">
@@ -228,7 +228,7 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item active">
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
         <a href="/userguide/wifi/">
         Connecting to WiFi
         
@@ -320,8 +320,8 @@
   
     
     <li data-nav-id="/packages/" title="Available packages" class="dd-item
-        
-        
+        parent
+        active
         
         ">
       <a href="/packages/">
@@ -586,7 +586,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/wifi.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/packages/_index.markdown" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -601,8 +601,6 @@
                         </a>
                     </span>
                   
-                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
-                  
                   <span class="links">
                  
                  
@@ -613,13 +611,7 @@
             
           
           
-            
-            
-          
-          
-            <a href='/'>gokrazy</a> > <a href='/userguide/'>Configuration</a> > Connecting to WiFi networks
-          
-        
+            <a href='/'>gokrazy</a> > Available packages
           
         
           
@@ -628,17 +620,6 @@
                   </span>
                 </div>
                 
-                    <div class="progress">
-    <div class="wrapper">
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</a></li>
-  </ul>
-</nav>
-    </div>
-</div>
-
-                
               </div>
             </div>
             
@@ -646,64 +627,114 @@
         
         </div>
         
+          <div id="chapter">
+        
         <div id="body-inner">
-          
-            <h1>
-              
-              Connecting to WiFi networks
-            </h1>
           
 
         
 
 
-<p>Since March 2022, gokrazy supports both encrypted and unencrypted WiFi networks!
-🎉</p>
 
-<div class="notices warning" ><p>Remember that using an <strong>unencrypted WiFi</strong> network means anyone in range can read
-your communication. Hence, we strongly recommend <a href="/userguide/tls-for-untrusted-networks/">using TLS for accessing the
-gokrazy web interface and doing
-updates</a>.</p>
-</div>
-
-<p>To make gokrazy connect to a WiFi network, first include the
-<code>github.com/gokrazy/wifi</code> package in your <code>gokr-packer</code> command line, e.g.:</p>
+	<h1 id="available-packages">Available packages</h1>
+<p>The guides in this chapter show how to set up popular third-party software.</p>
+<p>If you feel a common program should be included here but isn’t, please <a href="https://github.com/gokrazy/gokrazy/issues">file an
+issue on GitHub</a>.</p>
+<h2 id="installing-existing-go-software">Installing existing Go software</h2>
+<p>To add an existing Go software to you installation, you just need to indicate the
+import path of the package to <code>gokr-packer</code>.</p>
+<p>For instance to install <code>github.com/stapelberg/scan2drive/cmd/scan2drive</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/wifi
-</span></span></code></pre></div><p>Then, configure the <code>wifi</code> program by creating the file <code>wifi.json</code> as <a href="/userguide/package-config/#extrafiles">extra
-file</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># To connect to an unencrypted WiFi network, specify no psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;My unencrypted WiFi&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># OR, to connect to an encrypted WiFi network, specify the psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;Secure WiFi&#34;, &#34;psk&#34;: &#34;secret&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
-</span></span></code></pre></div><p>Alternatively, you can also create the <code>wifi.json</code> manually on the permanent
-data partition with path <code>/perm/wifi.json</code>.</p>
-<p>After starting gokrazy, the <code>wifi</code> program will connect to the configured WiFi network:</p>
-<p><a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
-<h2 id="for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</h2>
-<p>In case you have trouble getting your Raspberry Pi to connect to your network,
-this is how I set up my <a href="https://openwrt.org/toh/tp-link/tl-wdr4300">TP-LINK
-TL-WDR4300</a> with <a href="https://openwrt.org/">OpenWrt
-19.07</a>:</p>
-<p><a href="/img/iotee.jpg"><img src="/img/iotee.thumb.jpg" srcset="/img/iotee.thumb.2x.jpg 2x,/img/iotee.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
-<p>The MAC address filter isn’t a security measure, but prevents others from
-accidentally joining this open network.</p>
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -overwrite<span style="color:#f92672">=</span>/dev/sdx <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/stapelberg/scan2drive/cmd/scan2drive
+</span></span></code></pre></div><h2 id="packages-guides">Packages guides</h2>
 
 
-<footer class="footline">
+
+
+
+
+
+<ul class="children children-li">
+	
+
+	
+		
+	
+
+	
+
+	
+		
+	
+		
+			
+				
+<li>
+<a href="/packages/showcase/" >Showcase</a>
+</li>
+				
+
+				
+			
+			
+		
+	
+		
+			
+				
+<li>
+<a href="/packages/tailscale/" >Tailscale VPN</a>
+</li>
+				
+
+				
+			
+			
+		
+	
+		
+			
+				
+<li>
+<a href="/packages/caddy-http-server/" >Caddy HTTP server</a>
+</li>
+				
+
+				
+			
+			
+		
+	
+		
+			
+				
+<li>
+<a href="/packages/minio/" >MinIO object storage</a>
+</li>
+				
+
+				
+			
+			
+		
+	
+
+	
+</ul>
+
+
+
+
+
+
+
+<footer class=" footline" >
 	
 </footer>
 
+        
+            </div> 
         
         </div>
         
@@ -770,7 +801,6 @@ accidentally joining this open network.</p>
             
                 
                     
-                    
                 
                 
 
@@ -783,9 +813,6 @@ accidentally joining this open network.</p>
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -835,7 +862,6 @@ accidentally joining this open network.</p>
             
                 
                     
-                    
                 
                 
 
@@ -851,9 +877,6 @@ accidentally joining this open network.</p>
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -906,6 +929,7 @@ accidentally joining this open network.</p>
             
                 
                     
+                    
                 
                 
 
@@ -918,6 +942,9 @@ accidentally joining this open network.</p>
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1098,4 +1125,3 @@ accidentally joining this open network.</p>
 
   </body>
 </html>
-

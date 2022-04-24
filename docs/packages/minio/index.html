@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Connecting to WiFi networks :: gokrazy</title>
+    <title>MinIO object storage :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1650806413" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/userguide/wifi/">
+  <body class="" data-url="/packages/minio/">
     <nav id="sidebar" class="">
 
 
@@ -139,7 +139,7 @@
   
     
     <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        parent
+        
         
         
         ">
@@ -228,7 +228,7 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item active">
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
         <a href="/userguide/wifi/">
         Connecting to WiFi
         
@@ -320,7 +320,7 @@
   
     
     <li data-nav-id="/packages/" title="Available packages" class="dd-item
-        
+        parent
         
         
         ">
@@ -409,7 +409,7 @@
  
   
     
-      <li data-nav-id="/packages/minio/" title="MinIO object storage" class="dd-item ">
+      <li data-nav-id="/packages/minio/" title="MinIO object storage" class="dd-item active">
         <a href="/packages/minio/">
         MinIO object storage
         
@@ -586,7 +586,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/wifi.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/packages/minio.md" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -617,7 +617,7 @@
             
           
           
-            <a href='/'>gokrazy</a> > <a href='/userguide/'>Configuration</a> > Connecting to WiFi networks
+            <a href='/'>gokrazy</a> > <a href='/packages/'>Available packages</a> > MinIO object storage
           
         
           
@@ -632,7 +632,9 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</a></li>
+    <li><a href="#step-1-configuring-the-environment-variables-and-command-line-flags">Step 1: Configuring the environment variables and command-line flags</a></li>
+    <li><a href="#step-2-install-minio-to-your-gokrazy-device">Step 2: Install MinIO to your gokrazy device</a></li>
+    <li><a href="#step-3-test-whether-the-setup-was-successful">Step 3: Test whether the setup was successful</a></li>
   </ul>
 </nav>
     </div>
@@ -650,54 +652,79 @@
           
             <h1>
               
-              Connecting to WiFi networks
+              MinIO object storage
             </h1>
           
 
         
 
 
-<p>Since March 2022, gokrazy supports both encrypted and unencrypted WiFi networks!
-🎉</p>
-
-<div class="notices warning" ><p>Remember that using an <strong>unencrypted WiFi</strong> network means anyone in range can read
-your communication. Hence, we strongly recommend <a href="/userguide/tls-for-untrusted-networks/">using TLS for accessing the
-gokrazy web interface and doing
-updates</a>.</p>
-</div>
-
-<p>To make gokrazy connect to a WiFi network, first include the
-<code>github.com/gokrazy/wifi</code> package in your <code>gokr-packer</code> command line, e.g.:</p>
+<p><a href="https://min.io/">MinIO</a> is high-performance object storage that is API
+compatible to Amazons <a href="https://aws.amazon.com/de/s3/">Simple Storage Service (S3)</a>,
+but is open source and written in Go. It can be used as a building block for
+applications involving file storage and file transmission and while its native
+to the cloud, it turns out one can also use it on gokrazy. :)</p>
+<p>Since MinIO is a storage solution, you need to enable permanent storage on your
+gokrazy installation by running the <code>mkfs</code> command that <code>gokr-packer</code> prints. For
+more details, see <a href="/quickstart/">Quickstart</a>.</p>
+<p>This article also assumes that you have an instance directory (with a <code>go.mod</code>)
+set up.</p>
+<h2 id="step-1-configuring-the-environment-variables-and-command-line-flags">Step 1: Configuring the environment variables and command-line flags</h2>
+<p>You can find a detailed description on how to set the flags and environment vars
+in the article <a href="/userguide/package-config/">per-package configuration</a>.</p>
+<p><code>${INSTANCE?}/env/github.com/minio/minio/env.txt</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-env" data-lang="env"><span style="display:flex;"><span>MINIO_ROOT_USER<span style="color:#f92672">=</span>minio
+</span></span><span style="display:flex;"><span>MINIO_ROOT_PASSWORD<span style="color:#f92672">=</span>minio-on-gokrazy
+</span></span></code></pre></div><p><code>${INSTANCE?}/flags/github.com/minio/minio/flags.txt</code></p>
+<pre tabindex="0"><code>server
+--address
+:3001
+--console-address
+:3002
+/perm/minio/
+</code></pre><p>A few things can be noted here:</p>
+<ul>
+<li>
+<p>There are nice practical examples on the different options once you execute
+<code>minio server --help</code> if you have it installed locally or more advanced use
+cases in the official
+<a href="https://docs.min.io/minio/baremetal/reference/minio-server/minio-server.html">MinIO docs</a>.</p>
+</li>
+<li>
+<p>The ports for the storage server and console do not have to be explicitly set,
+but for me the default port collided with another service (Port 9000). If no
+port is set the console just chooses an arbitrary free one.</p>
+</li>
+<li>
+<p>For some reason the <code>HOME</code> variable has to be set to the storage folder.
+See <a href="https://github.com/minio/minio/issues/12641">Issue #12641</a> on why that
+is the case. As default gokrazy sets <code>HOME</code> to <code>HOME=/perm/&lt;cmd&gt;</code>, so if you
+want to change your storage location to something different modify the
+<code>env.txt</code> accordingly.</p>
+</li>
+</ul>
+<h2 id="step-2-install-minio-to-your-gokrazy-device">Step 2: Install MinIO to your gokrazy device</h2>
+<p>In your <code>gokr-packer</code> invocation (see <a href="/quickstart/">Quickstart</a> if you don’t
+have one yet), include the MinIO package:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/wifi
-</span></span></code></pre></div><p>Then, configure the <code>wifi</code> program by creating the file <code>wifi.json</code> as <a href="/userguide/package-config/#extrafiles">extra
-file</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># To connect to an unencrypted WiFi network, specify no psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;My unencrypted WiFi&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># OR, to connect to an encrypted WiFi network, specify the psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;Secure WiFi&#34;, &#34;psk&#34;: &#34;secret&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
-</span></span></code></pre></div><p>Alternatively, you can also create the <code>wifi.json</code> manually on the permanent
-data partition with path <code>/perm/wifi.json</code>.</p>
-<p>After starting gokrazy, the <code>wifi</code> program will connect to the configured WiFi network:</p>
-<p><a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
-<h2 id="for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</h2>
-<p>In case you have trouble getting your Raspberry Pi to connect to your network,
-this is how I set up my <a href="https://openwrt.org/toh/tp-link/tl-wdr4300">TP-LINK
-TL-WDR4300</a> with <a href="https://openwrt.org/">OpenWrt
-19.07</a>:</p>
-<p><a href="/img/iotee.jpg"><img src="/img/iotee.thumb.jpg" srcset="/img/iotee.thumb.2x.jpg 2x,/img/iotee.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
-<p>The MAC address filter isn’t a security measure, but prevents others from
-accidentally joining this open network.</p>
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/minio/minio
+</span></span></code></pre></div><h2 id="step-3-test-whether-the-setup-was-successful">Step 3: Test whether the setup was successful</h2>
+<p>If you have the <a href="https://github.com/minio/mc"><code>mc</code></a> command installed you can
+check out whether your installation of MinIO really works:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ mc alias set gokrazy http://gokrazy:3001 minio minio-on-gokrazy
+</span></span><span style="display:flex;"><span>Added <span style="color:#e6db74">`</span>gokrazy<span style="color:#e6db74">`</span> successfully.
+</span></span><span style="display:flex;"><span>$ mc ls gokrazy
+</span></span><span style="display:flex;"><span>$ mc mb gokrazy/testbucket
+</span></span><span style="display:flex;"><span>Bucket created successfully <span style="color:#e6db74">`</span>gokrazy/testbucket<span style="color:#e6db74">`</span>.
+</span></span><span style="display:flex;"><span>$ mc ls gokrazy
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>2021-09-15 16:40:16 CEST<span style="color:#f92672">]</span>     0B testbucket/
+</span></span></code></pre></div><p>Also check out the output in the logs on the gokrazy webinterface and login into
+the MinIO management console (<a href="http://gokrazy:3002">http://gokrazy:3002</a> in this
+guide) to create service accounts view logs, bucket contents and more.</p>
 
 
 <footer class="footline">
@@ -770,6 +797,134 @@ accidentally joining this open network.</p>
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                     
                 
                 
@@ -847,22 +1002,6 @@ accidentally joining this open network.</p>
             
         
                     
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
             
         
                     
@@ -871,120 +1010,8 @@ accidentally joining this open network.</p>
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
                         
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 

@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Connecting to WiFi networks :: gokrazy</title>
+    <title>Non-Go Prototyping :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1650806413" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/userguide/wifi/">
+  <body class="" data-url="/development/non-go/">
     <nav id="sidebar" class="">
 
 
@@ -139,7 +139,7 @@
   
     
     <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        parent
+        
         
         
         ">
@@ -228,7 +228,7 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item active">
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
         <a href="/userguide/wifi/">
         Connecting to WiFi
         
@@ -438,7 +438,7 @@
   
     
     <li data-nav-id="/development/" title="Package development" class="dd-item
-        
+        parent
         
         
         ">
@@ -527,7 +527,7 @@
  
   
     
-      <li data-nav-id="/development/non-go/" title="Non-Go Prototyping" class="dd-item ">
+      <li data-nav-id="/development/non-go/" title="Non-Go Prototyping" class="dd-item active">
         <a href="/development/non-go/">
         Non-Go Prototyping
         
@@ -586,7 +586,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/wifi.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/development/non-go.markdown" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -617,7 +617,7 @@
             
           
           
-            <a href='/'>gokrazy</a> > <a href='/userguide/'>Configuration</a> > Connecting to WiFi networks
+            <a href='/'>gokrazy</a> > <a href='/development/'>Package development</a> > Non-Go Prototyping
           
         
           
@@ -632,7 +632,9 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</a></li>
+    <li><a href="#go-software-not-written-for-gokrazy-grafana">Go software not written for gokrazy: Grafana</a></li>
+    <li><a href="#c-software-wireguard">C software: WireGuard</a></li>
+    <li><a href="#c-software-tc">C software: tc</a></li>
   </ul>
 </nav>
     </div>
@@ -650,55 +652,150 @@
           
             <h1>
               
-              Connecting to WiFi networks
+              Non-Go Prototyping
             </h1>
           
 
         
 
 
-<p>Since March 2022, gokrazy supports both encrypted and unencrypted WiFi networks!
-🎉</p>
-
-<div class="notices warning" ><p>Remember that using an <strong>unencrypted WiFi</strong> network means anyone in range can read
-your communication. Hence, we strongly recommend <a href="/userguide/tls-for-untrusted-networks/">using TLS for accessing the
-gokrazy web interface and doing
-updates</a>.</p>
-</div>
-
-<p>To make gokrazy connect to a WiFi network, first include the
-<code>github.com/gokrazy/wifi</code> package in your <code>gokr-packer</code> command line, e.g.:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/wifi
-</span></span></code></pre></div><p>Then, configure the <code>wifi</code> program by creating the file <code>wifi.json</code> as <a href="/userguide/package-config/#extrafiles">extra
-file</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
+<p>To realize the full benefits of gokrazy, you need to use only
+software written in Go. If there is no Go software for what you want
+to do, creating that piece of software can pose a seemingly
+unsurmountable hurdle. To make some quick progress and figure out if
+your idea can be implemented, it might make sense to temporarily use
+existing software before starting your own implementation.</p>
+<p>This article shows a couple of techniques for getting non-Go
+software to work on gokrazy, in increasing order of complexity.</p>
+<p>Note that software which is manually installed like shown
+here <strong>will not be automatically updated</strong> by gokrazy
+and hence poses a security risk. Use these techniques only for
+prototyping.</p>
+<h2 id="go-software-not-written-for-gokrazy-grafana">Go software not written for gokrazy: Grafana</h2>
+<p>It would not suffice to add Grafana to your <code>gokr-packer</code>
+command, as the resulting Grafana binary requires assets, supports
+plugins, keeps state, etc.</p>
+<p>Hence, you need to manually install Grafana into a directory
+underneath <code>/perm</code>. A convenient way to do that is to
+use <a href="https://github.com/gokrazy/breakglass">breakglass</a>
+to download the “Standalone Linux Binaries” release from
+<a href="https://grafana.com/grafana/download?platform=arm"><a href="https://grafana.com/grafana/download?platform=arm">https://grafana.com/grafana/download?platform=arm</a></a>. Note
+that I am serving the file from my computer because my busybox
+version supports neither HTTPS nor DNS.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/tmp/breakglass531810560 # wget http://10.0.0.76:4080/grafana-5.3.2.linux-arm64.tar.gz
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560 # tar xf grafana-5.3.2.linux-arm64.tar.gz
+</span></span></code></pre></div><p>We cannot start Grafana yet, as its binary is dynamically
+linked. One way to fix this is to place the sources which correspond
+to the release you just unpacked (e.g. from
+<a href="https://github.com/grafana/grafana/tree/v5.3.2"><a href="https://github.com/grafana/grafana/tree/v5.3.2">https://github.com/grafana/grafana/tree/v5.3.2</a></a>)
+in your <code>$GOPATH</code> and recompile the binaries:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>arm64 CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> CC<span style="color:#f92672">=</span>aarch64-linux-gnu-gcc go install <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -ldflags <span style="color:#e6db74">&#34;-linkmode external -extldflags -static&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/grafana/grafana/pkg/cmd/...
+</span></span></code></pre></div><p>Note that it is usually easier to set the environment
+variable <code>CGO_ENABLED=0</code> to get a statically linked
+binary, but Grafana uses sqlite3, which is written in C, so we
+resort to the <code>-ldflags</code> variant.</p>
+<p>At this point, we can start Grafana from breakglass:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/tmp/breakglass531810560 # cd grafana-5.3.2
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560/grafana-5.3.2 # wget http://10.0.0.76:4080/grafana-server
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560/grafana-5.3.2 # install -m 755 grafana-server bin/ &amp;&amp; rm grafana-server
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560/grafana-5.3.2 # ./bin/grafana-server
+</span></span><span style="display:flex;"><span>INFO[10-30|19:27:51] Starting Grafana                         logger=server version=5.0.0 commit=NA compiled=2018-10-30T19:27:51+0100
+</span></span><span style="display:flex;"><span>…
+</span></span></code></pre></div><p>To have gokrazy start Grafana, we can use a Go package like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># To connect to an unencrypted WiFi network, specify no psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;My unencrypted WiFi&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;syscall&#34;</span>
+</span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># OR, to connect to an encrypted WiFi network, specify the psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;Secure WiFi&#34;, &#34;psk&#34;: &#34;secret&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
-</span></span></code></pre></div><p>Alternatively, you can also create the <code>wifi.json</code> manually on the permanent
-data partition with path <code>/perm/wifi.json</code>.</p>
-<p>After starting gokrazy, the <code>wifi</code> program will connect to the configured WiFi network:</p>
-<p><a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
-<h2 id="for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</h2>
-<p>In case you have trouble getting your Raspberry Pi to connect to your network,
-this is how I set up my <a href="https://openwrt.org/toh/tp-link/tl-wdr4300">TP-LINK
-TL-WDR4300</a> with <a href="https://openwrt.org/">OpenWrt
-19.07</a>:</p>
-<p><a href="/img/iotee.jpg"><img src="/img/iotee.thumb.jpg" srcset="/img/iotee.thumb.2x.jpg 2x,/img/iotee.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
-<p>The MAC address filter isn’t a security measure, but prevents others from
-accidentally joining this open network.</p>
-
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">bin</span> = <span style="color:#e6db74">&#34;/perm/grafana/bin/grafana-server&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">Exec</span>(<span style="color:#a6e22e">bin</span>, []<span style="color:#66d9ef">string</span>{<span style="color:#a6e22e">bin</span>, <span style="color:#e6db74">&#34;-homepath=/perm/grafana&#34;</span>}, <span style="color:#66d9ef">nil</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="c-software-wireguard">C software: WireGuard</h2>
+<p>WireGuard is a modern VPN tunnel, which consists of a Linux kernel
+module and a configuration
+tool. See <a href="https://github.com/rtr7/kernel/commit/c7afbc1fd2efdb9e1149d271c4d2be59cc5c98f4">rtr7/kernel@c7afbc1f</a>
+for how the kernel module was added to the router7 kernel.</p>
+<p>The configuration tool can be statically cross-compiled. We can run
+Debian in a Docker container to not mess with our host system:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>% mkdir /tmp/wg
+</span></span><span style="display:flex;"><span>% cd /tmp/wg
+</span></span><span style="display:flex;"><span>% docker run -t -i debian
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# dpkg --add-architecture arm64
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# apt update
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# apt install libmnl-dev:arm64 libelf-dev:arm64 linux-headers-amd64 crossbuild-essential-arm64 pkg-config wget
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# wget https://git.zx2c4.com/WireGuard/snapshot/WireGuard-0.0.20181018.tar.xz
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# tar xf WireGuard-0.0.20181018.tar.xz
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# cd WireGuard-0.0.20181018/src/tools
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# make CC=aarch64-linux-gnu-gcc LDFLAGS=-static
+</span></span><span style="display:flex;"><span>root@d1728eaaa6e1:/# exit
+</span></span><span style="display:flex;"><span>% docker cp -L d1728eaaa6e1:/WireGuard-0.0.20181018/src/tools/wg .
+</span></span></code></pre></div><p>Now we can copy and run the <code>wg</code> binary via breakglass:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/tmp/breakglass531810560 # wget http://10.0.0.76:4080/wg
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560 # chmod +x wg
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560 # ./wg --help
+</span></span><span style="display:flex;"><span>Usage: ./wg &lt;cmd&gt; [&lt;args&gt;]
+</span></span><span style="display:flex;"><span>…
+</span></span></code></pre></div><h2 id="c-software-tc">C software: tc</h2>
+<p>Linux’s Traffic Control system (used e.g. for traffic shaping) is
+configured with the <code>tc</code> tool.</p>
+<p><code>tc</code> is a special case in that it requires to be
+dynamically linked. The different queueing disciplines are
+implemented as plugins, and statically linking <code>tc</code>
+results in a binary which starts but won’t be able to display or
+change queueing disciplines.</p>
+<p>Because gokrazy doesn’t include a C runtime environment, we’ll need to copy not
+only the <code>tc</code> binary, but also the dynamic loader and all required
+shared libraries. We can run Debian in a Docker container to not mess with our
+host system, and use the <a
+href="https://github.com/gokrazy/freeze"><code>freeze</code> tool</a> to
+automate the tedious parts of the process:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>% mkdir /tmp/iproute
+</span></span><span style="display:flex;"><span>% cd /tmp/iproute
+</span></span><span style="display:flex;"><span>% docker run -t -i debian:bookworm
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# dpkg --add-architecture arm64
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# apt update
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# apt install iproute2:arm64 qemu-user-static golang-go ca-certificates
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# go install github.com/gokrazy/freeze/cmd/...@latest
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# ~/go/bin/freeze -wrap=qemu-aarch64-static $(which tc)
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 /sbin/tc
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 Copying tc together with its 12 ELF shared library dependencies
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /sbin/tc /tmp/freeze2237965672/tc]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libbpf.so.0.7.0 /tmp/freeze2237965672/libbpf.so.0]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libelf-0.186.so /tmp/freeze2237965672/libelf.so.1]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libmnl.so.0.2.0 /tmp/freeze2237965672/libmnl.so.0]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libbsd.so.0.11.5 /tmp/freeze2237965672/libbsd.so.0]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libcap.so.2.44 /tmp/freeze2237965672/libcap.so.2]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libm-2.33.so /tmp/freeze2237965672/libm.so.6]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libdl-2.33.so /tmp/freeze2237965672/libdl.so.2]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libxtables.so.12.4.0 /tmp/freeze2237965672/libxtables.so.12]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libc-2.33.so /tmp/freeze2237965672/libc.so.6]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/ld-2.33.so /tmp/freeze2237965672/ld-linux-aarch64.so.1]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /lib/aarch64-linux-gnu/libz.so.1.2.11 /tmp/freeze2237965672/libz.so.1]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [cp /usr/lib/aarch64-linux-gnu/libmd.so.0.0.5 /tmp/freeze2237965672/libmd.so.0]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 [tar cf /tmp/freeze2237965672.tar freeze2237965672]
+</span></span><span style="display:flex;"><span>2022/03/20 11:45:46 Download freeze2237965672.tar to your gokrazy device and run:
+</span></span><span style="display:flex;"><span>	LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
+</span></span><span style="display:flex;"><span>root@6e530a973d45:/# exit
+</span></span><span style="display:flex;"><span>% mkdir /tmp/freeze
+</span></span><span style="display:flex;"><span>% cd /tmp/freeze
+</span></span><span style="display:flex;"><span>% docker cp 6e530a973d45:/tmp/freeze2237965672.tar .
+</span></span><span style="display:flex;"><span>% caddy file-server -listen=:4080
+</span></span></code></pre></div><p>Now we can copy the contents of the temporary directory to
+e.g. <code>/perm/tc</code> and run the <code>tc</code> command in
+breakglass:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/tmp/breakglass531810560 # wget -O- http://10.0.0.76:4080/freeze2237965672.tar | tar xf -
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560 # cd freeze2237965672
+</span></span><span style="display:flex;"><span>/tmp/breakglass531810560/freeze2237965672 # LD_LIBRARY_PATH=$PWD ./ld-linux-aarch64.so.1 ./tc
+</span></span><span style="display:flex;"><span>Usage: tc [ OPTIONS ] OBJECT { COMMAND | help }
+</span></span><span style="display:flex;"><span>…
+</span></span></code></pre></div>
 
 <footer class="footline">
 	
@@ -770,7 +867,6 @@ accidentally joining this open network.</p>
             
                 
                     
-                    
                 
                 
 
@@ -783,9 +879,6 @@ accidentally joining this open network.</p>
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -829,90 +922,6 @@ accidentally joining this open network.</p>
                     
             
         
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
                     
                         
             
@@ -1046,6 +1055,91 @@ accidentally joining this open network.</p>
             
             
                 
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                     
                 
                 

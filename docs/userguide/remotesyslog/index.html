@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.89.0-DEV" />
+    <meta name="generator" content="Hugo 0.98.0-DEV" />
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Remote Syslog: sending gokrazy logs over the network :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1650034108" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1650034108" rel="stylesheet">
-    <link href="/css/hybrid.css?1650034108" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1650034108" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1650034108" rel="stylesheet">
-    <link href="/css/auto-complete.css?1650034108" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1650034108" rel="stylesheet">
-    <link href="/css/theme.css?1650034108" rel="stylesheet">
-    <link href="/css/tabs.css?1650034108" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1650034108" rel="stylesheet">
+    <link href="/css/nucleus.css?1650806413" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1650806413" rel="stylesheet">
+    <link href="/css/hybrid.css?1650806413" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1650806413" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1650806413" rel="stylesheet">
+    <link href="/css/auto-complete.css?1650806413" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1650806413" rel="stylesheet">
+    <link href="/css/theme.css?1650806413" rel="stylesheet">
+    <link href="/css/tabs.css?1650806413" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1650806413" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1650034108"></script>
+    <script src="/js/jquery-3.3.1.min.js?1650806413"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1650034108"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1650034108"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1650806413"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1650806413"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1650034108"></script>
+<script type="text/javascript" src="/js/search.js?1650806413"></script>
 
     
   </div>
@@ -90,37 +90,13 @@
  
   
     
-    <li data-nav-id="/showcase/" title="Showcase" class="dd-item
-        
-        
-        
-        ">
-      <a href="/showcase/">
-          <b>1. </b>Showcase
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
     <li data-nav-id="/quickstart/" title="Quickstart" class="dd-item
         
         
         
         ">
       <a href="/quickstart/">
-          <b>2. </b>Quickstart
+          <b>1. </b>Quickstart
           
       </a>
       
@@ -138,13 +114,37 @@
  
   
     
-    <li data-nav-id="/userguide/" title="Userguide" class="dd-item
+    <li data-nav-id="/platforms/" title="Supported platforms" class="dd-item
+        
+        
+        
+        ">
+      <a href="/platforms/">
+          <b>2. </b>Supported platforms
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/userguide/" title="Configuration" class="dd-item
         parent
         
         
         ">
       <a href="/userguide/">
-          <b>3. </b>Userguide
+          <b>3. </b>Configuration
           
       </a>
       
@@ -152,8 +152,6 @@
         <ul>
           
           
-            
-          
           
 
         
@@ -167,51 +165,9 @@
  
   
     
-      <li data-nav-id="/userguide/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
-        <a href="/userguide/gpio/">
-        Input/output via GPIO pins
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, …" class="dd-item ">
+      <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
         <a href="/userguide/package-config/">
-        Package config: flags, environment variables, …
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/process-interface/" title="gokrazy process interface / requirements" class="dd-item ">
-        <a href="/userguide/process-interface/">
-        gokrazy process interface / requirements
+        Flags, environment variables, …
         
         </a>
     </li>
@@ -314,27 +270,6 @@
  
   
     
-      <li data-nav-id="/userguide/modules/" title="Working with Go modules" class="dd-item ">
-        <a href="/userguide/modules/">
-        Working with Go modules
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
       <li data-nav-id="/userguide/permanent-data/" title="Access permanent data" class="dd-item ">
         <a href="/userguide/permanent-data/">
         Access permanent data
@@ -368,8 +303,15 @@
 
             
           
-            
-            
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
 
 
 
@@ -377,13 +319,13 @@
  
   
     
-    <li data-nav-id="/userguide/install/" title="Installation" class="dd-item
+    <li data-nav-id="/packages/" title="Available packages" class="dd-item
         
         
         
         ">
-      <a href="/userguide/install/">
-          How do I install X on gokrazy?
+      <a href="/packages/">
+          <b>4. </b>Available packages
           
       </a>
       
@@ -404,8 +346,29 @@
  
   
     
-      <li data-nav-id="/userguide/install/tailscale/" title="Tailscale VPN" class="dd-item ">
-        <a href="/userguide/install/tailscale/">
+      <li data-nav-id="/packages/showcase/" title="Showcase" class="dd-item ">
+        <a href="/packages/showcase/">
+        Showcase
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/packages/tailscale/" title="Tailscale VPN" class="dd-item ">
+        <a href="/packages/tailscale/">
         Tailscale VPN
         
         </a>
@@ -425,8 +388,8 @@
  
   
     
-      <li data-nav-id="/userguide/install/caddy-http-server/" title="Caddy HTTP server" class="dd-item ">
-        <a href="/userguide/install/caddy-http-server/">
+      <li data-nav-id="/packages/caddy-http-server/" title="Caddy HTTP server" class="dd-item ">
+        <a href="/packages/caddy-http-server/">
         Caddy HTTP server
         
         </a>
@@ -446,8 +409,8 @@
  
   
     
-      <li data-nav-id="/userguide/install/minio/" title="MinIO object storage" class="dd-item ">
-        <a href="/userguide/install/minio/">
+      <li data-nav-id="/packages/minio/" title="MinIO object storage" class="dd-item ">
+        <a href="/packages/minio/">
         MinIO object storage
         
         </a>
@@ -465,58 +428,119 @@
   
  
 
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/development/" title="Package development" class="dd-item
+        
+        
+        
+        ">
+      <a href="/development/">
+          <b>5. </b>Package development
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item ">
+        <a href="/development/process-interface/">
+        Process interface / requirements
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/development/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
+        <a href="/development/gpio/">
+        Input/output via GPIO pins
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/development/modules/" title="Working with Go modules" class="dd-item ">
+        <a href="/development/modules/">
+        Working with Go modules
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/development/non-go/" title="Non-Go Prototyping" class="dd-item ">
+        <a href="/development/non-go/">
+        Non-Go Prototyping
+        
+        </a>
+    </li>
+     
+  
+ 
+
             
           
         
         </ul>
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/platforms/" title="Hardware and CI" class="dd-item
-        
-        
-        
-        ">
-      <a href="/platforms/">
-          <b>4. </b>Hardware and CI
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/prototyping/" title="Non-Go Prototyping" class="dd-item
-        
-        
-        
-        ">
-      <a href="/prototyping/">
-          <b>5. </b>Non-Go Prototyping
-          
-      </a>
-      
       
     </li>
   
@@ -593,7 +617,7 @@
             
           
           
-            <a href='/'>gokrazy</a> > <a href='/userguide/'>Userguide</a> > Remote Syslog: sending gokrazy logs over the network
+            <a href='/'>gokrazy</a> > <a href='/userguide/'>Configuration</a> > Remote Syslog: sending gokrazy logs over the network
           
         
           
@@ -641,21 +665,21 @@ persist logs elsewhere for later analysis.</p>
 <h2 id="client-side-gokrazy">Client side (gokrazy)</h2>
 <p>To enable remote syslog, you need to configure a target by creating the file
 <code>remote_syslog/target</code> on the permanent data partition.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># The following assumes you already created a file system</span>
-<span style="color:#75715e"># on the permanent data partition. Otherwise, please use:</span>
-<span style="color:#75715e"># sudo mkfs.ext4 /dev/disk/by-partuuid/2e18c40c-04</span>
-
-sudo mount /dev/disk/by-partuuid/2e18c40c-04 /mnt
-echo 10.0.0.76:514 | sudo tee /mnt/remote_syslog/target
-sudo umount /mnt
-</code></pre></div><p>I recommend using a (static) IP address for increased reliability, so that
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># The following assumes you already created a file system</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># on the permanent data partition. Otherwise, please use:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># sudo mkfs.ext4 /dev/disk/by-partuuid/2e18c40c-04</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo mount /dev/disk/by-partuuid/2e18c40c-04 /mnt
+</span></span><span style="display:flex;"><span>echo 10.0.0.76:514 | sudo tee /mnt/remote_syslog/target
+</span></span><span style="display:flex;"><span>sudo umount /mnt
+</span></span></code></pre></div><p>I recommend using a (static) IP address for increased reliability, so that
 remote syslog works even when DNS does not.</p>
 <h2 id="server-side-syslog-ng">Server side (syslog-ng)</h2>
 <p>This is how I instruct <a href="https://en.wikipedia.org/wiki/Syslog-ng">syslog-ng</a> via
 its <code>/etc/syslog-ng/syslog-ng.conf</code> to write syslog messages it received from
 e.g. host <code>gokrazy</code> to <code>/var/log/remote/gokrazy-log</code>:</p>
-<pre tabindex="0"><code>source net { network(ip(10.0.0.76) transport(&quot;udp&quot;)); };
-destination remote { file(&quot;/var/log/remote/${FULLHOST}-log&quot;); };
+<pre tabindex="0"><code>source net { network(ip(10.0.0.76) transport(&#34;udp&#34;)); };
+destination remote { file(&#34;/var/log/remote/${FULLHOST}-log&#34;); };
 log { source(net); destination(remote); };
 </code></pre>
 
@@ -735,8 +759,6 @@ log { source(net); destination(remote); };
 
                     
                     
-                        
-                    
                     
 
                     
@@ -747,38 +769,6 @@ log { source(net); destination(remote); };
                     
                         
                         
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -891,6 +881,9 @@ log { source(net); destination(remote); };
             
         
                     
+            
+        
+                    
                         
             
             
@@ -903,6 +896,70 @@ log { source(net); destination(remote); };
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
             
         
@@ -968,12 +1025,6 @@ log { source(net); destination(remote); };
             
         
                     
-            
-        
-                    
-            
-        
-                    
                         
             
             
@@ -989,19 +1040,6 @@ log { source(net); destination(remote); };
                     
             
         
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
                     
             
         
@@ -1021,19 +1059,19 @@ log { source(net); destination(remote); };
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1650034108"></script>
-    <script src="/js/perfect-scrollbar.min.js?1650034108"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1650034108"></script>
-    <script src="/js/jquery.sticky.js?1650034108"></script>
-    <script src="/js/featherlight.min.js?1650034108"></script>
-    <script src="/js/highlight.pack.js?1650034108"></script>
+    <script src="/js/clipboard.min.js?1650806413"></script>
+    <script src="/js/perfect-scrollbar.min.js?1650806413"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1650806413"></script>
+    <script src="/js/jquery.sticky.js?1650806413"></script>
+    <script src="/js/featherlight.min.js?1650806413"></script>
+    <script src="/js/highlight.pack.js?1650806413"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1650034108"></script>
-    <script src="/js/learn.js?1650034108"></script>
-    <script src="/js/hugo-learn.js?1650034108"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1650806413"></script>
+    <script src="/js/learn.js?1650806413"></script>
+    <script src="/js/hugo-learn.js?1650806413"></script>
     
         
-            <script src="/mermaid/mermaid.js?1650034108"></script>
+            <script src="/mermaid/mermaid.js?1650806413"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

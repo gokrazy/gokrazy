@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Connecting to WiFi networks :: gokrazy</title>
+    <title>Process interface / requirements :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1650806413" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/userguide/wifi/">
+  <body class="" data-url="/development/process-interface/">
     <nav id="sidebar" class="">
 
 
@@ -139,7 +139,7 @@
   
     
     <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        parent
+        
         
         
         ">
@@ -228,7 +228,7 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item active">
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
         <a href="/userguide/wifi/">
         Connecting to WiFi
         
@@ -438,7 +438,7 @@
   
     
     <li data-nav-id="/development/" title="Package development" class="dd-item
-        
+        parent
         
         
         ">
@@ -464,7 +464,7 @@
  
   
     
-      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item ">
+      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item active">
         <a href="/development/process-interface/">
         Process interface / requirements
         
@@ -586,7 +586,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/wifi.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/development/process-interface.md" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -617,7 +617,7 @@
             
           
           
-            <a href='/'>gokrazy</a> > <a href='/userguide/'>Configuration</a> > Connecting to WiFi networks
+            <a href='/'>gokrazy</a> > <a href='/development/'>Package development</a> > Process interface / requirements
           
         
           
@@ -632,7 +632,9 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</a></li>
+    <li><a href="#process-supervision">Process supervision</a></li>
+    <li><a href="#environment-variables">Environment variables</a></li>
+    <li><a href="#privilege-dropping--security">Privilege dropping / security</a></li>
   </ul>
 </nav>
     </div>
@@ -650,54 +652,80 @@
           
             <h1>
               
-              Connecting to WiFi networks
+              Process interface / requirements
             </h1>
           
 
         
 
 
-<p>Since March 2022, gokrazy supports both encrypted and unencrypted WiFi networks!
-🎉</p>
+<h2 id="process-supervision">Process supervision</h2>
 
-<div class="notices warning" ><p>Remember that using an <strong>unencrypted WiFi</strong> network means anyone in range can read
-your communication. Hence, we strongly recommend <a href="/userguide/tls-for-untrusted-networks/">using TLS for accessing the
-gokrazy web interface and doing
-updates</a>.</p>
+<div class="notices tip" ><p>You can find the corresponding code in
+<a href="https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/gokrazy/gokrazy%24+type:symbol+%5Esupervise%24&amp;patternType=regexp&amp;case=yes">func gokrazy.supervise</a>.</p>
 </div>
 
-<p>To make gokrazy connect to a WiFi network, first include the
-<code>github.com/gokrazy/wifi</code> package in your <code>gokr-packer</code> command line, e.g.:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/wifi
-</span></span></code></pre></div><p>Then, configure the <code>wifi</code> program by creating the file <code>wifi.json</code> as <a href="/userguide/package-config/#extrafiles">extra
-file</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
+<p>gokrazy’s init process (pid 1) supervises all the binaries the user specified via <code>gokr-packer</code> flags.</p>
+<p>More specifically, gokrazy:</p>
+<ol>
+<li>Starts your binary using Go’s <code>os/exec.Command</code> API.
+<ul>
+<li><a href="https://manpages.debian.org/unshare.2"><code>unshare(CLONE_NEWNS)</code></a> is used so
+that each process operates in its own <a href="https://manpages.debian.org/mount_namespaces.7">mount
+namespace</a>.</li>
+<li>The <code>stdout</code> and <code>stderr</code> file descriptors are hooked up to a ring buffer and can be viewed via gokrazy’s web interface.</li>
+<li>Extra command-line flags or environment variables can be specified using
+<a href="/userguide/package-config/">per-package configuration</a>.</li>
+</ul>
+</li>
+<li>When your binary’s process exits, gokrazy restarts it!
+<ul>
+<li>If the process exits with status code <code>0</code> (or <code>125</code>), gokrazy will stop
+supervision. Exiting immediately with status code <code>0</code> when the
+<code>GOKRAZY_FIRST_START=1</code> environment variable is set means “don’t start the
+program on boot”</li>
+</ul>
+</li>
+</ol>
+<h2 id="environment-variables">Environment variables</h2>
+<p>gokrazy sets the <code>HOME</code> environment variable to <code>HOME=/perm/&lt;cmd&gt;</code>, where
+<code>&lt;cmd&gt;</code> is the name of your binary. For example, <code>tailscale.com/cmd/tailscaled</code>
+is started with <code>HOME=/perm/tailscaled</code>.</p>
+<p>When your binary is first started, gokrazy sets the <code>GOKRAZY_FIRST_START=1</code>
+environment variable.</p>
+<h2 id="privilege-dropping--security">Privilege dropping / security</h2>
+<p>An easy way to implement privilege dropping in Go is to re-execute the process
+with <a href="https://pkg.go.dev/syscall#SysProcAttr">syscall.SysProcAttr</a> fields
+set. For example, this is how you would drop privileges to user <code>nobody</code>
+(uid/gid 65534):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// mustDropPrivileges re-executes the program in a child process,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// dropping root privileges to user nobody.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">mustDropPrivileges</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;NTP_PRIVILEGES_DROPPED&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;1&#34;</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># To connect to an unencrypted WiFi network, specify no psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;My unencrypted WiFi&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># OR, to connect to an encrypted WiFi network, specify the psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;Secure WiFi&#34;, &#34;psk&#34;: &#34;secret&#34;}&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
-</span></span></code></pre></div><p>Alternatively, you can also create the <code>wifi.json</code> manually on the permanent
-data partition with path <code>/perm/wifi.json</code>.</p>
-<p>After starting gokrazy, the <code>wifi</code> program will connect to the configured WiFi network:</p>
-<p><a href="/img/2020-05-27-gokrazy-wifi-unencrypted.jpg"><img src="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.jpg" srcset="/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.2x.jpg 2x,/img/2020-05-27-gokrazy-wifi-unencrypted.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
-<h2 id="for-debugging-known-working-wifi-router-setup">For debugging: known-working WiFi router setup</h2>
-<p>In case you have trouble getting your Raspberry Pi to connect to your network,
-this is how I set up my <a href="https://openwrt.org/toh/tp-link/tl-wdr4300">TP-LINK
-TL-WDR4300</a> with <a href="https://openwrt.org/">OpenWrt
-19.07</a>:</p>
-<p><a href="/img/iotee.jpg"><img src="/img/iotee.thumb.jpg" srcset="/img/iotee.thumb.2x.jpg 2x,/img/iotee.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
-<p>The MAC address filter isn’t a security measure, but prevents others from
-accidentally joining this open network.</p>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Args</span>[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Env</span> = append(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Environ</span>(), <span style="color:#e6db74">&#34;NTP_PRIVILEGES_DROPPED=1&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Stdout</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Stderr</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">SysProcAttr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SysProcAttr</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Credential</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">Credential</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">Uid</span>: <span style="color:#ae81ff">65534</span>,
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">Gid</span>: <span style="color:#ae81ff">65534</span>,
+</span></span><span style="display:flex;"><span>		},
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Run</span>())
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Examples:</p>
+<ul>
+<li><a href="https://sourcegraph.com/github.com/gokrazy/gokrazy/-/blob/cmd/ntp/privdrop.go"><code>github.com/gokrazy/gokrazy/cmd/ntp</code></a>
+is a rather involved example which retains the CAP_SYS_TIME capability in the
+child process</li>
+<li><a href="https://sourcegraph.com/github.com/gokrazy/rsync/-/blob/internal/maincmd/namespacing_linux.go"><code>github.com/gokrazy/rsync</code></a> uses Linux
+mount namespaces and constructs a file system with read-only bind mounts of
+the configured rsync modules</li>
+</ul>
 
 
 <footer class="footline">
@@ -770,7 +798,6 @@ accidentally joining this open network.</p>
             
                 
                     
-                    
                 
                 
 
@@ -783,9 +810,6 @@ accidentally joining this open network.</p>
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -835,7 +859,6 @@ accidentally joining this open network.</p>
             
                 
                     
-                    
                 
                 
 
@@ -851,9 +874,6 @@ accidentally joining this open network.</p>
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -986,6 +1006,7 @@ accidentally joining this open network.</p>
             
                 
                     
+                    
                 
                 
 
@@ -998,6 +1019,7 @@ accidentally joining this open network.</p>
             
             
                 
+                    
                     
                 
                 
@@ -1014,6 +1036,9 @@ accidentally joining this open network.</p>
             
             
                 
+                    
+                        
+                        
                     
                 
                 
