@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.98.0-DEV" />
+    <meta name="description" content="">
+
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Docker containers :: gokrazy</title>
+
+    
+    <link href="/css/nucleus.css?1650998234" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1650998234" rel="stylesheet">
+    <link href="/css/hybrid.css?1650998234" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1650998234" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1650998234" rel="stylesheet">
+    <link href="/css/auto-complete.css?1650998234" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1650998234" rel="stylesheet">
+    <link href="/css/theme.css?1650998234" rel="stylesheet">
+    <link href="/css/tabs.css?1650998234" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1650998234" rel="stylesheet">
+    
+    
+
+    <script src="/js/jquery-3.3.1.min.js?1650998234"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/packages/docker-containers/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1650998234"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1650998234"></script>
+<script type="text/javascript">
+    
+        var baseurl = "https:\/\/gokrazy.org\/";
+    
+</script>
+<script type="text/javascript" src="/js/search.js?1650998234"></script>
+
+    
+  </div>
+  
+    <section id="homelinks">
+      <ul>
+        <li>
+            <a class="padding" href='/'><i class='fas fa-home'></i> Home</a>
+        </li>
+      </ul>
+    </section>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/quickstart/" title="Quickstart" class="dd-item
+        
+        
+        
+        ">
+      <a href="/quickstart/">
+          <b>1. </b>Quickstart
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/platforms/" title="Supported platforms" class="dd-item
+        
+        
+        
+        ">
+      <a href="/platforms/">
+          <b>2. </b>Supported platforms
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/userguide/" title="Configuration" class="dd-item
+        
+        
+        
+        ">
+      <a href="/userguide/">
+          <b>3. </b>Configuration
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
+        <a href="/userguide/package-config/">
+        Flags, environment variables, …
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/remotesyslog/" title="Remote Syslog: sending gokrazy logs over the network" class="dd-item ">
+        <a href="/userguide/remotesyslog/">
+        Remote Syslog
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
+        <a href="/userguide/tls-for-untrusted-networks/">
+        Using TLS in untrusted networks
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
+        <a href="/userguide/wifi/">
+        Connecting to WiFi
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item ">
+        <a href="/userguide/bluetooth/">
+        Using Bluetooth
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/permanent-data/" title="Access permanent data" class="dd-item ">
+        <a href="/userguide/permanent-data/">
+        Access permanent data
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/rsync-backups/" title="Permanent data backup with the gokrazy rsyncd" class="dd-item ">
+        <a href="/userguide/rsync-backups/">
+        Data backup with rsync
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/packages/" title="Available packages" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/packages/">
+          <b>4. </b>Available packages
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/packages/showcase/" title="Showcase" class="dd-item ">
+        <a href="/packages/showcase/">
+        Showcase
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/packages/tailscale/" title="Tailscale VPN" class="dd-item ">
+        <a href="/packages/tailscale/">
+        Tailscale VPN
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/packages/caddy-http-server/" title="Caddy HTTP server" class="dd-item ">
+        <a href="/packages/caddy-http-server/">
+        Caddy HTTP server
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/packages/minio/" title="MinIO object storage" class="dd-item ">
+        <a href="/packages/minio/">
+        MinIO object storage
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/packages/docker-containers/" title="Docker containers" class="dd-item active">
+        <a href="/packages/docker-containers/">
+        Docker containers
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/development/" title="Package development" class="dd-item
+        
+        
+        
+        ">
+      <a href="/development/">
+          <b>5. </b>Package development
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item ">
+        <a href="/development/process-interface/">
+        Process interface / requirements
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/development/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
+        <a href="/development/gpio/">
+        Input/output via GPIO pins
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/development/modules/" title="Working with Go modules" class="dd-item ">
+        <a href="/development/modules/">
+        Working with Go modules
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/development/non-go/" title="Non-Go Prototyping" class="dd-item ">
+        <a href="/development/non-go/">
+        Non-Go Prototyping
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li>
+                  <a class="padding" href="https://github.com/gokrazy/gokrazy"><i class='fab fa-github'></i> GitHub repo</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/packages/docker-containers.markdown" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>gokrazy</a> > <a href='/packages/'>Available packages</a> > Docker containers
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#step-1-install-podman-to-your-gokrazy-device">Step 1: Install podman to your gokrazy device</a></li>
+    <li><a href="#step-2-verify-podman-works">Step 2: Verify podman works</a></li>
+    <li><a href="#step-3-use-podman-programmatically">Step 3: Use podman programmatically</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Docker containers
+            </h1>
+          
+
+        
+
+
+<p>gokrazy’s goal is to make it easy to build Go appliances. In an ideal world, all
+building blocks you need would be available in Go. In reality, that is not
+entirely the case. Perhaps you need to run a C program next to your Go
+programs. Docker containers make incremental (or partial) adoption of gokrazy
+easy.</p>
+<p>We’re going to use podman, a drop-in replacement for Docker, because there is a
+statically compiled version for amd64 and arm64 available that we could easily
+re-package into <a href="https://github.com/gokrazy/podman">https://github.com/gokrazy/podman</a>.</p>
+<h2 id="step-1-install-podman-to-your-gokrazy-device">Step 1: Install podman to your gokrazy device</h2>
+<p>In your <code>gokr-packer</code> invocation (see <a href="/quickstart/">Quickstart</a> if you don’t
+have one yet), include the <a href="https://github.com/gokrazy/iptables"><code>iptables</code></a>,
+<a href="https://github.com/gokrazy/nsenter"><code>nsenter</code></a> and
+<a href="https://github.com/gokrazy/podman"><code>podman</code></a> packages:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex; background-color:#3c3d38"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/iptables <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex; background-color:#3c3d38"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/nsenter <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex; background-color:#3c3d38"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/podman</span></span></code></pre></div>
+<h2 id="step-2-verify-podman-works">Step 2: Verify podman works</h2>
+<p>Use <a href="https://github.com/gokrazy/breakglass">breakglass</a> to login to your gokrazy
+instance and run a container manually:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/tmp/breakglass187145741 $ mount -t tmpfs tmpfs /var
+</span></span><span style="display:flex;"><span>/tmp/breakglass187145741 $ podman run --rm -ti docker.io/library/debian:sid
+</span></span><span style="display:flex;"><span>root@gokrazy:/# cat /etc/debian_version
+</span></span><span style="display:flex;"><span>bookworm/sid
+</span></span></code></pre></div><h2 id="step-3-use-podman-programmatically">Step 3: Use podman programmatically</h2>
+<p>Now that you have the required tools, there are a couple of decisions you have
+to make depending on what you want to run in your container(s):</p>
+<ol>
+<li>Should container data be stored ephemerally in <code>tmpfs</code> (lost with the next
+reboot), on the permanent partition of your SD card, or somewhere else
+entirely (e.g. network storage)?</li>
+<li>Do you want to pull new container versions automatically before each run, or
+manually on demand only?</li>
+<li>Should your container be started as a one-off job only (<a href="https://docs.docker.com/engine/reference/run/#detached--d">→ detached
+mode</a>), or
+supervised continuously (restarted when it exits)?</li>
+<li>Should your container use a deterministic name (so that you can <code>exec</code>
+commands in it easily), or use a fresh name for each run (so that there never
+are conflicts)?</li>
+</ol>
+<p>Aside from these broad questions, you very likely need to set a bunch of detail
+options for your container, such as additional environment variables, volume
+mounts, networking flags, or command line arguments.</p>
+<p>The following program is an example for how this could look like. I use this
+program to run <a href="https://irssi.org/">irssi</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os/exec&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strings&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;syscall&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/gokrazy/gokrazy&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">podman</span>(<span style="color:#a6e22e">args</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">podman</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#e6db74">&#34;/usr/local/bin/podman&#34;</span>, <span style="color:#a6e22e">args</span><span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">podman</span>.<span style="color:#a6e22e">Env</span> = <span style="color:#a6e22e">expandPath</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Environ</span>())
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">podman</span>.<span style="color:#a6e22e">Stdin</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdin</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">podman</span>.<span style="color:#a6e22e">Stdout</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">podman</span>.<span style="color:#a6e22e">Stderr</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">podman</span>.<span style="color:#a6e22e">Run</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;%v: %v&#34;</span>, <span style="color:#a6e22e">podman</span>.<span style="color:#a6e22e">Args</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">irssi</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Ensure we have an up-to-date clock, which in turn also means that
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// networking is up. This is relevant because podman takes what’s in
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// /etc/resolv.conf (nothing at boot) and holds on to it, meaning your
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// container will never have working networking if it starts too early.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">gokrazy</span>.<span style="color:#a6e22e">WaitForClock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mountVar</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">podman</span>(<span style="color:#e6db74">&#34;kill&#34;</span>, <span style="color:#e6db74">&#34;irssi&#34;</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Print</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">podman</span>(<span style="color:#e6db74">&#34;rm&#34;</span>, <span style="color:#e6db74">&#34;irssi&#34;</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Print</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// You could podman pull here.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">podman</span>(<span style="color:#e6db74">&#34;run&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;-td&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;-v&#34;</span>, <span style="color:#e6db74">&#34;/perm/irssi:/home/michael/.irssi&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;-v&#34;</span>, <span style="color:#e6db74">&#34;/perm/irclogs:/home/michael/irclogs&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;-e&#34;</span>, <span style="color:#e6db74">&#34;TERM=rxvt-unicode&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;-e&#34;</span>, <span style="color:#e6db74">&#34;LANG=C.UTF-8&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;--network&#34;</span>, <span style="color:#e6db74">&#34;host&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;--name&#34;</span>, <span style="color:#e6db74">&#34;irssi&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;docker.io/stapelberg/irssi:latest&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;screen&#34;</span>, <span style="color:#e6db74">&#34;-S&#34;</span>, <span style="color:#e6db74">&#34;irssi&#34;</span>, <span style="color:#e6db74">&#34;irssi&#34;</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">irssi</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// mountVar bind-mounts /perm/container-storage to /var if needed.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// This could be handled by an fstab(5) feature in gokrazy in the future.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">mountVar</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#e6db74">&#34;/proc/self/mountinfo&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">line</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">TrimSpace</span>(string(<span style="color:#a6e22e">b</span>)), <span style="color:#e6db74">&#34;\n&#34;</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">parts</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Fields</span>(<span style="color:#a6e22e">line</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">parts</span>) &lt; <span style="color:#ae81ff">5</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">mountpoint</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">parts</span>[<span style="color:#ae81ff">4</span>]
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Found mountpoint %q&#34;</span>, <span style="color:#a6e22e">parts</span>[<span style="color:#ae81ff">4</span>])
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">mountpoint</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;/var&#34;</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;/var file system already mounted, nothing to do&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">Mount</span>(<span style="color:#e6db74">&#34;/perm/container-storage&#34;</span>, <span style="color:#e6db74">&#34;/var&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">MS_BIND</span>, <span style="color:#e6db74">&#34;&#34;</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;mounting /perm/container-storage to /var: %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// expandPath returns env, but with PATH= modified or added
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// such that both /user and /usr/local/bin are included, which podman needs.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">expandPath</span>(<span style="color:#a6e22e">env</span> []<span style="color:#66d9ef">string</span>) []<span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">extra</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;/user:/usr/local/bin&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">found</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">idx</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">env</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">parts</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">val</span>, <span style="color:#e6db74">&#34;=&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">parts</span>) &lt; <span style="color:#ae81ff">2</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">continue</span> <span style="color:#75715e">// malformed entry
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">key</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">parts</span>[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">key</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;PATH&#34;</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">parts</span>[<span style="color:#ae81ff">1</span>:], <span style="color:#e6db74">&#34;=&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">env</span>[<span style="color:#a6e22e">idx</span>] = <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s=%s:%s&#34;</span>, <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">extra</span>, <span style="color:#a6e22e">val</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">found</span> = <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">found</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">busyboxDefaultPATH</span> = <span style="color:#e6db74">&#34;/usr/local/sbin:/sbin:/usr/sbin:/usr/local/bin:/bin:/usr/bin&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">env</span> = append(<span style="color:#a6e22e">env</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;PATH=%s:%s&#34;</span>, <span style="color:#a6e22e">extra</span>, <span style="color:#a6e22e">busyboxDefaultPATH</span>))
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">env</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1650998234"></script>
+    <script src="/js/perfect-scrollbar.min.js?1650998234"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1650998234"></script>
+    <script src="/js/jquery.sticky.js?1650998234"></script>
+    <script src="/js/featherlight.min.js?1650998234"></script>
+    <script src="/js/highlight.pack.js?1650998234"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1650998234"></script>
+    <script src="/js/learn.js?1650998234"></script>
+    <script src="/js/hugo-learn.js?1650998234"></script>
+    
+        
+            <script src="/mermaid/mermaid.js?1650998234"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
+
