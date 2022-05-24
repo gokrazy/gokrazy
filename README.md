@@ -28,7 +28,7 @@ go mod init hello
 
 Then, install `gokr-packer`:
 ```
-go get github.com/gokrazy/tools/cmd/gokr-packer@latest
+go install github.com/gokrazy/tools/cmd/gokr-packer@latest
 ```
 
 ## Overwriting an SD card for the Raspberry Pi 3 or 4
