@@ -131,7 +131,7 @@ After booting from this SD card, your device will:
 - obtain an IP address for hostname “gokrazy” via DHCP (IPv4) and SLAAC (IPv6)
 - synchronize the clock using NTP
 - expose a password-authenticated web interface on private IP addresses<br>
-  (the default password can be recovered from <code>~/.config/gokrazy/http-password.txt</code>)
+  (the default password can be recovered from `~/.config/gokrazy/http-password.txt` on Linux or from `~/Library/Application\ Support/gokrazy/http-password.txt` on macOS/Darwin)
 - supervise all installed programs (only the hello world program in this example)
 
 To interact with your device, you can:
