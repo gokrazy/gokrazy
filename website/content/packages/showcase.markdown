@@ -43,6 +43,14 @@ or directly from Spotify.
 appliance that provides a basic SSH to serial console bridge for accessing
 remote devices.
 
+### krazyotelcol
+[**krazyotelcol**](https://github.com/svrnm/krazyotelcol) is an appliance 
+running the [OpenTelemetry 
+Collector](https://github.com/open-telemetry/opentelemetry-collector), a 
+vendor-agnostic implementation on how to receive, process and export telemetry
+data.
+
+
 ## Successfully tested
 
 The following third-party programs have been successfully used with gokrazy
