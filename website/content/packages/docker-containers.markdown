@@ -84,6 +84,7 @@ import (
 func podman(args ...string) error {
 	podman := exec.Command("/usr/local/bin/podman", args...)
 	podman.Env = expandPath(os.Environ())
+	podman.Env = append(podman.Env, "TMPDIR=/tmp")
 	podman.Stdin = os.Stdin
 	podman.Stdout = os.Stdout
 	podman.Stderr = os.Stderr
