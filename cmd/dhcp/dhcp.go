@@ -132,7 +132,7 @@ func priorityFromName(ifname string) int {
 	return 5 // wlan0 and others
 }
 
-func applyLease(nl *netlink.Handle, ifname string, source string, lease dhcp4.Lease) error {
+func applyLease(nl *netlink.Handle, ifname string, source string, lease dhcp4.Lease, extraRoutePriority int) error {
 	// Log the received DHCPACK packet:
 	addrstr := lease.IP.String() + "/24"
 	details := []string{
@@ -180,7 +180,7 @@ func applyLease(nl *netlink.Handle, ifname string, source string, lease dhcp4.Le
 
 	// Adjust the priority of the network routes on this interface; the kernel
 	// adds at least one based on the configured address.
-	if err := changeRoutePriority(nl, l, priorityFromName(ifname)); err != nil {
+	if err := changeRoutePriority(nl, l, priorityFromName(ifname)+extraRoutePriority); err != nil {
 		return fmt.Errorf("changeRoutePriority: %v", err)
 	}
 
@@ -189,7 +189,7 @@ func applyLease(nl *netlink.Handle, ifname string, source string, lease dhcp4.Le
 			LinkIndex: l.Attrs().Index,
 			Dst:       defaultDst,
 			Gw:        r,
-			Priority:  priorityFromName(ifname),
+			Priority:  priorityFromName(ifname) + extraRoutePriority,
 		})
 		if err != nil {
 			return fmt.Errorf("RouteReplace: %v", err)
@@ -250,7 +250,7 @@ func changeRoutePriority(nl *netlink.Handle, l netlink.Link, priority int) error
 	return nil
 }
 
-func deprioritizeRoutesWhenDown(nl *netlink.Handle, ifname string) {
+func deprioritizeRoutesWhenDown(nl *netlink.Handle, ifname string, extraRoutePriority int) {
 	last := netlink.LinkOperState(netlink.OperUp)
 	for range time.Tick(1 * time.Second) {
 		l, err := nl.LinkByName(ifname)
@@ -270,7 +270,7 @@ func deprioritizeRoutesWhenDown(nl *netlink.Handle, ifname string) {
 			}
 		} else {
 			log.Printf("regained carrier on interface %s, re-prioritizing routes", ifname)
-			if err := changeRoutePriority(nl, l, priorityFromName(ifname)); err != nil {
+			if err := changeRoutePriority(nl, l, priorityFromName(ifname)+extraRoutePriority); err != nil {
 				log.Print(err)
 			}
 		}
@@ -289,6 +289,11 @@ func main() {
 			"static_network_config",
 			"",
 			"network configuration to apply instead of querying DHCP")
+
+		extraRoutePriority = flag.Int(
+			"extra_route_priority",
+			0,
+			"extra value to add to the interface’s priority (eth* defaults to priority 1, wlan* defaults to priority 5, interfaces without link are set to priority 1024)")
 	)
 	flag.Parse()
 
@@ -305,7 +310,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	go deprioritizeRoutesWhenDown(nl, *ifname)
+	go deprioritizeRoutesWhenDown(nl, *ifname, *extraRoutePriority)
 
 	intf, err := net.InterfaceByName(*ifname)
 	if err != nil {
@@ -357,7 +362,7 @@ func main() {
 			l.DNS[idx] = dns.To4()
 		}
 
-		if err := applyLease(nl, *ifname, "-static_network_config", l); err != nil {
+		if err := applyLease(nl, *ifname, "-static_network_config", l, *extraRoutePriority); err != nil {
 			log.Fatal(err)
 		}
 		// Leave the process running indefinitely
@@ -388,7 +393,7 @@ func main() {
 
 		lease := dhcp4.LeaseFromACK(last)
 
-		if err := applyLease(nl, *ifname, "DHCPACK", lease); err != nil {
+		if err := applyLease(nl, *ifname, "DHCPACK", lease, *extraRoutePriority); err != nil {
 			log.Fatal(err)
 		}
 
