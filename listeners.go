@@ -10,9 +10,7 @@ import (
 )
 
 var (
-	privateNets   []net.IPNet
-	ipv6LinkLocal net.IPNet
-	gokrazyGdns   = func() *net.IPNet {
+	gokrazyGdns = func() *net.IPNet {
 		_, net, err := net.ParseCIDR("fdf5:3606:2a21::/48")
 		if err != nil {
 			log.Panic(err)
@@ -21,59 +19,17 @@ var (
 	}()
 )
 
-// TODO: consider redefining PrivateNetworks using (net.IP).IsPrivate(),
-// IsLinkLocalUnicast() and IsLoopback() once Go 1.17 is widespread.
-
-// PrivateNetworks contains the CIDR representation of all networks which
-// gokrazy considers private.
-var PrivateNetworks = []string{
-	// loopback: https://tools.ietf.org/html/rfc3330#section-2
-	"127.0.0.0/8",
-	// loopback: https://tools.ietf.org/html/rfc3513#section-2.4
-	"::1/128",
-
-	// reserved: https://tools.ietf.org/html/rfc1918#section-3
-	"10.0.0.0/8",
-	"172.16.0.0/12",
-	"192.168.0.0/16",
-	// reserved: https://tools.ietf.org/html/rfc4193#section-3.1
-	"fc00::/7",
-
-	// link-local: https://tools.ietf.org/html/rfc3927#section-1.2
-	"169.254.0.0/16",
-	// link-local: https://tools.ietf.org/html/rfc4291#section-2.4
-	"fe80::/10",
-}
-
-func init() {
-	privateNets = make([]net.IPNet, len(PrivateNetworks))
-	for idx, s := range PrivateNetworks {
-		_, net, err := net.ParseCIDR(s)
-		if err != nil {
-			log.Panic(err.Error())
-		}
-		privateNets[idx] = *net
-		if s == "fe80::/10" {
-			ipv6LinkLocal = *net
-		}
-	}
-}
-
-// IsInPrivateNet reports whether ip is in PrivateNetworks.
+// IsInPrivateNet reports whether the specified IP address is a private address,
+// including loopback and link-local unicast addresses.
 func IsInPrivateNet(ip net.IP) bool {
-	return isPrivate("", ip)
+	return ip.IsLoopback() || ip.IsPrivate() || ip.IsLinkLocalUnicast()
 }
 
 func isPrivate(iface string, ipaddr net.IP) bool {
 	if strings.HasPrefix(iface, "uplink") {
 		return false
 	}
-	for _, n := range privateNets {
-		if n.Contains(ipaddr) {
-			return true
-		}
-	}
-	return false
+	return IsInPrivateNet(ipaddr)
 }
 
 func interfaceAddrs(keep func(string, net.IP) bool) ([]string, error) {
@@ -107,7 +63,7 @@ func interfaceAddrs(keep func(string, net.IP) bool) ([]string, error) {
 			}
 
 			host := ipaddr.String()
-			if ipv6LinkLocal.Contains(ipaddr) {
+			if ipaddr.IsLinkLocalUnicast() {
 				host = host + "%" + i.Name
 			}
 			hosts = append(hosts, host)
