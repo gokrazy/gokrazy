@@ -13,7 +13,6 @@ require (
 	github.com/rtr7/dhcp4 v0.0.0-20220302171438-18c84d089b46
 	github.com/vishvananda/netlink v1.1.0
 	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8
-	rsc.io/goversion v1.2.0
 )
 
 require (

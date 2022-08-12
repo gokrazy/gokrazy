@@ -2,6 +2,7 @@ package gokrazy
 
 import (
 	"bytes"
+	"debug/buildinfo"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -20,7 +21,6 @@ import (
 	"github.com/gokrazy/gokrazy/internal/assets"
 	"github.com/gokrazy/internal/fat"
 	"github.com/gokrazy/internal/rootdev"
-	"rsc.io/goversion/version"
 
 	"golang.org/x/sys/unix"
 )
@@ -81,11 +81,11 @@ func Model() string {
 }
 
 func readModuleInfo(path string) (string, error) {
-	v, err := version.ReadExe(path)
+	bi, err := buildinfo.ReadFile(path)
 	if err != nil {
 		return "", err
 	}
-	lines := strings.Split(strings.TrimSpace(v.ModuleInfo), "\n")
+	lines := strings.Split(strings.TrimSpace(bi.String()), "\n")
 	shortened := make([]string, len(lines))
 	for idx, line := range lines {
 		row := strings.Split(line, "\t")
