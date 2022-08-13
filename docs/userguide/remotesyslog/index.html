@@ -12,20 +12,20 @@
     <title>Remote Syslog: sending gokrazy logs over the network :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1654549561" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1654549561" rel="stylesheet">
-    <link href="/css/hybrid.css?1654549561" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1654549561" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1654549561" rel="stylesheet">
-    <link href="/css/auto-complete.css?1654549561" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1654549561" rel="stylesheet">
-    <link href="/css/theme.css?1654549561" rel="stylesheet">
-    <link href="/css/tabs.css?1654549561" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1654549561" rel="stylesheet">
+    <link href="/css/nucleus.css?1660412151" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1660412151" rel="stylesheet">
+    <link href="/css/hybrid.css?1660412151" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1660412151" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1660412151" rel="stylesheet">
+    <link href="/css/auto-complete.css?1660412151" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1660412151" rel="stylesheet">
+    <link href="/css/theme.css?1660412151" rel="stylesheet">
+    <link href="/css/tabs.css?1660412151" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1660412151" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1654549561"></script>
+    <script src="/js/jquery-3.3.1.min.js?1660412151"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1654549561"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1654549561"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1660412151"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1660412151"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1654549561"></script>
+<script type="text/javascript" src="/js/search.js?1660412151"></script>
 
     
   </div>
@@ -696,8 +696,10 @@ persist logs elsewhere for later analysis.</p>
 </span></span></code></pre></div><p>I recommend using a (static) IP address for increased reliability, so that
 remote syslog works even when DNS does not.</p>
 <h2 id="server-side-syslog-ng">Server side (syslog-ng)</h2>
-<p>This is how I instruct <a href="https://en.wikipedia.org/wiki/Syslog-ng">syslog-ng</a> via
-its <code>/etc/syslog-ng/syslog-ng.conf</code> to write syslog messages it received from
+<p>To run a syslog server on gokrazy, check out <a href="https://github.com/gokrazy/syslogd">https://github.com/gokrazy/syslogd</a>.</p>
+<p>If you want to run your syslog server on a regular Linux distribution, this is
+how I instructed <a href="https://en.wikipedia.org/wiki/Syslog-ng">syslog-ng</a> via its
+<code>/etc/syslog-ng/syslog-ng.conf</code> to write syslog messages it received from
 e.g. host <code>gokrazy</code> to <code>/var/log/remote/gokrazy-log</code>:</p>
 <pre tabindex="0"><code>source net { network(ip(10.0.0.76) transport(&#34;udp&#34;)); };
 destination remote { file(&#34;/var/log/remote/${FULLHOST}-log&#34;); };
@@ -1096,19 +1098,19 @@ log { source(net); destination(remote); };
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1654549561"></script>
-    <script src="/js/perfect-scrollbar.min.js?1654549561"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1654549561"></script>
-    <script src="/js/jquery.sticky.js?1654549561"></script>
-    <script src="/js/featherlight.min.js?1654549561"></script>
-    <script src="/js/highlight.pack.js?1654549561"></script>
+    <script src="/js/clipboard.min.js?1660412151"></script>
+    <script src="/js/perfect-scrollbar.min.js?1660412151"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1660412151"></script>
+    <script src="/js/jquery.sticky.js?1660412151"></script>
+    <script src="/js/featherlight.min.js?1660412151"></script>
+    <script src="/js/highlight.pack.js?1660412151"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1654549561"></script>
-    <script src="/js/learn.js?1654549561"></script>
-    <script src="/js/hugo-learn.js?1654549561"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1660412151"></script>
+    <script src="/js/learn.js?1660412151"></script>
+    <script src="/js/hugo-learn.js?1660412151"></script>
     
         
-            <script src="/mermaid/mermaid.js?1654549561"></script>
+            <script src="/mermaid/mermaid.js?1660412151"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

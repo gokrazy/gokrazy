@@ -29,8 +29,11 @@ remote syslog works even when DNS does not.
 
 ## Server side (syslog-ng)
 
-This is how I instruct [syslog-ng](https://en.wikipedia.org/wiki/Syslog-ng) via
-its `/etc/syslog-ng/syslog-ng.conf` to write syslog messages it received from
+To run a syslog server on gokrazy, check out https://github.com/gokrazy/syslogd.
+
+If you want to run your syslog server on a regular Linux distribution, this is
+how I instructed [syslog-ng](https://en.wikipedia.org/wiki/Syslog-ng) via its
+`/etc/syslog-ng/syslog-ng.conf` to write syslog messages it received from
 e.g. host `gokrazy` to `/var/log/remote/gokrazy-log`:
 
 ```
