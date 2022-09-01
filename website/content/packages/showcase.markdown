@@ -12,7 +12,7 @@ weight: 1
 The following third-party programs specifically target gokrazy.
 
 To get your program listed here, just <a
-href="https://github.com/gokrazy/gokrazy.github.io">send us a pull request</a>.
+href="https://github.com/gokrazy/gokrazy">send us a pull request</a>.
 
 ### scan2drive
 
@@ -50,6 +50,12 @@ Collector](https://github.com/open-telemetry/opentelemetry-collector), a
 vendor-agnostic implementation on how to receive, process and export telemetry
 data.
 
+### Restic's rest-server
+
+[**Rest Server**](https://github.com/restic/rest-server) is a high performance
+HTTP server that implements restic's REST backend API. Running it requires some
+setup and other configurations which are available in
+[this blog post](https://dcpri.me/2022/08/31/restic-rest-server-gokrazy/).
 
 ## Successfully tested
 
