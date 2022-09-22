@@ -23,3 +23,5 @@ identifier = "ds"
 url = "https://github.com/gokrazy/gokrazy"
 weight = 10
 
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
