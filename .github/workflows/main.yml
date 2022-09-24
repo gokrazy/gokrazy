@@ -21,7 +21,7 @@ jobs:
         [ "$(gofmt -l $(find . -name '*.go') 2>&1)" = "" ]
 
     - name: install gokr-packer
-      run: go install github.com/gokrazy/tools/cmd/gokr-packer@latest
+      run: GOPROXY=direct go install github.com/gokrazy/tools/cmd/gokr-packer@main
 
     - name: install qemu
       run: sudo apt update && sudo apt-get install qemu-system-x86
