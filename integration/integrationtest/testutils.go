@@ -51,7 +51,10 @@ func Run(t *testing.T, pkgName string, deviceType string, qemuArgs []string) {
 	tempdir := t.TempDir()
 	err := ioutil.WriteFile(
 		filepath.Join(tempdir, "go.mod"),
-		[]byte(fmt.Sprintf("module %s", pkgName)), 0644)
+		[]byte(fmt.Sprintf(`module %s
+
+replace %s => %s
+`, pkgName, pkgName, tempdir)), 0644)
 	if err != nil {
 		t.Fatal(err)
 	}
