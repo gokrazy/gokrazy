@@ -112,7 +112,7 @@ Build complete!
 
 To interact with the device, gokrazy provides a web interface reachable at:
 
-	http://gokrazy:<i>&lt;automatically-generated-random-password&gt;</i>@gokrazy/
+	http://gokrazy:<automatically-generated-random-password>@gokrazy/
 
 In addition, the following Linux consoles are set up:
 
@@ -131,7 +131,7 @@ After booting from this SD card, your device will:
 - obtain an IP address for hostname “gokrazy” via DHCP (IPv4) and SLAAC (IPv6)
 - synchronize the clock using NTP
 - expose a password-authenticated web interface on private IP addresses<br>
-  (the default password can be recovered from `~/.config/gokrazy/http-password.txt` on Linux or from `~/Library/Application\ Support/gokrazy/http-password.txt` on macOS/Darwin)
+  (the default password is automatically generated and can be recovered from `~/.config/gokrazy/http-password.txt` on Linux or from `~/Library/Application\ Support/gokrazy/http-password.txt` on macOS/Darwin)
 - supervise all installed programs (only the hello world program in this example)
 
 To interact with your device, you can:
@@ -142,7 +142,7 @@ To interact with your device, you can:
 
 Congratulations! 🎉 You now have a working gokrazy installation!
 
-Next, see the [Configuration guide](/userguide/) for details on how to user other
+Next, see the [Configuration guide](/userguide/) for details on how to use other
 programs.
 
 ## Optional: Using the serial console
