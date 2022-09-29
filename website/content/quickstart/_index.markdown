@@ -15,7 +15,7 @@ other <a href="/platforms/">supported and upcoming platforms</a>.
 
 ## Prep: Install Go
 
-If you don’t already have Go installed, install the latest <a href="https://golang.org/dl/">Go</a> version.
+If you don’t already have Go installed, <a href="https://golang.org/dl/">install the latest Go version</a>.
 
 ## Prep: Install the gokrazy packer
 
