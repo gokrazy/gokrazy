@@ -12,20 +12,20 @@
     <title>Working with Go modules :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1663880340" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1663880340" rel="stylesheet">
-    <link href="/css/hybrid.css?1663880340" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1663880340" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1663880340" rel="stylesheet">
-    <link href="/css/auto-complete.css?1663880340" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1663880340" rel="stylesheet">
-    <link href="/css/theme.css?1663880340" rel="stylesheet">
-    <link href="/css/tabs.css?1663880340" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1663880340" rel="stylesheet">
+    <link href="/css/nucleus.css?1664482083" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1664482083" rel="stylesheet">
+    <link href="/css/hybrid.css?1664482083" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1664482083" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1664482083" rel="stylesheet">
+    <link href="/css/auto-complete.css?1664482083" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1664482083" rel="stylesheet">
+    <link href="/css/theme.css?1664482083" rel="stylesheet">
+    <link href="/css/tabs.css?1664482083" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1664482083" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1663880340"></script>
+    <script src="/js/jquery-3.3.1.min.js?1664482083"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1663880340"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1663880340"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1664482083"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1664482083"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1663880340"></script>
+<script type="text/javascript" src="/js/search.js?1664482083"></script>
 
     
   </div>
@@ -653,8 +653,10 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#pull-in-repositories-from-your-gopath">pull in repositories from your GOPATH</a></li>
-    <li><a href="#pull-in-local-repositories">pull in local repositories</a></li>
+    <li><a href="#example-setup">Example setup</a></li>
+    <li><a href="#top-level-gomod-template">Top-level go.mod template</a></li>
+    <li><a href="#building-local-code-the-replace-directive">Building local code: the replace directive</a></li>
+    <li><a href="#influencing-the-granularity">Influencing the granularity</a></li>
   </ul>
 </nav>
     </div>
@@ -679,18 +681,101 @@
         
 
 
-<h2 id="pull-in-repositories-from-your-gopath">pull in repositories from your GOPATH</h2>
-<p>By default, Go modules will not look at <code>$GOPATH/src</code>,
-i.e. all packages passed to gokr-packer will be downloaded. If you
-had unpublished changes or packages in your <code>$GOPATH</code>,
-you can use the following steps to declare a Go module and pull it
-into the build:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>IMPORTPATH<span style="color:#f92672">=</span>github.com/stapelberg/gibot-i3
-</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>cd <span style="color:#66d9ef">$(</span>go env GOPATH<span style="color:#66d9ef">)</span>/src/<span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span> <span style="color:#f92672">&amp;&amp;</span> GO111MODULE<span style="color:#f92672">=</span>on go mod init <span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>go mod edit -require <span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span>@v0.0.0
-</span></span><span style="display:flex;"><span>go mod edit -replace <span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span><span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>go env GOPATH<span style="color:#66d9ef">)</span>/src/<span style="color:#e6db74">${</span>IMPORTPATH?<span style="color:#e6db74">}</span>
-</span></span></code></pre></div><h2 id="pull-in-local-repositories">pull in local repositories</h2>
-<p>Please see <a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive"><a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive">https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive</a></a>.</p>
+<p>If you are not yet familiar with Go modules in general (outside of gokrazy),
+please <a href="https://github.com/golang/go/wiki/Modules">read the Go wiki page on
+Modules</a> first.</p>
+<p><a href="https://github.com/gokrazy/tools/commit/c3979e1ceb3ea4fe02b78b2c1493c8128a5dc3f9">Since September
+2022</a>,
+the gokrazy packer builds each package in its own build directory, with its own
+<code>go.mod</code> and <code>go.sum</code> files. This is done for isolation: if you update one
+program, that will not have any effect on the other programs you include in your
+gokrazy instance.</p>
+<h2 id="example-setup">Example setup</h2>
+<p>Throughout this page, let’s assume your gokrazy instance directory is
+<code>~/gokrazy/scan2drive</code>, and that’s where you run the following <code>gokr-packer</code>
+command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -serial_console<span style="color:#f92672">=</span>disabled <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/fbstatus <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/stapelberg/scan2drive/cmd/scan2drive
+</span></span></code></pre></div><p>The packer will create the following build directory structure:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>% find . -name go.mod
+</span></span><span style="display:flex;"><span>./builddir/init/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/stapelberg/scan2drive/cmd/scan2drive/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/serial-busybox/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/hello/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/fbstatus/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/gokrazy/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/gokrazy/cmd/randomd/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/gokrazy/cmd/ntp/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/gokrazy/cmd/dhcp/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/rpi-eeprom/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/firmware/go.mod
+</span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/kernel/go.mod
+</span></span></code></pre></div><p>You can see that there is one subdirectory for each package explicitly specified
+on the command line, plus a couple extra ones that gokrazy always installs,
+e.g. <code>github.com/gokrazy/gokrazy/cmd/dhcp</code>.</p>
+<h2 id="top-level-gomod-template">Top-level go.mod template</h2>
+<p>If you want to influence the content of any <em>newly created</em> <code>go.mod</code> (no effect
+on existing <code>go.mod</code> files), you can create a <code>go.mod</code> template in your instance
+directory: <code>~/gokrazy/scan2drive/go.mod</code>.</p>
+<h2 id="building-local-code-the-replace-directive">Building local code: the replace directive</h2>
+<p>Go modules are loaded from the internet by default and are stored read-only on
+disk.</p>
+<p>If you want to make the gokrazy packer pick up a local working copy with your
+own changes instead, use the replace directive:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span># Create a local working copy in whichever directory you like.
+</span></span><span style="display:flex;"><span>% cd ~/projects
+</span></span><span style="display:flex;"><span>% git clone https://github.com/stapelberg/scan2drive
+</span></span><span style="display:flex;"><span>% cd scan2drive
+</span></span><span style="display:flex;"><span># make some changes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># Switch to your gokrazy instance directory,
+</span></span><span style="display:flex;"><span># …and specifically to the scan2drive build directory,
+</span></span><span style="display:flex;"><span># to add a replace directive to go.mod:
+</span></span><span style="display:flex;"><span>% cd ~/gokrazy/scan2drive
+</span></span><span style="display:flex;"><span>% cd builddir/github.com/stapelberg/scan2drive/cmd/scan2drive
+</span></span><span style="display:flex;"><span>% go mod edit -replace \
+</span></span><span style="display:flex;"><span>  github.com/stapelberg/scan2drive=/home/michael/projects/scan2drive
+</span></span></code></pre></div><p>For more details on the <code>replace</code> directive, see <a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive">the Go
+wiki</a>.</p>
+<h2 id="influencing-the-granularity">Influencing the granularity</h2>
+<p>Often, one Go <em>package</em> will be the only package you use from a certain Go
+<em>module</em>. But this isn’t always the case: for example, the system packages
+<code>github.com/gokrazy/gokrazy/cmd/dhcp</code> and <code>github.com/gokrazy/gokrazy/cmd/ntp</code>
+both come from the <code>github.com/gokrazy/gokrazy</code> module.</p>
+<p>The packer will by default create a separate builddir, including a separate
+<code>go.mod</code> and <code>go.sum</code>, for each package, even when they come from the same
+module.</p>
+<p>If you want to add module-wide replace directives to your <code>go.mod</code> file, you can
+influence the granularity at which gokr-packer works as follows.</p>
+<p>Move the <code>go.mod</code>/<code>go.sum</code> files to the directory level within the <code>builddir/</code>
+hierarchy at which you would like to work. gokr-packer will look for
+<code>go.mod</code>/<code>go.sum</code> files at the package level, going one level up until it finds
+the files.</p>
+<p>Hence, you can use the following locations, ordered from finest to coarsest
+granularity:</p>
+<ol>
+<li>
+<p>per-package builddir (default), e.g.:
+<code>builddir/github.com/gokrazy/gokrazy/cmd/dhcp/go.mod</code></p>
+</li>
+<li>
+<p>per-module builddir (convenient when working with replace directives), e.g.:
+<code>builddir/github.com/gokrazy/gokrazy/go.mod</code></p>
+</li>
+<li>
+<p>per-org builddir (convenient for wide-reaching replace directives), e.g.:
+<code>builddir/github.com/gokrazy/go.mod</code></p>
+</li>
+<li>
+<p>single builddir, preserving the previous behavior, e.g.:
+<code>builddir/go.mod</code></p>
+</li>
+</ol>
 
 
 <footer class="footline">
@@ -1085,19 +1170,19 @@ into the build:</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1663880340"></script>
-    <script src="/js/perfect-scrollbar.min.js?1663880340"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1663880340"></script>
-    <script src="/js/jquery.sticky.js?1663880340"></script>
-    <script src="/js/featherlight.min.js?1663880340"></script>
-    <script src="/js/highlight.pack.js?1663880340"></script>
+    <script src="/js/clipboard.min.js?1664482083"></script>
+    <script src="/js/perfect-scrollbar.min.js?1664482083"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1664482083"></script>
+    <script src="/js/jquery.sticky.js?1664482083"></script>
+    <script src="/js/featherlight.min.js?1664482083"></script>
+    <script src="/js/highlight.pack.js?1664482083"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1663880340"></script>
-    <script src="/js/learn.js?1663880340"></script>
-    <script src="/js/hugo-learn.js?1663880340"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1664482083"></script>
+    <script src="/js/learn.js?1664482083"></script>
+    <script src="/js/hugo-learn.js?1664482083"></script>
     
         
-            <script src="/mermaid/mermaid.js?1663880340"></script>
+            <script src="/mermaid/mermaid.js?1664482083"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

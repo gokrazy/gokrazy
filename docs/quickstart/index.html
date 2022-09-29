@@ -12,20 +12,20 @@
     <title>Quickstart :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1663880340" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1663880340" rel="stylesheet">
-    <link href="/css/hybrid.css?1663880340" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1663880340" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1663880340" rel="stylesheet">
-    <link href="/css/auto-complete.css?1663880340" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1663880340" rel="stylesheet">
-    <link href="/css/theme.css?1663880340" rel="stylesheet">
-    <link href="/css/tabs.css?1663880340" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1663880340" rel="stylesheet">
+    <link href="/css/nucleus.css?1664482083" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1664482083" rel="stylesheet">
+    <link href="/css/hybrid.css?1664482083" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1664482083" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1664482083" rel="stylesheet">
+    <link href="/css/auto-complete.css?1664482083" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1664482083" rel="stylesheet">
+    <link href="/css/theme.css?1664482083" rel="stylesheet">
+    <link href="/css/tabs.css?1664482083" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1664482083" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1663880340"></script>
+    <script src="/js/jquery-3.3.1.min.js?1664482083"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1663880340"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1663880340"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1664482083"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1664482083"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1663880340"></script>
+<script type="text/javascript" src="/js/search.js?1664482083"></script>
 
     
   </div>
@@ -684,7 +684,7 @@
 using gokrazy, but you can find
 other <a href="/platforms/">supported and upcoming platforms</a>.</p>
 <h2 id="prep-install-go">Prep: Install Go</h2>
-<p>If you don’t already have Go installed, install the latest <a href="https://golang.org/dl/">Go</a> version.</p>
+<p>If you don’t already have Go installed, <a href="https://golang.org/dl/">install the latest Go version</a>.</p>
 <h2 id="prep-install-the-gokrazy-packer">Prep: Install the gokrazy packer</h2>
 <p>Now that you have a working Go installation, install the gokrazy packer (<code>gokr-packer</code>):</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>go install github.com/gokrazy/tools/cmd/gokr-packer@latest
@@ -694,11 +694,10 @@ highlighted device name:</p>
 <script id="asciicast-G0PosAYGvUSnB3htMpLIz0p68" src="https://asciinema.org/a/G0PosAYGvUSnB3htMpLIz0p68.js" async></script>
 <p>In this example, we’ll assume the SD card is accessible as <code>/dev/sdx</code>.</p>
 <h2 id="step-2-create-a-gokrazy-instance-and-overwrite-an-sd-card-with-gokrazy">Step 2: Create a gokrazy instance and overwrite an SD card with gokrazy</h2>
-<p>Create a directory for this gokrazy instance and initialize a Go module:</p>
+<p>Create a directory for this gokrazy instance:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>INSTANCE<span style="color:#f92672">=</span>gokrazy/hello
 </span></span><span style="display:flex;"><span>mkdir -p ~/<span style="color:#e6db74">${</span>INSTANCE?<span style="color:#e6db74">}</span>
 </span></span><span style="display:flex;"><span>cd ~/<span style="color:#e6db74">${</span>INSTANCE?<span style="color:#e6db74">}</span>
-</span></span><span style="display:flex;"><span>go mod init hello
 </span></span></code></pre></div><p>To overwrite the entire SD card <code>/dev/sdx</code> with a gokrazy installation running a hello world program, use:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -overwrite<span style="color:#f92672">=</span>/dev/sdx <span style="color:#ae81ff">\
@@ -706,7 +705,12 @@ highlighted device name:</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/fbstatus <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox
-</span></span></code></pre></div><script id="asciicast-3DFZZaNvXuhHrSjnHRywT8KyO" src="https://asciinema.org/a/3DFZZaNvXuhHrSjnHRywT8KyO.js" async></script>
+</span></span></code></pre></div><p>The gokrazy packer builds each specified Go program
+(e.g. <code>github.com/gokrazy/hello</code>) in a separate build directory, each with its
+own <code>go.mod</code> file. See <a href="/development/modules/">Working with Go modules</a> for more
+details.</p>
+<p>This is what the above gokrazy packer command looks like in action:</p>
+<script id="asciicast-3DFZZaNvXuhHrSjnHRywT8KyO" src="https://asciinema.org/a/3DFZZaNvXuhHrSjnHRywT8KyO.js" async></script>
 <details>
 <summary style="display: list-item">
 Click here to show the <code>gokr-packer</code> log output
@@ -758,7 +762,7 @@ Click here to show the <code>gokr-packer</code> log output
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>To interact with the device, gokrazy provides a web interface reachable at:
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	http://gokrazy:&lt;i&gt;&amp;lt;automatically-generated-random-password&amp;gt;&lt;/i&gt;@gokrazy/
+</span></span><span style="display:flex;"><span>	http://gokrazy:&lt;automatically-generated-random-password&gt;@gokrazy/
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>In addition, the following Linux consoles are set up:
 </span></span><span style="display:flex;"><span>
@@ -772,7 +776,7 @@ Click here to show the <code>gokr-packer</code> log output
 <li>obtain an IP address for hostname “gokrazy” via DHCP (IPv4) and SLAAC (IPv6)</li>
 <li>synchronize the clock using NTP</li>
 <li>expose a password-authenticated web interface on private IP addresses<br>
-(the default password can be recovered from <code>~/.config/gokrazy/http-password.txt</code> on Linux or from <code>~/Library/Application\ Support/gokrazy/http-password.txt</code> on macOS/Darwin)</li>
+(the default password is automatically generated and can be recovered from <code>~/.config/gokrazy/http-password.txt</code> on Linux or from <code>~/Library/Application\ Support/gokrazy/http-password.txt</code> on macOS/Darwin)</li>
 <li>supervise all installed programs (only the hello world program in this example)</li>
 </ul>
 <p>To interact with your device, you can:</p>
@@ -782,7 +786,7 @@ Click here to show the <code>gokr-packer</code> log output
 <li>Install <a href="https://github.com/gokrazy/breakglass">breakglass</a> via the gokrazy packer, which allows you to start an interactive SSH session.</li>
 </ol>
 <p>Congratulations! 🎉 You now have a working gokrazy installation!</p>
-<p>Next, see the <a href="/userguide/">Configuration guide</a> for details on how to user other
+<p>Next, see the <a href="/userguide/">Configuration guide</a> for details on how to use other
 programs.</p>
 <h2 id="optional-using-the-serial-console">Optional: Using the serial console</h2>
 <p>If you prefer the serial console, you can optionally connect a serial adapter to
@@ -1184,19 +1188,19 @@ interactively start either:</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1663880340"></script>
-    <script src="/js/perfect-scrollbar.min.js?1663880340"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1663880340"></script>
-    <script src="/js/jquery.sticky.js?1663880340"></script>
-    <script src="/js/featherlight.min.js?1663880340"></script>
-    <script src="/js/highlight.pack.js?1663880340"></script>
+    <script src="/js/clipboard.min.js?1664482083"></script>
+    <script src="/js/perfect-scrollbar.min.js?1664482083"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1664482083"></script>
+    <script src="/js/jquery.sticky.js?1664482083"></script>
+    <script src="/js/featherlight.min.js?1664482083"></script>
+    <script src="/js/highlight.pack.js?1664482083"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1663880340"></script>
-    <script src="/js/learn.js?1663880340"></script>
-    <script src="/js/hugo-learn.js?1663880340"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1664482083"></script>
+    <script src="/js/learn.js?1664482083"></script>
+    <script src="/js/hugo-learn.js?1664482083"></script>
     
         
-            <script src="/mermaid/mermaid.js?1663880340"></script>
+            <script src="/mermaid/mermaid.js?1664482083"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
