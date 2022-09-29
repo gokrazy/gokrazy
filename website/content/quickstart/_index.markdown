@@ -36,13 +36,12 @@ In this example, we’ll assume the SD card is accessible as <code>/dev/sdx</cod
 
 ## Step 2: Create a gokrazy instance and overwrite an SD card with gokrazy
 
-Create a directory for this gokrazy instance and initialize a Go module:
+Create a directory for this gokrazy instance:
 
 ```shell
 INSTANCE=gokrazy/hello
 mkdir -p ~/${INSTANCE?}
 cd ~/${INSTANCE?}
-go mod init hello
 ```
 
 To overwrite the entire SD card <code>/dev/sdx</code> with a gokrazy installation running a hello world program, use:
@@ -55,6 +54,13 @@ gokr-packer \
   github.com/gokrazy/hello \
   github.com/gokrazy/serial-busybox
 ```
+
+The gokrazy packer builds each specified Go program
+(e.g. `github.com/gokrazy/hello`) in a separate build directory, each with its
+own `go.mod` file. See [Working with Go modules](/development/modules/) for more
+details.
+
+This is what the above gokrazy packer command looks like in action:
 
 <script id="asciicast-3DFZZaNvXuhHrSjnHRywT8KyO" src="https://asciinema.org/a/3DFZZaNvXuhHrSjnHRywT8KyO.js" async></script>
 
