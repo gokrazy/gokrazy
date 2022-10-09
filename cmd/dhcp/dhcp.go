@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/google/gopacket/layers"
+	"github.com/landlock-lsm/go-landlock/landlock"
 	"github.com/mdlayher/packet"
 	"github.com/rtr7/dhcp4"
 	"github.com/vishvananda/netlink"
@@ -296,6 +297,14 @@ func main() {
 			"extra value to add to the interface’s priority (eth* defaults to priority 1, wlan* defaults to priority 5, interfaces without link are set to priority 1024)")
 	)
 	flag.Parse()
+
+	if err := landlock.V2.BestEffort().RestrictPaths(
+		landlock.ROFiles("/etc/localtime"),
+		landlock.RODirs("/sys/class/net"), // for /sys/class/net/<ifname>/carrier
+		landlock.RWDirs("/tmp"),           // for writing /tmp/resolv.conf
+	); err != nil {
+		log.Fatal(err)
+	}
 
 	// NOTE: cannot gokrazy.WaitForClock() here, since the clock can only be
 	// initialized once the network is up.
