@@ -20,7 +20,7 @@ have one yet), include the [`iptables`](https://github.com/gokrazy/iptables),
 [`nsenter`](https://github.com/gokrazy/nsenter) and
 [`podman`](https://github.com/gokrazy/podman) packages:
 
-{{< highlight shell "hl_lines=6-8" >}}
+{{< highlight shell "hl_lines=6-10" >}}
 gokr-packer \
   -update=yes \
   github.com/gokrazy/hello \
