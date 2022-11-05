@@ -28,7 +28,9 @@ gokr-packer \
   github.com/gokrazy/serial-busybox \
   github.com/gokrazy/iptables \
   github.com/gokrazy/nsenter \
-  github.com/gokrazy/podman
+  github.com/gokrazy/podman \
+  github.com/greenpau/cni-plugins/cmd/cni-nftables-portmap \
+  github.com/greenpau/cni-plugins/cmd/cni-nftables-firewall
 {{< /highlight >}}
 
 ## Step 2: Verify podman works
