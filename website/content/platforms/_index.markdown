@@ -129,5 +129,31 @@ that are not yet supported in the upstream Linux kernel.
 This kernel is the only choice for you if you have a Raspberry Pi that’s older
 than the Raspberry Pi 3, but you still want to use gokrazy with it.
 
+### Community-supported Odroid XU4/HC1/HC2
+
+Odroid XU4/HC1/HC2 is based on a Samsung Exynos 5422 SOC (4 ARM Cortext-A15
+cores and 4 ARM Cortex-A7 cores) and has been on the market since ~2016. HC1
+and HC2 variants support installing a 2.5'/3.5' hard drive on board.
+
+Kernel for these devices is available at [github.com/anupcshan/gokrazy-odroidxu4-kernel].
+This package contains a recent kernel, U-boot and some binary blobs that are
+required to initiate the boot process. It has been tested against Odroid HC2
+hardware with gigabit networking, USB and HDD functional.
+
+See [github.com/anupcshan/odroidbake] for an example on how to create a
+new disk image.
+
+```
+gokr-packer \
+  -kernel_package=github.com/anupcshan/gokrazy-odroidxu4-kernel \
+  -eeprom_package= \          # Device doesn't use RPI EEPROM
+  -firmware_package= \        # No extra firmware package- everything bundled into kernel
+  -device_type=odroidhc1 \    # To handle MBR boot and define how to layout boot files
+  -serial_console=disabled \
+  # list of packages to install
+```
+
 [github.com/gokrazy-community/kernel-rpi-os-32]: https://github.com/gokrazy-community/kernel-rpi-os-32
 [github.com/gokrazy-community/firmware-rpi]: https://github.com/gokrazy-community/firmware-rpi
+[github.com/anupcshan/gokrazy-odroidxu4-kernel]: https://github.com/anupcshan/gokrazy-odroidxu4-kernel
+[github.com/anupcshan/odroidbake]: https://github.com/anupcshan/odroidbake
