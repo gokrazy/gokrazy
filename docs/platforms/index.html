@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.98.0-DEV" />
+    <meta name="generator" content="Hugo 0.106.0-DEV">
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Supported platforms :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1667670390" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1667670390" rel="stylesheet">
-    <link href="/css/hybrid.css?1667670390" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1667670390" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1667670390" rel="stylesheet">
-    <link href="/css/auto-complete.css?1667670390" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1667670390" rel="stylesheet">
-    <link href="/css/theme.css?1667670390" rel="stylesheet">
-    <link href="/css/tabs.css?1667670390" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1667670390" rel="stylesheet">
+    <link href="/css/nucleus.css?1668067075" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1668067075" rel="stylesheet">
+    <link href="/css/hybrid.css?1668067075" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1668067075" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1668067075" rel="stylesheet">
+    <link href="/css/auto-complete.css?1668067075" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1668067075" rel="stylesheet">
+    <link href="/css/theme.css?1668067075" rel="stylesheet">
+    <link href="/css/tabs.css?1668067075" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1668067075" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1667670390"></script>
+    <script src="/js/jquery-3.3.1.min.js?1668067075"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1667670390"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1667670390"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1668067075"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1668067075"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1667670390"></script>
+<script type="text/javascript" src="/js/search.js?1668067075"></script>
 
     
   </div>
@@ -115,7 +115,7 @@
   
     
     <li data-nav-id="/platforms/" title="Supported platforms" class="dd-item
-        parent
+        
         active
         
         ">
@@ -663,6 +663,7 @@
     <li><a href="#community">Community-supported platforms</a>
       <ul>
         <li><a href="#community-supported-raspberry-pi-os-32-bit-kernelfirmware">Community-supported Raspberry Pi OS 32-bit kernel/firmware</a></li>
+        <li><a href="#community-supported-odroid-xu4hc1hc2">Community-supported Odroid XU4/HC1/HC2</a></li>
       </ul>
     </li>
   </ul>
@@ -907,7 +908,24 @@ Pis. The corresponding firmware for this kernel is
 that are not yet supported in the upstream Linux kernel.</p>
 <p>This kernel is the only choice for you if you have a Raspberry Pi that’s older
 than the Raspberry Pi 3, but you still want to use gokrazy with it.</p>
-
+<h3 id="community-supported-odroid-xu4hc1hc2">Community-supported Odroid XU4/HC1/HC2</h3>
+<p>Odroid XU4/HC1/HC2 is based on a Samsung Exynos 5422 SOC (4 ARM Cortex-A15
+cores and 4 ARM Cortex-A7 cores) and has been on the market since ~2016. HC1
+and HC2 variants support installing a 2.5&rsquo;/3.5&rsquo; hard drive on board.</p>
+<p>Kernel for these devices is available at <a href="https://github.com/anupcshan/gokrazy-odroidxu4-kernel">github.com/anupcshan/gokrazy-odroidxu4-kernel</a>.
+This package contains a recent kernel, U-boot and some binary blobs that are
+required to initiate the boot process. It has been tested against Odroid HC2
+hardware with gigabit networking, USB and HDD functional.</p>
+<p>See <a href="https://github.com/anupcshan/odroidbake">github.com/anupcshan/odroidbake</a> for an example on how to create a
+new disk image.</p>
+<pre tabindex="0"><code>gokr-packer \
+  -kernel_package=github.com/anupcshan/gokrazy-odroidxu4-kernel \
+  -eeprom_package= \          # Device doesn&#39;t use RPI EEPROM
+  -firmware_package= \        # No extra firmware package- everything bundled into kernel
+  -device_type=odroidhc1 \    # To handle MBR boot and define how to layout boot files
+  -serial_console=disabled \
+  # list of packages to install
+</code></pre>
 
 
 
@@ -1300,19 +1318,19 @@ than the Raspberry Pi 3, but you still want to use gokrazy with it.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1667670390"></script>
-    <script src="/js/perfect-scrollbar.min.js?1667670390"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1667670390"></script>
-    <script src="/js/jquery.sticky.js?1667670390"></script>
-    <script src="/js/featherlight.min.js?1667670390"></script>
-    <script src="/js/highlight.pack.js?1667670390"></script>
+    <script src="/js/clipboard.min.js?1668067075"></script>
+    <script src="/js/perfect-scrollbar.min.js?1668067075"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1668067075"></script>
+    <script src="/js/jquery.sticky.js?1668067075"></script>
+    <script src="/js/featherlight.min.js?1668067075"></script>
+    <script src="/js/highlight.pack.js?1668067075"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1667670390"></script>
-    <script src="/js/learn.js?1667670390"></script>
-    <script src="/js/hugo-learn.js?1667670390"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1668067075"></script>
+    <script src="/js/learn.js?1668067075"></script>
+    <script src="/js/hugo-learn.js?1668067075"></script>
     
         
-            <script src="/mermaid/mermaid.js?1667670390"></script>
+            <script src="/mermaid/mermaid.js?1668067075"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
