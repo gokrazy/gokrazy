@@ -131,7 +131,7 @@ than the Raspberry Pi 3, but you still want to use gokrazy with it.
 
 ### Community-supported Odroid XU4/HC1/HC2
 
-Odroid XU4/HC1/HC2 is based on a Samsung Exynos 5422 SOC (4 ARM Cortext-A15
+Odroid XU4/HC1/HC2 is based on a Samsung Exynos 5422 SOC (4 ARM Cortex-A15
 cores and 4 ARM Cortex-A7 cores) and has been on the market since ~2016. HC1
 and HC2 variants support installing a 2.5'/3.5' hard drive on board.
 
