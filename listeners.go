@@ -5,87 +5,29 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"strings"
 	"sync"
-)
 
-var (
-	gokrazyGdns = func() *net.IPNet {
-		_, net, err := net.ParseCIDR("fdf5:3606:2a21::/48")
-		if err != nil {
-			log.Panic(err)
-		}
-		return net
-	}()
+	"github.com/gokrazy/gokrazy/ifaddr"
 )
 
 // IsInPrivateNet reports whether the specified IP address is a private address,
 // including loopback and link-local unicast addresses.
 func IsInPrivateNet(ip net.IP) bool {
-	return ip.IsLoopback() || ip.IsPrivate() || ip.IsLinkLocalUnicast()
-}
-
-func isPrivate(iface string, ipaddr net.IP) bool {
-	if strings.HasPrefix(iface, "uplink") {
-		return false
-	}
-	return IsInPrivateNet(ipaddr)
-}
-
-func interfaceAddrs(keep func(string, net.IP) bool) ([]string, error) {
-	ifaces, err := net.Interfaces()
-	if err != nil {
-		return nil, err
-	}
-
-	var hosts []string
-	for _, i := range ifaces {
-		if i.Flags&net.FlagUp != net.FlagUp {
-			continue
-		}
-		addrs, err := i.Addrs()
-		if err != nil {
-			return nil, err
-		}
-
-		for _, a := range addrs {
-			ipaddr, _, err := net.ParseCIDR(a.String())
-			if err != nil {
-				return nil, err
-			}
-
-			if gokrazyGdns.Contains(ipaddr) {
-				continue
-			}
-
-			if !keep(i.Name, ipaddr) {
-				continue
-			}
-
-			host := ipaddr.String()
-			if ipaddr.IsLinkLocalUnicast() {
-				host = host + "%" + i.Name
-			}
-			hosts = append(hosts, host)
-		}
-	}
-	return hosts, nil
+	return ifaddr.IsInPrivateNet(ip)
 }
 
 // PrivateInterfaceAddrs returns all private (as per RFC1918, RFC4193,
 // RFC3330, RFC3513, RFC3927, RFC4291) host addresses of all active
 // interfaces, suitable to be passed to net.JoinHostPort.
 func PrivateInterfaceAddrs() ([]string, error) {
-	return interfaceAddrs(isPrivate)
+	return ifaddr.PrivateInterfaceAddrs()
 }
 
 // PublicInterfaceAddrs returns all public (excluding RFC1918, RFC4193,
 // RFC3330, RFC3513, RFC3927, RFC4291) host addresses of all active
 // interfaces, suitable to be passed to net.JoinHostPort.
 func PublicInterfaceAddrs() ([]string, error) {
-	return interfaceAddrs(func(iface string, addr net.IP) bool {
-		return !isPrivate(iface, addr)
-	})
+	return ifaddr.PublicInterfaceAddrs()
 }
 
 // Wrapper to keep track of allocated servers per host
