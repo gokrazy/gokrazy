@@ -12,20 +12,20 @@
     <title>Connecting to WiFi networks :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1668067075" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1668067075" rel="stylesheet">
-    <link href="/css/hybrid.css?1668067075" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1668067075" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1668067075" rel="stylesheet">
-    <link href="/css/auto-complete.css?1668067075" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1668067075" rel="stylesheet">
-    <link href="/css/theme.css?1668067075" rel="stylesheet">
-    <link href="/css/tabs.css?1668067075" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1668067075" rel="stylesheet">
+    <link href="/css/nucleus.css?1668940579" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1668940579" rel="stylesheet">
+    <link href="/css/hybrid.css?1668940579" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1668940579" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1668940579" rel="stylesheet">
+    <link href="/css/auto-complete.css?1668940579" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1668940579" rel="stylesheet">
+    <link href="/css/theme.css?1668940579" rel="stylesheet">
+    <link href="/css/tabs.css?1668940579" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1668940579" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1668067075"></script>
+    <script src="/js/jquery-3.3.1.min.js?1668940579"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1668067075"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1668067075"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1668940579"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1668940579"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1668067075"></script>
+<script type="text/javascript" src="/js/search.js?1668940579"></script>
 
     
   </div>
@@ -680,17 +680,9 @@
 
 <p>Since March 2022, gokrazy supports both encrypted and unencrypted WiFi networks!
 🎉</p>
-
-<div class="notices warning" ><p>Remember that using an <strong>unencrypted WiFi</strong> network means anyone in range can read
-your communication. Hence, we strongly recommend <a href="/userguide/tls-for-untrusted-networks/">using TLS for accessing the
-gokrazy web interface and doing
-updates</a>.</p>
-</div>
-
 <p>To make gokrazy connect to a WiFi network, first include the
 <code>github.com/gokrazy/wifi</code> package in your <code>gokr-packer</code> command line, e.g.:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -tls<span style="color:#f92672">=</span>self-signed <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
@@ -700,12 +692,13 @@ updates</a>.</p>
 file</a>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># To connect to an unencrypted WiFi network, specify no psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;My unencrypted WiFi&#34;}&#39;</span> <span style="color:#ae81ff">\
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># To connect to an encrypted WiFi network, specify the psk:</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;Secure WiFi&#34;, &#34;psk&#34;: &#34;secret&#34;}&#39;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># OR, to connect to an encrypted WiFi network, specify the psk:</span>
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;Secure WiFi&#34;, &#34;psk&#34;: &#34;secret&#34;}&#39;</span> <span style="color:#ae81ff">\
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Or, to connect to an unencrypted WiFi network, specify no psk,</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># and use TLS: https://gokrazy.org/userguide/tls-for-untrusted-networks/</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;{&#34;ssid&#34;: &#34;My unencrypted WiFi&#34;}&#39;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  &gt; extrafiles/github.com/gokrazy/wifi/etc/wifi.json
 </span></span></code></pre></div><p>Alternatively, you can also create the <code>wifi.json</code> manually on the permanent
 data partition with path <code>/perm/wifi.json</code>.</p>
@@ -1113,19 +1106,19 @@ accidentally joining this open network.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1668067075"></script>
-    <script src="/js/perfect-scrollbar.min.js?1668067075"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1668067075"></script>
-    <script src="/js/jquery.sticky.js?1668067075"></script>
-    <script src="/js/featherlight.min.js?1668067075"></script>
-    <script src="/js/highlight.pack.js?1668067075"></script>
+    <script src="/js/clipboard.min.js?1668940579"></script>
+    <script src="/js/perfect-scrollbar.min.js?1668940579"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1668940579"></script>
+    <script src="/js/jquery.sticky.js?1668940579"></script>
+    <script src="/js/featherlight.min.js?1668940579"></script>
+    <script src="/js/highlight.pack.js?1668940579"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1668067075"></script>
-    <script src="/js/learn.js?1668067075"></script>
-    <script src="/js/hugo-learn.js?1668067075"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1668940579"></script>
+    <script src="/js/learn.js?1668940579"></script>
+    <script src="/js/hugo-learn.js?1668940579"></script>
     
         
-            <script src="/mermaid/mermaid.js?1668067075"></script>
+            <script src="/mermaid/mermaid.js?1668940579"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
