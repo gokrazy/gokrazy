@@ -9,19 +9,11 @@ aliases:
 Since March 2022, gokrazy supports both encrypted and unencrypted WiFi networks!
 🎉
 
-{{% notice warning %}}
-Remember that using an **unencrypted WiFi** network means anyone in range can read
-your communication. Hence, we strongly recommend [using TLS for accessing the
-gokrazy web interface and doing
-updates](/userguide/tls-for-untrusted-networks/).
-{{% /notice %}}
-
 To make gokrazy connect to a WiFi network, first include the
 `github.com/gokrazy/wifi` package in your `gokr-packer` command line, e.g.:
 
 ```shell
 gokr-packer \
-  -tls=self-signed \
   -update=yes \
   github.com/gokrazy/hello \
   github.com/gokrazy/breakglass \
@@ -35,12 +27,13 @@ file](/userguide/package-config/#extrafiles):
 ```shell
 mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
 
-# To connect to an unencrypted WiFi network, specify no psk:
-echo '{"ssid": "My unencrypted WiFi"}' \
+# To connect to an encrypted WiFi network, specify the psk:
+echo '{"ssid": "Secure WiFi", "psk": "secret"}' \
   > extrafiles/github.com/gokrazy/wifi/etc/wifi.json
 
-# OR, to connect to an encrypted WiFi network, specify the psk:
-echo '{"ssid": "Secure WiFi", "psk": "secret"}' \
+# Or, to connect to an unencrypted WiFi network, specify no psk,
+# and use TLS: https://gokrazy.org/userguide/tls-for-untrusted-networks/
+echo '{"ssid": "My unencrypted WiFi"}' \
   > extrafiles/github.com/gokrazy/wifi/etc/wifi.json
 ```
 
