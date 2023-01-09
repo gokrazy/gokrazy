@@ -296,6 +296,51 @@ func updateListenerPairs(httpPort, httpsPort string, useTLS bool, tlsConfig *tls
 	return nil
 }
 
+// By default, stdio is open on /dev/console which cannot be a controlling tty
+// so set up stdio on a normal tty (e.g. tty1, ttyS0, ttyAMA0)
+// See https://busybox.net/FAQ.html#job_control
+func runWithCtty(shell string) error {
+	// find TTY device connected to /dev/console
+	// https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-tty
+	buf, err := ioutil.ReadFile("/sys/class/tty/console/active")
+	if err != nil {
+		return err
+	}
+
+	devs := strings.Split(strings.TrimSpace(string(buf)), " ")
+	ttyDev := "/dev/" + devs[len(devs)-1]
+
+	stdin, err := os.OpenFile(ttyDev, os.O_RDWR, 0600)
+	if err != nil {
+		return fmt.Errorf("stdin: %v", err)
+	}
+	defer stdin.Close()
+
+	stdout, err := os.OpenFile(ttyDev, os.O_RDWR, 0600)
+	if err != nil {
+		return fmt.Errorf("stdout: %v", err)
+	}
+	defer stdout.Close()
+
+	stderr, err := os.OpenFile(ttyDev, os.O_RDWR, 0600)
+	if err != nil {
+		return fmt.Errorf("stderr: %v", err)
+	}
+	defer stderr.Close()
+
+	sh := exec.Command(shell)
+	sh.Stdin = stdin
+	sh.Stdout = stdout
+	sh.Stderr = stderr
+	sh.SysProcAttr = &syscall.SysProcAttr{
+		Setsid:  true,
+		Setctty: true,
+		Ctty:    0,
+	}
+
+	return sh.Run()
+}
+
 func tryStartShell() error {
 	var lastErr error
 	for _, shell := range []string{
@@ -308,12 +353,9 @@ func tryStartShell() error {
 			continue
 		}
 		log.Printf("starting shell %s upon input on serial console", shell)
-		sh := exec.Command(shell)
-		sh.Stdin = os.Stdin
-		sh.Stdout = os.Stdout
-		sh.Stderr = os.Stderr
-		if err := sh.Run(); err != nil {
-			log.Printf("sh: %v", err)
+
+		if err := runWithCtty(shell); err != nil {
+			log.Printf("runWithCtty: %v", err)
 			lastErr = err
 		}
 		return nil
