@@ -53,8 +53,8 @@ good to go!
 
 After building a new gokrazy image on your computer, you can easily
 update an existing gokrazy installation in-place thanks to the A/B
-partitioning scheme we use. Just specify the <code>-update</code>
-flag when building your new image.
+partitioning scheme we use. Just use the <code>gok update</code>
+command.
 
 ## Minimal state and configuration
 

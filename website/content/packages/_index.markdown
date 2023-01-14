@@ -16,15 +16,14 @@ issue on GitHub](https://github.com/gokrazy/gokrazy/issues).
 
 ## Installing existing Go software
 
-To add an existing Go software to you installation, you just need to indicate the
-import path of the package to `gokr-packer`.
+To add existing Go software to your gokrazy instance, run `gok add` with the
+import path of the program you want to add (the import path must refer to a
+`package main` in Go terminology).
 
-For instance to install `github.com/stapelberg/scan2drive/cmd/scan2drive`:
+For instance, to install `github.com/stapelberg/scan2drive/cmd/scan2drive`, use:
 
 ```shell
-gokr-packer \
-  -overwrite=/dev/sdx \
-  github.com/stapelberg/scan2drive/cmd/scan2drive
+gok add github.com/stapelberg/scan2drive/cmd/scan2drive
 ```
 
 ## Packages guides

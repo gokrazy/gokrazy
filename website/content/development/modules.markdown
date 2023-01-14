@@ -19,24 +19,21 @@ gokrazy instance.
 
 ## Example setup
 
-Throughout this page, let’s assume your gokrazy instance directory is
-`~/gokrazy/scan2drive`, and that’s where you run the following `gokr-packer`
-command:
+Throughout this page, let’s assume your gokrazy instance is named `scanner`, and
+will hence store its files in `~/gokrazy/scanner`. A single additional program,
+`scan2drive`, is included:
 
-```shell
-gokr-packer \
-  -update=yes \
-  -serial_console=disabled \
-  github.com/gokrazy/fbstatus \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/serial-busybox \
-  github.com/stapelberg/scan2drive/cmd/scan2drive
+```bash
+gok -i scanner new
+gok -i scanner add github.com/stapelberg/scan2drive/cmd/scan2drive
 
 ```
 
-The packer will create the following build directory structure:
+When building this instance (using `gok overwrite` initially, or `gok update`
+afterwards), the `gok` CLI will create the following build directory structure:
 
-```text
+```bash
+% cd ~/gokrazy/scanner
 % find . -name go.mod
 ./builddir/init/go.mod
 ./builddir/github.com/stapelberg/scan2drive/cmd/scan2drive/go.mod
@@ -52,41 +49,38 @@ The packer will create the following build directory structure:
 ./builddir/github.com/gokrazy/kernel/go.mod
 ```
 
-You can see that there is one subdirectory for each package explicitly specified
-on the command line, plus a couple extra ones that gokrazy always installs,
-e.g. `github.com/gokrazy/gokrazy/cmd/dhcp`.
+You can see that there is one subdirectory for each package listed in the
+`Packages` field of your instance’s `config.json` (see `gok edit`), which
+includes the explicitly added `scan2drive`, plus a couple extra ones that
+gokrazy always installs, e.g. `github.com/gokrazy/gokrazy/cmd/dhcp`.
 
 ## Top-level go.mod template
 
 If you want to influence the content of any *newly created* `go.mod` (no effect
 on existing `go.mod` files), you can create a `go.mod` template in your instance
-directory: `~/gokrazy/scan2drive/go.mod`.
+directory: `~/gokrazy/scanner/go.mod`.
 
 ## Building local code: the replace directive
 
 Go modules are loaded from the internet by default and are stored read-only on
 disk.
 
-If you want to make the gokrazy packer pick up a local working copy with your
-own changes instead, use the replace directive:
+If you want to make the gokrazy packer pick up a local working copy with
+not-yet-published code, or a working copy with local changes to existing code,
+use `gok add` with a directory name:
 
-```text
+```bash
 # Create a local working copy in whichever directory you like.
 % cd ~/projects
 % git clone https://github.com/stapelberg/scan2drive
 % cd scan2drive
 # make some changes
 
-# Switch to your gokrazy instance directory,
-# …and specifically to the scan2drive build directory,
-# to add a replace directive to go.mod:
-% cd ~/gokrazy/scan2drive
-% cd builddir/github.com/stapelberg/scan2drive/cmd/scan2drive
-% go mod edit -replace \
-  github.com/stapelberg/scan2drive=/home/michael/projects/scan2drive
+% gok -i scan2drive add ./cmd/scan2drive
 ```
 
-For more details on the `replace` directive, see [the Go
+The `gok` CLI will set up the `replace` directive for you. For more details on
+`replace`, see [the Go
 wiki](https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive).
 
 ## Influencing the granularity

@@ -1,35 +1,43 @@
 ---
 title: "Package config: flags, environment variables, extra files"
 menuTitle: "Flags, environment variables, …"
-weight: 10
+weight: 20
 ---
 
 gokrazy will arrange for each included package to be started at boot. For
-example, given the following packer command:
+example, given the following instance `config.json` (open in your editor using
+`gok edit`):
 
-```shell
-gokr-packer \
-  -update=yes \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/breakglass \
-  github.com/gokrazy/serial-busybox
+```json
+{
+    "Hostname": "docs",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass"
+    ]
+}
 ```
 
-…gokrazy will start the `hello`, `breakglass` and `serial-busybox` programs.
+…gokrazy will start the `fbstatus`, `hello`, `serial-busybox` and `breakglass`
+programs.
+
+## Package config
 
 This article shows how you can configure different aspects of individual
 packages.
 
-Each bit of configuration lives in its own directory:
+Each bit of configuration is nested under the `PackageConfig` map field in your
+instance’s `config.json`, see [Instance Config Reference →
+`PackageConfig`](/userguide/instance-config/#packageconfig). The map is keyed by
+package name (from the `Packages` field), and each map entry can have the
+following fields:
 
-- `flags` for [Command-line flags](#flags)
-- `env` for [Environment variables](#env)
-- `buildflags` for [Go build flags](#buildflags)
-- `extrafiles` for [Extra files](#extrafiles)
-
-Within these directories, create a directory named after the package import
-path, then place your configuration in a text file: `flags.txt`, `env.txt` or
-`buildflags.txt`.
+- `CommandLineFlags` for [Command-line flags](#flags)
+- `Environment` for [Environment variables](#env)
+- `GoBuildFlags` for [Go build flags](#buildflags)
+- `ExtraFilePaths` or `ExtraFileContents` for [Extra files](#extrafiles)
 
 ## Command-line flags {#flags}
 
@@ -38,9 +46,17 @@ emergency/debugging access to a gokrazy installation.
 
 To enable SSH port forwardings to localhost, set the `-forward` flag to `loopback`:
 
-```shell
-mkdir -p flags/github.com/gokrazy/breakglass
-echo '-forward=loopback' > flags/github.com/gokrazy/breakglass/flags.txt
+```json
+{
+    "PackageConfig": {
+        "github.com/gokrazy/breakglass": {
+            "CommandLineFlags": [
+                "-forward=loopback"
+            ]
+        }
+    },
+    …
+}
 ```
 
 ## Environment variables {#env}
@@ -49,9 +65,17 @@ echo '-forward=loopback' > flags/github.com/gokrazy/breakglass/flags.txt
 as the [Go runtime’s `GODEBUG`](https://golang.org/pkg/runtime/) variable can be
 set as follows:
 
-```shell
-mkdir -p env/github.com/gokrazy/breakglass
-echo 'GODEBUG=gctrace=1' > env/github.com/gokrazy/breakglass/env.txt
+```json
+{
+    "PackageConfig": {
+        "github.com/gokrazy/breakglass": {
+            "Environment": [
+                "GODEBUG=gctrace=1"
+            ]
+        }
+    },
+    …
+}
 ```
 
 ## Go build flags {#buildflags}
@@ -65,9 +89,17 @@ variable](https://github.com/gokrazy/hello/blob/e33b5caa1a73b5e58e4d4f4b165d07e6
 using the [`-X` linker flag](https://golang.org/cmd/link/), which is a common
 technique to embed version information:
 
-```shell
-mkdir -p buildflags/github.com/gokrazy/hello
-echo '-ldflags=-X main.world=Welt' > buildflags/github.com/gokrazy/hello/buildflags.txt
+```json
+{
+    "PackageConfig": {
+        "github.com/gokrazy/hello": {
+            "GoBuildFlags": [
+                "-ldflags=-X main.world=Welt"
+            ]
+        }
+    },
+    …
+}
 ```
 
 ## Extra files {#extrafiles}
@@ -75,12 +107,44 @@ echo '-ldflags=-X main.world=Welt' > buildflags/github.com/gokrazy/hello/buildfl
 If your program needs extra files to be present in gokrazy’s root file system
 image at a specific location, you can add them with the `extrafiles` mechanism:
 
-```shell
-mkdir -p extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy
-cat > extrafiles/github.com/caddyserver/caddy/v2/cmd/caddy/etc/caddy/Caddyfile <<'EOT'
+```json
+{
+    "PackageConfig": {
+        "github.com/caddyserver/caddy/v2/cmd/caddy": {
+            "ExtraFileContents": {
+                "/etc/caddy/Caddyfile": "http://:80 {
+	root * /tmp
+	file_server browse
+}
+"
+            }
+        }
+    },
+    …
+}
+```
+
+Or, if managing the file contents within the `config.json` becomes unwieldy, you
+can manage it in a separate file:
+
+```bash
+cat > ~/gokrazy/hello/Caddyfile <<'EOT'
 http://:80 {
 	root * /tmp
 	file_server browse
 }
 EOT
+```
+
+```json
+{
+    "PackageConfig": {
+        "github.com/caddyserver/caddy/v2/cmd/caddy": {
+            "ExtraFilePaths": {
+                "/etc/caddy/Caddyfile": "Caddyfile"
+            }
+        }
+    },
+    …
+}
 ```

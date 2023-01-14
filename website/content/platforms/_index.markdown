@@ -143,15 +143,21 @@ hardware with gigabit networking, USB and HDD functional.
 See [github.com/anupcshan/odroidbake] for an example on how to create a
 new disk image.
 
-```
-gokr-packer \
-  -kernel_package=github.com/anupcshan/gokrazy-odroidxu4-kernel \
-  -eeprom_package= \          # Device doesn't use RPI EEPROM
-  -firmware_package= \        # No extra firmware package- everything bundled into kernel
-  -device_type=odroidhc1 \    # To handle MBR boot and define how to layout boot files
-  -serial_console=disabled \
-  # list of packages to install
-```
+{{< highlight json "hl_lines=3 10-13" >}}
+{
+    "Hostname": "odroid",
+    "DeviceType": "odroidhc1",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass"
+    ],
+    "KernelPackage": "github.com/anupcshan/gokrazy-odroidxu4-kernel",
+    "FirmwarePackage": "",
+    "EEPROMPackage": ""
+}
+{{< /highlight >}}
 
 [github.com/gokrazy-community/kernel-rpi-os-32]: https://github.com/gokrazy-community/kernel-rpi-os-32
 [github.com/gokrazy-community/firmware-rpi]: https://github.com/gokrazy-community/firmware-rpi

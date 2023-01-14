@@ -15,10 +15,10 @@ periph.io supports the Raspberry Pi 3 and Raspberry Pi 4, starting with version
 
 ## Connect GPIO pins based on pinout
 
-<a href="https://pinout.xyz"><img src="/img/raspberry-pi-pinout.png" width="700" align="right" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a>
-
 To verify the code is doing what we expect, let’s connect a multimeter as per
 [pinout.xyz](https://pinout.xyz)’s pinout:
+
+![](/img/raspberry-pi-pinout.png)
 
 - pin number 18 (signal `BCM24`, labeled `24` in the pinout above)
 - pin number 20 (signal `GND`)
@@ -69,18 +69,17 @@ func main() {
 }
 ```
 
-Install the program on your Raspberry Pi using gokrazy (see [Quickstart](/quickstart/)):
+You have two options to run this program on your Raspberry Pi:
 
-```shell
-gokr-packer \
-  -update=yes \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/breakglass \
-  github.com/gokrazy/serial-busybox \
-  github.com/gokrazy/hello-gpio
+1. Use `gok run` to temporarily run this program on a running gokrazy instance.
+2. Use `gok add` to permanently include this program in your gokrazy instance:
+
+```bash
+# From the hello-gpio directory, run:
+gok add .
+# Then, deploy as usual:
+gok update
 ```
-
-…and wait a few seconds for it to reboot.
 
 At this point, we should be able to see the high/low signal on the multimeter,
 alternating between 3.3V (high) and 0V (low) every 5 seconds:

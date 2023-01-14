@@ -15,23 +15,21 @@ re-package into https://github.com/gokrazy/podman.
 
 ## Step 1: Install podman to your gokrazy device
 
-In your `gokr-packer` invocation (see [Quickstart](/quickstart/) if you don’t
-have one yet), include the [`iptables`](https://github.com/gokrazy/iptables),
-[`nsenter`](https://github.com/gokrazy/nsenter) and
-[`podman`](https://github.com/gokrazy/podman) packages:
+Include the following packages in your gokrazy installation:
 
-{{< highlight shell "hl_lines=6-10" >}}
-gokr-packer \
-  -update=yes \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/breakglass \
-  github.com/gokrazy/serial-busybox \
-  github.com/gokrazy/iptables \
-  github.com/gokrazy/nsenter \
-  github.com/gokrazy/podman \
-  github.com/greenpau/cni-plugins/cmd/cni-nftables-portmap \
-  github.com/greenpau/cni-plugins/cmd/cni-nftables-firewall
-{{< /highlight >}}
+```bash
+gok add github.com/gokrazy/iptables
+gok add github.com/gokrazy/nsenter
+gok add github.com/gokrazy/podman
+gok add github.com/greenpau/cni-plugins/cmd/cni-nftables-portmap
+gok add github.com/greenpau/cni-plugins/cmd/cni-nftables-firewall
+```
+
+Then, deploy as usual:
+
+```bash
+gok update
+```
 
 ## Step 2: Verify podman works
 

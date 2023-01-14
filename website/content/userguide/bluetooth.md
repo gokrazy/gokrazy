@@ -1,7 +1,7 @@
 ---
 title: "Using Bluetooth"
 menuTitle: "Using Bluetooth"
-weight: 40
+weight: 60
 aliases:
   - /userguide/bluetooth/
 ---
@@ -11,15 +11,11 @@ have a lot of dependencies that are not available on gokrazy and those are out
 of scope here. But the basic Bluetooth hardware are supported on low level. This
 is useful in particular for applications using Bluetooth LE natively in Go.
 
-To enable Bluetooth in gokrazy, first include the
-`github.com/gokrazy/bluetooth` package in your `gokr-packer` command line, e.g.:
+To enable Bluetooth in gokrazy, first add the
+`github.com/gokrazy/bluetooth` package to your gokrazy instance:
 
-```shell
-gokr-packer \
-  -tls=self-signed \
-  -update=yes \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/bluetooth
+```bash
+gok add github.com/gokrazy/bluetooth
 ```
 
 The `github.com/gokrazy/bluetooth` package loads the appropriate kernel modules
@@ -27,30 +23,50 @@ and firmware required.
 
 ## Example program
 
-As demo we're using [bluewalker] Bluetooth LE scanner utility just to show
-that Bluetooth is working.
+As demo we're using the [bluewalker] Bluetooth LE scanner utility to show that
+Bluetooth is working:
+
+```bash
+gok add gitlab.com/jtaimisto/bluewalker
+```
 
 [bluewalker]: https://gitlab.com/jtaimisto/bluewalker
 
-First, prepare command line flags.
+Then, open your instance’s `config.json` in your editor:
 
-```shell
-mkdir -p flags/gitlab.com/jtaimisto/bluewalker
-echo '-device=hci0' > flags/gitlab.com/jtaimisto/bluewalker/flags.txt
+```bash
+gok edit
 ```
 
-Then, deploy as usual.
+And configure [Package config: Command-line flags](/userguide/package-config/#flags):
 
-```shell
-gokr-packer \
-  -tls=self-signed \
-  -update=yes \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/bluetooth \
-  gitlab.com/jtaimisto/bluewalker
+{{< highlight json "hl_lines=11-15" >}}
+{
+    "Hostname": "blue",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "gitlab.com/jtaimisto/bluewalker"
+    ],
+    "PackageConfig": {
+        "gitlab.com/jtaimisto/bluewalker": {
+            "CommandLineFlags": [
+                "-device=hci0"
+            ]
+        }
+    }
+}
+{{< /highlight >}}
+
+Then, deploy as usual:
+
+```bash
+gok update
 ```
 
-Once deployed with gokr-packer, you can see Bluetooth events being received
-in the bluewalker output.
+Once deployed, you can see Bluetooth events being received in the bluewalker
+output.
 
 ![Bluewalker output in gokrazy web interface](/img/2022-03-09-bluetooth-bluewalker.png)

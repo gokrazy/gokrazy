@@ -1,7 +1,7 @@
 ---
 title: "Remote Syslog: sending gokrazy logs over the network"
 menuTitle: "Remote Syslog"
-weight: 20
+weight: 30
 ---
 
 If you update your gokrazy installations daily, as we recommend you do, logs

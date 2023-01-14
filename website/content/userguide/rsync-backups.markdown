@@ -1,7 +1,7 @@
 ---
 title: "Permanent data backup with the gokrazy rsyncd"
 menuTitle: "Data backup with rsync"
-weight: 50
+weight: 80
 ---
 
 I like to periodically back up all scans from my [scan2drive
@@ -18,25 +18,54 @@ requirements.
 (You don’t typically need backups of your gokrazy device’s root partition
 because it can be built reproducibly any time using Go.)
 
-## Step 1. Configure the gokrazy rsync daemon {#configure}
+## Step 1. Install the gokrazy rsync daemon {#install}
 
-In your gokrazy instance directory (see [Quickstart](/quickstart/) if you don’t
-have one yet), create a [package flag config file](/userguide/package-config/)
-to start gokrazy rsync as a daemon:
+Add the gokrazy rsync daemon `gokr-rsyncd` to your gokrazy instance:
 
-```shell
-mkdir -p flags/github.com/gokrazy/rsync/cmd/gokr-rsyncd
-cat > flags/github.com/gokrazy/rsync/cmd/gokr-rsyncd/flags.txt <<'EOT'
---gokr.config=/etc/gokr-rsyncd.toml
---daemon
-EOT
+```bash
+gok add github.com/gokrazy/rsync/cmd/gokr-rsyncd
 ```
 
-In the daemon config file, configure an authorized SSH listener and which rsync modules to serve:
+## Step 2. Configure the gokrazy rsync daemon {#configure}
 
-```shell
-mkdir -p extrafiles/github.com/gokrazy/rsync/cmd/gokr-rsyncd/etc
-cat > extrafiles/github.com/gokrazy/rsync/cmd/gokr-rsyncd/etc/gokr-rsyncd.toml <<'EOT'
+Open your gokrazy instance’s `config.json` in your editor:
+
+```bash
+gok edit
+```
+
+Configure [Package config: Command-line flags](/userguide/package-config/#flags) and [Package config: Extra files](/userguide/package-config/#extrafiles):
+
+{{< highlight json "hl_lines=11-19" >}}
+{
+    "Hostname": "backedup",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "github.com/gokrazy/rsync/cmd/gokr-rsyncd"
+    ],
+    "PackageConfig": {
+        "github.com/gokrazy/rsync/cmd/gokr-rsyncd": {
+            "CommandLineFlags": [
+                "--gokr.config=/etc/gokr-rsyncd.toml",
+                "--daemon"
+            ],
+            "ExtraFilePaths": {
+                "/etc/gokr-rsyncd.toml": "gokr-rsyncd.toml",
+                "/etc/gokr-rsyncd.authorized_keys": "gokr-rsyncd.authorized_keys"
+            }
+        }
+    }
+}
+{{< /highlight >}}
+
+In the daemon config file, configure an authorized SSH listener and which
+rsync modules to serve:
+
+```bash
+cat > ~/gokrazy/hello/gokr-rsyncd.toml <<'EOT'
 dont_namespace = true 
 [[listener]]
   [listener.authorized_ssh]
@@ -50,25 +79,16 @@ EOT
 
 Finally, create the authorized keys file that determines who can access the rsync daemon:
 
-```shell
-cat > extrafiles/github.com/gokrazy/rsync/cmd/gokr-rsyncd/etc/gokr-rsyncd.authorized_keys <<'EOT'
+```bash
+cat > ~/gokrazy/hello/gokr-rsyncd.authorized_keys <<'EOT'
 ssh-ed25519 […] michael@midna
 EOT
 ```
 
-## Step 2. Install the gokrazy rsync daemon {#install}
+Then, deploy as usual:
 
-Include the gokrazy rsync daemon `gokr-rsyncd` in your gokr-packer invocation,
-for example:
-
-```shell
-gokr-packer \
-  -update=yes \
-  -serial_console=disabled \
-  github.com/gokrazy/fbstatus \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/serial-busybox \
-  github.com/gokrazy/rsync/cmd/gokr-rsyncd
+```bash
+gok update
 ```
 
 ## Step 3. Configure SSH from the backup machine {#ssh}
@@ -86,7 +106,7 @@ Host scan2drive-backup
 
 Now you should be able to run rsync via SSH as usual:
 
-```shell
+```bash
 rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/
 ```
 
@@ -96,7 +116,7 @@ rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/
 First, install [the `rsync-prom` tool](https://github.com/stapelberg/rsyncprom)
 to monitor your periodic transfer with [Prometheus](https://prometheus.io/):
 
-```shell
+```bash
 go install github.com/stapelberg/rsyncprom/cmd/rsync-prom@latest
 ```
 

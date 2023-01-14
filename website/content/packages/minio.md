@@ -12,32 +12,62 @@ but is open source and written in Go. It can be used as a building block for
 applications involving file storage and file transmission and while its native
 to the cloud, it turns out one can also use it on gokrazy. :)
 
-Since MinIO is a storage solution, you need to enable permanent storage on your
-gokrazy installation by running the `mkfs` command that `gokr-packer` prints. For
-more details, see [Quickstart](/quickstart/).
+## Step 1: Install MinIO to your gokrazy device
 
-This article also assumes that you have an instance directory (with a `go.mod`)
-set up.
+Add the `minio` program to your gokrazy instance:
 
-## Step 1: Configuring the environment variables and command-line flags
-
-You can find a detailed description on how to set the flags and environment vars
-in the article [per-package configuration](/userguide/package-config/).
-
-`${INSTANCE?}/env/github.com/minio/minio/env.txt`
-```env
-MINIO_ROOT_USER=minio
-MINIO_ROOT_PASSWORD=minio-on-gokrazy
+```bash
+gok add github.com/minio/minio
+# Automatically initialize a file system on the /perm partition on first boot:
+gok add github.com/gokrazy/mkfs
 ```
 
-`${INSTANCE?}/flags/github.com/minio/minio/flags.txt`
+## Step 2: Configuring the environment variables and command-line flags
+
+Then, open your instance’s `config.json` in your editor:
+
+```bash
+gok edit
 ```
-server
---address
-:3001
---console-address
-:3002
-/perm/minio/
+
+And configure [Package config: Command-line
+flags](/userguide/package-config/#flags) and [Package config: Environment
+variables](/userguide/package-config/#env):
+
+{{< highlight json "hl_lines=11-26" >}}
+{
+    "Hostname": "storage",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "github.com/minio/minio",
+        "github.com/gokrazy/mkfs"
+    ],
+    "PackageConfig": {
+        "github.com/minio/minio": {
+            "CommandLineFlags": [
+                "server",
+                "--address",
+                ":3001",
+                "--console-address",
+                ":3002",
+                "/perm/minio/"
+            ],
+            "Environment": [
+                "MINIO_ROOT_USER=minio",
+                "MINIO_ROOT_PASSWORD=minio-on-gokrazy"
+            ]
+        }
+    }
+}
+{{< /highlight >}}
+
+Then, deploy as usual:
+
+```bash
+gok update
 ```
 
 A few things can be noted here:
@@ -55,21 +85,7 @@ A few things can be noted here:
   See [Issue #12641](https://github.com/minio/minio/issues/12641) on why that
   is the case. As default gokrazy sets `HOME` to `HOME=/perm/<cmd>`, so if you
   want to change your storage location to something different modify the
-  `env.txt` accordingly.
-
-## Step 2: Install MinIO to your gokrazy device
-
-In your `gokr-packer` invocation (see [Quickstart](/quickstart/) if you don’t
-have one yet), include the MinIO package:
-
-```shell
-gokr-packer \
-  -update=yes \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/breakglass \
-  github.com/gokrazy/serial-busybox \
-  github.com/minio/minio
-```
+  `Environment` field accordingly.
 
 ## Step 3: Test whether the setup was successful
 

@@ -9,32 +9,62 @@ aliases:
 Since March 2022, gokrazy supports both encrypted and unencrypted WiFi networks!
 🎉
 
-To make gokrazy connect to a WiFi network, first include the
-`github.com/gokrazy/wifi` package in your `gokr-packer` command line, e.g.:
+## Step 1. Install the wifi package
 
-```shell
-gokr-packer \
-  -update=yes \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/breakglass \
-  github.com/gokrazy/serial-busybox \
-  github.com/gokrazy/wifi
+To make gokrazy connect to a WiFi network, first add the
+`github.com/gokrazy/wifi` package to your gokrazy instance:
+
+```bash
+gok add github.com/gokrazy/wifi
+```
+
+## Step 2. Configure the wifi package
+
+Open your gokrazy instance’s `config.json` in your editor:
+
+```bash
+gok edit
 ```
 
 Then, configure the `wifi` program by creating the file `wifi.json` as [extra
-file](/userguide/package-config/#extrafiles):
+file](/userguide/package-config/#extrafiles).
 
-```shell
-mkdir -p extrafiles/github.com/gokrazy/wifi/etc/
+{{< highlight json "hl_lines=11-19" >}}
+{
+    "Hostname": "wifi",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "github.com/gokrazy/wifi"
+    ],
+    "PackageConfig": {
+        "github.com/gokrazy/wifi": {
+            "ExtraFilePaths": {
+                "/etc/wifi.json": "wifi.json"
+            }
+        }
+    }
+}
+{{< /highlight >}}
 
-# To connect to an encrypted WiFi network, specify the psk:
-echo '{"ssid": "Secure WiFi", "psk": "secret"}' \
-  > extrafiles/github.com/gokrazy/wifi/etc/wifi.json
+In the same directory, create `wifi.json` like so for an encrypted WiFi network:
 
-# Or, to connect to an unencrypted WiFi network, specify no psk,
-# and use TLS: https://gokrazy.org/userguide/tls-for-untrusted-networks/
-echo '{"ssid": "My unencrypted WiFi"}' \
-  > extrafiles/github.com/gokrazy/wifi/etc/wifi.json
+```json
+{
+    "ssid": "Secure WiFi",
+    "psk": "secret"
+}
+```
+
+If you need to connect to an *unencrypted* WiFi network, specify no psk, and [use
+TLS](/userguide/tls-for-untrusted-networks/):
+
+```json
+{
+    "ssid": "My unencrypted WiFi"
+}
 ```
 
 Alternatively, you can also create the `wifi.json` manually on the permanent

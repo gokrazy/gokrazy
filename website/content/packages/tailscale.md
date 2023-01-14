@@ -29,28 +29,58 @@ networking mode works fine, though 🥳 .
 [Userspace networking]: https://tailscale.com/kb/1112/userspace-networking/ "Userspace networking mode (for containers)"
 {{% /notice %}}
 
-
 ## Requirements
+
  * Package `tailscale.com` v1.22.1 or later (latest version used automatically unless you have the package already in go.mod)
  * Volume `/perm/` needs to be initialized (instructions use `github.com/gokrazy/mkfs` to initialize)
 to persist authentication over reboots.
 
+## Step 1. include the tailscale packages
 
-## Step 1. set command-line flags
+Add the Tailscale daemon `tailscaled` and CLI `tailscale` Go packages to your
+gokrazy instance:
 
-We need to specify the following flags for the `tailscale` to bring up
-connection (see [Package
-config: flags and environment variables](/userguide/package-config) if you’re
-unfamiliar with this mechanism):
+```bash
+gok add tailscale.com/cmd/tailscaled
+gok add tailscale.com/cmd/tailscale
+# Automatically initialize a file system on the /perm partition on first boot:
+gok add github.com/gokrazy/mkfs
+```
+
+## Step 2. set command-line flags
+
+Then, open your instance’s `config.json` in your editor:
+
+```bash
+gok edit
+```
+
+And configure [Package config: Command-line
+flags](/userguide/package-config/#flags) for Option A or Option B:
 
 **Option A: interactive authentication**
 
-```shell
-mkdir -p flags/tailscale.com/cmd/tailscale
-cat > flags/tailscale.com/cmd/tailscale/flags.txt <<EOF
-up
-EOF
-```
+{{< highlight json "hl_lines=12-18" >}}
+{
+    "Hostname": "ts",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "tailscale.com/cmd/tailscaled",
+        "tailscale.com/cmd/tailscale",
+        "github.com/gokrazy/mkfs"
+    ],
+    "PackageConfig": {
+        "tailscale.com/cmd/tailscale": {
+            "CommandLineFlags": [
+                "up"
+            ]
+        }
+    }
+}
+{{< /highlight >}}
 
 **Option B: unattended authentication with auth key**
 
@@ -61,37 +91,41 @@ Include the key to tailscale flags:
 
 [Tailscale console]: https://login.tailscale.com/ "Tailscale management console login.tailscale.com"
 
-```shell
-cat > flags/tailscale.com/cmd/tailscale/flags.txt <<EOF
-up
---auth-key=tskey-AAAAAAAAAAAA-AAAAAAAAAAAAAAAAAAAAAA
-EOF
+{{< highlight json "hl_lines=12-18" >}}
+{
+    "Hostname": "ts",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "tailscale.com/cmd/tailscaled",
+        "tailscale.com/cmd/tailscale",
+        "github.com/gokrazy/mkfs"
+    ],
+    "PackageConfig": {
+        "tailscale.com/cmd/tailscale": {
+            "CommandLineFlags": [
+                "up",
+                "--auth-key=tskey-AAAAAAAAAAAA-AAAAAAAAAAAAAAAAAAAAAA"
+            ]
+        }
+    }
+}
+{{< /highlight >}}
+
+Then, deploy as usual:
+
+```bash
+gok update
 ```
-
-## Step 2. include the tailscale packages
-
-In your `gokr-packer` invocation (see [Quickstart](/quickstart/) if you don’t
-have one yet), include the Tailscale daemon `tailscaled` and CLI `tailscale`
-Go packages:
-
-```shell
-gokr-packer \
-  -update=yes \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/mkfs \
-  tailscale.com/cmd/tailscaled \
-  tailscale.com/cmd/tailscale
-```
-
-We include `mkfs` to automatically initialize a filesystem on the `/perm`
-partition on first boot.
 
 ## Step 3. authenticate (interactive only)
 
 Skip this step if you are using option B with auth key.
 
 1. Navigate to your gokrazy web interface with browser using the URL displayed
-by gokr-packer.
+by the `gok` CLI.
 1. Open the service `/user/tailscale` and find the login URL.
 1. Open the link with browser and log in to Tailscale and authorize the client.
 
@@ -114,20 +148,43 @@ instance to not require login every 3 months.
 this step.)
 
 To make the `github.com/stapelberg/dr` package able to connect to addresses on
-the tailscale network, we need to first enable [`tailscaled`’s HTTP
-proxy](https://tailscale.com/kb/1112/userspace-networking/#step-2-configure-your-application-to-use-socks5-or-http):
+the tailscale network, we need to enable [`tailscaled`’s HTTP
+proxy](https://tailscale.com/kb/1112/userspace-networking/#step-2-configure-your-application-to-use-socks5-or-http)
+and set the proxy environment variables:
 
-```shell
-echo '--outbound-http-proxy-listen=localhost:9080' >> flags/tailscale.com/cmd/tailscaled/flags.txt
-```
-
-And then set the proxy environment variables:
-
-```shell
-mkdir -p env/github.com/stapelberg/dr
-echo 'HTTPS_PROXY=localhost:9080' > env/github.com/stapelberg/dr/env.txt
-echo 'HTTP_PROXY=localhost:9080' >> env/github.com/stapelberg/dr/env.txt
-```
+{{< highlight json "hl_lines=16 21 24-29" >}}
+{
+    "Hostname": "ts",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "tailscale.com/cmd/tailscaled",
+        "tailscale.com/cmd/tailscale",
+        "github.com/gokrazy/mkfs",
+        "github.com/stapelberg/dr"
+    ],
+    "PackageConfig": {
+        "tailscale.com/cmd/tailscale": {
+            "CommandLineFlags": [
+                "up"
+            ]
+        },
+        "tailscale.com/cmd/tailscaled": {
+            "CommandLineFlags": [
+                "--outbound-http-proxy-listen=localhost:9080"
+            ]
+        },
+        "github.com/stapelberg/dr": {
+            "Environment": [
+                "HTTPS_PROXY=localhost:9080",
+                "HTTP_PROXY=localhost:9080"
+            ]
+        }
+    }
+}
+{{< /highlight >}}
 
 ## Optional: Tailscale Go listener {#optional-tailscale-go-listener}
 
