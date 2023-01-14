@@ -12,20 +12,20 @@
     <title>Controlling a GPIO input/output pin :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1668940579" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1668940579" rel="stylesheet">
-    <link href="/css/hybrid.css?1668940579" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1668940579" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1668940579" rel="stylesheet">
-    <link href="/css/auto-complete.css?1668940579" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1668940579" rel="stylesheet">
-    <link href="/css/theme.css?1668940579" rel="stylesheet">
-    <link href="/css/tabs.css?1668940579" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1668940579" rel="stylesheet">
+    <link href="/css/nucleus.css?1673684179" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1673684179" rel="stylesheet">
+    <link href="/css/hybrid.css?1673684179" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1673684179" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1673684179" rel="stylesheet">
+    <link href="/css/auto-complete.css?1673684179" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1673684179" rel="stylesheet">
+    <link href="/css/theme.css?1673684179" rel="stylesheet">
+    <link href="/css/tabs.css?1673684179" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1673684179" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1668940579"></script>
+    <script src="/js/jquery-3.3.1.min.js?1673684179"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1668940579"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1668940579"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1673684179"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1673684179"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1668940579"></script>
+<script type="text/javascript" src="/js/search.js?1673684179"></script>
 
     
   </div>
@@ -165,6 +165,69 @@
  
   
     
+      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item ">
+        <a href="/userguide/instance-config/">
+        Instance Config Reference
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
+        <a href="/userguide/migration-guide/">
+        Instance Config Migration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
+        <a href="/userguide/automation/">
+        Automation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
       <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
         <a href="/userguide/package-config/">
         Flags, environment variables, …
@@ -207,9 +270,9 @@
  
   
     
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
+        <a href="/userguide/wifi/">
+        Connecting to WiFi
         
         </a>
     </li>
@@ -228,9 +291,9 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
+      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
+        <a href="/userguide/tls-for-untrusted-networks/">
+        Using TLS in untrusted networks
         
         </a>
     </li>
@@ -685,9 +748,9 @@ peripheral I/O in Go, to set one of the Raspberry Pi’s General Purpose I/O
 <p>periph.io supports the Raspberry Pi 3 and Raspberry Pi 4, starting with version
 <code>v3.6.4</code>.</p>
 <h2 id="connect-gpio-pins-based-on-pinout">Connect GPIO pins based on pinout</h2>
-<p><a href="https://pinout.xyz"><img src="/img/raspberry-pi-pinout.png" width="700" align="right" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
 <p>To verify the code is doing what we expect, let’s connect a multimeter as per
 <a href="https://pinout.xyz">pinout.xyz</a>’s pinout:</p>
+<p><img src="/img/raspberry-pi-pinout.png" alt=""></p>
 <ul>
 <li>pin number 18 (signal <code>BCM24</code>, labeled <code>24</code> in the pinout above)</li>
 <li>pin number 20 (signal <code>GND</code>)</li>
@@ -732,15 +795,16 @@ example at <a href="https://periph.io/device/led/">periph.io/device/led</a>:</p>
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Install the program on your Raspberry Pi using gokrazy (see <a href="/quickstart/">Quickstart</a>):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello-gpio
-</span></span></code></pre></div><p>…and wait a few seconds for it to reboot.</p>
-<p>At this point, we should be able to see the high/low signal on the multimeter,
+</span></span></code></pre></div><p>You have two options to run this program on your Raspberry Pi:</p>
+<ol>
+<li>Use <code>gok run</code> to temporarily run this program on a running gokrazy instance.</li>
+<li>Use <code>gok add</code> to permanently include this program in your gokrazy instance:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># From the hello-gpio directory, run:</span>
+</span></span><span style="display:flex;"><span>gok add .
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Then, deploy as usual:</span>
+</span></span><span style="display:flex;"><span>gok update
+</span></span></code></pre></div><p>At this point, we should be able to see the high/low signal on the multimeter,
 alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
 <p><a href="/img/2020-06-15-gpio.jpg"><img src="/img/2020-06-15-gpio.thumb.jpg" srcset="/img/2020-06-15-gpio.thumb.2x.jpg 2x,/img/2020-06-15-gpio.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
 
@@ -822,6 +886,54 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -1137,19 +1249,19 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1668940579"></script>
-    <script src="/js/jquery.sticky.js?1668940579"></script>
-    <script src="/js/featherlight.min.js?1668940579"></script>
-    <script src="/js/highlight.pack.js?1668940579"></script>
+    <script src="/js/clipboard.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1673684179"></script>
+    <script src="/js/jquery.sticky.js?1673684179"></script>
+    <script src="/js/featherlight.min.js?1673684179"></script>
+    <script src="/js/highlight.pack.js?1673684179"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1668940579"></script>
-    <script src="/js/learn.js?1668940579"></script>
-    <script src="/js/hugo-learn.js?1668940579"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1673684179"></script>
+    <script src="/js/learn.js?1673684179"></script>
+    <script src="/js/hugo-learn.js?1673684179"></script>
     
         
-            <script src="/mermaid/mermaid.js?1668940579"></script>
+            <script src="/mermaid/mermaid.js?1673684179"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

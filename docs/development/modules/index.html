@@ -12,20 +12,20 @@
     <title>Working with Go modules :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1668940579" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1668940579" rel="stylesheet">
-    <link href="/css/hybrid.css?1668940579" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1668940579" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1668940579" rel="stylesheet">
-    <link href="/css/auto-complete.css?1668940579" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1668940579" rel="stylesheet">
-    <link href="/css/theme.css?1668940579" rel="stylesheet">
-    <link href="/css/tabs.css?1668940579" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1668940579" rel="stylesheet">
+    <link href="/css/nucleus.css?1673684179" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1673684179" rel="stylesheet">
+    <link href="/css/hybrid.css?1673684179" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1673684179" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1673684179" rel="stylesheet">
+    <link href="/css/auto-complete.css?1673684179" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1673684179" rel="stylesheet">
+    <link href="/css/theme.css?1673684179" rel="stylesheet">
+    <link href="/css/tabs.css?1673684179" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1673684179" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1668940579"></script>
+    <script src="/js/jquery-3.3.1.min.js?1673684179"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1668940579"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1668940579"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1673684179"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1673684179"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1668940579"></script>
+<script type="text/javascript" src="/js/search.js?1673684179"></script>
 
     
   </div>
@@ -165,6 +165,69 @@
  
   
     
+      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item ">
+        <a href="/userguide/instance-config/">
+        Instance Config Reference
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
+        <a href="/userguide/migration-guide/">
+        Instance Config Migration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
+        <a href="/userguide/automation/">
+        Automation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
       <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
         <a href="/userguide/package-config/">
         Flags, environment variables, …
@@ -207,9 +270,9 @@
  
   
     
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
+        <a href="/userguide/wifi/">
+        Connecting to WiFi
         
         </a>
     </li>
@@ -228,9 +291,9 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
+      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
+        <a href="/userguide/tls-for-untrusted-networks/">
+        Using TLS in untrusted networks
         
         </a>
     </li>
@@ -691,18 +754,15 @@ the gokrazy packer builds each package in its own build directory, with its own
 program, that will not have any effect on the other programs you include in your
 gokrazy instance.</p>
 <h2 id="example-setup">Example setup</h2>
-<p>Throughout this page, let’s assume your gokrazy instance directory is
-<code>~/gokrazy/scan2drive</code>, and that’s where you run the following <code>gokr-packer</code>
-command:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -serial_console<span style="color:#f92672">=</span>disabled <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/fbstatus <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/stapelberg/scan2drive/cmd/scan2drive
-</span></span></code></pre></div><p>The packer will create the following build directory structure:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>% find . -name go.mod
+<p>Throughout this page, let’s assume your gokrazy instance is named <code>scanner</code>, and
+will hence store its files in <code>~/gokrazy/scanner</code>. A single additional program,
+<code>scan2drive</code>, is included:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i scanner new
+</span></span><span style="display:flex;"><span>gok -i scanner add github.com/stapelberg/scan2drive/cmd/scan2drive
+</span></span></code></pre></div><p>When building this instance (using <code>gok overwrite</code> initially, or <code>gok update</code>
+afterwards), the <code>gok</code> CLI will create the following build directory structure:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>% cd ~/gokrazy/scanner
+</span></span><span style="display:flex;"><span>% find . -name go.mod
 </span></span><span style="display:flex;"><span>./builddir/init/go.mod
 </span></span><span style="display:flex;"><span>./builddir/github.com/stapelberg/scan2drive/cmd/scan2drive/go.mod
 </span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/serial-busybox/go.mod
@@ -715,32 +775,29 @@ command:</p>
 </span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/rpi-eeprom/go.mod
 </span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/firmware/go.mod
 </span></span><span style="display:flex;"><span>./builddir/github.com/gokrazy/kernel/go.mod
-</span></span></code></pre></div><p>You can see that there is one subdirectory for each package explicitly specified
-on the command line, plus a couple extra ones that gokrazy always installs,
-e.g. <code>github.com/gokrazy/gokrazy/cmd/dhcp</code>.</p>
+</span></span></code></pre></div><p>You can see that there is one subdirectory for each package listed in the
+<code>Packages</code> field of your instance’s <code>config.json</code> (see <code>gok edit</code>), which
+includes the explicitly added <code>scan2drive</code>, plus a couple extra ones that
+gokrazy always installs, e.g. <code>github.com/gokrazy/gokrazy/cmd/dhcp</code>.</p>
 <h2 id="top-level-gomod-template">Top-level go.mod template</h2>
 <p>If you want to influence the content of any <em>newly created</em> <code>go.mod</code> (no effect
 on existing <code>go.mod</code> files), you can create a <code>go.mod</code> template in your instance
-directory: <code>~/gokrazy/scan2drive/go.mod</code>.</p>
+directory: <code>~/gokrazy/scanner/go.mod</code>.</p>
 <h2 id="building-local-code-the-replace-directive">Building local code: the replace directive</h2>
 <p>Go modules are loaded from the internet by default and are stored read-only on
 disk.</p>
-<p>If you want to make the gokrazy packer pick up a local working copy with your
-own changes instead, use the replace directive:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span># Create a local working copy in whichever directory you like.
+<p>If you want to make the gokrazy packer pick up a local working copy with
+not-yet-published code, or a working copy with local changes to existing code,
+use <code>gok add</code> with a directory name:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Create a local working copy in whichever directory you like.</span>
 </span></span><span style="display:flex;"><span>% cd ~/projects
 </span></span><span style="display:flex;"><span>% git clone https://github.com/stapelberg/scan2drive
 </span></span><span style="display:flex;"><span>% cd scan2drive
-</span></span><span style="display:flex;"><span># make some changes
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># make some changes</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span># Switch to your gokrazy instance directory,
-</span></span><span style="display:flex;"><span># …and specifically to the scan2drive build directory,
-</span></span><span style="display:flex;"><span># to add a replace directive to go.mod:
-</span></span><span style="display:flex;"><span>% cd ~/gokrazy/scan2drive
-</span></span><span style="display:flex;"><span>% cd builddir/github.com/stapelberg/scan2drive/cmd/scan2drive
-</span></span><span style="display:flex;"><span>% go mod edit -replace \
-</span></span><span style="display:flex;"><span>  github.com/stapelberg/scan2drive=/home/michael/projects/scan2drive
-</span></span></code></pre></div><p>For more details on the <code>replace</code> directive, see <a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive">the Go
+</span></span><span style="display:flex;"><span>% gok -i scan2drive add ./cmd/scan2drive
+</span></span></code></pre></div><p>The <code>gok</code> CLI will set up the <code>replace</code> directive for you. For more details on
+<code>replace</code>, see <a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive">the Go
 wiki</a>.</p>
 <h2 id="influencing-the-granularity">Influencing the granularity</h2>
 <p>Often, one Go <em>package</em> will be the only package you use from a certain Go
@@ -855,6 +912,54 @@ granularity:</p>
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -1170,19 +1275,19 @@ granularity:</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1668940579"></script>
-    <script src="/js/jquery.sticky.js?1668940579"></script>
-    <script src="/js/featherlight.min.js?1668940579"></script>
-    <script src="/js/highlight.pack.js?1668940579"></script>
+    <script src="/js/clipboard.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1673684179"></script>
+    <script src="/js/jquery.sticky.js?1673684179"></script>
+    <script src="/js/featherlight.min.js?1673684179"></script>
+    <script src="/js/highlight.pack.js?1673684179"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1668940579"></script>
-    <script src="/js/learn.js?1668940579"></script>
-    <script src="/js/hugo-learn.js?1668940579"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1673684179"></script>
+    <script src="/js/learn.js?1673684179"></script>
+    <script src="/js/hugo-learn.js?1673684179"></script>
     
         
-            <script src="/mermaid/mermaid.js?1668940579"></script>
+            <script src="/mermaid/mermaid.js?1673684179"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

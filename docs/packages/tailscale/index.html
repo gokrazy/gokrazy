@@ -12,20 +12,20 @@
     <title>Tailscale VPN :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1668940579" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1668940579" rel="stylesheet">
-    <link href="/css/hybrid.css?1668940579" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1668940579" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1668940579" rel="stylesheet">
-    <link href="/css/auto-complete.css?1668940579" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1668940579" rel="stylesheet">
-    <link href="/css/theme.css?1668940579" rel="stylesheet">
-    <link href="/css/tabs.css?1668940579" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1668940579" rel="stylesheet">
+    <link href="/css/nucleus.css?1673684179" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1673684179" rel="stylesheet">
+    <link href="/css/hybrid.css?1673684179" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1673684179" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1673684179" rel="stylesheet">
+    <link href="/css/auto-complete.css?1673684179" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1673684179" rel="stylesheet">
+    <link href="/css/theme.css?1673684179" rel="stylesheet">
+    <link href="/css/tabs.css?1673684179" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1673684179" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1668940579"></script>
+    <script src="/js/jquery-3.3.1.min.js?1673684179"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1668940579"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1668940579"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1673684179"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1673684179"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1668940579"></script>
+<script type="text/javascript" src="/js/search.js?1673684179"></script>
 
     
   </div>
@@ -165,6 +165,69 @@
  
   
     
+      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item ">
+        <a href="/userguide/instance-config/">
+        Instance Config Reference
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
+        <a href="/userguide/migration-guide/">
+        Instance Config Migration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
+        <a href="/userguide/automation/">
+        Automation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
       <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
         <a href="/userguide/package-config/">
         Flags, environment variables, …
@@ -207,9 +270,9 @@
  
   
     
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
+        <a href="/userguide/wifi/">
+        Connecting to WiFi
         
         </a>
     </li>
@@ -228,9 +291,9 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
+      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
+        <a href="/userguide/tls-for-untrusted-networks/">
+        Using TLS in untrusted networks
         
         </a>
     </li>
@@ -654,8 +717,8 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#requirements">Requirements</a></li>
-    <li><a href="#step-1-set-command-line-flags">Step 1. set command-line flags</a></li>
-    <li><a href="#step-2-include-the-tailscale-packages">Step 2. include the tailscale packages</a></li>
+    <li><a href="#step-1-include-the-tailscale-packages">Step 1. include the tailscale packages</a></li>
+    <li><a href="#step-2-set-command-line-flags">Step 2. set command-line flags</a></li>
     <li><a href="#step-3-authenticate-interactive-only">Step 3. authenticate (interactive only)</a></li>
     <li><a href="#step-4-disable-key-expiry-optional">Step 4. disable key expiry (optional)</a></li>
     <li><a href="#optional-tailscale-network-for-other-programs">Optional: tailscale network for other programs</a></li>
@@ -708,41 +771,69 @@ networking mode works fine, though 🥳 .</p>
 <li>Volume <code>/perm/</code> needs to be initialized (instructions use <code>github.com/gokrazy/mkfs</code> to initialize)
 to persist authentication over reboots.</li>
 </ul>
-<h2 id="step-1-set-command-line-flags">Step 1. set command-line flags</h2>
-<p>We need to specify the following flags for the <code>tailscale</code> to bring up
-connection (see <a href="/userguide/package-config">Package
-config: flags and environment variables</a> if you’re
-unfamiliar with this mechanism):</p>
+<h2 id="step-1-include-the-tailscale-packages">Step 1. include the tailscale packages</h2>
+<p>Add the Tailscale daemon <code>tailscaled</code> and CLI <code>tailscale</code> Go packages to your
+gokrazy instance:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add tailscale.com/cmd/tailscaled
+</span></span><span style="display:flex;"><span>gok add tailscale.com/cmd/tailscale
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Automatically initialize a file system on the /perm partition on first boot:</span>
+</span></span><span style="display:flex;"><span>gok add github.com/gokrazy/mkfs
+</span></span></code></pre></div><h2 id="step-2-set-command-line-flags">Step 2. set command-line flags</h2>
+<p>Then, open your instance’s <code>config.json</code> in your editor:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit
+</span></span></code></pre></div><p>And configure <a href="/userguide/package-config/#flags">Package config: Command-line
+flags</a> for Option A or Option B:</p>
 <p><strong>Option A: interactive authentication</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p flags/tailscale.com/cmd/tailscale
-</span></span><span style="display:flex;"><span>cat &gt; flags/tailscale.com/cmd/tailscale/flags.txt <span style="color:#e6db74">&lt;&lt;EOF
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">up
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
-</span></span></code></pre></div><p><strong>Option B: unattended authentication with auth key</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscaled&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscale&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/mkfs&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;tailscale.com/cmd/tailscale&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;up&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ]
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p><strong>Option B: unattended authentication with auth key</strong></p>
 <p>Alternatively,
 navigate to <a href="https://login.tailscale.com/" title="Tailscale management console login.tailscale.com">Tailscale console</a> and open Settings / Keys. Generate auth key.</p>
 <p>Include the key to tailscale flags:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cat &gt; flags/tailscale.com/cmd/tailscale/flags.txt <span style="color:#e6db74">&lt;&lt;EOF
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">up
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">--auth-key=tskey-AAAAAAAAAAAA-AAAAAAAAAAAAAAAAAAAAAA
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
-</span></span></code></pre></div><h2 id="step-2-include-the-tailscale-packages">Step 2. include the tailscale packages</h2>
-<p>In your <code>gokr-packer</code> invocation (see <a href="/quickstart/">Quickstart</a> if you don’t
-have one yet), include the Tailscale daemon <code>tailscaled</code> and CLI <code>tailscale</code>
-Go packages:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/mkfs <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  tailscale.com/cmd/tailscaled <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  tailscale.com/cmd/tailscale
-</span></span></code></pre></div><p>We include <code>mkfs</code> to automatically initialize a filesystem on the <code>/perm</code>
-partition on first boot.</p>
-<h2 id="step-3-authenticate-interactive-only">Step 3. authenticate (interactive only)</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscaled&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscale&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/mkfs&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;tailscale.com/cmd/tailscale&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;up&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--auth-key=tskey-AAAAAAAAAAAA-AAAAAAAAAAAAAAAAAAAAAA&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ]
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>Then, deploy as usual:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update
+</span></span></code></pre></div><h2 id="step-3-authenticate-interactive-only">Step 3. authenticate (interactive only)</h2>
 <p>Skip this step if you are using option B with auth key.</p>
 <ol>
 <li>Navigate to your gokrazy web interface with browser using the URL displayed
-by gokr-packer.</li>
+by the <code>gok</code> CLI.</li>
 <li>Open the service <code>/user/tailscale</code> and find the login URL.</li>
 <li>Open the link with browser and log in to Tailscale and authorize the client.</li>
 </ol>
@@ -759,14 +850,41 @@ instance to not require login every 3 months.</p>
 <p>(If you only want to connect to services on your gokrazy device, you don’t need
 this step.)</p>
 <p>To make the <code>github.com/stapelberg/dr</code> package able to connect to addresses on
-the tailscale network, we need to first enable <a href="https://tailscale.com/kb/1112/userspace-networking/#step-2-configure-your-application-to-use-socks5-or-http"><code>tailscaled</code>’s HTTP
-proxy</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;--outbound-http-proxy-listen=localhost:9080&#39;</span> &gt;&gt; flags/tailscale.com/cmd/tailscaled/flags.txt
-</span></span></code></pre></div><p>And then set the proxy environment variables:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p env/github.com/stapelberg/dr
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;HTTPS_PROXY=localhost:9080&#39;</span> &gt; env/github.com/stapelberg/dr/env.txt
-</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;HTTP_PROXY=localhost:9080&#39;</span> &gt;&gt; env/github.com/stapelberg/dr/env.txt
-</span></span></code></pre></div><h2 id="optional-tailscale-go-listener">Optional: Tailscale Go listener</h2>
+the tailscale network, we need to enable <a href="https://tailscale.com/kb/1112/userspace-networking/#step-2-configure-your-application-to-use-socks5-or-http"><code>tailscaled</code>’s HTTP
+proxy</a>
+and set the proxy environment variables:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscaled&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscale&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/mkfs&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/stapelberg/dr&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;tailscale.com/cmd/tailscale&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;up&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;tailscale.com/cmd/tailscaled&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--outbound-http-proxy-listen=localhost:9080&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/stapelberg/dr&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;Environment&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;HTTPS_PROXY=localhost:9080&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;HTTP_PROXY=localhost:9080&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ]
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h2 id="optional-tailscale-go-listener">Optional: Tailscale Go listener</h2>
 <p>If you want to make a program listen on tailscale without listening on any other
 network interface, you can use the <a href="https://pkg.go.dev/tailscale.com/tsnet" title="Package tsnet provides Tailscale as a library. It is an experimental work in progress.">tsnet Tailscale as a library</a> package
 in your application.</p>
@@ -914,6 +1032,54 @@ your application source code.</p>
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -1229,19 +1395,19 @@ your application source code.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1668940579"></script>
-    <script src="/js/jquery.sticky.js?1668940579"></script>
-    <script src="/js/featherlight.min.js?1668940579"></script>
-    <script src="/js/highlight.pack.js?1668940579"></script>
+    <script src="/js/clipboard.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1673684179"></script>
+    <script src="/js/jquery.sticky.js?1673684179"></script>
+    <script src="/js/featherlight.min.js?1673684179"></script>
+    <script src="/js/highlight.pack.js?1673684179"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1668940579"></script>
-    <script src="/js/learn.js?1668940579"></script>
-    <script src="/js/hugo-learn.js?1668940579"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1673684179"></script>
+    <script src="/js/learn.js?1673684179"></script>
+    <script src="/js/hugo-learn.js?1673684179"></script>
     
         
-            <script src="/mermaid/mermaid.js?1668940579"></script>
+            <script src="/mermaid/mermaid.js?1673684179"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

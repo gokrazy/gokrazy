@@ -12,20 +12,20 @@
     <title>MinIO object storage :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1668940579" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1668940579" rel="stylesheet">
-    <link href="/css/hybrid.css?1668940579" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1668940579" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1668940579" rel="stylesheet">
-    <link href="/css/auto-complete.css?1668940579" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1668940579" rel="stylesheet">
-    <link href="/css/theme.css?1668940579" rel="stylesheet">
-    <link href="/css/tabs.css?1668940579" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1668940579" rel="stylesheet">
+    <link href="/css/nucleus.css?1673684179" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1673684179" rel="stylesheet">
+    <link href="/css/hybrid.css?1673684179" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1673684179" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1673684179" rel="stylesheet">
+    <link href="/css/auto-complete.css?1673684179" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1673684179" rel="stylesheet">
+    <link href="/css/theme.css?1673684179" rel="stylesheet">
+    <link href="/css/tabs.css?1673684179" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1673684179" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1668940579"></script>
+    <script src="/js/jquery-3.3.1.min.js?1673684179"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1668940579"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1668940579"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1673684179"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1673684179"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1668940579"></script>
+<script type="text/javascript" src="/js/search.js?1673684179"></script>
 
     
   </div>
@@ -165,6 +165,69 @@
  
   
     
+      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item ">
+        <a href="/userguide/instance-config/">
+        Instance Config Reference
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
+        <a href="/userguide/migration-guide/">
+        Instance Config Migration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
+        <a href="/userguide/automation/">
+        Automation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
       <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
         <a href="/userguide/package-config/">
         Flags, environment variables, …
@@ -207,9 +270,9 @@
  
   
     
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
+        <a href="/userguide/wifi/">
+        Connecting to WiFi
         
         </a>
     </li>
@@ -228,9 +291,9 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
+      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
+        <a href="/userguide/tls-for-untrusted-networks/">
+        Using TLS in untrusted networks
         
         </a>
     </li>
@@ -653,8 +716,8 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#step-1-configuring-the-environment-variables-and-command-line-flags">Step 1: Configuring the environment variables and command-line flags</a></li>
-    <li><a href="#step-2-install-minio-to-your-gokrazy-device">Step 2: Install MinIO to your gokrazy device</a></li>
+    <li><a href="#step-1-install-minio-to-your-gokrazy-device">Step 1: Install MinIO to your gokrazy device</a></li>
+    <li><a href="#step-2-configuring-the-environment-variables-and-command-line-flags">Step 2: Configuring the environment variables and command-line flags</a></li>
     <li><a href="#step-3-test-whether-the-setup-was-successful">Step 3: Test whether the setup was successful</a></li>
   </ul>
 </nav>
@@ -685,25 +748,47 @@ compatible to Amazons <a href="https://aws.amazon.com/de/s3/">Simple Storage Ser
 but is open source and written in Go. It can be used as a building block for
 applications involving file storage and file transmission and while its native
 to the cloud, it turns out one can also use it on gokrazy. :)</p>
-<p>Since MinIO is a storage solution, you need to enable permanent storage on your
-gokrazy installation by running the <code>mkfs</code> command that <code>gokr-packer</code> prints. For
-more details, see <a href="/quickstart/">Quickstart</a>.</p>
-<p>This article also assumes that you have an instance directory (with a <code>go.mod</code>)
-set up.</p>
-<h2 id="step-1-configuring-the-environment-variables-and-command-line-flags">Step 1: Configuring the environment variables and command-line flags</h2>
-<p>You can find a detailed description on how to set the flags and environment vars
-in the article <a href="/userguide/package-config/">per-package configuration</a>.</p>
-<p><code>${INSTANCE?}/env/github.com/minio/minio/env.txt</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-env" data-lang="env"><span style="display:flex;"><span>MINIO_ROOT_USER<span style="color:#f92672">=</span>minio
-</span></span><span style="display:flex;"><span>MINIO_ROOT_PASSWORD<span style="color:#f92672">=</span>minio-on-gokrazy
-</span></span></code></pre></div><p><code>${INSTANCE?}/flags/github.com/minio/minio/flags.txt</code></p>
-<pre tabindex="0"><code>server
---address
-:3001
---console-address
-:3002
-/perm/minio/
-</code></pre><p>A few things can be noted here:</p>
+<h2 id="step-1-install-minio-to-your-gokrazy-device">Step 1: Install MinIO to your gokrazy device</h2>
+<p>Add the <code>minio</code> program to your gokrazy instance:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/minio/minio
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Automatically initialize a file system on the /perm partition on first boot:</span>
+</span></span><span style="display:flex;"><span>gok add github.com/gokrazy/mkfs
+</span></span></code></pre></div><h2 id="step-2-configuring-the-environment-variables-and-command-line-flags">Step 2: Configuring the environment variables and command-line flags</h2>
+<p>Then, open your instance’s <code>config.json</code> in your editor:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit
+</span></span></code></pre></div><p>And configure <a href="/userguide/package-config/#flags">Package config: Command-line
+flags</a> and <a href="/userguide/package-config/#env">Package config: Environment
+variables</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;storage&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/minio/minio&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/mkfs&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/minio/minio&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;server&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--address&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;:3001&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--console-address&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;:3002&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;/perm/minio/&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ],
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;Environment&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;MINIO_ROOT_USER=minio&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;MINIO_ROOT_PASSWORD=minio-on-gokrazy&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ]
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>Then, deploy as usual:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update
+</span></span></code></pre></div><p>A few things can be noted here:</p>
 <ul>
 <li>
 <p>There are nice practical examples on the different options once you execute
@@ -721,19 +806,10 @@ port is set the console just chooses an arbitrary free one.</p>
 See <a href="https://github.com/minio/minio/issues/12641">Issue #12641</a> on why that
 is the case. As default gokrazy sets <code>HOME</code> to <code>HOME=/perm/&lt;cmd&gt;</code>, so if you
 want to change your storage location to something different modify the
-<code>env.txt</code> accordingly.</p>
+<code>Environment</code> field accordingly.</p>
 </li>
 </ul>
-<h2 id="step-2-install-minio-to-your-gokrazy-device">Step 2: Install MinIO to your gokrazy device</h2>
-<p>In your <code>gokr-packer</code> invocation (see <a href="/quickstart/">Quickstart</a> if you don’t
-have one yet), include the MinIO package:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/breakglass <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/minio/minio
-</span></span></code></pre></div><h2 id="step-3-test-whether-the-setup-was-successful">Step 3: Test whether the setup was successful</h2>
+<h2 id="step-3-test-whether-the-setup-was-successful">Step 3: Test whether the setup was successful</h2>
 <p>If you have the <a href="https://github.com/minio/mc"><code>mc</code></a> command installed you can
 check out whether your installation of MinIO really works:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ mc alias set gokrazy http://gokrazy:3001 minio minio-on-gokrazy
@@ -825,6 +901,54 @@ guide) to create service accounts view logs, bucket contents and more.</p>
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -1140,19 +1264,19 @@ guide) to create service accounts view logs, bucket contents and more.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1668940579"></script>
-    <script src="/js/jquery.sticky.js?1668940579"></script>
-    <script src="/js/featherlight.min.js?1668940579"></script>
-    <script src="/js/highlight.pack.js?1668940579"></script>
+    <script src="/js/clipboard.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1673684179"></script>
+    <script src="/js/jquery.sticky.js?1673684179"></script>
+    <script src="/js/featherlight.min.js?1673684179"></script>
+    <script src="/js/highlight.pack.js?1673684179"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1668940579"></script>
-    <script src="/js/learn.js?1668940579"></script>
-    <script src="/js/hugo-learn.js?1668940579"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1673684179"></script>
+    <script src="/js/learn.js?1673684179"></script>
+    <script src="/js/hugo-learn.js?1673684179"></script>
     
         
-            <script src="/mermaid/mermaid.js?1668940579"></script>
+            <script src="/mermaid/mermaid.js?1673684179"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

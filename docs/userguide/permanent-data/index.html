@@ -12,20 +12,20 @@
     <title>Access permanent data :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1668940579" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1668940579" rel="stylesheet">
-    <link href="/css/hybrid.css?1668940579" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1668940579" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1668940579" rel="stylesheet">
-    <link href="/css/auto-complete.css?1668940579" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1668940579" rel="stylesheet">
-    <link href="/css/theme.css?1668940579" rel="stylesheet">
-    <link href="/css/tabs.css?1668940579" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1668940579" rel="stylesheet">
+    <link href="/css/nucleus.css?1673684179" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1673684179" rel="stylesheet">
+    <link href="/css/hybrid.css?1673684179" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1673684179" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1673684179" rel="stylesheet">
+    <link href="/css/auto-complete.css?1673684179" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1673684179" rel="stylesheet">
+    <link href="/css/theme.css?1673684179" rel="stylesheet">
+    <link href="/css/tabs.css?1673684179" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1673684179" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1668940579"></script>
+    <script src="/js/jquery-3.3.1.min.js?1673684179"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1668940579"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1668940579"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1673684179"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1673684179"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1668940579"></script>
+<script type="text/javascript" src="/js/search.js?1673684179"></script>
 
     
   </div>
@@ -165,6 +165,69 @@
  
   
     
+      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item ">
+        <a href="/userguide/instance-config/">
+        Instance Config Reference
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
+        <a href="/userguide/migration-guide/">
+        Instance Config Migration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
+        <a href="/userguide/automation/">
+        Automation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
       <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
         <a href="/userguide/package-config/">
         Flags, environment variables, …
@@ -207,9 +270,9 @@
  
   
     
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
+        <a href="/userguide/wifi/">
+        Connecting to WiFi
         
         </a>
     </li>
@@ -228,9 +291,9 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
+      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
+        <a href="/userguide/tls-for-untrusted-networks/">
+        Using TLS in untrusted networks
         
         </a>
     </li>
@@ -684,20 +747,14 @@
 <p>gokrazy provides a handy way to create the permanent data filesystem on the fourth partition of your gokrazy installation.
 The <a href="https://github.com/gokrazy/mkfs">gokrazy/mkfs</a> program will create the filesystem.
 To actually access the permanent data partition from your own program, gokrazy will mount the partition under <code>/perm</code> directory during the startup.</p>
-<p>You can either include this program in your <code>gokr-packer</code> command line:</p>
-<pre tabindex="0"><code>gokr-packer \
-  -overwrite=/dev/sdx \
-  -serial_console=disabled \
-  github.com/gokrazy/fbstatus \
-  github.com/gokrazy/hello \
-  github.com/gokrazy/serial-busybox \
-  github.com/gokrazy/mkfs
-</code></pre><p>…or, if you want to run it only once without otherwise including it in your
+<p>You can add the <code>gokrazy/mkfs</code> program to your gokrazy instance:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/mkfs
+</span></span></code></pre></div><p>…or, if you want to run it only once without otherwise including it in your
 installation, you can use <code>gok run</code>:</p>
-<pre tabindex="0"><code>git clone https://github.com/gokrazy/mkfs
-cd mkfs
-gok run -i bakery
-</code></pre><h2 id="permanent-data-in-action">Permanent data in action</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/gokrazy/mkfs
+</span></span><span style="display:flex;"><span>cd mkfs
+</span></span><span style="display:flex;"><span>gok -i bakery run
+</span></span></code></pre></div><h2 id="permanent-data-in-action">Permanent data in action</h2>
 <p>The Go program demonstrates the functionality of the permanent data mount:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span>
@@ -846,6 +903,54 @@ Copy the file to the permanent data filesystem.</p>
                     
                         
                         
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
@@ -1152,19 +1257,19 @@ Copy the file to the permanent data filesystem.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1668940579"></script>
-    <script src="/js/jquery.sticky.js?1668940579"></script>
-    <script src="/js/featherlight.min.js?1668940579"></script>
-    <script src="/js/highlight.pack.js?1668940579"></script>
+    <script src="/js/clipboard.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1673684179"></script>
+    <script src="/js/jquery.sticky.js?1673684179"></script>
+    <script src="/js/featherlight.min.js?1673684179"></script>
+    <script src="/js/highlight.pack.js?1673684179"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1668940579"></script>
-    <script src="/js/learn.js?1668940579"></script>
-    <script src="/js/hugo-learn.js?1668940579"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1673684179"></script>
+    <script src="/js/learn.js?1673684179"></script>
+    <script src="/js/hugo-learn.js?1673684179"></script>
     
         
-            <script src="/mermaid/mermaid.js?1668940579"></script>
+            <script src="/mermaid/mermaid.js?1673684179"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

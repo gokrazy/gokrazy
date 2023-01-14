@@ -12,20 +12,20 @@
     <title>Permanent data backup with the gokrazy rsyncd :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1668940579" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1668940579" rel="stylesheet">
-    <link href="/css/hybrid.css?1668940579" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1668940579" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1668940579" rel="stylesheet">
-    <link href="/css/auto-complete.css?1668940579" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1668940579" rel="stylesheet">
-    <link href="/css/theme.css?1668940579" rel="stylesheet">
-    <link href="/css/tabs.css?1668940579" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1668940579" rel="stylesheet">
+    <link href="/css/nucleus.css?1673684179" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1673684179" rel="stylesheet">
+    <link href="/css/hybrid.css?1673684179" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1673684179" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1673684179" rel="stylesheet">
+    <link href="/css/auto-complete.css?1673684179" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1673684179" rel="stylesheet">
+    <link href="/css/theme.css?1673684179" rel="stylesheet">
+    <link href="/css/tabs.css?1673684179" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1673684179" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1668940579"></script>
+    <script src="/js/jquery-3.3.1.min.js?1673684179"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1668940579"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1668940579"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1673684179"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1673684179"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1668940579"></script>
+<script type="text/javascript" src="/js/search.js?1673684179"></script>
 
     
   </div>
@@ -165,6 +165,69 @@
  
   
     
+      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item ">
+        <a href="/userguide/instance-config/">
+        Instance Config Reference
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
+        <a href="/userguide/migration-guide/">
+        Instance Config Migration Guide
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
+        <a href="/userguide/automation/">
+        Automation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
       <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
         <a href="/userguide/package-config/">
         Flags, environment variables, …
@@ -207,9 +270,9 @@
  
   
     
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
+      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
+        <a href="/userguide/wifi/">
+        Connecting to WiFi
         
         </a>
     </li>
@@ -228,9 +291,9 @@
  
   
     
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
+      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
+        <a href="/userguide/tls-for-untrusted-networks/">
+        Using TLS in untrusted networks
         
         </a>
     </li>
@@ -653,8 +716,8 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#configure">Step 1. Configure the gokrazy rsync daemon</a></li>
-    <li><a href="#install">Step 2. Install the gokrazy rsync daemon</a></li>
+    <li><a href="#install">Step 1. Install the gokrazy rsync daemon</a></li>
+    <li><a href="#configure">Step 2. Configure the gokrazy rsync daemon</a></li>
     <li><a href="#ssh">Step 3. Configure SSH from the backup machine</a></li>
     <li><a href="#cron">Step 4. Configure a daily cron job</a></li>
   </ul>
@@ -692,18 +755,38 @@ have set up my backup, but many variants are possible to cater to different
 requirements.</p>
 <p>(You don’t typically need backups of your gokrazy device’s root partition
 because it can be built reproducibly any time using Go.)</p>
-<h2 id="configure">Step 1. Configure the gokrazy rsync daemon</h2>
-<p>In your gokrazy instance directory (see <a href="/quickstart/">Quickstart</a> if you don’t
-have one yet), create a <a href="/userguide/package-config/">package flag config file</a>
-to start gokrazy rsync as a daemon:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p flags/github.com/gokrazy/rsync/cmd/gokr-rsyncd
-</span></span><span style="display:flex;"><span>cat &gt; flags/github.com/gokrazy/rsync/cmd/gokr-rsyncd/flags.txt <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">--gokr.config=/etc/gokr-rsyncd.toml
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">--daemon
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span>
-</span></span></code></pre></div><p>In the daemon config file, configure an authorized SSH listener and which rsync modules to serve:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p extrafiles/github.com/gokrazy/rsync/cmd/gokr-rsyncd/etc
-</span></span><span style="display:flex;"><span>cat &gt; extrafiles/github.com/gokrazy/rsync/cmd/gokr-rsyncd/etc/gokr-rsyncd.toml <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+<h2 id="install">Step 1. Install the gokrazy rsync daemon</h2>
+<p>Add the gokrazy rsync daemon <code>gokr-rsyncd</code> to your gokrazy instance:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/rsync/cmd/gokr-rsyncd
+</span></span></code></pre></div><h2 id="configure">Step 2. Configure the gokrazy rsync daemon</h2>
+<p>Open your gokrazy instance’s <code>config.json</code> in your editor:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit
+</span></span></code></pre></div><p>Configure <a href="/userguide/package-config/#flags">Package config: Command-line flags</a> and <a href="/userguide/package-config/#extrafiles">Package config: Extra files</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;backedup&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/rsync/cmd/gokr-rsyncd&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/gokrazy/rsync/cmd/gokr-rsyncd&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--gokr.config=/etc/gokr-rsyncd.toml&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--daemon&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ],
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;ExtraFilePaths&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#f92672">&#34;/etc/gokr-rsyncd.toml&#34;</span>: <span style="color:#e6db74">&#34;gokr-rsyncd.toml&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#f92672">&#34;/etc/gokr-rsyncd.authorized_keys&#34;</span>: <span style="color:#e6db74">&#34;gokr-rsyncd.authorized_keys&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>In the daemon config file, configure an authorized SSH listener and which
+rsync modules to serve:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; ~/gokrazy/hello/gokr-rsyncd.toml <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">dont_namespace = true 
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[[listener]]
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [listener.authorized_ssh]
@@ -714,19 +797,11 @@ to start gokrazy rsync as a daemon:</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  path = &#34;/perm/scans&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span>
 </span></span></code></pre></div><p>Finally, create the authorized keys file that determines who can access the rsync daemon:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cat &gt; extrafiles/github.com/gokrazy/rsync/cmd/gokr-rsyncd/etc/gokr-rsyncd.authorized_keys <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; ~/gokrazy/hello/gokr-rsyncd.authorized_keys <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ssh-ed25519 […] michael@midna
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span>
-</span></span></code></pre></div><h2 id="install">Step 2. Install the gokrazy rsync daemon</h2>
-<p>Include the gokrazy rsync daemon <code>gokr-rsyncd</code> in your gokr-packer invocation,
-for example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gokr-packer <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -update<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -serial_console<span style="color:#f92672">=</span>disabled <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/fbstatus <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/hello <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/serial-busybox <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  github.com/gokrazy/rsync/cmd/gokr-rsyncd
+</span></span></code></pre></div><p>Then, deploy as usual:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update
 </span></span></code></pre></div><h2 id="ssh">Step 3. Configure SSH from the backup machine</h2>
 <p>On your PC (not the gokrazy instance), add an SSH configuration stanza to your
 <code>~/.ssh/config</code> to configure the custom port (22873 for ssh+rsync) and which
@@ -736,11 +811,11 @@ passwordless identity file to use (for the <a href="#cron">cron job in step 4</a
 </span></span><span style="display:flex;"><span>    Port 22873
 </span></span><span style="display:flex;"><span>    IdentityFile ~/.ssh/id_ed25519_scan2drivebackup
 </span></span></code></pre></div><p>Now you should be able to run rsync via SSH as usual:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/
 </span></span></code></pre></div><h2 id="cron">Step 4. Configure a daily cron job</h2>
 <p>First, install <a href="https://github.com/stapelberg/rsyncprom">the <code>rsync-prom</code> tool</a>
 to monitor your periodic transfer with <a href="https://prometheus.io/">Prometheus</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>go install github.com/stapelberg/rsyncprom/cmd/rsync-prom@latest
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go install github.com/stapelberg/rsyncprom/cmd/rsync-prom@latest
 </span></span></code></pre></div><p>Then wrap the above rsync command in an rsync-prom invocation in a shell script called <code>scan2drive-backup-sync.sh</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>SSH_AUTH_SOCK<span style="color:#f92672">=</span> ~/go/bin/rsync-prom --instance<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;scan2drive@midna&#34;</span> <span style="color:#ae81ff">\
@@ -835,6 +910,54 @@ to monitor your periodic transfer with <a href="https://prometheus.io/">Promethe
                     
                         
                         
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
@@ -1141,19 +1264,19 @@ to monitor your periodic transfer with <a href="https://prometheus.io/">Promethe
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.min.js?1668940579"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1668940579"></script>
-    <script src="/js/jquery.sticky.js?1668940579"></script>
-    <script src="/js/featherlight.min.js?1668940579"></script>
-    <script src="/js/highlight.pack.js?1668940579"></script>
+    <script src="/js/clipboard.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.min.js?1673684179"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1673684179"></script>
+    <script src="/js/jquery.sticky.js?1673684179"></script>
+    <script src="/js/featherlight.min.js?1673684179"></script>
+    <script src="/js/highlight.pack.js?1673684179"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1668940579"></script>
-    <script src="/js/learn.js?1668940579"></script>
-    <script src="/js/hugo-learn.js?1668940579"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1673684179"></script>
+    <script src="/js/learn.js?1673684179"></script>
+    <script src="/js/hugo-learn.js?1673684179"></script>
     
         
-            <script src="/mermaid/mermaid.js?1668940579"></script>
+            <script src="/mermaid/mermaid.js?1673684179"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
