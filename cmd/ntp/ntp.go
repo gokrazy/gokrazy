@@ -48,9 +48,11 @@ func main() {
 	mustDropPrivileges(rtc)
 
 	for {
+		jitter := time.Duration(rand.Int63n(250)) * time.Millisecond
 		if err := set(rtc); err != nil {
+			time.Sleep(jitter)
 			log.Fatalf("setting time failed: %v", err)
 		}
-		time.Sleep(1*time.Hour + time.Duration(rand.Int63n(250))*time.Millisecond)
+		time.Sleep(1*time.Hour + jitter)
 	}
 }
