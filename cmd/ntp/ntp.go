@@ -11,8 +11,16 @@ import (
 	"github.com/beevik/ntp"
 )
 
+var servers = []string{
+	"0.gokrazy.pool.ntp.org",
+	"1.gokrazy.pool.ntp.org",
+	"2.gokrazy.pool.ntp.org",
+	"3.gokrazy.pool.ntp.org",
+}
+
 func set(rtc *os.File) error {
-	r, err := ntp.Query("0.gokrazy.pool.ntp.org")
+	server := servers[rand.Intn(len(servers))]
+	r, err := ntp.Query(server)
 	if err != nil {
 		return err
 	}
@@ -21,7 +29,7 @@ func set(rtc *os.File) error {
 	if err := syscall.Settimeofday(&tv); err != nil {
 		return err
 	}
-	log.Printf("clock set to %v", r.Time)
+	log.Printf("clock set to %v (from %s)", r.Time, server)
 
 	if rtc == nil {
 		return nil
