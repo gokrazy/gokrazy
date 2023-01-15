@@ -12,20 +12,20 @@
     <title>Automation :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1673684179" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1673684179" rel="stylesheet">
-    <link href="/css/hybrid.css?1673684179" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1673684179" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1673684179" rel="stylesheet">
-    <link href="/css/auto-complete.css?1673684179" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1673684179" rel="stylesheet">
-    <link href="/css/theme.css?1673684179" rel="stylesheet">
-    <link href="/css/tabs.css?1673684179" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1673684179" rel="stylesheet">
+    <link href="/css/nucleus.css?1673804071" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1673804071" rel="stylesheet">
+    <link href="/css/hybrid.css?1673804071" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1673804071" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1673804071" rel="stylesheet">
+    <link href="/css/auto-complete.css?1673804071" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1673804071" rel="stylesheet">
+    <link href="/css/theme.css?1673804071" rel="stylesheet">
+    <link href="/css/tabs.css?1673804071" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1673804071" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1673684179"></script>
+    <script src="/js/jquery-3.3.1.min.js?1673804071"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1673684179"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1673684179"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1673804071"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1673804071"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1673684179"></script>
+<script type="text/javascript" src="/js/search.js?1673804071"></script>
 
     
   </div>
@@ -761,7 +761,7 @@ integration service <a href="#githubactions">like GitHub Actions</a>.</p>
 </ol>
 <h2 id="makefile">Automating common workflows with a <code>Makefile</code></h2>
 <p>The <code>make</code> tool can be used to document and centralize common workflows.</p>
-<p>For example, I use the following Makefile. I run <code>make update</code> from
+<p>For example, I use the following Makefile. I run <code>make get &amp;&amp; make update</code> from
 <a href="https://en.wikipedia.org/wiki/Cron">cron</a> every day. I sometimes manually run
 <code>make overwrite</code> with <code>/dev/sdx</code> being my USB SD card reader. And for debugging,
 <code>make root</code> produces a <a href="https://en.wikipedia.org/wiki/SquashFS">SquashFS</a> image
@@ -770,7 +770,10 @@ I can inspect with <code>unsquashfs -ll</code>.</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">all</span><span style="color:#f92672">:</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.PHONY</span><span style="color:#f92672">:</span> update overwrite root
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.PHONY</span><span style="color:#f92672">:</span> get update overwrite root
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">get</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">${</span>GOK<span style="color:#e6db74">}</span> get --update_all
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">update</span><span style="color:#f92672">:</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">${</span>GOK<span style="color:#e6db74">}</span> update
@@ -1269,19 +1272,19 @@ directory to verify that your program builds as a gokrazy appliance:</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1673684179"></script>
-    <script src="/js/perfect-scrollbar.min.js?1673684179"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1673684179"></script>
-    <script src="/js/jquery.sticky.js?1673684179"></script>
-    <script src="/js/featherlight.min.js?1673684179"></script>
-    <script src="/js/highlight.pack.js?1673684179"></script>
+    <script src="/js/clipboard.min.js?1673804071"></script>
+    <script src="/js/perfect-scrollbar.min.js?1673804071"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1673804071"></script>
+    <script src="/js/jquery.sticky.js?1673804071"></script>
+    <script src="/js/featherlight.min.js?1673804071"></script>
+    <script src="/js/highlight.pack.js?1673804071"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1673684179"></script>
-    <script src="/js/learn.js?1673684179"></script>
-    <script src="/js/hugo-learn.js?1673684179"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1673804071"></script>
+    <script src="/js/learn.js?1673804071"></script>
+    <script src="/js/hugo-learn.js?1673804071"></script>
     
         
-            <script src="/mermaid/mermaid.js?1673684179"></script>
+            <script src="/mermaid/mermaid.js?1673804071"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
