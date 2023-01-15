@@ -18,7 +18,7 @@ two different scenarios:
 
 The `make` tool can be used to document and centralize common workflows.
 
-For example, I use the following Makefile. I run `make update` from
+For example, I use the following Makefile. I run `make get && make update` from
 [cron](https://en.wikipedia.org/wiki/Cron) every day. I sometimes manually run
 `make overwrite` with `/dev/sdx` being my USB SD card reader. And for debugging,
 `make root` produces a [SquashFS](https://en.wikipedia.org/wiki/SquashFS) image
@@ -29,7 +29,10 @@ GOK := gok -i dr
 
 all:
 
-.PHONY: update overwrite root
+.PHONY: get update overwrite root
+
+get:
+	${GOK} get --update_all
 
 update:
 	${GOK} update
