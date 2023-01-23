@@ -5,14 +5,18 @@ title: gokrazy
 
 # gokrazy Go appliances
 
-With gokrazy, you can deploy your Go programs as appliances to a Raspberry Pi or
-PC ([→ supported platforms](/platforms/)).
+With gokrazy, you can deploy your Go programs as
+[appliances](https://en.wikipedia.org/wiki/Computer_appliance) to a Raspberry Pi
+or PC ([→ supported platforms](/platforms/)).
 
-For a long time, we were unhappy with having to care about security
-issues and Linux distribution maintenance on our various Raspberry Pis.
+For a long time, we were unhappy about having to spend so much time on each of
+our various Raspberry Pis, taking care of security updates and other general
+Linux distribution maintenance.
 
-Then, we had a crazy idea: what if we got rid of memory-unsafe
-languages and all software we don’t strictly need?
+Then, we had a crazy idea: what if we massively reduced the overall system
+complexity by getting rid of all software we don’t strictly need, and instead
+built up a minimal system from scratch entirely in Go, a memory safe programming
+language?
 
 Turns out this is feasible. gokrazy is the result.
 
@@ -21,11 +25,27 @@ Turns out this is feasible. gokrazy is the result.
 ## Your app(s) + only 4 moving parts
 
 1. the [Linux kernel](https://github.com/gokrazy/kernel)
+   * new versions are typically available < 24h after upstream release!
 1. the [Raspberry Pi firmware files](https://github.com/gokrazy/firmware)
-1. the [Go](https://golang.org/) compiler and standard library
-1. the gokrazy userland
+1. the [Go](https://go.dev/) compiler and standard library
+1. the gokrazy system (minimal init system, updater, DHCP, NTP, …)
 
-All are updated using the same command.
+## Uniformity
+
+What’s appealing about building an appliance entirely in Go? You get the same
+advantages you get when building Go software elsewhere:
+
+* All components mentioned above (except for the Go compiler) are managed as Go
+  modules, using the same tooling you’re already familiar with.
+* Go has very quick compilation times; the `gok run` command allows for a fast
+  edit-run loop.
+* Go’s
+  [tracing](https://about.sourcegraph.com/blog/go/an-introduction-to-go-tool-trace-rhys-hiltner)
+  and [profiling](https://go.dev/blog/pprof) support can be used on the entire
+  system
+* With Go’s [replace
+  directive](https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive),
+  you can quickly modify any part of the system with the same workflow.
 
 ## Web status interface
 
