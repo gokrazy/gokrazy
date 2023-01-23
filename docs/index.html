@@ -12,20 +12,20 @@
     <title>gokrazy :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1673804071" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1673804071" rel="stylesheet">
-    <link href="/css/hybrid.css?1673804071" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1673804071" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1673804071" rel="stylesheet">
-    <link href="/css/auto-complete.css?1673804071" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1673804071" rel="stylesheet">
-    <link href="/css/theme.css?1673804071" rel="stylesheet">
-    <link href="/css/tabs.css?1673804071" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1673804071" rel="stylesheet">
+    <link href="/css/nucleus.css?1674460918" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1674460918" rel="stylesheet">
+    <link href="/css/hybrid.css?1674460918" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1674460918" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1674460918" rel="stylesheet">
+    <link href="/css/auto-complete.css?1674460918" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1674460918" rel="stylesheet">
+    <link href="/css/theme.css?1674460918" rel="stylesheet">
+    <link href="/css/tabs.css?1674460918" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1674460918" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1673804071"></script>
+    <script src="/js/jquery-3.3.1.min.js?1674460918"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1673804071"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1673804071"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1674460918"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1674460918"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1673804071"></script>
+<script type="text/javascript" src="/js/search.js?1674460918"></script>
 
     
   </div>
@@ -678,22 +678,45 @@
 
  
 <h1 id="gokrazy-go-appliances">gokrazy Go appliances</h1>
-<p>With gokrazy, you can deploy your Go programs as appliances to a Raspberry Pi or
-PC (<a href="/platforms/">→ supported platforms</a>).</p>
-<p>For a long time, we were unhappy with having to care about security
-issues and Linux distribution maintenance on our various Raspberry Pis.</p>
-<p>Then, we had a crazy idea: what if we got rid of memory-unsafe
-languages and all software we don’t strictly need?</p>
+<p>With gokrazy, you can deploy your Go programs as
+<a href="https://en.wikipedia.org/wiki/Computer_appliance">appliances</a> to a Raspberry Pi
+or PC (<a href="/platforms/">→ supported platforms</a>).</p>
+<p>For a long time, we were unhappy about having to spend so much time on each of
+our various Raspberry Pis, taking care of security updates and other general
+Linux distribution maintenance.</p>
+<p>Then, we had a crazy idea: what if we massively reduced the overall system
+complexity by getting rid of all software we don’t strictly need, and instead
+built up a minimal system from scratch entirely in Go, a memory safe programming
+language?</p>
 <p>Turns out this is feasible. gokrazy is the result.</p>
 <!--<img src="logo.svg" width="50" height="50" alt="gokrazy logo" title="gokrazy logo">-->
 <h2 id="your-apps--only-4-moving-parts">Your app(s) + only 4 moving parts</h2>
 <ol>
-<li>the <a href="https://github.com/gokrazy/kernel">Linux kernel</a></li>
+<li>the <a href="https://github.com/gokrazy/kernel">Linux kernel</a>
+<ul>
+<li>new versions are typically available &lt; 24h after upstream release!</li>
+</ul>
+</li>
 <li>the <a href="https://github.com/gokrazy/firmware">Raspberry Pi firmware files</a></li>
-<li>the <a href="https://golang.org/">Go</a> compiler and standard library</li>
-<li>the gokrazy userland</li>
+<li>the <a href="https://go.dev/">Go</a> compiler and standard library</li>
+<li>the gokrazy system (minimal init system, updater, DHCP, NTP, …)</li>
 </ol>
-<p>All are updated using the same command.</p>
+<h2 id="uniformity">Uniformity</h2>
+<p>What’s appealing about building an appliance entirely in Go? You get the same
+advantages you get when building Go software elsewhere:</p>
+<ul>
+<li>All components mentioned above (except for the Go compiler) are managed as Go
+modules, using the same tooling you’re already familiar with.</li>
+<li>Go has very quick compilation times; the <code>gok run</code> command allows for a fast
+edit-run loop.</li>
+<li>Go’s
+<a href="https://about.sourcegraph.com/blog/go/an-introduction-to-go-tool-trace-rhys-hiltner">tracing</a>
+and <a href="https://go.dev/blog/pprof">profiling</a> support can be used on the entire
+system</li>
+<li>With Go’s <a href="https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive">replace
+directive</a>,
+you can quickly modify any part of the system with the same workflow.</li>
+</ul>
 <h2 id="web-status-interface">Web status interface</h2>
 <p>On a regular Linux distribution, we’d largely use systemctl’s start,
 stop, restart and status verbs to manage our applications. gokrazy
@@ -1151,19 +1174,19 @@ configurability, you may need to replace some of our programs.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1673804071"></script>
-    <script src="/js/perfect-scrollbar.min.js?1673804071"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1673804071"></script>
-    <script src="/js/jquery.sticky.js?1673804071"></script>
-    <script src="/js/featherlight.min.js?1673804071"></script>
-    <script src="/js/highlight.pack.js?1673804071"></script>
+    <script src="/js/clipboard.min.js?1674460918"></script>
+    <script src="/js/perfect-scrollbar.min.js?1674460918"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1674460918"></script>
+    <script src="/js/jquery.sticky.js?1674460918"></script>
+    <script src="/js/featherlight.min.js?1674460918"></script>
+    <script src="/js/highlight.pack.js?1674460918"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1673804071"></script>
-    <script src="/js/learn.js?1673804071"></script>
-    <script src="/js/hugo-learn.js?1673804071"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1674460918"></script>
+    <script src="/js/learn.js?1674460918"></script>
+    <script src="/js/hugo-learn.js?1674460918"></script>
     
         
-            <script src="/mermaid/mermaid.js?1673804071"></script>
+            <script src="/mermaid/mermaid.js?1674460918"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
