@@ -189,6 +189,7 @@ type service struct {
 	stopped   bool
 	stoppedMu sync.RWMutex
 	cmd       *exec.Cmd
+	cmdMu     sync.Mutex
 	Stdout    lineswriter
 	Stderr    lineswriter
 	started   time.Time
@@ -219,8 +220,20 @@ func (s *service) Diverted() string {
 	return s.diversion
 }
 
+func (s *service) Cmd() *exec.Cmd {
+	s.cmdMu.Lock()
+	defer s.cmdMu.Unlock()
+	return s.cmd
+}
+
+func (s *service) setCmd(cmd *exec.Cmd) {
+	s.cmdMu.Lock()
+	defer s.cmdMu.Unlock()
+	s.cmd = cmd
+}
+
 func (s *service) Name() string {
-	return s.cmd.Args[0]
+	return s.Cmd().Args[0]
 }
 
 func (s *service) supervisionMode() supervisionMode {
@@ -308,8 +321,8 @@ func (s *service) MarshalJSON() ([]byte, error) {
 		Stopped:   s.Stopped(),
 		StartTime: s.Started(),
 		Pid:       pid,
-		Path:      s.cmd.Path,
-		Args:      s.cmd.Args,
+		Path:      s.Cmd().Path,
+		Args:      s.Cmd().Args,
 		Diverted:  s.Diverted(),
 	})
 }
@@ -381,11 +394,11 @@ func isDontSupervise(err error) bool {
 }
 
 func supervise(s *service) {
-	tag := filepath.Base(s.cmd.Path)
-	if modInfo, err := readModuleInfo(s.cmd.Path); err == nil {
+	tag := filepath.Base(s.Cmd().Path)
+	if modInfo, err := readModuleInfo(s.Cmd().Path); err == nil {
 		s.ModuleInfo = modInfo
 	} else {
-		log.Printf("cannot read module info from %s: %v", s.cmd.Path, err)
+		log.Printf("cannot read module info from %s: %v", s.Cmd().Path, err)
 	}
 
 	s.state = NewProcessState()
@@ -399,7 +412,7 @@ func supervise(s *service) {
 	// that need correct time. This can be enabled
 	// by adding a settings file named waitforclock.txt under
 	// waitforclock/<package> directory.
-	if strings.HasPrefix(s.cmd.Path, "/user/") && s.waitForClock {
+	if strings.HasPrefix(s.Cmd().Path, "/user/") && s.waitForClock {
 		l.Print("gokrazy: waiting for clock to be synced")
 		WaitForClock()
 	}
@@ -411,9 +424,9 @@ func supervise(s *service) {
 		}
 
 		cmd := &exec.Cmd{
-			Path:   s.cmd.Path,
-			Args:   s.cmd.Args,
-			Env:    s.cmd.Env,
+			Path:   s.Cmd().Path,
+			Args:   s.Cmd().Args,
+			Env:    s.Cmd().Env,
 			Stdout: s.Stdout,
 			Stderr: s.Stderr,
 			SysProcAttr: &syscall.SysProcAttr{
@@ -440,7 +453,7 @@ func supervise(s *service) {
 		// ported daemons would do, so setting $HOME
 		// increases the chance that third-party daemons
 		// just work.
-		homeDir := "/perm/" + filepath.Base(s.cmd.Path)
+		homeDir := "/perm/" + filepath.Base(s.Cmd().Path)
 		cmd.Env = append(cmd.Env, "HOME="+homeDir)
 		if _, err := os.Stat(homeDir); err == nil {
 			cmd.Dir = homeDir
@@ -535,7 +548,7 @@ func findSvc(path string) *service {
 	services.Lock()
 	defer services.Unlock()
 	for _, s := range services.S {
-		if s.cmd.Path == path {
+		if s.Cmd().Path == path {
 			return s
 		}
 	}

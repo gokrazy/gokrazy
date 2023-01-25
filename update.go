@@ -394,23 +394,44 @@ func uploadTemp(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type divertRequest struct {
+	Path      string   `json:"Path"`
+	Diversion string   `json:"Diversion"`
+	Flags     []string `json:"Flags"`
+}
+
 func divert(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "expected a POST request", http.StatusBadRequest)
 		return
 	}
 
-	diversion := r.FormValue("diversion")
-	if diversion == "" {
+	var req divertRequest
+	if r.Header.Get("Content-Type") == "application/json" {
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "couldn't read request body", http.StatusBadRequest)
+			return
+		}
+		err = json.Unmarshal(body, &req)
+		if err != nil {
+			http.Error(w, "couldn't unmarshal request body", http.StatusBadRequest)
+			return
+		}
+	} else {
+		req.Diversion = r.FormValue("diversion")
+		req.Path = r.FormValue("path")
+	}
+
+	if req.Diversion == "" {
 		http.Error(w, "diversion parameter is not set", http.StatusBadRequest)
 		return
 	}
 
-	path := r.FormValue("path")
-	svc := findSvc(path)
+	svc := findSvc(req.Path)
 	if svc == nil {
 		log.Printf("adding new service in-memory to make diversion work")
-		cmd := exec.Command(path)
+		cmd := exec.Command(req.Path, req.Flags...)
 		svc = NewService(cmd).s
 		services.Lock()
 		services.S = append(services.S, svc)
@@ -420,13 +441,16 @@ func divert(w http.ResponseWriter, r *http.Request) {
 
 	// Ensure diversion binary is executable (/uploadtemp creates regular,
 	// non-executable files).
-	diversion = filepath.Join(os.TempDir(), diversion)
+	diversion := filepath.Join(os.TempDir(), req.Diversion)
 	if err := os.Chmod(diversion, 0755); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	svc.setDiversion(diversion)
+	cmd := svc.Cmd()
+	cmd.Args = append([]string{cmd.Args[0]}, req.Flags...)
+	svc.setCmd(cmd)
 
 	if err := restart(svc, syscall.SIGTERM); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
