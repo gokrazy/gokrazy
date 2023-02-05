@@ -77,23 +77,6 @@ func parseUtsname(u unix.Utsname) string {
 		str(u.Sysname), str(u.Release), str(u.Machine))
 }
 
-func readSBOM() (*json.RawMessage, string, error) {
-	b, err := os.ReadFile("/etc/gokrazy/sbom.json")
-	if err != nil {
-		return nil, "", err
-	}
-
-	type SBOMWithHash struct {
-		SBOMHash string           `json:"sbom_hash"`
-		SBOM     *json.RawMessage `json:"sbom"`
-	}
-	var sh SBOMWithHash
-	if err := json.Unmarshal(b, &sh); err != nil {
-		return nil, "", err
-	}
-	return sh.SBOM, sh.SBOMHash, nil
-}
-
 func buildHeartbeatRequest() heartbeatRequest {
 	machineID := gokrazy.MachineID()
 	model := gokrazy.Model()
@@ -104,7 +87,7 @@ func buildHeartbeatRequest() heartbeatRequest {
 	}
 	kernel := parseUtsname(uname)
 
-	sbom, sbomHash, err := readSBOM()
+	sbom, sbomHash, err := gokrazy.ReadSBOM()
 	if err != nil {
 		log.Printf("reading SBOM: %v", err)
 	}
