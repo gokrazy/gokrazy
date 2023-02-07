@@ -29,6 +29,7 @@ type humanReadable struct {
 // TODO: use this structure from gokrazy/api, once available
 type heartbeatRequest struct {
 	MachineID     string           `json:"machine_id"`
+	Hostname      string           `json:"hostname"`
 	SBOMHash      string           `json:"sbom_hash"`
 	SBOM          *json.RawMessage `json:"sbom"`
 	HumanReadable humanReadable    `json:"human_readable"`
@@ -80,6 +81,7 @@ func parseUtsname(u unix.Utsname) string {
 func buildHeartbeatRequest() heartbeatRequest {
 	machineID := gokrazy.MachineID()
 	model := gokrazy.Model()
+	hostname, _ := os.Hostname()
 
 	var uname unix.Utsname
 	if err := unix.Uname(&uname); err != nil {
@@ -94,6 +96,7 @@ func buildHeartbeatRequest() heartbeatRequest {
 
 	return heartbeatRequest{
 		MachineID: machineID,
+		Hostname:  hostname,
 		SBOMHash:  sbomHash,
 		SBOM:      sbom,
 		HumanReadable: humanReadable{
