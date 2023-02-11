@@ -3,6 +3,7 @@ package gokrazy
 import (
 	"container/ring"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -448,14 +449,31 @@ func supervise(s *service) {
 		if attempt == 0 {
 			cmd.Env = append(cmd.Env, "GOKRAZY_FIRST_START=1")
 		}
-		// Designate a subdirectory under /perm as $HOME.
+		// Designate a subdirectory under /perm/home as $HOME.
 		// This mirrors what gokrazy system daemons and
 		// ported daemons would do, so setting $HOME
 		// increases the chance that third-party daemons
 		// just work.
-		homeDir := "/perm/" + filepath.Base(s.Cmd().Path)
+		base := filepath.Base(s.Cmd().Path)
+		oldDir := "/perm/" + base
+		homeDir := "/perm/home/" + base
+		// Older gokrazy installations used /perm/<base>,
+		// but since we started creating one directory for each
+		// supervised process, it is better to use /perm/home/<base>
+		// to avoid cluttering the /perm partition.
+		if _, err := os.Stat(oldDir); err == nil {
+			homeDir = oldDir
+		}
 		cmd.Env = append(cmd.Env, "HOME="+homeDir)
-		if _, err := os.Stat(homeDir); err == nil {
+		if err := os.MkdirAll(homeDir, 0700); err != nil {
+			if errors.Is(err, syscall.EROFS) {
+				l.Printf("gokrazy: cannot create $HOME directory without writeable /perm partition")
+			} else {
+				l.Printf("gokrazy: creating $HOME: %v", err)
+			}
+		} else {
+			// Process execution fails when cmd.Dir points to
+			// a non-existant directory.
 			cmd.Dir = homeDir
 		}
 
