@@ -18,7 +18,11 @@ complexity by getting rid of all software we don’t strictly need, and instead
 built up a minimal system from scratch entirely in Go, a memory safe programming
 language?
 
-Turns out this is feasible. gokrazy is the result.
+Turns out this is feasible. gokrazy is the result. See it in action in [this
+first installation demo
+video](https://www.youtube.com/watch?v=6FBGjdT8ZW4&list=PLxMVx8p-A48A6H-EWqzN-HStDH1dOW5PU):
+
+{{< youtube id="6FBGjdT8ZW4" title="gokrazy demo: first installation and adding programs" >}}
 
 <!--<img src="logo.svg" width="50" height="50" alt="gokrazy logo" title="gokrazy logo">-->
 

@@ -25,3 +25,7 @@ weight = 10
 
 [outputs]
 home = [ "HTML", "RSS", "JSON"]
+
+[privacy]
+  [privacy.youtube]
+    privacyEnhanced = true
