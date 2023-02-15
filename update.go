@@ -279,8 +279,30 @@ func initUpdate() error {
 	if strings.Contains(rootdev.PARTUUID(), "-") {
 		gpt = ",gpt"
 	}
+	featureStr := fmt.Sprintf("partuuid,updatehash%s,", gpt)
 	http.HandleFunc("/update/features", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "partuuid,updatehash%s,", gpt)
+		if !jsonRequested(r) {
+			w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+			io.WriteString(w, featureStr)
+			return
+		}
+
+		// This response contains all information that the
+		// github.com/gokrazy/updater package needs to obtain from the
+		// target device, in one single go.
+		b, err := json.Marshal(struct {
+			Features string         `json:"features"`
+			EEPROM   *eepromVersion `json:"EEPROM"`
+		}{
+			Features: featureStr,
+			EEPROM:   lastInstalledEepromVersion,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(b)
 	})
 	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(rootdev.BlockDevice()))
 	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(rootdev.InactiveRootPartition())))

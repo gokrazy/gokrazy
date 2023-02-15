@@ -414,6 +414,12 @@ func SuperviseServices(services []*Service) error {
 		unwrapped[idx] = svc.s
 	}
 
+	var err error
+	lastInstalledEepromVersion, err = readLastInstalledEepromVersion()
+	if err != nil {
+		log.Printf("getting EEPROM version: %v", err)
+	}
+
 	initStatus()
 	setupDeviceSpecifics()
 
