@@ -168,7 +168,12 @@ func parseUtsname(u unix.Utsname) string {
 }
 
 func jsonRequested(r *http.Request) bool {
-	return strings.Contains(strings.ToLower(r.Header.Get("Content-type")), "application/json")
+	// When this function was introduced, it incorrectly checked the
+	// Content-Type header (which specifies the type of the body, if any), where
+	// it should have looked at the Accept header. Hence, we now consider both,
+	// at least for some time.
+	return strings.Contains(strings.ToLower(r.Header.Get("Accept")), "application/json") ||
+		strings.Contains(strings.ToLower(r.Header.Get("Content-type")), "application/json")
 }
 
 func eventStreamRequested(r *http.Request) bool {
