@@ -37,7 +37,7 @@ table {
       <div style="clear: left;">
         <p style="float: left;"><img src = "assets/gokrazy-logo.svg" alt="the gokrazy logo: a mad gopher" width="70px"/></p>
         <p style="width: 50ex; margin-top: 0.25em; font-size: 18px"><a href="/">gokrazy</a><br>
-        <small style="font-size: 11px" class="text-muted">version {{ .BuildTimestamp }}</small></p>
+        <small style="font-size: 11px" class="text-muted">built at {{ .BuildTimestamp }}</small></p>
       </div>
     </div>
 
@@ -57,6 +57,12 @@ table {
           <td>{{ .Model }}</td>
         </tr>
         {{ end }}
+	{{ if (ne .SBOMHash "") }}
+        <tr>
+          <th>SBOM</th>
+          <td>{{ .SBOMHash | printSBOMHash }}</td>
+        </tr>
+	{{ end }}
         {{ if .EEPROM }}
         <tr>
           <th>EEPROM<br>(SHA256)</th>

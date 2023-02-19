@@ -125,6 +125,14 @@ func eventStreamRequested(r *http.Request) bool {
 
 var templates = template.Must(template.New("root").
 	Funcs(map[string]interface{}{
+		"printSBOMHash": func(sbomHash string) string {
+			const sbomHashLen = 10
+			if len(sbomHash) < sbomHashLen {
+				return sbomHash
+			}
+			return sbomHash[:sbomHashLen]
+		},
+
 		"shortenSHA256": func(hash string) string {
 			if len(hash) > 10 {
 				return hash[:10]
@@ -176,6 +184,11 @@ func initStatus() {
 	}
 	kernel := parseUtsname(uname)
 
+	_, sbomHash, err := ReadSBOM()
+	if err != nil {
+		log.Printf("getting SBOM: %v", err)
+	}
+
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assets.Assets))))
 
 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
@@ -219,6 +232,7 @@ func initStatus() {
 		if err := templates.ExecuteTemplate(&buf, "status.tmpl", struct {
 			Service        *service
 			BuildTimestamp string
+			SBOMHash       string
 			Hostname       string
 			Model          string
 			XsrfToken      int32
@@ -227,6 +241,7 @@ func initStatus() {
 		}{
 			Service:        svc,
 			BuildTimestamp: buildTimestamp,
+			SBOMHash:       sbomHash,
 			Hostname:       hostname,
 			Model:          model,
 			XsrfToken:      token,
@@ -334,6 +349,7 @@ func initStatus() {
 			PrivateAddrs   []string
 			PublicAddrs    []string
 			BuildTimestamp string
+			SBOMHash       string
 			Meminfo        map[string]int64
 			Hostname       string
 			Model          string
@@ -349,6 +365,7 @@ func initStatus() {
 			PrivateAddrs:   privateAddrs,
 			PublicAddrs:    publicAddrs,
 			BuildTimestamp: buildTimestamp,
+			SBOMHash:       sbomHash,
 			Meminfo:        parseMeminfo(),
 			Hostname:       hostname,
 			Model:          model,
