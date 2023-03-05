@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"log/syslog"
 	"net/http"
@@ -287,15 +286,11 @@ func (s *service) Signal(signal syscall.Signal) error {
 	s.processMu.RLock()
 	defer s.processMu.RUnlock()
 	if s.process != nil {
-		// Use syscall.Kill instead of s.process.Signal as the latter returns
-		// “os: process already finished” when the process exited.
-		err := syscall.Kill(-s.process.Pid, signal)
-		if errno, ok := err.(syscall.Errno); ok {
-			if errno == syscall.ESRCH {
-				return nil // no such process, nothing to signal
-			}
+		err := s.process.Signal(signal)
+		if err != nil && !errors.Is(err, os.ErrProcessDone) {
+			return err
 		}
-		return err
+		return nil
 	}
 	return nil // no process, nothing to signal
 }
@@ -329,7 +324,7 @@ func (s *service) MarshalJSON() ([]byte, error) {
 }
 
 func rssOfPid(pid int) int64 {
-	statm, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/statm", pid))
+	statm, err := os.ReadFile(fmt.Sprintf("/proc/%d/statm", pid))
 	if err != nil {
 		return 0
 	}
@@ -354,7 +349,7 @@ func (s *service) RSS() int64 {
 var syslogRaddr string
 
 func initRemoteSyslog() {
-	b, err := ioutil.ReadFile("/perm/remote_syslog/target")
+	b, err := os.ReadFile("/perm/remote_syslog/target")
 	if err != nil {
 		if !os.IsNotExist(err) {
 			log.Print(err)
