@@ -331,40 +331,62 @@ func initUpdate() error {
 			return
 		}
 
-		doneCh := make(chan struct{})
-		go func() {
-			killSupervisedServices()
-			close(doneCh)
-		}()
+		rc := http.NewResponseController(w)
+		start := time.Now()
+		killSupervisedServicesAndUmountPerm(15 * time.Second)
+		fmt.Fprintf(w, "All services killed in %s\n", time.Since(start))
+		rc.Flush()
 
-		atLeast1Second := time.After(time.Second)
+		log.Println("Rebooting")
+		if err := reboot(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		w.Write([]byte("Rebooting...\n"))
+		rc.Flush()
+	})
+	http.HandleFunc("/poweroff", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "expected a POST request", http.StatusBadRequest)
+			return
+		}
 
-		go func() {
-			select {
-			case <-doneCh:
-				log.Println("All processes shut down")
-			case <-time.After(15 * time.Second):
-				log.Println("Timed out waiting for processes to shut down")
-			}
+		rc := http.NewResponseController(w)
+		start := time.Now()
+		killSupervisedServicesAndUmountPerm(15 * time.Second)
+		fmt.Fprintf(w, "All services killed in %s\n", time.Since(start))
+		rc.Flush()
 
-			// give the HTTP response some time to be sent
-			<-atLeast1Second
-
-			log.Println("Unmounting /perm")
-			if err := syscall.Unmount("/perm", unix.MNT_FORCE); err != nil {
-				log.Printf("unmounting /perm failed: %v", err)
-			}
-
-			log.Println("Rebooting")
-			if err := reboot(); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
-		}()
+		log.Println("Powering off")
+		if err := unix.Reboot(unix.LINUX_REBOOT_CMD_POWER_OFF); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		w.Write([]byte("Powering off...\n"))
+		rc.Flush()
 	})
 	http.HandleFunc("/uploadtemp/", uploadTemp)
 	http.HandleFunc("/divert", divert)
 
 	return nil
+}
+
+func killSupervisedServicesAndUmountPerm(maxDelay time.Duration) {
+	doneCh := make(chan struct{})
+	go func() {
+		killSupervisedServices()
+		close(doneCh)
+	}()
+
+	select {
+	case <-doneCh:
+		log.Println("All processes shut down")
+	case <-time.After(maxDelay):
+		log.Println("Timed out waiting for processes to shut down")
+	}
+
+	log.Println("Unmounting /perm")
+	if err := syscall.Unmount("/perm", unix.MNT_FORCE); err != nil {
+		log.Printf("unmounting /perm failed: %v", err)
+	}
 }
 
 func uploadTemp(w http.ResponseWriter, r *http.Request) {
