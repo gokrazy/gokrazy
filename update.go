@@ -369,19 +369,8 @@ func initUpdate() error {
 	return nil
 }
 
-func killSupervisedServicesAndUmountPerm(maxDelay time.Duration) {
-	doneCh := make(chan struct{})
-	go func() {
-		killSupervisedServices()
-		close(doneCh)
-	}()
-
-	select {
-	case <-doneCh:
-		log.Println("All processes shut down")
-	case <-time.After(maxDelay):
-		log.Println("Timed out waiting for processes to shut down")
-	}
+func killSupervisedServicesAndUmountPerm(signalDelay time.Duration) {
+	killSupervisedServices(signalDelay)
 
 	log.Println("Unmounting /perm")
 	if err := syscall.Unmount("/perm", unix.MNT_FORCE); err != nil {

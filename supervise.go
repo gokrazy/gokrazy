@@ -534,13 +534,15 @@ var services struct {
 	S []*service
 }
 
-// killSupervisedServices is called before rebooting when upgrading, allowing
-// processes to terminate in an orderly fashion.
-func killSupervisedServices() {
+// signalSupervisedServices sends a given signal to all non-stopped processes.
+// It returns the corresponding processState to allow waiting for a given state.
+func signalSupervisedServices(signal syscall.Signal) []*processState {
 	services.Lock()
 	defer services.Unlock()
+
+	states := make([]*processState, 0, len(services.S))
 	for _, s := range services.S {
-		if s.Stopped() {
+		if s.Stopped() && s.state.Get() == Stopped {
 			continue
 		}
 
@@ -549,12 +551,49 @@ func killSupervisedServices() {
 		s.state.Set(Stopping)
 
 		s.setStopped(true)
-		s.Signal(syscall.SIGTERM)
+		s.Signal(signal)
+		states = append(states, s.state)
+	}
+	return states
+}
+
+// killSupervisedServices is called before rebooting when upgrading, allowing
+// processes to terminate in an orderly fashion.
+func killSupervisedServices(signalDelay time.Duration) {
+	termStates := signalSupervisedServices(syscall.SIGTERM)
+	termDone := make(chan struct{})
+	go func() {
+		for _, s := range termStates {
+			s.WaitTill(Stopped)
+		}
+		close(termDone)
+	}()
+
+	select {
+	case <-termDone:
+		log.Println("All processes shut down")
+		return
+	case <-time.After(signalDelay):
+	}
+	log.Println("Some processes did not stop, send sigkill")
+
+	killStates := signalSupervisedServices(syscall.SIGKILL)
+	killDone := make(chan struct{})
+	go func() {
+		for _, s := range killStates {
+			s.WaitTill(Stopped)
+		}
+		close(killDone)
+	}()
+
+	select {
+	case <-killDone:
+		log.Println("All processes shut down")
+		return
+	case <-time.After(signalDelay):
 	}
 
-	for _, s := range services.S {
-		s.waitTillStopped()
-	}
+	log.Println("Some processes did not stop after sigkill")
 }
 
 func findSvc(path string) *service {

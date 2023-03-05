@@ -23,6 +23,12 @@ func NewProcessState() *processState {
 	return p
 }
 
+func (p *processState) Get() statusCode {
+	p.lock.Lock()
+	defer p.lock.Unlock()
+	return p.status
+}
+
 func (p *processState) Set(status statusCode) {
 	p.lock.Lock()
 	defer p.lock.Unlock()
