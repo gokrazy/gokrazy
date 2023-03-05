@@ -18,7 +18,7 @@ Turns out this is feasible. gokrazy is the result.
 
 # GitHub Repository structure
 
-* [github.com/gokrazy/gokrazy](https://github.com/gokrazy/gokrazy): system code, main issue tracker, documentation
+* [github.com/gokrazy/gokrazy](https://github.com/gokrazy/gokrazy): init code, main issue tracker, documentation
 * [github.com/gokrazy/tools](https://github.com/gokrazy/tools): SD card image creation code, pulling in:
     * [github.com/gokrazy/firmware](https://github.com/gokrazy/firmware): Raspberry Pi 3 or 4 firmware files
     * [github.com/gokrazy/rpi-eeprom](https://github.com/gokrazy/rpi-eeprom): Raspberry Pi 4 EEPROM files
@@ -48,3 +48,6 @@ hugo
 The updated website content will be stored in the `./docs` directory.
 Do not update anything here manually.
 
+# Hacking
+
+To adjust the behavior of the init process of your device, add a [`replace` directive to `~/gokrazy/instancename/builddir/init/go.mod`](https://gokrazy.org/development/modules/) pointing to your local copy.
