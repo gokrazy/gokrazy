@@ -546,6 +546,9 @@ func signalSupervisedServices(signal syscall.Signal) []*processState {
 
 	states := make([]*processState, 0, len(services.S))
 	for _, s := range services.S {
+		// s.Stopped() only checks the "stopped" flag of the service (if it shouldn't restart).
+		// We check the actual state as well to be sure to re-send a signal if we are already
+		// in the "Stopping" state.
 		if s.Stopped() && s.state.Get() == Stopped {
 			continue
 		}
