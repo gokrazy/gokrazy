@@ -331,9 +331,19 @@ func initUpdate() error {
 			return
 		}
 
+		signalDelay := time.Minute
+		if s := r.FormValue("wait_per_signal"); s != "" {
+			var err error
+			signalDelay, err = time.ParseDuration(s)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+		}
+
 		rc := http.NewResponseController(w)
 		start := time.Now()
-		killSupervisedServicesAndUmountPerm(15 * time.Second)
+		killSupervisedServicesAndUmountPerm(signalDelay)
 		fmt.Fprintf(w, "All services killed in %s\n", time.Since(start))
 		rc.Flush()
 
@@ -350,9 +360,19 @@ func initUpdate() error {
 			return
 		}
 
+		signalDelay := time.Minute
+		if s := r.FormValue("wait_per_signal"); s != "" {
+			var err error
+			signalDelay, err = time.ParseDuration(s)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+		}
+
 		rc := http.NewResponseController(w)
 		start := time.Now()
-		killSupervisedServicesAndUmountPerm(15 * time.Second)
+		killSupervisedServicesAndUmountPerm(signalDelay)
 		fmt.Fprintf(w, "All services killed in %s\n", time.Since(start))
 		rc.Flush()
 
