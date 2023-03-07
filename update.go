@@ -352,6 +352,7 @@ func initUpdate() error {
 		rc.Flush()
 
 		go func() {
+			time.Sleep(time.Second) // give the http response some time to be sent
 			if err := reboot(); err != nil {
 				log.Println("could not reboot:", err)
 			}
@@ -384,6 +385,7 @@ func initUpdate() error {
 		rc.Flush()
 
 		go func() {
+			time.Sleep(time.Second) // give the http response some time to be sent
 			if err := unix.Reboot(unix.LINUX_REBOOT_CMD_POWER_OFF); err != nil {
 				log.Println("could not power off:", err)
 			}
