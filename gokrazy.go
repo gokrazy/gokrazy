@@ -266,6 +266,10 @@ func Boot(userBuildTimestamp string) error {
 		log.Printf("creating compatibility symlink /dev/ttyAMA0 -> /dev/ttyS0 failed: %v", err)
 	}
 
+	if err := pollPowerButtons(); err != nil {
+		log.Printf("polling power buttons: %v", err)
+	}
+
 	return nil
 }
 

@@ -8,6 +8,7 @@ require (
 	github.com/gokrazy/internal v0.0.0-20220129150711-9ed298107648
 	github.com/google/gopacket v1.1.19
 	github.com/google/renameio/v2 v2.0.0
+	github.com/kenshaw/evdev v0.1.0
 	github.com/mdlayher/packet v1.0.0
 	github.com/mdlayher/watchdog v0.0.0-20201005150459-8bdc4f41966b
 	github.com/rtr7/dhcp4 v0.0.0-20220302171438-18c84d089b46
