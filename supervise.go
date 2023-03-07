@@ -563,6 +563,7 @@ func signalSupervisedServices(signal syscall.Signal) []*processState {
 // killSupervisedServices is called before rebooting when upgrading, allowing
 // processes to terminate in an orderly fashion.
 func killSupervisedServices(signalDelay time.Duration) {
+	log.Println("sending sigterm to all services")
 	termStates := signalSupervisedServices(syscall.SIGTERM)
 	termDone := make(chan struct{})
 	go func() {
@@ -574,11 +575,11 @@ func killSupervisedServices(signalDelay time.Duration) {
 
 	select {
 	case <-termDone:
-		log.Println("All processes shut down")
+		log.Println("all services shut down")
 		return
 	case <-time.After(signalDelay):
 	}
-	log.Println("Some processes did not stop, send sigkill")
+	log.Println("some services did not stop, send sigkill")
 
 	killStates := signalSupervisedServices(syscall.SIGKILL)
 	killDone := make(chan struct{})
@@ -591,12 +592,12 @@ func killSupervisedServices(signalDelay time.Duration) {
 
 	select {
 	case <-killDone:
-		log.Println("All processes shut down")
+		log.Println("all services shut down")
 		return
 	case <-time.After(signalDelay):
 	}
 
-	log.Println("Some processes did not stop after sigkill")
+	log.Println("some services did not stop after sigkill")
 }
 
 func findSvc(path string) *service {
