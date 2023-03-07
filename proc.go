@@ -49,6 +49,4 @@ func (p *processState) WaitTill(status statusCode) {
 	for p.status != status {
 		p.statusChange.Wait()
 	}
-
-	return
 }

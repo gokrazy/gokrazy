@@ -260,10 +260,6 @@ func (s *service) setStopped(val bool) {
 	s.stopped = val
 }
 
-func (s *service) waitTillStopped() {
-	s.state.WaitTill(Stopped)
-}
-
 func (s *service) Started() time.Time {
 	s.startedMu.RLock()
 	defer s.startedMu.RUnlock()
