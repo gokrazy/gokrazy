@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"log/syslog"
 	"net/http"
@@ -261,10 +260,6 @@ func (s *service) setStopped(val bool) {
 	s.stopped = val
 }
 
-func (s *service) waitTillStopped() {
-	s.state.WaitTill(Stopped)
-}
-
 func (s *service) Started() time.Time {
 	s.startedMu.RLock()
 	defer s.startedMu.RUnlock()
@@ -287,8 +282,8 @@ func (s *service) Signal(signal syscall.Signal) error {
 	s.processMu.RLock()
 	defer s.processMu.RUnlock()
 	if s.process != nil {
-		// Use syscall.Kill instead of s.process.Signal as the latter returns
-		// “os: process already finished” when the process exited.
+		// Use syscall.Kill instead of s.process.Signal since we want
+		// to the send the signal to all process of the group (-pid)
 		err := syscall.Kill(-s.process.Pid, signal)
 		if errno, ok := err.(syscall.Errno); ok {
 			if errno == syscall.ESRCH {
@@ -329,7 +324,7 @@ func (s *service) MarshalJSON() ([]byte, error) {
 }
 
 func rssOfPid(pid int) int64 {
-	statm, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/statm", pid))
+	statm, err := os.ReadFile(fmt.Sprintf("/proc/%d/statm", pid))
 	if err != nil {
 		return 0
 	}
@@ -354,7 +349,7 @@ func (s *service) RSS() int64 {
 var syslogRaddr string
 
 func initRemoteSyslog() {
-	b, err := ioutil.ReadFile("/perm/remote_syslog/target")
+	b, err := os.ReadFile("/perm/remote_syslog/target")
 	if err != nil {
 		if !os.IsNotExist(err) {
 			log.Print(err)
@@ -539,13 +534,18 @@ var services struct {
 	S []*service
 }
 
-// killSupervisedServices is called before rebooting when upgrading, allowing
-// processes to terminate in an orderly fashion.
-func killSupervisedServices() {
+// signalSupervisedServices sends a given signal to all non-stopped processes.
+// It returns the corresponding processState to allow waiting for a given state.
+func signalSupervisedServices(signal syscall.Signal) []*processState {
 	services.Lock()
 	defer services.Unlock()
+
+	states := make([]*processState, 0, len(services.S))
 	for _, s := range services.S {
-		if s.Stopped() {
+		// s.Stopped() only checks the "stopped" flag of the service (if it shouldn't restart).
+		// We check the actual state as well to be sure to re-send a signal if we are already
+		// in the "Stopping" state.
+		if s.Stopped() && s.state.Get() == Stopped {
 			continue
 		}
 
@@ -554,12 +554,50 @@ func killSupervisedServices() {
 		s.state.Set(Stopping)
 
 		s.setStopped(true)
-		s.Signal(syscall.SIGTERM)
+		s.Signal(signal)
+		states = append(states, s.state)
+	}
+	return states
+}
+
+// killSupervisedServices is called before rebooting when upgrading, allowing
+// processes to terminate in an orderly fashion.
+func killSupervisedServices(signalDelay time.Duration) {
+	log.Println("sending sigterm to all services")
+	termStates := signalSupervisedServices(syscall.SIGTERM)
+	termDone := make(chan struct{})
+	go func() {
+		for _, s := range termStates {
+			s.WaitTill(Stopped)
+		}
+		close(termDone)
+	}()
+
+	select {
+	case <-termDone:
+		log.Println("all services shut down")
+		return
+	case <-time.After(signalDelay):
+	}
+	log.Println("some services did not stop, send sigkill")
+
+	killStates := signalSupervisedServices(syscall.SIGKILL)
+	killDone := make(chan struct{})
+	go func() {
+		for _, s := range killStates {
+			s.WaitTill(Stopped)
+		}
+		close(killDone)
+	}()
+
+	select {
+	case <-killDone:
+		log.Println("all services shut down")
+		return
+	case <-time.After(signalDelay):
 	}
 
-	for _, s := range services.S {
-		s.waitTillStopped()
-	}
+	log.Println("some services did not stop after sigkill")
 }
 
 func findSvc(path string) *service {

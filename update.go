@@ -331,33 +331,63 @@ func initUpdate() error {
 			return
 		}
 
-		doneCh := make(chan struct{})
-		go func() {
-			killSupervisedServices()
-			close(doneCh)
-		}()
-
-		atLeast1Second := time.After(time.Second)
-
-		go func() {
-			select {
-			case <-doneCh:
-				log.Println("All processes shut down")
-			case <-time.After(15 * time.Second):
-				log.Println("Timed out waiting for processes to shut down")
+		signalDelay := time.Minute
+		if s := r.FormValue("wait_per_signal"); s != "" {
+			var err error
+			signalDelay, err = time.ParseDuration(s)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
 			}
+		}
 
-			// give the HTTP response some time to be sent
-			<-atLeast1Second
+		rc := http.NewResponseController(w)
+		start := time.Now()
+		killSupervisedServicesAndUmountPerm(signalDelay)
+		fmt.Fprintf(w, "All services killed in %s\n", time.Since(start))
+		rc.Flush()
 
-			log.Println("Unmounting /perm")
-			if err := syscall.Unmount("/perm", unix.MNT_FORCE); err != nil {
-				log.Printf("unmounting /perm failed: %v", err)
-			}
+		log.Println("Rebooting")
+		w.Write([]byte("Rebooting...\n"))
+		rc.Flush()
 
-			log.Println("Rebooting")
+		go func() {
+			time.Sleep(time.Second) // give the http response some time to be sent
 			if err := reboot(); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
+				log.Println("could not reboot:", err)
+			}
+		}()
+	})
+	http.HandleFunc("/poweroff", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "expected a POST request", http.StatusBadRequest)
+			return
+		}
+
+		signalDelay := time.Minute
+		if s := r.FormValue("wait_per_signal"); s != "" {
+			var err error
+			signalDelay, err = time.ParseDuration(s)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+		}
+
+		rc := http.NewResponseController(w)
+		start := time.Now()
+		killSupervisedServicesAndUmountPerm(signalDelay)
+		fmt.Fprintf(w, "All services killed in %s\n", time.Since(start))
+		rc.Flush()
+
+		log.Println("Powering off")
+		w.Write([]byte("Powering off...\n"))
+		rc.Flush()
+
+		go func() {
+			time.Sleep(time.Second) // give the http response some time to be sent
+			if err := unix.Reboot(unix.LINUX_REBOOT_CMD_POWER_OFF); err != nil {
+				log.Println("could not power off:", err)
 			}
 		}()
 	})
@@ -365,6 +395,15 @@ func initUpdate() error {
 	http.HandleFunc("/divert", divert)
 
 	return nil
+}
+
+func killSupervisedServicesAndUmountPerm(signalDelay time.Duration) {
+	killSupervisedServices(signalDelay)
+
+	log.Println("Unmounting /perm")
+	if err := syscall.Unmount("/perm", unix.MNT_FORCE); err != nil {
+		log.Printf("unmounting /perm failed: %v", err)
+	}
 }
 
 func uploadTemp(w http.ResponseWriter, r *http.Request) {
