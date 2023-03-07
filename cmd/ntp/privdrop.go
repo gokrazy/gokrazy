@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"os/signal"
 	"syscall"
 	"unsafe"
 )
@@ -83,19 +82,5 @@ func mustDropPrivileges(rtc *os.File) {
 		},
 		AmbientCaps: []uintptr{CAP_SYS_TIME},
 	}
-
-	if err := cmd.Start(); err != nil {
-		log.Fatal(err)
-	}
-	go func() {
-		// forward signals to the child process to ensure proper termination on SIGTERM
-		// see https://github.com/gokrazy/gokrazy/pull/177
-		ch := make(chan os.Signal, 1)
-		signal.Notify(ch, syscall.SIGTERM)
-		for s := range ch {
-			cmd.Process.Signal(s)
-		}
-	}()
-
-	log.Fatal(cmd.Wait())
+	log.Fatal(cmd.Run())
 }
