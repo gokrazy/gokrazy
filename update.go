@@ -348,11 +348,14 @@ func initUpdate() error {
 		rc.Flush()
 
 		log.Println("Rebooting")
-		if err := reboot(); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
 		w.Write([]byte("Rebooting...\n"))
 		rc.Flush()
+
+		go func() {
+			if err := reboot(); err != nil {
+				log.Println("could not reboot:", err)
+			}
+		}()
 	})
 	http.HandleFunc("/poweroff", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -377,11 +380,14 @@ func initUpdate() error {
 		rc.Flush()
 
 		log.Println("Powering off")
-		if err := unix.Reboot(unix.LINUX_REBOOT_CMD_POWER_OFF); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
 		w.Write([]byte("Powering off...\n"))
 		rc.Flush()
+
+		go func() {
+			if err := unix.Reboot(unix.LINUX_REBOOT_CMD_POWER_OFF); err != nil {
+				log.Println("could not power off:", err)
+			}
+		}()
 	})
 	http.HandleFunc("/uploadtemp/", uploadTemp)
 	http.HandleFunc("/divert", divert)
