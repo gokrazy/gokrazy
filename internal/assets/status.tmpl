@@ -43,10 +43,10 @@
     </p>
     {{ end }}
 
-    <h3>stdout <small class="pull-right">Log lines: <input type="number" value="101" size="4" id="stdout_len"></small></h3>
+    <h3>stdout <small><a href="/log?path={{ .Service.Name }}&stream=stdout">raw log</a></small></h3>
     <pre id="stdout"></pre>
 
-    <h3>stderr <small class="pull-right">Log lines: <input type="number" value="101" size="4" id="stderr_len"></small></h3>
+    <h3>stderr <small><a href="/log?path={{ .Service.Name }}&stream=stderr">raw log</a></small></h3>
     <pre id="stderr"></pre>
 
     <h3>module info</h3>
@@ -76,20 +76,19 @@
     }
 
     const stderrElt = document.getElementById("stderr");
-    const stderrEltLen = document.getElementById("stderr_len");
-
     const stdoutElt = document.getElementById("stdout");
-    const stdoutEltLen = document.getElementById("stdout_len");
+
+    const maxLines = 101;
 
     new EventSource("/log?path={{ .Service.Name }}&stream=stderr", { withCredentials: true }).onmessage = function(e) {
       // Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
       const txt = stderrElt.innerText + e.data + "\n";
-      const i = truncateAt(stderrElt.innerText, +stderrEltLen.value);
+      const i = truncateAt(stderrElt.innerText, maxLines);
       stderrElt.innerText = txt.slice(i);
     };
     new EventSource("/log?path={{ .Service.Name }}&stream=stdout", { withCredentials: true }).onmessage = function(e) {
       const txt = stdoutElt.innerText + e.data + "\n";
-      const i = truncateAt(stdoutElt.innerText, +stdoutEltLen.value);
+      const i = truncateAt(stdoutElt.innerText, maxLines);
       stdoutElt.innerText = txt.slice(i);
     };
 </script>
