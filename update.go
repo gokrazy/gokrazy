@@ -271,6 +271,9 @@ func setupDeviceSpecifics() {
 	}
 }
 
+// Allow for slow VM shutdown of 90 seconds, and then some
+const defaultSignalDelay = 100 * time.Second
+
 func initUpdate() error {
 	// The /update/features handler is used for negotiation of individual
 	// feature support (e.g. PARTUUID= support) between the packer and update
@@ -331,7 +334,7 @@ func initUpdate() error {
 			return
 		}
 
-		signalDelay := time.Minute
+		signalDelay := defaultSignalDelay
 		if s := r.FormValue("wait_per_signal"); s != "" {
 			var err error
 			signalDelay, err = time.ParseDuration(s)
@@ -364,7 +367,7 @@ func initUpdate() error {
 			return
 		}
 
-		signalDelay := time.Minute
+		signalDelay := defaultSignalDelay
 		if s := r.FormValue("wait_per_signal"); s != "" {
 			var err error
 			signalDelay, err = time.ParseDuration(s)
