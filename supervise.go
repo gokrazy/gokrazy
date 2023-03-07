@@ -286,13 +286,9 @@ func (s *service) Signal(signal syscall.Signal) error {
 	s.processMu.RLock()
 	defer s.processMu.RUnlock()
 	if s.process != nil {
-		// Use syscall.Kill instead of s.process.Signal since we want
-		// to the send the signal to all process of the group (-pid)
-		err := syscall.Kill(-s.process.Pid, signal)
-		if errno, ok := err.(syscall.Errno); ok {
-			if errno == syscall.ESRCH {
-				return nil // no such process, nothing to signal
-			}
+		err := s.process.Signal(signal)
+		if err != nil && !errors.Is(err, os.ErrProcessDone) { // ignore "process not found"
+			return err
 		}
 		return err
 	}
