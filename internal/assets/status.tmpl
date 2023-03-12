@@ -58,16 +58,37 @@
 {{ template "footer.tmpl" . }}
 
 <script>
+    // truncateAt finds the position at which the prefix should be removed
+    // to have the right number of lines (for use with slice).
+    function truncateAt(s, maxLines) {
+      let found = 0;
+      let i = s.length + 1;
+      while (true) {
+        i = s.lastIndexOf("\n", i - 1);
+        if (i == -1) {
+          return 0;
+        }
+        found++;
+        if (found >= maxLines) {
+          return i + 1;
+        }
+      }
+    }
+
+    const stderrElt = document.getElementById("stderr");
+    const stdoutElt = document.getElementById("stdout");
+
     const maxLines = 101;
+
     new EventSource("/log?path={{ .Service.Name }}&stream=stderr", { withCredentials: true }).onmessage = function(e) {
-        // Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
-        // This is extremely inefficient, since we're splitting into component lines and joining them
-        // back each time a line is added.
-        var txt = document.getElementById("stderr").innerText + e.data + "\n";
-        document.getElementById("stderr").innerText = txt.split('\n').slice(-maxLines).join('\n')
+      // Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
+      const txt = stderrElt.innerText + e.data + "\n";
+      const i = truncateAt(stderrElt.innerText, maxLines);
+      stderrElt.innerText = txt.slice(i);
     };
     new EventSource("/log?path={{ .Service.Name }}&stream=stdout", { withCredentials: true }).onmessage = function(e) {
-        var txt = document.getElementById("stdout").innerText + e.data + "\n";
-        document.getElementById("stdout").innerText = txt.split('\n').slice(-maxLines).join('\n')
+      const txt = stdoutElt.innerText + e.data + "\n";
+      const i = truncateAt(stdoutElt.innerText, maxLines);
+      stdoutElt.innerText = txt.slice(i);
     };
 </script>
