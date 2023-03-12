@@ -23,13 +23,18 @@
 {{ end }}
 </td>
 <td class="lastlog">
-{{ last $svc.Stdout.Lines $svc.Stderr.Lines }}
+{{ if $svc.Stdout.Lines }}
+<small>stdout: </small>{{last $svc.Stdout.Lines }}<br/>
+{{ end }}
+{{ if $svc.Stderr.Lines }}
+<small>stderr: </small>{{last $svc.Stderr.Lines }}<br/>
+{{ end }}
 </td>
 </tr>
 {{ end }}
 
 </table>
-</div>  
+</div>
 <div class="col-md-12">
 <h2>memory</h2>
 {{ megabytes (index .Meminfo "MemTotal") }} total, {{ megabytes (index .Meminfo "MemAvailable") }} available<br>
