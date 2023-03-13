@@ -43,10 +43,10 @@
     </p>
     {{ end }}
 
-    <h3>stdout</h3>
+    <h3>stdout <small><a href="/log?path={{ .Service.Name }}&stream=stdout">raw log</a></small></h3>
     <pre id="stdout"></pre>
 
-    <h3>stderr</h3>
+    <h3>stderr <small><a href="/log?path={{ .Service.Name }}&stream=stderr">raw log</a></small></h3>
     <pre id="stderr"></pre>
 
     <h3>module info</h3>
