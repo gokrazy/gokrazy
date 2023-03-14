@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"path/filepath"
 	"runtime"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -143,13 +142,11 @@ var templates = template.Must(template.New("root").
 			return time.Since(t).Seconds() < 5
 		},
 
-		"last": func(stdout, stderr []string) string {
-			if len(stdout) == 0 && len(stderr) == 0 {
+		"last": func(s []string) string {
+			if len(s) == 0 {
 				return ""
 			}
-			both := append(stdout, stderr...)
-			sort.Strings(both)
-			return both[len(both)-1]
+			return s[len(s)-1]
 		},
 
 		"megabytes": func(val int64) string {
