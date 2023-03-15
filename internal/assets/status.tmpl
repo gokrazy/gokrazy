@@ -58,16 +58,29 @@
 {{ template "footer.tmpl" . }}
 
 <script>
-    const maxLines = 101;
-    new EventSource("/log?path={{ .Service.Name }}&stream=stderr", { withCredentials: true }).onmessage = function(e) {
-        // Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
-        // This is extremely inefficient, since we're splitting into component lines and joining them
-        // back each time a line is added.
-        var txt = document.getElementById("stderr").innerText + e.data + "\n";
-        document.getElementById("stderr").innerText = txt.split('\n').slice(-maxLines).join('\n')
-    };
-    new EventSource("/log?path={{ .Service.Name }}&stream=stdout", { withCredentials: true }).onmessage = function(e) {
-        var txt = document.getElementById("stdout").innerText + e.data + "\n";
-        document.getElementById("stdout").innerText = txt.split('\n').slice(-maxLines).join('\n')
-    };
+    function newLogrotate(elt) {
+      const maxLines = 101;
+      var lines = 0;
+      return function (e) {
+        const line = e.data;
+        const txt = elt.innerText + line + "\n";
+        lines += line.split("\n").length;
+
+        var toRemove = lines - maxLines;
+        var i = 0;
+        while (toRemove-- > 0) {
+          i = txt.indexOf("\n", i) + 1;
+          lines--;
+        }
+        elt.innerText = txt.slice(i);
+      };
+    }
+
+    new EventSource("/log?path={{ .Service.Name }}&stream=stderr", {
+      withCredentials: true,
+    }).onmessage = newLogrotate(document.getElementById("stderr"));
+
+    new EventSource("/log?path={{ .Service.Name }}&stream=stdout", {
+      withCredentials: true,
+    }).onmessage = newLogrotate(document.getElementById("stdout"));
 </script>
