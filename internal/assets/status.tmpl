@@ -58,8 +58,8 @@
 {{ template "footer.tmpl" . }}
 
 <script>
-    const maxLines = 101;
     function newLogrotate(elt) {
+      const maxLines = 101;
       var lines = 0;
       return function (e) {
         const line = e.data;
