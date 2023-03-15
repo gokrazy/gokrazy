@@ -58,37 +58,45 @@
 {{ template "footer.tmpl" . }}
 
 <script>
-    // truncateAt finds the position at which the prefix should be removed
-    // to have the right number of lines (for use with slice).
-    function truncateAt(s, maxLines) {
-      let found = 0;
-      let i = s.length + 1;
-      while (true) {
-        i = s.lastIndexOf("\n", i - 1);
-        if (i == -1) {
-          return 0;
-        }
-        found++;
-        if (found >= maxLines) {
-          return i + 1;
-        }
-      }
-    }
-
-    const stderrElt = document.getElementById("stderr");
-    const stdoutElt = document.getElementById("stdout");
-
     const maxLines = 101;
 
-    new EventSource("/log?path={{ .Service.Name }}&stream=stderr", { withCredentials: true }).onmessage = function(e) {
+    const stderrElt = document.getElementById("stderr");
+    var stderrLines = 0;
+    new EventSource("/log?path={{ .Service.Name }}&stream=stderr", {
+      withCredentials: true,
+    }).onmessage = function (e) {
       // Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
-      const txt = stderrElt.innerText + e.data + "\n";
-      const i = truncateAt(stderrElt.innerText, maxLines);
+      const line = e.data;
+
+      const txt = stderrElt.innerText + line + "\n";
+      stderrLines += line.split("\n").length;
+
+      var toRemove = stderrLines - maxLines;
+      var i = 0;
+      while (toRemove-- > 0) {
+        i = txt.indexOf("\n", i) + 1;
+        stderrLines--;
+      }
       stderrElt.innerText = txt.slice(i);
     };
-    new EventSource("/log?path={{ .Service.Name }}&stream=stdout", { withCredentials: true }).onmessage = function(e) {
-      const txt = stdoutElt.innerText + e.data + "\n";
-      const i = truncateAt(stdoutElt.innerText, maxLines);
+
+    const stdoutElt = document.getElementById("stdout");
+    var stdoutLines = 0;
+    new EventSource("/log?path={{ .Service.Name }}&stream=stdout", {
+      withCredentials: true,
+    }).onmessage = function (e) {
+      // Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
+      const line = e.data;
+
+      const txt = stdoutElt.innerText + line + "\n";
+      stdoutLines += line.split("\n").length;
+
+      var toRemove = stdoutLines - maxLines;
+      var i = 0;
+      while (toRemove-- > 0) {
+        i = txt.indexOf("\n", i) + 1;
+        stdoutLines--;
+      }
       stdoutElt.innerText = txt.slice(i);
     };
 </script>
