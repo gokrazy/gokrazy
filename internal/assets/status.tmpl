@@ -57,46 +57,29 @@
 
 {{ template "footer.tmpl" . }}
 
-<script>
-    const maxLines = 101;
+<script>const maxLines = 101;
+    function newLogrotate(elt) {
+      var lines = 0;
+      return function (e) {
+        const line = e.data;
+        const txt = elt.innerText + line + "\n";
+        lines += line.split("\n").length;
 
-    const stderrElt = document.getElementById("stderr");
-    var stderrLines = 0;
+        var toRemove = lines - maxLines;
+        var i = 0;
+        while (toRemove-- > 0) {
+          i = txt.indexOf("\n", i) + 1;
+          lines--;
+        }
+        elt.innerText = txt.slice(i);
+      };
+    }
+
     new EventSource("/log?path={{ .Service.Name }}&stream=stderr", {
       withCredentials: true,
-    }).onmessage = function (e) {
-      // Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
-      const line = e.data;
+    }).onmessage = newLogrotate(document.getElementById("stderr"));
 
-      const txt = stderrElt.innerText + line + "\n";
-      stderrLines += line.split("\n").length;
-
-      var toRemove = stderrLines - maxLines;
-      var i = 0;
-      while (toRemove-- > 0) {
-        i = txt.indexOf("\n", i) + 1;
-        stderrLines--;
-      }
-      stderrElt.innerText = txt.slice(i);
-    };
-
-    const stdoutElt = document.getElementById("stdout");
-    var stdoutLines = 0;
     new EventSource("/log?path={{ .Service.Name }}&stream=stdout", {
       withCredentials: true,
-    }).onmessage = function (e) {
-      // Append line to whatever is in the `pre` block. Then, truncate number of lines to `maxLines`.
-      const line = e.data;
-
-      const txt = stdoutElt.innerText + line + "\n";
-      stdoutLines += line.split("\n").length;
-
-      var toRemove = stdoutLines - maxLines;
-      var i = 0;
-      while (toRemove-- > 0) {
-        i = txt.indexOf("\n", i) + 1;
-        stdoutLines--;
-      }
-      stdoutElt.innerText = txt.slice(i);
-    };
+    }).onmessage = newLogrotate(document.getElementById("stdout"));
 </script>
