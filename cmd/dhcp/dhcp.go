@@ -277,6 +277,18 @@ func deprioritizeRoutesWhenDown(nl *netlink.Handle, ifname string, extraRoutePri
 	}
 }
 
+func waitForInterface(ifname string) {
+	t := time.NewTicker(1 * time.Second)
+	defer t.Stop()
+
+	log.Printf("waiting indefinitely for %s to appear", ifname)
+	for range t.C {
+		if _, err := net.InterfaceByName(ifname); err == nil {
+			return
+		}
+	}
+}
+
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	var (
@@ -305,6 +317,8 @@ func main() {
 		log.Fatal(err)
 	}
 	hostname := string(utsname.Nodename[:bytes.IndexByte(utsname.Nodename[:], 0)])
+
+	waitForInterface(*ifname)
 
 	nl, err := netlink.NewHandle(netlink.FAMILY_V4)
 	if err != nil {
