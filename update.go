@@ -493,14 +493,11 @@ func divert(w http.ResponseWriter, r *http.Request) {
 	}
 
 	svc := findSvc(req.Path)
-	if svc == nil {
+	newService := svc == nil
+	if newService {
 		log.Printf("adding new service in-memory to make diversion work")
 		cmd := exec.Command(req.Path, req.Flags...)
 		svc = NewService(cmd).s
-		services.Lock()
-		services.S = append(services.S, svc)
-		services.Unlock()
-		go supervise(svc)
 	}
 
 	// Ensure diversion binary is executable (/uploadtemp creates regular,
@@ -515,6 +512,13 @@ func divert(w http.ResponseWriter, r *http.Request) {
 	cmd := svc.Cmd()
 	cmd.Args = append([]string{cmd.Args[0]}, req.Flags...)
 	svc.setCmd(cmd)
+
+	if newService {
+		services.Lock()
+		services.S = append(services.S, svc)
+		services.Unlock()
+		go supervise(svc)
+	}
 
 	if err := restart(svc, syscall.SIGTERM); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

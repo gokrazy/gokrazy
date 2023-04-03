@@ -220,6 +220,13 @@ func (s *service) Diverted() string {
 	return s.diversion
 }
 
+func (s *service) Path() string {
+	if d := s.Diverted(); d != "" {
+		return d
+	}
+	return s.Cmd().Path
+}
+
 func (s *service) Cmd() *exec.Cmd {
 	s.cmdMu.Lock()
 	defer s.cmdMu.Unlock()
@@ -390,7 +397,7 @@ func isDontSupervise(err error) bool {
 }
 
 func supervise(s *service) {
-	if modInfo, err := readModuleInfo(s.Cmd().Path); err == nil {
+	if modInfo, err := readModuleInfo(s.Path()); err == nil {
 		s.ModuleInfo = modInfo
 	} else {
 		log.Printf("cannot read module info from %s: %v", s.Cmd().Path, err)
