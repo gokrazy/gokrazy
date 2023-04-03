@@ -374,21 +374,37 @@ type Service struct {
 	s *service
 }
 
+func newService(cmd *exec.Cmd, stopped, waitForClock bool) *Service {
+	s := &service{
+		cmd:          cmd,
+		stopped:      stopped,
+		waitForClock: waitForClock,
+	}
+
+	s.state = NewProcessState()
+
+	tag := filepath.Base(s.Cmd().Path)
+	s.Stdout = newLogWriter(tag)
+	s.Stderr = newLogWriter(tag)
+
+	return &Service{s}
+}
+
 // NewService constructs a new gokrazy service from the specified command.
 func NewService(cmd *exec.Cmd) *Service {
-	return &Service{&service{cmd: cmd}}
+	return newService(cmd, false, false)
 }
 
 // NewStoppedService is like NewService, but the created gokrazy service will
 // not be supervised, i.e. remain stopped on boot.
 func NewStoppedService(cmd *exec.Cmd) *Service {
-	return &Service{&service{cmd: cmd, stopped: true}}
+	return newService(cmd, true, false)
 }
 
 // NewWaitForClockService is like NewService, but the created gokrazy service
 // will wait for clock to be synchronized, i.e. blocked till the clock is accurate.
 func NewWaitForClockService(cmd *exec.Cmd) *Service {
-	return &Service{&service{cmd: cmd, waitForClock: true}}
+	return newService(cmd, true, true)
 }
 
 // Supervise runs SuperviseServices, creating services from commands.

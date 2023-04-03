@@ -390,17 +390,12 @@ func isDontSupervise(err error) bool {
 }
 
 func supervise(s *service) {
-	tag := filepath.Base(s.Cmd().Path)
 	if modInfo, err := readModuleInfo(s.Cmd().Path); err == nil {
 		s.ModuleInfo = modInfo
 	} else {
 		log.Printf("cannot read module info from %s: %v", s.Cmd().Path, err)
 	}
 
-	s.state = NewProcessState()
-
-	s.Stdout = newLogWriter(tag)
-	s.Stderr = newLogWriter(tag)
 	l := log.New(s.Stderr, "", log.LstdFlags|log.Ldate|log.Ltime)
 	attempt := 0
 
