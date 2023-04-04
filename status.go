@@ -14,6 +14,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/gokrazy/gokrazy/internal/assets"
@@ -46,35 +47,51 @@ func parseMeminfo() map[string]int64 {
 	return vals
 }
 
-// mustReadFile0 returns the file contents or an empty string if the file could
-// not be read. All trailing \0 bytes are stripped (as found in
+// readFile0 returns the file contents or an empty string if the file could not
+// be read. All bytes from any \0 byte onwards are stripped (as found in
 // /proc/device-tree/model).
-func mustReadFile0(filename string) string {
-	b, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return ""
-	}
+//
+// Additionally, whitespace is trimmed.
+func readFile0(filename string) string {
+	b, _ := ioutil.ReadFile(filename)
 	if idx := bytes.IndexByte(b, 0); idx > -1 {
 		b = b[:idx]
 	}
-	return string(b)
+	return string(bytes.TrimSpace(b))
 }
 
+var modelCache atomic.Value // of string
+
 // Model returns a human readable description of the current device model,
-// e.g. “Raspberry Pi 4 Model B Rev 1.1” or “PC Engines apu2”.
+// e.g. “Raspberry Pi 4 Model B Rev 1.1” or “PC Engines apu2” or “QEMU”
+// or ultimately “unknown model”.
 func Model() string {
-	// the supported Raspberry Pis have this file
-	model := mustReadFile0("/proc/device-tree/model")
-	if model == "" {
-		// The PC Engines apu2c4 (and other PCs) have this file instead:
-		vendor := mustReadFile0("/sys/class/dmi/id/board_vendor")
-		name := mustReadFile0("/sys/class/dmi/id/board_name")
-		if vendor == "" || name == "" {
-			return "" // unsupported platform
-		}
-		model = strings.TrimSpace(vendor) + " " + strings.TrimSpace(name)
+	if s, ok := modelCache.Load().(string); ok {
+		return s
 	}
-	return strings.TrimSpace(model)
+	andCache := func(s string) string {
+		modelCache.Store(s)
+		return s
+	}
+	// the supported Raspberry Pis have this file
+	if m := readFile0("/proc/device-tree/model"); m != "" {
+		return andCache(m)
+	}
+	// The PC Engines apu2c4 (and other PCs) have this file instead:
+	vendor := readFile0("/sys/class/dmi/id/board_vendor")
+	name := readFile0("/sys/class/dmi/id/board_name")
+	if vendor != "" || name != "" {
+		return andCache(vendor + " " + name)
+	}
+	// QEMU has none of that. But it does say "QEMU" here, so use this as
+	// another fallback:
+	if v := readFile0("/sys/class/dmi/id/sys_vendor"); v != "" {
+		return andCache(v)
+	}
+	// If we can't find anything else, at least return some non-empty string so
+	// fbstatus doesn't render funny with empty parens. Plus this gives people
+	// something to grep for to add more model detection.
+	return "unknown model"
 }
 
 func readModuleInfo(path string) (string, error) {
