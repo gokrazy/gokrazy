@@ -448,7 +448,8 @@ system of your gokrazy instance. Any file aside from the built Go program
 
 `ExtraFilePaths` is a map from root file system destination path
 (e.g. `/etc/caddy/Caddyfile`) to a relative or absolute path of the extra files
-to include.
+to include. Relative paths are relative to the instance directory,
+e.g. `~/gokrazy/hello` — the same directory in which `config.json` lives.
 
 The extra file path can refer to one of:
 
