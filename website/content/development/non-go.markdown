@@ -141,9 +141,7 @@ href="https://github.com/gokrazy/freeze"><code>freeze</code> tool</a> to
 automate the tedious parts of the process:
 
 ```text
-% mkdir /tmp/iproute
-% cd /tmp/iproute
-% docker run -t -i debian:bookworm
+% docker run -t -i debian:trixie
 root@6e530a973d45:/# dpkg --add-architecture arm64
 root@6e530a973d45:/# apt update
 root@6e530a973d45:/# apt install iproute2:arm64 qemu-user-static golang-go ca-certificates

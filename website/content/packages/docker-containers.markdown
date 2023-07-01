@@ -40,7 +40,7 @@ instance and run a container manually:
 /tmp/breakglass187145741 $ mount -t tmpfs tmpfs /var
 /tmp/breakglass187145741 $ podman run --rm -ti docker.io/library/debian:sid
 root@gokrazy:/# cat /etc/debian_version
-bookworm/sid
+12.0
 ```
 
 ## Step 3: Use podman programmatically
