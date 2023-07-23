@@ -8,18 +8,23 @@
 <table class="table">
 <tbody><tr>
 <th width="20%">path</th>
-<th width="80%">last log line</th>
+<th width="8%">status</th>
+<th width="72%">last log line</th>
 </tr>
 
 {{ range $idx, $svc := .Services }}
 <tr>
 <td>
 <a href="/status?path={{ $svc.Name }}">{{ $svc.Name }}</a>
+</td>
+<td>
 {{ if restarting $svc.Started }}
 <span class="label label-danger">restarting</span>
 {{ end }}
 {{ if $svc.Stopped }}
-<span class="label label-warning">stopped</span>
+<span class="label label-default">stopped</span>
+{{ else if not (restarting $svc.Started) }}
+<span class="label label-success">running</span>
 {{ end }}
 </td>
 <td class="lastlog">
