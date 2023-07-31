@@ -77,11 +77,7 @@ dont_namespace = true
 EOT
 ```
 
-(Note that `scan2drive.lan` is the name of my gokrazy instance. I added the IP of the instance and defined a name in `/etc/hosts`, i.e `192.168.10.2 scan2drive.lan`)
-
 Finally, create the authorized keys file that determines who can access the rsync daemon:
-
-(i.e `ssh-keygen -t ed25519 -C "michael@midna.com"`, save in `~/.ssh/id_ed25519_scan2drivebackup` and cat the `.pub` key to `gokr-rsyncd.authorized_keys`)
 
 ```bash
 cat > ~/gokrazy/hello/gokr-rsyncd.authorized_keys <<'EOT'
