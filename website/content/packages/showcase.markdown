@@ -57,6 +57,12 @@ HTTP server that implements restic's REST backend API. Running it requires some
 setup and other configurations which are available in
 [this blog post](https://dcpri.me/2022/08/31/restic-rest-server-gokrazy/).
 
+### waiw
+
+[**waiw**](https://github.com/BrunoTeixeira1996/waiw) is a Go webserver to store 
+movies/series/animes ratings and comments. Running it requires some setup but the
+README describes every step to make it work.
+
 ## Successfully tested
 
 The following third-party programs have been successfully used with gokrazy
