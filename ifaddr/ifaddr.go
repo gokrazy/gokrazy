@@ -17,12 +17,22 @@ var (
 		}
 		return net
 	}()
+
+	tailnet = func() *net.IPNet {
+		// see https://tailscale.com/kb/1015/100.x-addresses/
+		_, net, err := net.ParseCIDR("100.64.0.0/10")
+		if err != nil {
+			log.Panic(err)
+		}
+		return net
+	}()
 )
 
 // IsInPrivateNet reports whether the specified IP address is a private address,
-// including loopback and link-local unicast addresses.
+// including loopback, link-local unicast addresses and tailscale tailnet
+// addresses.
 func IsInPrivateNet(ip net.IP) bool {
-	return ip.IsLoopback() || ip.IsPrivate() || ip.IsLinkLocalUnicast()
+	return ip.IsLoopback() || ip.IsPrivate() || ip.IsLinkLocalUnicast() || tailnet.Contains(ip)
 }
 
 func isPrivate(iface string, ipaddr net.IP) bool {
