@@ -17,9 +17,6 @@ gokrazy’s init process (pid 1) supervises all the binaries the user specified 
 More specifically, gokrazy:
 
 1. Starts your binary using Go’s `os/exec.Command` API.
-   - [`unshare(CLONE_NEWNS)`](https://manpages.debian.org/unshare.2) is used so
-     that each process operates in its own [mount
-     namespace](https://manpages.debian.org/mount_namespaces.7).
    - The `stdout` and `stderr` file descriptors are hooked up to a ring buffer and can be viewed via gokrazy’s web interface.
    - Extra command-line flags or environment variables can be specified using
      [per-package configuration](/userguide/package-config/).
