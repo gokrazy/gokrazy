@@ -48,6 +48,8 @@
   </url><url>
     <loc>https://gokrazy.org/userguide/permanent-data/</loc>
   </url><url>
+    <loc>https://gokrazy.org/userguide/qemu/</loc>
+  </url><url>
     <loc>https://gokrazy.org/userguide/rsync-backups/</loc>
   </url><url>
     <loc>https://gokrazy.org/development/non-go/</loc>

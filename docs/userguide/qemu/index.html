@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Controlling a GPIO input/output pin :: gokrazy</title>
+    <title>QEMU x86-64 virtual machine :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1696883224" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/development/gpio/">
+  <body class="" data-url="/userguide/qemu/">
     <nav id="sidebar" class="">
 
 
@@ -139,7 +139,7 @@
   
     
     <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        
+        parent
         
         
         ">
@@ -354,7 +354,7 @@
  
   
     
-      <li data-nav-id="/userguide/qemu/" title="QEMU x86-64 virtual machine" class="dd-item ">
+      <li data-nav-id="/userguide/qemu/" title="QEMU x86-64 virtual machine" class="dd-item active">
         <a href="/userguide/qemu/">
         QEMU x86-64 virtual machine
         
@@ -543,7 +543,7 @@
   
     
     <li data-nav-id="/development/" title="Package development" class="dd-item
-        parent
+        
         
         
         ">
@@ -590,7 +590,7 @@
  
   
     
-      <li data-nav-id="/development/gpio/" title="Controlling a GPIO input/output pin" class="dd-item active">
+      <li data-nav-id="/development/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
         <a href="/development/gpio/">
         Input/output via GPIO pins
         
@@ -712,7 +712,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/development/gpio.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/qemu.md" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -743,7 +743,7 @@
             
           
           
-            <a href='/'>gokrazy</a> > <a href='/development/'>Package development</a> > Controlling a GPIO input/output pin
+            <a href='/'>gokrazy</a> > <a href='/userguide/'>Configuration</a> > QEMU x86-64 virtual machine
           
         
           
@@ -758,8 +758,18 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#connect-gpio-pins-based-on-pinout">Connect GPIO pins based on pinout</a></li>
-    <li><a href="#setting-an-output-pin-signal">Setting an output pin signal</a></li>
+    <li><a href="#building-the-image">Building the image</a>
+      <ul>
+        <li><a href="#create-a-new-gokrazy-instance">Create a new gokrazy instance</a></li>
+        <li><a href="#edit-the-instance-configuration">Edit the instance configuration</a></li>
+        <li><a href="#build-the-image">Build the image</a></li>
+        <li><a href="#use-the-image-with-qemu">Use the image with QEMU</a></li>
+        <li><a href="#use-the-image-with-proxmox">Use the image with Proxmox</a></li>
+        <li><a href="#bonus-deploy-a-qemu-guest-agent">Bonus: Deploy a QEMU guest agent</a></li>
+        <li><a href="#tips-optimizing-the-vm">Tips: Optimizing the VM</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </div>
@@ -777,78 +787,87 @@
           
             <h1>
               
-              Controlling a GPIO input/output pin
+              QEMU x86-64 virtual machine
             </h1>
           
 
         
 
 
-<p>In this guide, we are using <a href="https://periph.io/">periph.io</a>, a library for
-peripheral I/O in Go, to set one of the Raspberry Pi’s General Purpose I/O
-(GPIO) pins to a logical high (3.3V) or low (0V) signal.</p>
-<p>periph.io supports the Raspberry Pi 3 and Raspberry Pi 4, starting with version
-<code>v3.6.4</code>.</p>
-<h2 id="connect-gpio-pins-based-on-pinout">Connect GPIO pins based on pinout</h2>
-<p>To verify the code is doing what we expect, let’s connect a multimeter as per
-<a href="https://pinout.xyz">pinout.xyz</a>’s pinout:</p>
-<p><img src="/img/raspberry-pi-pinout.png" alt=""></p>
+<p>In addition to running gokrazy on a Raspberry Pi or another ARM board, you can
+also run it in a QEMU x86-64 virtual machine. The following guide covers what&rsquo;s
+necessary to build and run a gokrazy image on QEMU. Your hypervisor may require
+additional configuration.</p>
+<h2 id="building-the-image">Building the image</h2>
+<h3 id="create-a-new-gokrazy-instance">Create a new gokrazy instance</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual new
+</span></span></code></pre></div><p>The <code>-i</code> flag specifies the name of the instance. In this case, we&rsquo;re using
+<code>virtual</code>, but you can use any name you like. The instance configuration will be
+created in your home directory under <code>~/gokrazy/virtual</code>.</p>
+<h3 id="edit-the-instance-configuration">Edit the instance configuration</h3>
+<p>Run <code>gok -i virtual edit</code> to open the <a href="/userguide/instance-config">instance
+configuration</a> file in your favorite editor. You&rsquo;ll
+need to make the following changes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;virtual&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>  <span style="color:#f92672">&#34;KernelPackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/rtr7/kernel&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>  <span style="color:#f92672">&#34;FirmwarePackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/rtr7/kernel&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>  <span style="color:#f92672">&#34;SerialConsole&#34;</span>: <span style="color:#e6db74">&#34;ttyS0,115200&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}</span></span></code></pre></div>
+<h3 id="build-the-image">Build the image</h3>
+<p>The following command will build a single image file that contains the kernel,
+firmware, and root filesystem. The <code>--target_storage_bytes</code> flag must be
+specified to set the size of the image. The example below creates a 4GB image.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual overwrite --full virtual.img --target_storage_bytes <span style="color:#ae81ff">4294967296</span>
+</span></span></code></pre></div><p>The image will be written to the current directory as <code>virtual.img</code>.</p>
+<h3 id="use-the-image-with-qemu">Use the image with QEMU</h3>
+<p>You can now use the image with QEMU. The following command will boot the image
+in QEMU with a serial console:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qemu-system-x86_64 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -machine accel<span style="color:#f92672">=</span>kvm <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -smp <span style="color:#ae81ff">8</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -m <span style="color:#ae81ff">2048</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -drive file<span style="color:#f92672">=</span>virtual.img,format<span style="color:#f92672">=</span>raw <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -nographic
+</span></span></code></pre></div><h3 id="use-the-image-with-proxmox">Use the image with Proxmox</h3>
+<p>You can also use the image with other hypervisors, such as <a href="https://www.proxmox.com/en/proxmox-virtual-environment/overview">Proxmox
+PVE</a>. Start by
+creating a new VM without a storage device. Then, upload the image to the
+Proxmox host and add it as a hard disk to the VM.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qm importdisk &lt;vmid&gt; virtual.img &lt;storage&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># for example, for vmid 105 and local-zfs storage:</span>
+</span></span><span style="display:flex;"><span>qm importdisk <span style="color:#ae81ff">105</span> virtual.img local-zfs
+</span></span></code></pre></div><p>Visit the Proxmox web UI and choose the unattached disk on the VM Hardware
+tab. Click &ldquo;Edit&rdquo; and select &ldquo;SCSI&rdquo; as the Bus/Device. Click &ldquo;Add&rdquo; to add the
+disk to the VM. Visit the &ldquo;Options&rdquo; tab and edit &ldquo;Boot Order&rdquo;. Make sure the
+SCIS disk is checked and move it to the top of the list. Click &ldquo;OK&rdquo; to save your
+changes.</p>
+<h3 id="bonus-deploy-a-qemu-guest-agent">Bonus: Deploy a QEMU guest agent</h3>
+<p>If you&rsquo;re using Proxmox PVE, you can deploy a QEMU guest agent to the VM. This
+will allow you to discover the VM&rsquo;s IP address. The
+<a href="https://github.com/bradfitz/qemu-guest-kragent">qemu-guest-kragent</a> project
+provides a simple agent that can be used with gokrazy.</p>
+<p>To add the agent to your gokrazy instance, run the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual add github.com/bradfitz/qemu-guest-kragent
+</span></span></code></pre></div><p>Visit the Proxmox web UI and choose the VM. Click &ldquo;Options&rdquo; and select &ldquo;QEMU
+Guest Agent&rdquo;. Make sure &ldquo;Use QEMU Guest Agent&rdquo; is checked. Click &ldquo;OK&rdquo; to save
+your changes.</p>
+<h3 id="tips-optimizing-the-vm">Tips: Optimizing the VM</h3>
+<p>The following tips can be used to optimize the VM and reduce CPU usage:</p>
 <ul>
-<li>pin number 18 (signal <code>BCM24</code>, labeled <code>24</code> in the pinout above)</li>
-<li>pin number 20 (signal <code>GND</code>)</li>
+<li>Disable USB hotplug</li>
+<li>Disable USB tablet/pointer support</li>
+<li>Use the VirtIO graphics support. On Proxmox either &ldquo;VirtIO-GPU&rdquo; graphic card
+or <code>vga: virtio</code> in the config file.</li>
 </ul>
-<p>We need to set the multimeter to “Voltage measurement, DC (direct current)”.</p>
-<h2 id="setting-an-output-pin-signal">Setting an output pin signal</h2>
-<p>To set the pin high and low, alternatingly, with a 5 second frequency, we will
-be using the <code>hello-gpio</code> program, which is a slightly modified version of the
-example at <a href="https://periph.io/device/led/">periph.io/device/led</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;periph.io/x/periph/conn/gpio&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;periph.io/x/periph/host&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;periph.io/x/periph/host/rpi&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doGPIO</span>() <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Loading periph.io drivers&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Load periph.io drivers:
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">host</span>.<span style="color:#a6e22e">Init</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Toggling GPIO forever&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTicker</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">Low</span>; ; <span style="color:#a6e22e">l</span> = !<span style="color:#a6e22e">l</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;setting GPIO pin number 18 (signal BCM24) to %v&#34;</span>, <span style="color:#a6e22e">l</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Lookup a pin by its location on the board:
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rpi</span>.<span style="color:#a6e22e">P1_18</span>.<span style="color:#a6e22e">Out</span>(<span style="color:#a6e22e">l</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">C</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">doGPIO</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>You have two options to run this program on your Raspberry Pi:</p>
-<ol>
-<li>Use <code>gok run</code> to temporarily run this program on a running gokrazy instance.</li>
-<li>Use <code>gok add</code> to permanently include this program in your gokrazy instance:</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># From the hello-gpio directory, run:</span>
-</span></span><span style="display:flex;"><span>gok add .
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Then, deploy as usual:</span>
-</span></span><span style="display:flex;"><span>gok update
-</span></span></code></pre></div><p>At this point, we should be able to see the high/low signal on the multimeter,
-alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
-<p><a href="/img/2020-06-15-gpio.jpg"><img src="/img/2020-06-15-gpio.thumb.jpg" srcset="/img/2020-06-15-gpio.thumb.2x.jpg 2x,/img/2020-06-15-gpio.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a></p>
+<h3 id="next-steps">Next steps</h3>
+<p>You can now use this gokrazy VM instance as you would any other gokrazy
+instance. For example, you can add packages, configure the instance, and update
+it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual update
+</span></span></code></pre></div><p>For more information, see the <a href="/userguide/instance-config/">Instance config reference</a>.</p>
 
 
 <footer class="footline">
@@ -921,6 +940,7 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
             
                 
                     
+                    
                 
                 
 
@@ -928,6 +948,25 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -1062,21 +1101,6 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -1093,6 +1117,9 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1209,7 +1236,6 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
             
                 
                     
-                    
                 
                 
 
@@ -1222,26 +1248,6 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
             
             
                 
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                     
                 
                 
@@ -1259,8 +1265,21 @@ alternating between 3.3V (high) and 0V (low) every 5 seconds:</p>
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
                         
-                        
+            
+            
+                
                     
                 
                 
