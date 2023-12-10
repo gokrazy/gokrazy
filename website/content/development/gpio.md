@@ -84,3 +84,95 @@ At this point, we should be able to see the high/low signal on the multimeter,
 alternating between 3.3V (high) and 0V (low) every 5 seconds:
 
 <a href="/img/2020-06-15-gpio.jpg"><img src="/img/2020-06-15-gpio.thumb.jpg" srcset="/img/2020-06-15-gpio.thumb.2x.jpg 2x,/img/2020-06-15-gpio.thumb.3x.jpg 3x" width="700" style="border: 1px solid grey; margin-bottom: 2em; margin-top: 1em"></a>
+
+## Setting up an input pin
+
+To setup a Pin as an input and to act on change to High level, such as a button,
+we must poll the Pin periodically because [periph.io’s](http://periph.io/) edge
+detection, which examples like the
+[periph.io/device/button example](https://periph.io/device/button/) rely on,
+[is not available on gokrazy](https://github.com/gokrazy/gokrazy/issues/233).
+
+The below example configures a single Pin for Input and uses Go channels to
+signal level changes that can be acted on. Keep in mind that shortening the
+polling interval will increase CPU usage.
+
+```go
+package main
+
+import (
+	"log"
+	"time"
+
+	"periph.io/x/conn/v3/gpio"
+	"periph.io/x/conn/v3/gpio/gpioreg"
+	host "periph.io/x/host/v3"
+)
+
+type pinLevelMessage struct {
+	State gpio.Level
+	Reset gpio.Level
+}
+
+func setupGPIOInput(pinName string, levelChan chan pinLevelMessage) (gpio.PinIO, error) {
+	log.Printf("Loading periph.io drivers")
+	if _, err := host.Init(); err != nil {
+		return nil, err
+	}
+
+	// Find Pin by name
+	p := gpioreg.ByName(pinName)
+
+	// Configure Pin for input, configure pull as needed
+	// Edge mode is currently not supported
+	if err := p.In(gpio.PullNoChange, gpio.NoEdge); err != nil {
+		return nil, err
+	}
+
+	// Setup Input signalling
+	go func() {
+		lastLevel := p.Read()
+		// How often to poll levels, 100-150ms is fairly responsive unless
+		// button presses are very fast.
+		// Shortening the polling interval <100ms significantly increases
+		// CPU load.
+		for range time.Tick(100 * time.Millisecond) {
+			currentLevel := p.Read()
+			log.Printf("level: %v", currentLevel)
+
+			if currentLevel != lastLevel {
+				levelChan <- pinLevelMessage{State: currentLevel, Reset: !currentLevel}
+				lastLevel = currentLevel
+			}
+		}
+	}()
+	return p, nil
+}
+
+func main() {
+	// Channel for communicating Pin levels
+	levelChan := make(chan pinLevelMessage)
+
+	p, err := setupGPIOInput("GPIO4", levelChan)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Main loop, act on level changes
+	for {
+		select {
+		case msg := <-levelChan:
+			if msg.State {
+				log.Printf("Pin %s is High, processing high state tasks", p.Name())
+				// Process high state tasks
+			} else if msg.Reset {
+				log.Printf("Pin %s is Low, resetting to wait for high state", p.Name())
+				// Process resetting logic, if any
+			}
+		default:
+			// Any other ongoing tasks
+		}
+	}
+}
+
+```
