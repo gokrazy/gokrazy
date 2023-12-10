@@ -10,7 +10,7 @@ In this guide, we are using [periph.io](https://periph.io/), a library for
 peripheral I/O in Go, to set one of the Raspberry Pi’s General Purpose I/O
 (GPIO) pins to a logical high (3.3V) or low (0V) signal.
 
-periph.io supports the Raspberry Pi 3 and Raspberry Pi 4, starting with version
+periph.io supports the Raspberry Pi 3, Raspberry Pi Zero 2W and Raspberry Pi 4, starting with version
 `v3.6.4`.
 
 ## Connect GPIO pins based on pinout
@@ -38,9 +38,9 @@ import (
 	"log"
 	"time"
 
-	"periph.io/x/periph/conn/gpio"
-	"periph.io/x/periph/host"
-	"periph.io/x/periph/host/rpi"
+	"periph.io/x/conn/v3/gpio"
+	host "periph.io/x/host/v3"
+	"periph.io/x/host/v3/rpi"
 )
 
 func doGPIO() error {
@@ -59,7 +59,6 @@ func doGPIO() error {
 		}
 		<-t.C
 	}
-	return nil
 }
 
 func main() {
