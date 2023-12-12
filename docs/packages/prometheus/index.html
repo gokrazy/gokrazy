@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Process interface / requirements :: gokrazy</title>
+    <title>Prometheus :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1702421706" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/development/process-interface/">
+  <body class="" data-url="/packages/prometheus/">
     <nav id="sidebar" class="">
 
 
@@ -404,7 +404,7 @@
   
     
     <li data-nav-id="/packages/" title="Available packages" class="dd-item
-        
+        parent
         
         
         ">
@@ -535,7 +535,7 @@
  
   
     
-      <li data-nav-id="/packages/prometheus/" title="Prometheus" class="dd-item ">
+      <li data-nav-id="/packages/prometheus/" title="Prometheus" class="dd-item active">
         <a href="/packages/prometheus/">
         Prometheus
         
@@ -564,7 +564,7 @@
   
     
     <li data-nav-id="/development/" title="Package development" class="dd-item
-        parent
+        
         
         
         ">
@@ -590,7 +590,7 @@
  
   
     
-      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item active">
+      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item ">
         <a href="/development/process-interface/">
         Process interface / requirements
         
@@ -733,7 +733,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/development/process-interface.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/packages/prometheus.md" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -764,7 +764,7 @@
             
           
           
-            <a href='/'>gokrazy</a> > <a href='/development/'>Package development</a> > Process interface / requirements
+            <a href='/'>gokrazy</a> > <a href='/packages/'>Available packages</a> > Prometheus
           
         
           
@@ -779,9 +779,8 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#process-supervision">Process supervision</a></li>
-    <li><a href="#environment-variables">Environment variables</a></li>
-    <li><a href="#privilege-dropping--security">Privilege dropping / security</a></li>
+    <li><a href="#installing-the-prometheus-node-exporter">Installing the Prometheus Node Exporter</a></li>
+    <li><a href="#installing-the-prometheus-time-series-database">Installing the Prometheus Time Series Database</a></li>
   </ul>
 </nav>
     </div>
@@ -799,77 +798,88 @@
           
             <h1>
               
-              Process interface / requirements
+              Prometheus
             </h1>
           
 
         
 
 
-<h2 id="process-supervision">Process supervision</h2>
-
-<div class="notices tip" ><p>You can find the corresponding code in
-<a href="https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/gokrazy/gokrazy%24+type:symbol+%5Esupervise%24&amp;patternType=regexp&amp;case=yes">func gokrazy.supervise</a>.</p>
-</div>
-
-<p>gokrazy’s init process (pid 1) supervises all the binaries the user specified via <code>gokr-packer</code> flags.</p>
-<p>More specifically, gokrazy:</p>
+<p><a href="https://github.com/prometheus/prometheus">Prometheus</a> is monitoring system and
+time series database.</p>
+<p><strong>Note</strong>: In the following we will assume that your instance is called <code>hello</code>
+(default) as well as that the hostname is <code>hello</code> as well.</p>
+<h2 id="installing-the-prometheus-node-exporter">Installing the Prometheus Node Exporter</h2>
+<p>If all you want to do is monitor your gokrazy installation, just add the
+Prometheus <a href="https://github.com/prometheus/node_exporter">node exporter</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/prometheus/node_exporter
+</span></span></code></pre></div><h2 id="installing-the-prometheus-time-series-database">Installing the Prometheus Time Series Database</h2>
+<p>To install the prometheus monitoring system, add the <code>prometheus</code> program to
+your gokrazy instance:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/prometheus/prometheus/cmd/prometheus
+</span></span></code></pre></div><p>We need a valid prometheus config for prometheus to start successfully. Start
+with the <a href="https://github.com/prometheus/prometheus/blob/main/documentation/examples/prometheus.yml">default <code>prometheus.yml</code> from the prometheus
+repository</a>.
+Save it to your gokrazy instance directory, e.g.
+<code>~/gokrazy/hello/prometheus.yml</code>.</p>
+<p>Open your instance’s config.json in your editor:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit
+</span></span></code></pre></div><p>To use the prometheus config file, we need to do two things in the gokrazy
+config:</p>
 <ol>
-<li>Starts your binary using Go’s <code>os/exec.Command</code> API.
-<ul>
-<li>The <code>stdout</code> and <code>stderr</code> file descriptors are hooked up to a ring buffer and can be viewed via gokrazy’s web interface.</li>
-<li>Extra command-line flags or environment variables can be specified using
-<a href="/userguide/package-config/">per-package configuration</a>.</li>
-</ul>
-</li>
-<li>When your binary’s process exits, gokrazy restarts it!
-<ul>
-<li>If the process exits with status code <code>0</code> (or <code>125</code>), gokrazy will stop
-supervision. Exiting immediately with status code <code>0</code> when the
-<code>GOKRAZY_FIRST_START=1</code> environment variable is set means “don’t start the
-program on boot”</li>
-</ul>
-</li>
+<li>Copy over the <code>prometheus.yml</code> with <a href="/userguide/package-config/#extrafiles">Package config: Extra
+files</a></li>
+<li>Add <a href="/userguide/package-config/#flags">Package config: Command-line flags</a></li>
+<li>We also add <code>WaitForClock</code> to get accurate timestamps for our timeseries data</li>
 </ol>
-<h2 id="environment-variables">Environment variables</h2>
-<p>gokrazy sets the <code>HOME</code> environment variable to <code>HOME=/perm/&lt;cmd&gt;</code>, where
-<code>&lt;cmd&gt;</code> is the name of your binary. For example, <code>tailscale.com/cmd/tailscaled</code>
-is started with <code>HOME=/perm/tailscaled</code>.</p>
-<p>When your binary is first started, gokrazy sets the <code>GOKRAZY_FIRST_START=1</code>
-environment variable.</p>
-<h2 id="privilege-dropping--security">Privilege dropping / security</h2>
-<p>An easy way to implement privilege dropping in Go is to re-execute the process
-with <a href="https://pkg.go.dev/syscall#SysProcAttr">syscall.SysProcAttr</a> fields
-set. For example, this is how you would drop privileges to user <code>nobody</code>
-(uid/gid 65534):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// mustDropPrivileges re-executes the program in a child process,
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// dropping root privileges to user nobody.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">mustDropPrivileges</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;NTP_PRIVILEGES_DROPPED&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;1&#34;</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Args</span>[<span style="color:#ae81ff">0</span>])
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Env</span> = append(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Environ</span>(), <span style="color:#e6db74">&#34;NTP_PRIVILEGES_DROPPED=1&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Stdout</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Stderr</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">SysProcAttr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SysProcAttr</span>{
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Credential</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">Credential</span>{
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">Uid</span>: <span style="color:#ae81ff">65534</span>,
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">Gid</span>: <span style="color:#ae81ff">65534</span>,
-</span></span><span style="display:flex;"><span>		},
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Run</span>())
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Examples:</p>
-<ul>
-<li><a href="https://sourcegraph.com/github.com/gokrazy/gokrazy/-/blob/cmd/ntp/privdrop.go"><code>github.com/gokrazy/gokrazy/cmd/ntp</code></a>
-is a rather involved example which retains the CAP_SYS_TIME capability in the
-child process</li>
-<li><a href="https://sourcegraph.com/github.com/gokrazy/rsync/-/blob/internal/maincmd/namespacing_linux.go"><code>github.com/gokrazy/rsync</code></a> uses Linux
-mount namespaces and constructs a file system with read-only bind mounts of
-the configured rsync modules</li>
-</ul>
+<p>Your config should look something like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;hello&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/prometheus/prometheus&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/prometheus/prometheus&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--config.file=/etc/prometheus/prometheus.yml&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ],
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;WaitForClock&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;ExtraFilePaths&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#f92672">&#34;/etc/prometheus/prometheus.yml&#34;</span>: <span style="color:#e6db74">&#34;prometheus.yml&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            }
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>Then, deploy as usual:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update
+</span></span></code></pre></div><p>In theory, this is enough to deploy prometheus, but unfortunately we are missing
+the web assets for the web UI which are not included in our build of prometheus.</p>
+<p>You can use prometheus as is, if you never want to go to the web UI on
+<code>hello:9090</code>. If you visit the web UI anyway, you will get this (or a similar)
+error:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Error opening React index.html: open web/ui/static/react/index.html: no such file or directory
+</span></span></code></pre></div><p>To get the web UI to work, we first need the missing files. They are released
+with every prometheus release and you need to update them by hand with every new
+version.</p>
+<ol>
+<li>Go to <a href="https://github.com/prometheus/prometheus/releases">https://github.com/prometheus/prometheus/releases</a></li>
+<li>Expand the section &ldquo;Assets&rdquo; for the lastest release</li>
+<li>Download <code>prometheus-web-ui-VERSION.tar.gz</code> with <code>VERSION</code> being something
+like <code>2.46.0</code>
+(example url for version 2.46.0:
+<a href="https://github.com/prometheus/prometheus/releases/download/v2.46.0/prometheus-web-ui-2.46.0.tar.gz">https://github.com/prometheus/prometheus/releases/download/v2.46.0/prometheus-web-ui-2.46.0.tar.gz</a>)</li>
+<li>Extract the archive file: <code>tar xf prometheus-web-ui-2.46.0.tar.gz</code></li>
+<li>Enable <a href="https://github.com/gokrazy/breakglass">breakglass</a> via gokrazy web</li>
+<li>Create the right folder on your device:
+<code>ssh hello mkdir -p /perm/home/prometheus/web/ui</code></li>
+<li>Copy over the <code>static/</code> directory you exctracted from the tar file:
+<code>scp -r static/ hello:/perm/home/prometheus/web/ui</code></li>
+<li>Go to <code>hello:9090</code> to check if the web UI is working</li>
+</ol>
 
 
 <footer class="footline">
@@ -1134,6 +1144,7 @@ the configured rsync modules</li>
             
                 
                     
+                    
                 
                 
 
@@ -1146,6 +1157,9 @@ the configured rsync modules</li>
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -1227,39 +1241,6 @@ the configured rsync modules</li>
             
                 
                     
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
                     
                 
                 
@@ -1272,6 +1253,9 @@ the configured rsync modules</li>
             
         
                     
+            
+        
+                    
                         
             
             
@@ -1279,6 +1263,35 @@ the configured rsync modules</li>
                     
                         
                         
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
