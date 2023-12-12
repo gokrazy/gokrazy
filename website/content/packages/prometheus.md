@@ -6,11 +6,22 @@ weight: 70
 [Prometheus](https://github.com/prometheus/prometheus) is monitoring system and
 time series database.
 
-**Note**: In the following we well assume that your instance is called `hello`
+**Note**: In the following we will assume that your instance is called `hello`
 (default) as well as that the hostname is `hello` as well.
 
-To install prometheus, first add the `prometheus` program to your gokrazy
-instance:
+## Installing the Prometheus Node Exporter
+
+If all you want to do is monitor your gokrazy installation, just add the
+Prometheus [node exporter](https://github.com/prometheus/node_exporter):
+
+```bash
+gok add github.com/prometheus/node_exporter
+```
+
+## Installing the Prometheus Time Series Database
+
+To install the prometheus monitoring system, add the `prometheus` program to
+your gokrazy instance:
 
 ```bash
 gok add github.com/prometheus/prometheus/cmd/prometheus
@@ -67,7 +78,7 @@ Then, deploy as usual:
 gok update
 ```
 
-In theory, this is enough to deploy prometheus, but unfortunatly we are missing
+In theory, this is enough to deploy prometheus, but unfortunately we are missing
 the web assets for the web UI which are not included in our build of prometheus.
 
 You can use prometheus as is, if you never want to go to the web UI on
