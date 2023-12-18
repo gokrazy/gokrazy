@@ -645,6 +645,7 @@ included in the boot file system of your gokrazy instance:
 - `*.elf`, Raspberry Pi firmware files
 - `*.upd`, Raspberry Pi EEPROM update files
 - `*.sig`, Raspberry Pi EEPROM update signatures
+- `overlays/*.dtbo`, Device Tree overlay files for the Raspberry Pi OS kernel
 
 Default if unset: `github.com/gokrazy/firmware`
 
@@ -696,6 +697,40 @@ If empty, no files will be included.
         "github.com/gokrazy/breakglass"
     ],
     "EEPROMPackage": ""
+}
+{{< /highlight >}}
+
+## Bootloader configuration {#bootloader}
+
+The Raspberry Pi’s “system configuration parameters” (interpreted by the
+bootloader, or “boot firmware”) can be configured via [the `config.txt`
+file](https://www.raspberrypi.com/documentation/computers/config_txt.html) on
+the boot file system.
+
+The `BootloaderExtraLines` array contains one string per extra line that should
+be added to `config.txt` when the gokrazy packer creates the boot file system.
+
+This allows enabling the [Raspberry Pi-provided Device Tree
+Overlays](https://www.raspberrypi.com/documentation/computers/configuration.html#part3.1)
+— the example below enables [1-Wire](https://en.wikipedia.org/wiki/1-Wire)
+support. Note that not all Device Tree Overlays are guaranteed to work;
+compatibility depends on whether the upstream Linux driver matches the Raspberry
+Pi OS Linux driver.
+
+**Example:**
+
+{{< highlight json "hl_lines=9-11" >}}
+{
+    "Hostname": "hello",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass"
+    ],
+    "BootloaderExtraLines": [
+	    "dtoverlay=w1-gpio"
+	]
 }
 {{< /highlight >}}
 
