@@ -48,7 +48,7 @@ advantages you get when building Go software elsewhere:
   and [profiling](https://go.dev/blog/pprof) support can be used on the entire
   system
 * With Go’s [replace
-  directive](https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive),
+  directive](https://go.dev/wiki/Modules#when-should-i-use-the-replace-directive),
   you can quickly modify any part of the system with the same workflow.
 
 ## Web status interface
