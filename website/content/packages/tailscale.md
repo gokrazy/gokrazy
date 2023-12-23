@@ -20,18 +20,9 @@ remotely (no static DHCP leases, port-forwarding and DynDNS required!), or even
 to secure your communication when gokrazy is [connected to an unencrypted WiFi
 network](/userguide/unencrypted-wifi/).
 
-{{% notice note %}}
-Tailscale currently uses [Userspace networking] mode on gokrazy, because
-for `tun` mode, Tailscale currently requires components that gokrazy does not
-provide. For accessing the services on your gokrazy installation, the Userspace
-networking mode works fine, though 🥳 .
-
-[Userspace networking]: https://tailscale.com/kb/1112/userspace-networking/ "Userspace networking mode (for containers)"
-{{% /notice %}}
-
 ## Requirements
 
- * Package `tailscale.com` v1.22.1 or later (latest version used automatically unless you have the package already in go.mod)
+ * Package `tailscale.com` v1.56.1 or later (latest version used automatically unless you have the package already in go.mod)
  * Volume `/perm/` needs to be initialized (instructions use `github.com/gokrazy/mkfs` to initialize)
 to persist authentication over reboots.
 
@@ -142,127 +133,67 @@ instance to not require login every 3 months.
 [Tailscale console]: https://login.tailscale.com/ "Tailscale management console login.tailscale.com"
 {{% /notice %}}
 
-## Optional: tailscale network for other programs
+## Optional: Tailscale network for other programs
 
-(If you only want to connect to services on your gokrazy device, you don’t need
-this step.)
+Before Tailscale v1.56.1, Tailscale used [Userspace networking] mode on gokrazy,
+meaning you needed to use Tailscale as an HTTP proxy to establish outgoing
+connections into your tailnet.
 
-To make the `github.com/stapelberg/dr` package able to connect to addresses on
-the tailscale network, we need to enable [`tailscaled`’s HTTP
-proxy](https://tailscale.com/kb/1112/userspace-networking/#step-2-configure-your-application-to-use-socks5-or-http)
-and set the proxy environment variables:
+[Userspace networking]: https://tailscale.com/kb/1112/userspace-networking/ "Userspace networking mode (for containers)"
 
-{{< highlight json "hl_lines=16 21 24-29" >}}
-{
-    "Hostname": "ts",
-    "Packages": [
-        "github.com/gokrazy/fbstatus",
-        "github.com/gokrazy/hello",
-        "github.com/gokrazy/serial-busybox",
-        "github.com/gokrazy/breakglass",
-        "tailscale.com/cmd/tailscaled",
-        "tailscale.com/cmd/tailscale",
-        "github.com/gokrazy/mkfs",
-        "github.com/stapelberg/dr"
-    ],
-    "PackageConfig": {
-        "tailscale.com/cmd/tailscale": {
-            "CommandLineFlags": [
-                "up"
-            ]
-        },
-        "tailscale.com/cmd/tailscaled": {
-            "CommandLineFlags": [
-                "--outbound-http-proxy-listen=localhost:9080"
-            ]
-        },
-        "github.com/stapelberg/dr": {
-            "Environment": [
-                "HTTPS_PROXY=localhost:9080",
-                "HTTP_PROXY=localhost:9080"
-            ]
-        }
-    }
-}
-{{< /highlight >}}
+With Tailscale v1.56.1 and newer, programs running on gokrazy can connect to
+other devices in your tailnet without extra steps! 🎉 DNS resolution and TCP
+connections work out of the box.
 
 ## Optional: Tailscale Go listener {#optional-tailscale-go-listener}
 
-If you want to make a program listen on tailscale without listening on any other
-network interface, you can use the [tsnet Tailscale as a library] package
-in your application.
+Before Tailscale v1.56.1, Tailscale used [Userspace networking] mode on gokrazy,
+meaning you needed to use the tsnet package if you wanted to restrict a listener
+to Tailscale.
 
-When using `tailscale.com/tsnet`, you don't need to run `tailscale up` and
-it's enough to only include `tailscale.com/cmd/tailscaled` and your appplication
-with tsnet.
-
-There is an example program at
-[github.com/gokrazy/tsnetdemo](https://github.com/gokrazy/tsnetdemo):
-
-[tsnet Tailscale as a library]: https://pkg.go.dev/tailscale.com/tsnet "Package tsnet provides Tailscale as a library. It is an experimental work in progress."
-
+With Tailscale v1.56.1 and newer, you can listen on Tailscale addresses and use
+[LocalClient.WhoIs](https://pkg.go.dev/tailscale.com/client/tailscale#LocalClient.WhoIs)
+to obtain the remote identity:
 
 ```go
 package main
 
 import (
-	"crypto/tls"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"tailscale.com/client/tailscale"
-	"tailscale.com/tsnet"
 )
 
 func main() {
-	os.Setenv("TAILSCALE_USE_WIP_CODE", "true")
-	// TODO: comment out this line to avoid having to re-login each time you start this program
-	os.Setenv("TS_LOGIN", "1")
-	os.Setenv("HOME", "/perm/tsnetdemo")
-	hostname := flag.String("hostname", "tsnetdemo", "tailscale hostname")
+	listen := flag.String("listen", "gokrazy.monkey-turtle.ts.net:8111", "[host]:port listen address")
 	allowedUser := flag.String("allowed_user", "", "the name of a tailscale user to allow")
 	flag.Parse()
-	s := &tsnet.Server{
-		Hostname: *hostname,
-	}
-	log.Printf("starting tailscale listener on hostname %s", *hostname)
-	ln, err := s.Listen("tcp", ":443")
-	if err != nil {
-		log.Fatal(err)
-	}
-	ln = tls.NewListener(ln, &tls.Config{
-		GetCertificate: tailscale.GetCertificate,
-	})
+	log.Printf("starting HTTP listener on %s", *listen)
+	var ts tailscale.LocalClient
 	httpsrv := &http.Server{
+		Addr: *listen,
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			who, err := tailscale.WhoIs(r.Context(), r.RemoteAddr)
+			who, err := ts.WhoIs(r.Context(), r.RemoteAddr)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 			if who.UserProfile.LoginName != *allowedUser || *allowedUser == "" {
-				err := fmt.Sprintf("you are logged in as %q, but -allowed_user flag does not match!", who.UserProfile.LoginName)
+				err := fmt.Sprintf("you are logged in as %q (userprofile: %+v), but -allowed_user flag does not match!", who.UserProfile.LoginName, who.UserProfile)
 				log.Printf("forbidden: %v", err)
 				http.Error(w, err, http.StatusForbidden)
 				return
 			}
-			fmt.Fprintf(w, "hey there, %q! this message is served via the tsnet package from gokrazy!", who.UserProfile.LoginName)
+			fmt.Fprintf(w, "hey there, %q! this message is served via tailscale from gokrazy!", who.UserProfile.LoginName)
 		}),
 	}
-	log.Fatal(httpsrv.Serve(ln))
+	log.Fatal(httpsrv.ListenAndServe())
 }
 ```
 
 1. Deploy this program to your gokrazy device
-1. Open the authentication URL from the log output
-1. Open the tsnetdemo host name in your tailscale in your Tailnet domain alias, e.g. https://tsnetdemo.monkey-turtle.ts.net
+1. Open the listening address in your browser, e.g. http://gokrazy.monkey-turtle.ts.net:8111
 1. Specify the `--allowed_user` flag to verify that tailscale authentication works as expected
-
-You can also use `TS_AUTHKEY` instead of `TS_LOGIN=1` for non-interactive
-auth. See [Environment variables] in Userguide to avoid setting secrets in
-your application source code.
-
-[Environment variables]: {{<relref "userguide/package-config.md">}}#env
