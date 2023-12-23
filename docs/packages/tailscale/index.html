@@ -12,20 +12,20 @@
     <title>Tailscale VPN :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1703018386" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1703018386" rel="stylesheet">
-    <link href="/css/hybrid.css?1703018386" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1703018386" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1703018386" rel="stylesheet">
-    <link href="/css/auto-complete.css?1703018386" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1703018386" rel="stylesheet">
-    <link href="/css/theme.css?1703018386" rel="stylesheet">
-    <link href="/css/tabs.css?1703018386" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1703018386" rel="stylesheet">
+    <link href="/css/nucleus.css?1703349770" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1703349770" rel="stylesheet">
+    <link href="/css/hybrid.css?1703349770" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1703349770" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1703349770" rel="stylesheet">
+    <link href="/css/auto-complete.css?1703349770" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1703349770" rel="stylesheet">
+    <link href="/css/theme.css?1703349770" rel="stylesheet">
+    <link href="/css/tabs.css?1703349770" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1703349770" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1703018386"></script>
+    <script src="/js/jquery-3.3.1.min.js?1703349770"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1703018386"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1703018386"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1703349770"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1703349770"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1703018386"></script>
+<script type="text/javascript" src="/js/search.js?1703349770"></script>
 
     
   </div>
@@ -784,7 +784,7 @@
     <li><a href="#step-2-set-command-line-flags">Step 2. set command-line flags</a></li>
     <li><a href="#step-3-authenticate-interactive-only">Step 3. authenticate (interactive only)</a></li>
     <li><a href="#step-4-disable-key-expiry-optional">Step 4. disable key expiry (optional)</a></li>
-    <li><a href="#optional-tailscale-network-for-other-programs">Optional: tailscale network for other programs</a></li>
+    <li><a href="#optional-tailscale-network-for-other-programs">Optional: Tailscale network for other programs</a></li>
     <li><a href="#optional-tailscale-go-listener">Optional: Tailscale Go listener</a></li>
   </ul>
 </nav>
@@ -821,16 +821,9 @@ Tailscale with gokrazy.</p>
 remotely (no static DHCP leases, port-forwarding and DynDNS required!), or even
 to secure your communication when gokrazy is <a href="/userguide/unencrypted-wifi/">connected to an unencrypted WiFi
 network</a>.</p>
-
-<div class="notices note" ><p>Tailscale currently uses <a href="https://tailscale.com/kb/1112/userspace-networking/" title="Userspace networking mode (for containers)">Userspace networking</a> mode on gokrazy, because
-for <code>tun</code> mode, Tailscale currently requires components that gokrazy does not
-provide. For accessing the services on your gokrazy installation, the Userspace
-networking mode works fine, though 🥳 .</p>
-</div>
-
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li>Package <code>tailscale.com</code> v1.22.1 or later (latest version used automatically unless you have the package already in go.mod)</li>
+<li>Package <code>tailscale.com</code> v1.56.1 or later (latest version used automatically unless you have the package already in go.mod)</li>
 <li>Volume <code>/perm/</code> needs to be initialized (instructions use <code>github.com/gokrazy/mkfs</code> to initialize)
 to persist authentication over reboots.</li>
 </ul>
@@ -909,113 +902,61 @@ You can disable key expiry from <a href="https://login.tailscale.com/" title="Ta
 instance to not require login every 3 months.</p>
 </div>
 
-<h2 id="optional-tailscale-network-for-other-programs">Optional: tailscale network for other programs</h2>
-<p>(If you only want to connect to services on your gokrazy device, you don’t need
-this step.)</p>
-<p>To make the <code>github.com/stapelberg/dr</code> package able to connect to addresses on
-the tailscale network, we need to enable <a href="https://tailscale.com/kb/1112/userspace-networking/#step-2-configure-your-application-to-use-socks5-or-http"><code>tailscaled</code>’s HTTP
-proxy</a>
-and set the proxy environment variables:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscaled&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscale&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/mkfs&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/stapelberg/dr&#34;</span>
-</span></span><span style="display:flex;"><span>    ],
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;tailscale.com/cmd/tailscale&#34;</span>: {
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
-</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;up&#34;</span>
-</span></span><span style="display:flex;"><span>            ]
-</span></span><span style="display:flex;"><span>        },
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;tailscale.com/cmd/tailscaled&#34;</span>: {
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
-</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--outbound-http-proxy-listen=localhost:9080&#34;</span>
-</span></span><span style="display:flex;"><span>            ]
-</span></span><span style="display:flex;"><span>        },
-</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/stapelberg/dr&#34;</span>: {
-</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;Environment&#34;</span>: [
-</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;HTTPS_PROXY=localhost:9080&#34;</span>,
-</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;HTTP_PROXY=localhost:9080&#34;</span>
-</span></span><span style="display:flex; background-color:#3c3d38"><span>            ]
-</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h2 id="optional-tailscale-network-for-other-programs">Optional: Tailscale network for other programs</h2>
+<p>Before Tailscale v1.56.1, Tailscale used <a href="https://tailscale.com/kb/1112/userspace-networking/" title="Userspace networking mode (for containers)">Userspace networking</a> mode on gokrazy,
+meaning you needed to use Tailscale as an HTTP proxy to establish outgoing
+connections into your tailnet.</p>
+<p>With Tailscale v1.56.1 and newer, programs running on gokrazy can connect to
+other devices in your tailnet without extra steps! 🎉 DNS resolution and TCP
+connections work out of the box.</p>
 <h2 id="optional-tailscale-go-listener">Optional: Tailscale Go listener</h2>
-<p>If you want to make a program listen on tailscale without listening on any other
-network interface, you can use the <a href="https://pkg.go.dev/tailscale.com/tsnet" title="Package tsnet provides Tailscale as a library. It is an experimental work in progress.">tsnet Tailscale as a library</a> package
-in your application.</p>
-<p>When using <code>tailscale.com/tsnet</code>, you don&rsquo;t need to run <code>tailscale up</code> and
-it&rsquo;s enough to only include <code>tailscale.com/cmd/tailscaled</code> and your appplication
-with tsnet.</p>
-<p>There is an example program at
-<a href="https://github.com/gokrazy/tsnetdemo">github.com/gokrazy/tsnetdemo</a>:</p>
+<p>Before Tailscale v1.56.1, Tailscale used <a href="https://tailscale.com/kb/1112/userspace-networking/" title="Userspace networking mode (for containers)">Userspace networking</a> mode on gokrazy,
+meaning you needed to use the tsnet package if you wanted to restrict a listener
+to Tailscale.</p>
+<p>With Tailscale v1.56.1 and newer, you can listen on Tailscale addresses and use
+<a href="https://pkg.go.dev/tailscale.com/client/tailscale#LocalClient.WhoIs">LocalClient.WhoIs</a>
+to obtain the remote identity:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;crypto/tls&#34;</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;flag&#34;</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;tailscale.com/client/tailscale&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;tailscale.com/tsnet&#34;</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Setenv</span>(<span style="color:#e6db74">&#34;TAILSCALE_USE_WIP_CODE&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// TODO: comment out this line to avoid having to re-login each time you start this program
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Setenv</span>(<span style="color:#e6db74">&#34;TS_LOGIN&#34;</span>, <span style="color:#e6db74">&#34;1&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Setenv</span>(<span style="color:#e6db74">&#34;HOME&#34;</span>, <span style="color:#e6db74">&#34;/perm/tsnetdemo&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">hostname</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">String</span>(<span style="color:#e6db74">&#34;hostname&#34;</span>, <span style="color:#e6db74">&#34;tsnetdemo&#34;</span>, <span style="color:#e6db74">&#34;tailscale hostname&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">listen</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">String</span>(<span style="color:#e6db74">&#34;listen&#34;</span>, <span style="color:#e6db74">&#34;gokrazy.monkey-turtle.ts.net:8111&#34;</span>, <span style="color:#e6db74">&#34;[host]:port listen address&#34;</span>)
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">allowedUser</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">String</span>(<span style="color:#e6db74">&#34;allowed_user&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;the name of a tailscale user to allow&#34;</span>)
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">Parse</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">tsnet</span>.<span style="color:#a6e22e">Server</span>{
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Hostname</span>: <span style="color:#f92672">*</span><span style="color:#a6e22e">hostname</span>,
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;starting tailscale listener on hostname %s&#34;</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">hostname</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ln</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Listen</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#e6db74">&#34;:443&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ln</span> = <span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">NewListener</span>(<span style="color:#a6e22e">ln</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">tls</span>.<span style="color:#a6e22e">Config</span>{
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">GetCertificate</span>: <span style="color:#a6e22e">tailscale</span>.<span style="color:#a6e22e">GetCertificate</span>,
-</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;starting HTTP listener on %s&#34;</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">listen</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ts</span> <span style="color:#a6e22e">tailscale</span>.<span style="color:#a6e22e">LocalClient</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">httpsrv</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Addr</span>: <span style="color:#f92672">*</span><span style="color:#a6e22e">listen</span>,
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Handler</span>: <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">who</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tailscale</span>.<span style="color:#a6e22e">WhoIs</span>(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Context</span>(), <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RemoteAddr</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">who</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ts</span>.<span style="color:#a6e22e">WhoIs</span>(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Context</span>(), <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RemoteAddr</span>)
 </span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>(), <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusInternalServerError</span>)
 </span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span>
 </span></span><span style="display:flex;"><span>			}
 </span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">who</span>.<span style="color:#a6e22e">UserProfile</span>.<span style="color:#a6e22e">LoginName</span> <span style="color:#f92672">!=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">allowedUser</span> <span style="color:#f92672">||</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">allowedUser</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span> {
-</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;you are logged in as %q, but -allowed_user flag does not match!&#34;</span>, <span style="color:#a6e22e">who</span>.<span style="color:#a6e22e">UserProfile</span>.<span style="color:#a6e22e">LoginName</span>)
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;you are logged in as %q (userprofile: %+v), but -allowed_user flag does not match!&#34;</span>, <span style="color:#a6e22e">who</span>.<span style="color:#a6e22e">UserProfile</span>.<span style="color:#a6e22e">LoginName</span>, <span style="color:#a6e22e">who</span>.<span style="color:#a6e22e">UserProfile</span>)
 </span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;forbidden: %v&#34;</span>, <span style="color:#a6e22e">err</span>)
 </span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">err</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusForbidden</span>)
 </span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span>
 </span></span><span style="display:flex;"><span>			}
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;hey there, %q! this message is served via the tsnet package from gokrazy!&#34;</span>, <span style="color:#a6e22e">who</span>.<span style="color:#a6e22e">UserProfile</span>.<span style="color:#a6e22e">LoginName</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;hey there, %q! this message is served via tailscale from gokrazy!&#34;</span>, <span style="color:#a6e22e">who</span>.<span style="color:#a6e22e">UserProfile</span>.<span style="color:#a6e22e">LoginName</span>)
 </span></span><span style="display:flex;"><span>		}),
 </span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">httpsrv</span>.<span style="color:#a6e22e">Serve</span>(<span style="color:#a6e22e">ln</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">httpsrv</span>.<span style="color:#a6e22e">ListenAndServe</span>())
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><ol>
 <li>Deploy this program to your gokrazy device</li>
-<li>Open the authentication URL from the log output</li>
-<li>Open the tsnetdemo host name in your tailscale in your Tailnet domain alias, e.g. <a href="https://tsnetdemo.monkey-turtle.ts.net">https://tsnetdemo.monkey-turtle.ts.net</a></li>
+<li>Open the listening address in your browser, e.g. <a href="http://gokrazy.monkey-turtle.ts.net:8111">http://gokrazy.monkey-turtle.ts.net:8111</a></li>
 <li>Specify the <code>--allowed_user</code> flag to verify that tailscale authentication works as expected</li>
 </ol>
-<p>You can also use <code>TS_AUTHKEY</code> instead of <code>TS_LOGIN=1</code> for non-interactive
-auth. See <a href="/userguide/package-config/#env">Environment variables</a> in Userguide to avoid setting secrets in
-your application source code.</p>
 
 
 <footer class="footline">
@@ -1506,19 +1447,19 @@ your application source code.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1703018386"></script>
-    <script src="/js/perfect-scrollbar.min.js?1703018386"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1703018386"></script>
-    <script src="/js/jquery.sticky.js?1703018386"></script>
-    <script src="/js/featherlight.min.js?1703018386"></script>
-    <script src="/js/highlight.pack.js?1703018386"></script>
+    <script src="/js/clipboard.min.js?1703349770"></script>
+    <script src="/js/perfect-scrollbar.min.js?1703349770"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1703349770"></script>
+    <script src="/js/jquery.sticky.js?1703349770"></script>
+    <script src="/js/featherlight.min.js?1703349770"></script>
+    <script src="/js/highlight.pack.js?1703349770"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1703018386"></script>
-    <script src="/js/learn.js?1703018386"></script>
-    <script src="/js/hugo-learn.js?1703018386"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1703349770"></script>
+    <script src="/js/learn.js?1703349770"></script>
+    <script src="/js/hugo-learn.js?1703349770"></script>
     
         
-            <script src="/mermaid/mermaid.js?1703018386"></script>
+            <script src="/mermaid/mermaid.js?1703349770"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
