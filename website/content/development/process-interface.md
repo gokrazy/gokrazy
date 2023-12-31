@@ -28,9 +28,9 @@ More specifically, gokrazy:
 
 ## Environment variables
 
-gokrazy sets the `HOME` environment variable to `HOME=/perm/<cmd>`, where
+gokrazy sets the `HOME` environment variable to `HOME=/perm/home/<cmd>`, where
 `<cmd>` is the name of your binary. For example, `tailscale.com/cmd/tailscaled`
-is started with `HOME=/perm/tailscaled`.
+is started with `HOME=/perm/home/tailscaled`.
 
 When your binary is first started, gokrazy sets the `GOKRAZY_FIRST_START=1`
 environment variable.
