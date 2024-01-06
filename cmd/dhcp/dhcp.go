@@ -368,8 +368,24 @@ func main() {
 	}
 
 	if *staticConfig != "" {
+		var sc []byte
+		var lsrc string
+
+		// Simple heuristic to check if we got JSON strings from the command line
+		if strings.HasPrefix(strings.TrimSpace(*staticConfig), "{") {
+			sc = []byte(*staticConfig)
+			lsrc = "-static_network_config <string>"
+		} else {
+			sc, err = os.ReadFile(*staticConfig)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			lsrc = fmt.Sprintf("-static_network_config=%s", *staticConfig)
+		}
+
 		var l dhcp4.Lease
-		if err := json.Unmarshal([]byte(*staticConfig), &l); err != nil {
+		if err := json.Unmarshal(sc, &l); err != nil {
 			log.Fatal(err)
 		}
 		if ones, bits := l.Netmask.Size(); ones == 0 && bits == 0 {
@@ -391,7 +407,7 @@ func main() {
 			l.DNS[idx] = dns.To4()
 		}
 
-		if err := applyLease(nl, *ifname, "-static_network_config", l, *extraRoutePriority); err != nil {
+		if err := applyLease(nl, *ifname, lsrc, l, *extraRoutePriority); err != nil {
 			log.Fatal(err)
 		}
 		// Leave the process running indefinitely
