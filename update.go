@@ -356,7 +356,7 @@ func initUpdate() error {
 
 		go func() {
 			time.Sleep(time.Second) // give the http response some time to be sent
-			if err := reboot(); err != nil {
+			if err := reboot(r.FormValue("kexec") != "off"); err != nil {
 				log.Println("could not reboot:", err)
 			}
 		}()

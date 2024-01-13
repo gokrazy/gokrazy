@@ -40,10 +40,11 @@ func kexecReboot() error {
 	return unix.Reboot(unix.LINUX_REBOOT_CMD_KEXEC)
 }
 
-func reboot() error {
-	if err := kexecReboot(); err != nil {
-		log.Printf("kexec reboot failed: %v", err)
-		return unix.Reboot(unix.LINUX_REBOOT_CMD_RESTART)
+func reboot(tryKexec bool) error {
+	if tryKexec {
+		if err := kexecReboot(); err != nil {
+			log.Printf("kexec reboot failed: %v", err)
+		}
 	}
-	return nil
+	return unix.Reboot(unix.LINUX_REBOOT_CMD_RESTART)
 }
