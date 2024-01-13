@@ -88,9 +88,68 @@ error:
 Error opening React index.html: open web/ui/static/react/index.html: no such file or directory
 ```
 
-To get the web UI to work, we first need the missing files. They are released
-with every prometheus release and you need to update them by hand with every new
-version.
+To get the web UI to work, we first need the missing files. You have two
+options:
+
+### Option A: Build Web Assets
+
+Follow [Prometheus → Building from
+source](https://github.com/prometheus/prometheus?tab=readme-ov-file#building-from-source),
+meaning:
+
+```bash
+git clone https://github.com/prometheus/prometheus
+cd prometheus
+make assets-compress
+```
+
+Instruct gokrazy to use this build of Prometheus:
+
+```bash
+gok -i hello add .
+```
+
+Configure gokrazy to build Prometheus with the `builtinassets` [Go build
+tag](/userguide/instance-config/#packagegobuildtags):
+
+{{< highlight json "hl_lines=11-14" >}}
+{
+    "Hostname": "hello",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "github.com/prometheus/prometheus"
+    ],
+    "PackageConfig": {
+        "github.com/prometheus/prometheus": {
+            "GoBuildTags": [
+                "builtinassets"
+            ],
+            "CommandLineFlags": [
+                "--config.file=/etc/prometheus/prometheus.yml"
+            ],
+            "WaitForClock": true,
+            "ExtraFilePaths": {
+                "/etc/prometheus/prometheus.yml": "prometheus.yml"
+            }
+        }
+    }
+}
+{{< /highlight >}}
+
+To update Prometheus, you’ll need to update your Prometheus dir instead of using
+`gok get`:
+
+```bash
+git pull && make assets-compress
+```
+
+### Option B: Download Web Assets
+
+The web assets are released with every prometheus release and you need to update
+them by hand with every new version.
 
 1. Go to https://github.com/prometheus/prometheus/releases
 2. Expand the section "Assets" for the lastest release
