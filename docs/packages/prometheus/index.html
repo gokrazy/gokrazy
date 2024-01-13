@@ -12,20 +12,20 @@
     <title>Prometheus :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1704019251" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1704019251" rel="stylesheet">
-    <link href="/css/hybrid.css?1704019251" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1704019251" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1704019251" rel="stylesheet">
-    <link href="/css/auto-complete.css?1704019251" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1704019251" rel="stylesheet">
-    <link href="/css/theme.css?1704019251" rel="stylesheet">
-    <link href="/css/tabs.css?1704019251" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1704019251" rel="stylesheet">
+    <link href="/css/nucleus.css?1705158700" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1705158700" rel="stylesheet">
+    <link href="/css/hybrid.css?1705158700" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1705158700" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1705158700" rel="stylesheet">
+    <link href="/css/auto-complete.css?1705158700" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1705158700" rel="stylesheet">
+    <link href="/css/theme.css?1705158700" rel="stylesheet">
+    <link href="/css/tabs.css?1705158700" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1705158700" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1704019251"></script>
+    <script src="/js/jquery-3.3.1.min.js?1705158700"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1704019251"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1704019251"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1705158700"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1705158700"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1704019251"></script>
+<script type="text/javascript" src="/js/search.js?1705158700"></script>
 
     
   </div>
@@ -780,7 +780,12 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#installing-the-prometheus-node-exporter">Installing the Prometheus Node Exporter</a></li>
-    <li><a href="#installing-the-prometheus-time-series-database">Installing the Prometheus Time Series Database</a></li>
+    <li><a href="#installing-the-prometheus-time-series-database">Installing the Prometheus Time Series Database</a>
+      <ul>
+        <li><a href="#option-a-build-web-assets">Option A: Build Web Assets</a></li>
+        <li><a href="#option-b-download-web-assets">Option B: Download Web Assets</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </div>
@@ -862,9 +867,49 @@ the web assets for the web UI which are not included in our build of prometheus.
 <code>hello:9090</code>. If you visit the web UI anyway, you will get this (or a similar)
 error:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Error opening React index.html: open web/ui/static/react/index.html: no such file or directory
-</span></span></code></pre></div><p>To get the web UI to work, we first need the missing files. They are released
-with every prometheus release and you need to update them by hand with every new
-version.</p>
+</span></span></code></pre></div><p>To get the web UI to work, we first need the missing files. You have two
+options:</p>
+<h3 id="option-a-build-web-assets">Option A: Build Web Assets</h3>
+<p>Follow <a href="https://github.com/prometheus/prometheus?tab=readme-ov-file#building-from-source">Prometheus → Building from
+source</a>,
+meaning:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/prometheus/prometheus
+</span></span><span style="display:flex;"><span>cd prometheus
+</span></span><span style="display:flex;"><span>make assets-compress
+</span></span></code></pre></div><p>Instruct gokrazy to use this build of Prometheus:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i hello add .
+</span></span></code></pre></div><p>Configure gokrazy to build Prometheus with the <code>builtinassets</code> <a href="/userguide/instance-config/#packagegobuildtags">Go build
+tag</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;hello&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/prometheus/prometheus&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/prometheus/prometheus&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;GoBuildTags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;builtinassets&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ],
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;--config.file=/etc/prometheus/prometheus.yml&#34;</span>
+</span></span><span style="display:flex;"><span>            ],
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;WaitForClock&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;ExtraFilePaths&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;/etc/prometheus/prometheus.yml&#34;</span>: <span style="color:#e6db74">&#34;prometheus.yml&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>To update Prometheus, you’ll need to update your Prometheus dir instead of using
+<code>gok get</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git pull <span style="color:#f92672">&amp;&amp;</span> make assets-compress
+</span></span></code></pre></div><h3 id="option-b-download-web-assets">Option B: Download Web Assets</h3>
+<p>The web assets are released with every prometheus release and you need to update
+them by hand with every new version.</p>
 <ol>
 <li>Go to <a href="https://github.com/prometheus/prometheus/releases">https://github.com/prometheus/prometheus/releases</a></li>
 <li>Expand the section &ldquo;Assets&rdquo; for the lastest release</li>
@@ -1370,19 +1415,19 @@ like <code>2.46.0</code>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1704019251"></script>
-    <script src="/js/perfect-scrollbar.min.js?1704019251"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1704019251"></script>
-    <script src="/js/jquery.sticky.js?1704019251"></script>
-    <script src="/js/featherlight.min.js?1704019251"></script>
-    <script src="/js/highlight.pack.js?1704019251"></script>
+    <script src="/js/clipboard.min.js?1705158700"></script>
+    <script src="/js/perfect-scrollbar.min.js?1705158700"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1705158700"></script>
+    <script src="/js/jquery.sticky.js?1705158700"></script>
+    <script src="/js/featherlight.min.js?1705158700"></script>
+    <script src="/js/highlight.pack.js?1705158700"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1704019251"></script>
-    <script src="/js/learn.js?1704019251"></script>
-    <script src="/js/hugo-learn.js?1704019251"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1705158700"></script>
+    <script src="/js/learn.js?1705158700"></script>
+    <script src="/js/hugo-learn.js?1705158700"></script>
     
         
-            <script src="/mermaid/mermaid.js?1704019251"></script>
+            <script src="/mermaid/mermaid.js?1705158700"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
