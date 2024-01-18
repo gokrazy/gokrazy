@@ -2,6 +2,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"math/rand"
 	"os"
@@ -39,6 +40,13 @@ func set(rtc *os.File) error {
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
+	flag.Parse()
+
+	if len(flag.Args()) > 0 {
+		servers = flag.Args()
+		log.Printf("using command line supplied server list: %v", servers)
+	}
 
 	var rtc *os.File
 	var err error

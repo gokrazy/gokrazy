@@ -67,7 +67,7 @@ func mustDropPrivileges(rtc *os.File) {
 		log.Fatalf("SYS_CAPSET: %v", errno)
 	}
 
-	cmd := exec.Command(os.Args[0])
+	cmd := exec.Command(os.Args[0], os.Args[1:]...)
 	cmd.Env = append(os.Environ(), "NTP_PRIVILEGES_DROPPED=1")
 	if rtc != nil {
 		cmd.Env = append(cmd.Env, "NTP_RTC=1")
