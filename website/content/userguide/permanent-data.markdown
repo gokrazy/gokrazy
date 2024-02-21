@@ -97,3 +97,20 @@ sudo cp config.json /path/to-mounted/filesystem/my-example
 ```
 
 If you want to access files on the permanent data filesystem you may need the [sudo](https://en.wikipedia.org/wiki/Sudo) capability.
+
+## Notes about macOS
+
+In macOS, to identify what device file maps to the mini sd card use:
+
+```bash
+$ diskutil list
+```
+
+If you want to create an ext4 filesystem from macOS, use the <a href="https://e2fsprogs.sourceforge.net/">ext2/3/4 utilities</a>.
+The easiest way to install them is via <a href="https://formulae.brew.sh/formula/e2fsprogs#default">homebrew</a>.
+
+With the utilities installed you can run (replace X and Y based on the <code>diskutil list</code> output):
+
+```bash
+$ sudo `brew --prefix e2fsprogs`/sbin/mkfs.ext4 /dev/diskXsY
+```

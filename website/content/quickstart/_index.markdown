@@ -27,8 +27,8 @@ go install github.com/gokrazy/tools/cmd/gok@main
 
 ## Step 1: Insert an SD card
 
-Run `watch -d1 ls -l '/dev/disk/by-id/*'` (macOS: `diskutil list`) and insert an SD card. Copy the
-highlighted device name:
+Run `watch -d1 ls -l '/dev/disk/by-id/*'` (see the permanent [section](https://gokrazy.org/userguide/permanent-data/section) for macOS instructions)
+and insert an SD card. Copy the highlighted device name:
 
 <script id="asciicast-G0PosAYGvUSnB3htMpLIz0p68" src="https://asciinema.org/a/G0PosAYGvUSnB3htMpLIz0p68.js" async></script>
 
