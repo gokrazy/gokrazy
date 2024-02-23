@@ -106,8 +106,8 @@ In macOS, to identify what device file maps to the mini sd card use:
 $ diskutil list
 ```
 
-If you want to create an ext4 filesystem from macOS, use the <a href="https://e2fsprogs.sourceforge.net/">ext2/3/4 utilities</a>.
-The easiest way to install them is via <a href="https://formulae.brew.sh/formula/e2fsprogs#default">homebrew</a>.
+If you want to create an ext4 filesystem from macOS, use the ext2/3/4 [utilities](https://e2fsprogs.sourceforge.net/).
+The easiest way to install them is via [homebrew](https://formulae.brew.sh/formula/e2fsprogs#default).
 
 With the utilities installed you can run (replace X and Y based on the <code>diskutil list</code> output):
 
