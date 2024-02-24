@@ -12,20 +12,20 @@
     <title>Access permanent data :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1708498932" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1708498932" rel="stylesheet">
-    <link href="/css/hybrid.css?1708498932" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1708498932" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1708498932" rel="stylesheet">
-    <link href="/css/auto-complete.css?1708498932" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1708498932" rel="stylesheet">
-    <link href="/css/theme.css?1708498932" rel="stylesheet">
-    <link href="/css/tabs.css?1708498932" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1708498932" rel="stylesheet">
+    <link href="/css/nucleus.css?1708788459" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1708788459" rel="stylesheet">
+    <link href="/css/hybrid.css?1708788459" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1708788459" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1708788459" rel="stylesheet">
+    <link href="/css/auto-complete.css?1708788459" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1708788459" rel="stylesheet">
+    <link href="/css/theme.css?1708788459" rel="stylesheet">
+    <link href="/css/tabs.css?1708788459" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1708788459" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1708498932"></script>
+    <script src="/js/jquery-3.3.1.min.js?1708788459"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1708498932"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1708498932"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1708788459"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1708788459"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1708498932"></script>
+<script type="text/javascript" src="/js/search.js?1708788459"></script>
 
     
   </div>
@@ -782,6 +782,7 @@
     <li><a href="#create-the-filesystem">Create the filesystem</a></li>
     <li><a href="#permanent-data-in-action">Permanent data in action</a></li>
     <li><a href="#manual-inspectionmodification">Manual inspection/modification</a></li>
+    <li><a href="#notes-about-macos">Notes about macOS</a></li>
   </ul>
 </nav>
     </div>
@@ -878,7 +879,14 @@ Copy the file to the permanent data filesystem.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir /path/to-mounted/filesystem/my-example
 </span></span><span style="display:flex;"><span>sudo cp config.json /path/to-mounted/filesystem/my-example
 </span></span></code></pre></div><p>If you want to access files on the permanent data filesystem you may need the <a href="https://en.wikipedia.org/wiki/Sudo">sudo</a> capability.</p>
-
+<h2 id="notes-about-macos">Notes about macOS</h2>
+<p>In macOS, to identify what device file maps to the mini sd card use:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ diskutil list
+</span></span></code></pre></div><p>If you want to create an ext4 filesystem from macOS, use the ext2/3/4 <a href="https://e2fsprogs.sourceforge.net/">utilities</a>.
+The easiest way to install them is via <a href="https://formulae.brew.sh/formula/e2fsprogs#default">homebrew</a>.</p>
+<p>With the utilities installed you can run (replace X and Y based on the <code>diskutil list</code> output):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sudo <span style="color:#e6db74">`</span>brew --prefix e2fsprogs<span style="color:#e6db74">`</span>/sbin/mkfs.ext4 /dev/diskXsY
+</span></span></code></pre></div>
 
 <footer class="footline">
 	
@@ -1368,19 +1376,19 @@ Copy the file to the permanent data filesystem.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1708498932"></script>
-    <script src="/js/perfect-scrollbar.min.js?1708498932"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1708498932"></script>
-    <script src="/js/jquery.sticky.js?1708498932"></script>
-    <script src="/js/featherlight.min.js?1708498932"></script>
-    <script src="/js/highlight.pack.js?1708498932"></script>
+    <script src="/js/clipboard.min.js?1708788459"></script>
+    <script src="/js/perfect-scrollbar.min.js?1708788459"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1708788459"></script>
+    <script src="/js/jquery.sticky.js?1708788459"></script>
+    <script src="/js/featherlight.min.js?1708788459"></script>
+    <script src="/js/highlight.pack.js?1708788459"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1708498932"></script>
-    <script src="/js/learn.js?1708498932"></script>
-    <script src="/js/hugo-learn.js?1708498932"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1708788459"></script>
+    <script src="/js/learn.js?1708788459"></script>
+    <script src="/js/hugo-learn.js?1708788459"></script>
     
         
-            <script src="/mermaid/mermaid.js?1708498932"></script>
+            <script src="/mermaid/mermaid.js?1708788459"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
