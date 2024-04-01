@@ -184,7 +184,7 @@ you can enable Tailscale SSH.
 }
 {{< /highlight >}}
 
-Note that Tailscale SSH needs to be allowed by your Tailnet ACL.
+Note that Tailscale SSH [needs to be allowed by your Tailnet ACL](https://tailscale.com/kb/1193/tailscale-ssh#ensure-tailscale-ssh-is-permitted-in-acls).
 You can configure to allow, for example, each user to access their own
 devices using Tailscale SSH, or define which hosts users can access.
 
