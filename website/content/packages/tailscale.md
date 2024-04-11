@@ -157,7 +157,7 @@ than your gokrazy appliance, you can set up Tailscale as a subnet router.
 }
 {{< /highlight >}}
 
-Starting Tailscale version v1.63.x ([FIXME](https://github.com/tailscale/tailscale/issues/11405))
+Starting [Tailscale version v1.64](https://github.com/tailscale/tailscale/issues/11405),
 IP forwarding is automatically enabled on Gokrazy.
 
 ## Optional: Accessing gokrazy using Tailscale SSH
