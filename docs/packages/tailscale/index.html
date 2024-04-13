@@ -12,20 +12,20 @@
     <title>Tailscale VPN :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1709106573" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1709106573" rel="stylesheet">
-    <link href="/css/hybrid.css?1709106573" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1709106573" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1709106573" rel="stylesheet">
-    <link href="/css/auto-complete.css?1709106573" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1709106573" rel="stylesheet">
-    <link href="/css/theme.css?1709106573" rel="stylesheet">
-    <link href="/css/tabs.css?1709106573" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1709106573" rel="stylesheet">
+    <link href="/css/nucleus.css?1712990999" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1712990999" rel="stylesheet">
+    <link href="/css/hybrid.css?1712990999" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1712990999" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1712990999" rel="stylesheet">
+    <link href="/css/auto-complete.css?1712990999" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1712990999" rel="stylesheet">
+    <link href="/css/theme.css?1712990999" rel="stylesheet">
+    <link href="/css/tabs.css?1712990999" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1712990999" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1709106573"></script>
+    <script src="/js/jquery-3.3.1.min.js?1712990999"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1709106573"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1709106573"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1712990999"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1712990999"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1709106573"></script>
+<script type="text/javascript" src="/js/search.js?1712990999"></script>
 
     
   </div>
@@ -784,6 +784,8 @@
     <li><a href="#step-2-set-command-line-flags">Step 2. set command-line flags</a></li>
     <li><a href="#step-3-authenticate-interactive-only">Step 3. authenticate (interactive only)</a></li>
     <li><a href="#step-4-disable-key-expiry-optional">Step 4. disable key expiry (optional)</a></li>
+    <li><a href="#optional-using-gokrazy-as-a-tailscale-subnet-router">Optional: Using gokrazy as a Tailscale subnet router</a></li>
+    <li><a href="#optional-accessing-gokrazy-using-tailscale-ssh">Optional: Accessing gokrazy using Tailscale SSH</a></li>
     <li><a href="#optional-tailscale-network-for-other-programs">Optional: Tailscale network for other programs</a></li>
     <li><a href="#optional-tailscale-go-listener">Optional: Tailscale Go listener</a></li>
   </ul>
@@ -902,6 +904,49 @@ You can disable key expiry from <a href="https://login.tailscale.com/" title="Ta
 instance to not require login every 3 months.</p>
 </div>
 
+<h2 id="optional-using-gokrazy-as-a-tailscale-subnet-router">Optional: Using gokrazy as a Tailscale subnet router</h2>
+<p>To allow hosts in your Tailnet to access devices in your network other
+than your gokrazy appliance, you can set up Tailscale as a subnet router.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscaled&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscale&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;tailscale.com/cmd/tailscale&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;up&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--advertise-routes=192.168.0.0/24&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>Starting <a href="https://github.com/tailscale/tailscale/issues/11405">Tailscale version v1.64</a>,
+IP forwarding is automatically enabled on Gokrazy.</p>
+<h2 id="optional-accessing-gokrazy-using-tailscale-ssh">Optional: Accessing gokrazy using Tailscale SSH</h2>
+<p>To access the gokrazy appliance using SSH authenticating using Tailscale,
+you can enable Tailscale SSH.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscaled&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;tailscale.com/cmd/tailscale&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;tailscale.com/cmd/tailscale&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;up&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--ssh=true&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>Note that Tailscale SSH <a href="https://tailscale.com/kb/1193/tailscale-ssh#ensure-tailscale-ssh-is-permitted-in-acls">needs to be allowed by your Tailnet ACL</a>.
+You can configure to allow, for example, each user to access their own
+devices using Tailscale SSH, or define which hosts users can access.</p>
 <h2 id="optional-tailscale-network-for-other-programs">Optional: Tailscale network for other programs</h2>
 <p>Before Tailscale v1.56.1, Tailscale used <a href="https://tailscale.com/kb/1112/userspace-networking/" title="Userspace networking mode (for containers)">Userspace networking</a> mode on gokrazy,
 meaning you needed to use Tailscale as an HTTP proxy to establish outgoing
@@ -1447,19 +1492,19 @@ to obtain the remote identity:</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1709106573"></script>
-    <script src="/js/perfect-scrollbar.min.js?1709106573"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1709106573"></script>
-    <script src="/js/jquery.sticky.js?1709106573"></script>
-    <script src="/js/featherlight.min.js?1709106573"></script>
-    <script src="/js/highlight.pack.js?1709106573"></script>
+    <script src="/js/clipboard.min.js?1712990999"></script>
+    <script src="/js/perfect-scrollbar.min.js?1712990999"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1712990999"></script>
+    <script src="/js/jquery.sticky.js?1712990999"></script>
+    <script src="/js/featherlight.min.js?1712990999"></script>
+    <script src="/js/highlight.pack.js?1712990999"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1709106573"></script>
-    <script src="/js/learn.js?1709106573"></script>
-    <script src="/js/hugo-learn.js?1709106573"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1712990999"></script>
+    <script src="/js/learn.js?1712990999"></script>
+    <script src="/js/hugo-learn.js?1712990999"></script>
     
         
-            <script src="/mermaid/mermaid.js?1709106573"></script>
+            <script src="/mermaid/mermaid.js?1712990999"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
