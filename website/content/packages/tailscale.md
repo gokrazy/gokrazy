@@ -133,6 +133,61 @@ instance to not require login every 3 months.
 [Tailscale console]: https://login.tailscale.com/ "Tailscale management console login.tailscale.com"
 {{% /notice %}}
 
+## Optional: Using gokrazy as a Tailscale subnet router
+
+To allow hosts in your Tailnet to access devices in your network other
+than your gokrazy appliance, you can set up Tailscale as a subnet router.
+
+{{< highlight json "hl_lines=12" >}}
+{
+    "Hostname": "ts",
+    "Packages": [
+        "github.com/gokrazy/serial-busybox",
+        "tailscale.com/cmd/tailscaled",
+        "tailscale.com/cmd/tailscale"
+    ],
+    "PackageConfig": {
+        "tailscale.com/cmd/tailscale": {
+            "CommandLineFlags": [
+                "up",
+                "--advertise-routes=192.168.0.0/24"
+            ]
+        }
+    }
+}
+{{< /highlight >}}
+
+Starting [Tailscale version v1.64](https://github.com/tailscale/tailscale/issues/11405),
+IP forwarding is automatically enabled on Gokrazy.
+
+## Optional: Accessing gokrazy using Tailscale SSH
+
+To access the gokrazy appliance using SSH authenticating using Tailscale,
+you can enable Tailscale SSH.
+
+{{< highlight json "hl_lines=12" >}}
+{
+    "Hostname": "ts",
+    "Packages": [
+        "github.com/gokrazy/serial-busybox",
+        "tailscale.com/cmd/tailscaled",
+        "tailscale.com/cmd/tailscale"
+    ],
+    "PackageConfig": {
+        "tailscale.com/cmd/tailscale": {
+            "CommandLineFlags": [
+                "up",
+                "--ssh=true"
+            ]
+        }
+    }
+}
+{{< /highlight >}}
+
+Note that Tailscale SSH [needs to be allowed by your Tailnet ACL](https://tailscale.com/kb/1193/tailscale-ssh#ensure-tailscale-ssh-is-permitted-in-acls).
+You can configure to allow, for example, each user to access their own
+devices using Tailscale SSH, or define which hosts users can access.
+
 ## Optional: Tailscale network for other programs
 
 Before Tailscale v1.56.1, Tailscale used [Userspace networking] mode on gokrazy,
