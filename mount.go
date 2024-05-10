@@ -1,12 +1,19 @@
 package gokrazy
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
 	"syscall"
+	"time"
 
+	"github.com/gokrazy/internal/config"
+	"github.com/gokrazy/internal/gpt"
 	"github.com/gokrazy/internal/rootdev"
 )
 
@@ -126,6 +133,111 @@ func mountfs() error {
 
 	if err := syscall.Mount("cgroup2", "/sys/fs/cgroup", "cgroup2", 0, ""); err != nil {
 		log.Printf("cgroup2 on /sys/fs/cgroup: %v", err)
+	}
+
+	if err := mountDevices(); err != nil {
+		log.Printf("mountDevices: %v", err)
+	}
+
+	return nil
+}
+
+func findGPTPartUUID(uuid string) (_ string, _ error) {
+	var dev string
+	uuid = strings.ToLower(uuid)
+	err := filepath.Walk("/sys/block", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			log.Printf("findGPTPartUUID: %v", err)
+			return nil
+		}
+		if info.Mode()&os.ModeSymlink == 0 {
+			return nil
+		}
+		devname := "/dev/" + filepath.Base(path)
+		f, err := os.Open(devname)
+		if err != nil {
+			log.Printf("findGPTPartUUID: %v", err)
+			return nil
+		}
+		defer f.Close()
+		for idx, partUUID := range gpt.PartitionUUIDs(f) {
+			if strings.ToLower(partUUID) != uuid {
+				continue
+			}
+			dev = devname
+			if (strings.HasPrefix(dev, "/dev/mmcblk") ||
+				strings.HasPrefix(dev, "/dev/loop") ||
+				strings.HasPrefix(dev, "/dev/nvme")) &&
+				!strings.HasSuffix(dev, "p") {
+				dev += "p"
+			}
+			dev += strconv.Itoa(idx + 1)
+
+			// TODO: abort early with sentinel error code
+			return nil
+		}
+		return nil
+	})
+	if err != nil {
+		return "", err
+	}
+	if dev == "" {
+		return "", fmt.Errorf("PARTUUID=%s not found", uuid)
+	}
+	return dev, nil
+}
+
+func deviceForSource(source string) (string, error) {
+	if strings.HasPrefix(source, "PARTUUID=") {
+		return findGPTPartUUID(strings.TrimPrefix(source, "PARTUUID="))
+	}
+
+	return source, nil
+}
+
+func mountDevice(md config.MountDevice) error {
+	dev, err := deviceForSource(md.Source)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("mounting %s on %s", dev, md.Target)
+	if err := syscall.Mount(dev, md.Target, md.Type, 0, ""); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// mountDevices mounts the user-specified devices. The packer persists them from
+// the instance config to mountdevices.json.
+func mountDevices() error {
+	b, err := os.ReadFile("/etc/gokrazy/mountdevices.json")
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil // packer too old
+		}
+		return fmt.Errorf("reading mountdevices.json: %v", err)
+	}
+
+	var mountdevices []config.MountDevice
+	if err := json.Unmarshal(b, &mountdevices); err != nil {
+		return err
+	}
+
+	// Start one goroutine per mount device
+	for _, md := range mountdevices {
+		md := md // remove once we are on Go 1.22
+		go func() {
+			for {
+				err := mountDevice(md)
+				if err == nil {
+					return
+				}
+				log.Printf("mounting %s: %v", md.Source, err)
+				time.Sleep(1 * time.Second)
+			}
+		}()
 	}
 
 	return nil
