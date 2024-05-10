@@ -1,6 +1,6 @@
 module github.com/gokrazy/gokrazy
 
-go 1.20
+go 1.21
 
 require (
 	github.com/anatol/vmtest v0.0.0-20211215032353-afd7b1dd38ef
