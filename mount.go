@@ -115,6 +115,15 @@ func mountfs() error {
 		}
 	}
 
+	// Create /perm/var if needed so that the /var symlink resolves
+	if err := os.MkdirAll("/perm/var", 0755); err != nil {
+		log.Printf("mkdir /perm/var: %v", err)
+	}
+
+	if err := os.Symlink("/run", "/perm/var/run"); err != nil && !os.IsExist(err) {
+		log.Printf("symlink /perm/var/run to /run: %v", err)
+	}
+
 	if err := syscall.Mount("cgroup2", "/sys/fs/cgroup", "cgroup2", 0, ""); err != nil {
 		log.Printf("cgroup2 on /sys/fs/cgroup: %v", err)
 	}
