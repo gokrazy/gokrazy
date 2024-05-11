@@ -9,23 +9,23 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>gokrazy :: gokrazy</title>
+    <title>gokrazy Go appliances :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1712990999" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1712990999" rel="stylesheet">
-    <link href="/css/hybrid.css?1712990999" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1712990999" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1712990999" rel="stylesheet">
-    <link href="/css/auto-complete.css?1712990999" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1712990999" rel="stylesheet">
-    <link href="/css/theme.css?1712990999" rel="stylesheet">
-    <link href="/css/tabs.css?1712990999" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1712990999" rel="stylesheet">
+    <link href="/css/nucleus.css?1715455994" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1715455994" rel="stylesheet">
+    <link href="/css/hybrid.css?1715455994" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1715455994" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1715455994" rel="stylesheet">
+    <link href="/css/auto-complete.css?1715455994" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1715455994" rel="stylesheet">
+    <link href="/css/theme.css?1715455994" rel="stylesheet">
+    <link href="/css/tabs.css?1715455994" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1715455994" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1712990999"></script>
+    <script src="/js/jquery-3.3.1.min.js?1715455994"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1712990999"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1712990999"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1715455994"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1715455994"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1712990999"></script>
+<script type="text/javascript" src="/js/search.js?1715455994"></script>
 
     
   </div>
@@ -741,9 +741,24 @@
 
  
 <h1 id="gokrazy-go-appliances">gokrazy Go appliances</h1>
-<p>With gokrazy, you can deploy your Go programs as
-<a href="https://en.wikipedia.org/wiki/Computer_appliance">appliances</a> to a Raspberry Pi
-or PC (<a href="/platforms/">→ supported platforms</a>).</p>
+<p>With gokrazy, you can deploy one or more Go programs as
+<a href="https://en.wikipedia.org/wiki/Computer_appliance">appliances</a> to a Raspberry
+Pi, Virtual Machine, embedded or normal PC (see <a href="/platforms/">supported
+platforms</a>).</p>
+<p>gokrazy uses its own minimal Go userland instead of a traditional Linux
+distribution base.</p>
+<p>This minimalist approach offers several advantages in terms of security,
+maintainability and reliability:</p>
+<ul>
+<li>The surface area for security vulnerabilities is drastically reduced.</li>
+<li>The root filesystem is entirely read-only (making persistent malware
+installation hard) and new versions of the system are installed by overwriting
+the root file system with the new version.</li>
+<li>No default shell access: There is neither xz nor OpenSSH on a gokrazy
+system. Interactive access for debugging is possible, but needs to be
+explicitly started.</li>
+</ul>
+<h2 id="backstory">Backstory</h2>
 <p>For a long time, we were unhappy about having to spend so much time on each of
 our various Raspberry Pis, taking care of security updates and other general
 Linux distribution maintenance.</p>
@@ -1292,19 +1307,19 @@ configurability, you may need to replace some of our programs.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1712990999"></script>
-    <script src="/js/perfect-scrollbar.min.js?1712990999"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1712990999"></script>
-    <script src="/js/jquery.sticky.js?1712990999"></script>
-    <script src="/js/featherlight.min.js?1712990999"></script>
-    <script src="/js/highlight.pack.js?1712990999"></script>
+    <script src="/js/clipboard.min.js?1715455994"></script>
+    <script src="/js/perfect-scrollbar.min.js?1715455994"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1715455994"></script>
+    <script src="/js/jquery.sticky.js?1715455994"></script>
+    <script src="/js/featherlight.min.js?1715455994"></script>
+    <script src="/js/highlight.pack.js?1715455994"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1712990999"></script>
-    <script src="/js/learn.js?1712990999"></script>
-    <script src="/js/hugo-learn.js?1712990999"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1715455994"></script>
+    <script src="/js/learn.js?1715455994"></script>
+    <script src="/js/hugo-learn.js?1715455994"></script>
     
         
-            <script src="/mermaid/mermaid.js?1712990999"></script>
+            <script src="/mermaid/mermaid.js?1715455994"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
