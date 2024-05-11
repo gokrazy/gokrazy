@@ -1,13 +1,30 @@
 ---
 layout: default
-title: gokrazy
+title: gokrazy Go appliances
 ---
 
 # gokrazy Go appliances
 
-With gokrazy, you can deploy your Go programs as
-[appliances](https://en.wikipedia.org/wiki/Computer_appliance) to a Raspberry Pi
-or PC ([→ supported platforms](/platforms/)).
+With gokrazy, you can deploy one or more Go programs as
+[appliances](https://en.wikipedia.org/wiki/Computer_appliance) to a Raspberry
+Pi, Virtual Machine, embedded or normal PC (see [supported
+platforms](/platforms/)).
+
+gokrazy uses its own minimal Go userland instead of a traditional Linux
+distribution base.
+
+This minimalist approach offers several advantages in terms of security,
+maintainability and reliability:
+
+* The surface area for security vulnerabilities is drastically reduced.
+* The root filesystem is entirely read-only (making persistent malware
+  installation hard) and new versions of the system are installed by overwriting
+  the root file system with the new version.
+* No default shell access: There is neither xz nor OpenSSH on a gokrazy
+  system. Interactive access for debugging is possible, but needs to be
+  explicitly started.
+
+## Backstory
 
 For a long time, we were unhappy about having to spend so much time on each of
 our various Raspberry Pis, taking care of security updates and other general
