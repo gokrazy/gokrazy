@@ -76,7 +76,6 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"syscall"
 
 	"github.com/gokrazy/gokrazy"
 )
@@ -100,10 +99,6 @@ func irssi() error {
 	// /etc/resolv.conf (nothing at boot) and holds on to it, meaning your
 	// container will never have working networking if it starts too early.
 	gokrazy.WaitForClock()
-
-	if err := mountVar(); err != nil {
-		return err
-	}
 
 	if err := podman("kill", "irssi"); err != nil {
 		log.Print(err)
@@ -135,33 +130,6 @@ func main() {
 	if err := irssi(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-// mountVar bind-mounts /perm/container-storage to /var if needed.
-// This could be handled by an fstab(5) feature in gokrazy in the future.
-func mountVar() error {
-	b, err := os.ReadFile("/proc/self/mountinfo")
-	if err != nil {
-		return err
-	}
-	for _, line := range strings.Split(strings.TrimSpace(string(b)), "\n") {
-		parts := strings.Fields(line)
-		if len(parts) < 5 {
-			continue
-		}
-		mountpoint := parts[4]
-		log.Printf("Found mountpoint %q", parts[4])
-		if mountpoint == "/var" {
-			log.Printf("/var file system already mounted, nothing to do")
-			return nil
-		}
-	}
-
-	if err := syscall.Mount("/perm/container-storage", "/var", "", syscall.MS_BIND, ""); err != nil {
-		return fmt.Errorf("mounting /perm/container-storage to /var: %v", err)
-	}
-
-	return nil
 }
 
 // expandPath returns env, but with PATH= modified or added
