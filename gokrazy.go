@@ -228,6 +228,10 @@ func Boot(userBuildTimestamp string) error {
 
 	maybeSwitchToInactive()
 
+	if err := loadModules(); err != nil {
+		log.Printf("loading modules: %v", err)
+	}
+
 	hostnameb, err := ioutil.ReadFile("/etc/hostname")
 	if err != nil && os.IsNotExist(err) {
 		hostnameb, err = ioutil.ReadFile("/hostname")
