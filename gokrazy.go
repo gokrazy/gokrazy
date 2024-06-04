@@ -16,7 +16,6 @@ import (
 	"net"
 	"os"
 	"os/exec"
-	"os/signal"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -482,15 +481,11 @@ func SuperviseServices(services []*Service) error {
 		log.Printf("cannot listen for new IP addresses: %v", err)
 	}
 
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, unix.SIGHUP)
-	go func() {
-		for range c {
-			if err := updateListenerPairs(httpPort, httpsPort, useTLS, tlsConfig); err != nil {
-				log.Printf("updating listeners: %v", err)
-			}
+	listenForSignals(func() {
+		if err := updateListenerPairs(httpPort, httpsPort, useTLS, tlsConfig); err != nil {
+			log.Printf("updating listeners: %v", err)
 		}
-	}()
+	})
 
 	// Only supervise services after the SIGHUP handler is set up, otherwise a
 	// particularly fast dhcp client (e.g. when running in qemu) might send
