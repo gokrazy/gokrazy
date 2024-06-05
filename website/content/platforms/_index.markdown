@@ -64,28 +64,37 @@ The leading <code>github.com</code> in front of package import paths has been om
 
 ## Performance
 
-The JPEG encoding column is the result of running scan2drive’s [`neonjpeg`
-micro-benchmark](https://github.com/stapelberg/scan2drive/blob/1205954672323cf4f8a0619b57e3d107eba66af0/internal/neonjpeg/bench_test.go).
+The turbojpeg encoding column is the result of running scan2drive’s [`turbojpeg`
+micro-benchmark](https://github.com/stapelberg/scan2drive/blob/9856bfff7118111062998dc5034b9f7e4709101b/internal/turbojpeg/bench_test.go)
 
-| Hardware    | JPEG encoding |
-| ----------- | ------------- |
-| raspi4b     | 0.69s         |
-| raspi3b     | 1.22s         |
-| raspizero2w | 1.47s         |
+The json column is the result of running the `json` benchmark from the
+[x/benchmarks repo](https://pkg.go.dev/golang.org/x/benchmarks).
+
+| Hardware    | turbojpeg encoding | json   |
+| ----------- | ------------------ | ------ |
+| raspi5b     | 0.32s              | 24ms   |
+| raspi4b     | 1.00s              | 38ms   |
+| raspi3b     | 1.05s              | 216ms  |
+| raspizero2w | 1.04s              | 184ms  |
 
 ## Power Usage
 
-These power measurements were done using a HomeMatic HM-ES-PMSw1-Pl power switch
-with measurement feature. The Raspberry Pi 4 was using the original Raspberry Pi
-power supply, the others were measured with a random USB power supply.
+These power measurements were done using a [myStrom WiFi
+Switch](https://mystrom.ch/de/wifi-switch/) with measurement feature.
 
-| Hardware    | Power Usage |
-| ----------- | ----------- |
-| apu2c4      | 4.0W        |
-| raspi3b     | 1.5W        |
-| raspi3b+    | 2.5W        |
-| raspi4b     | 2.8W        |
-| raspizero2w | 0.8W        |
+The Raspberry Pi 4 and Pi 5 were using their original Raspberry Pi power supply,
+the others were measured with a random USB power supply.
+
+An Ethernet cable was connected in all tests, WiFi was not enabled.
+
+| Hardware    | Power Usage (with Ethernet) | Power Usage (with HDMI and WiFi) |
+| ----------- | -----------                 | -----------------------          |
+| apu2c4      | 4.0W                        | n/a                              |
+| raspi5b     | 3.2W                        | 3.5W                             |
+| raspi4b     | 2.8W                        | 3.3W                             |
+| raspi3b+    | 2.5W                        | TODO                             |
+| raspi3b     | 1.5W                        | TODO                             |
+| raspizero2w | 0.8W                        | TODO                             |
 
 ## Hardware Support
 
@@ -95,6 +104,7 @@ power supply, the others were measured with a random USB power supply.
 | raspi3b     | [open or WPA-PSK]    | [limited]              |
 | raspi3b+    | [open or WPA-PSK]    | [limited]              |
 | raspi4b     | [open or WPA-PSK]    | [limited]              |
+| raspi5b     | [open or WPA-PSK]    | [limited]              |
 | raspizero2w | [open or WPA-PSK]    | [limited]              |
 
 [open or WPA-PSK]: /userguide/wifi/
