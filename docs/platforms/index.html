@@ -12,20 +12,20 @@
     <title>Supported platforms :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1716397106" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1716397106" rel="stylesheet">
-    <link href="/css/hybrid.css?1716397106" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1716397106" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1716397106" rel="stylesheet">
-    <link href="/css/auto-complete.css?1716397106" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1716397106" rel="stylesheet">
-    <link href="/css/theme.css?1716397106" rel="stylesheet">
-    <link href="/css/tabs.css?1716397106" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1716397106" rel="stylesheet">
+    <link href="/css/nucleus.css?1717614248" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1717614248" rel="stylesheet">
+    <link href="/css/hybrid.css?1717614248" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1717614248" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1717614248" rel="stylesheet">
+    <link href="/css/auto-complete.css?1717614248" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1717614248" rel="stylesheet">
+    <link href="/css/theme.css?1717614248" rel="stylesheet">
+    <link href="/css/tabs.css?1717614248" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1717614248" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1716397106"></script>
+    <script src="/js/jquery-3.3.1.min.js?1717614248"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1716397106"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1716397106"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1717614248"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1717614248"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1716397106"></script>
+<script type="text/javascript" src="/js/search.js?1717614248"></script>
 
     
   </div>
@@ -918,61 +918,85 @@ temporarily broken at HEAD.</p>
 </tbody>
 </table>
 <h2 id="performance">Performance</h2>
-<p>The JPEG encoding column is the result of running scan2drive’s <a href="https://github.com/stapelberg/scan2drive/blob/1205954672323cf4f8a0619b57e3d107eba66af0/internal/neonjpeg/bench_test.go"><code>neonjpeg</code>
-micro-benchmark</a>.</p>
+<p>The turbojpeg encoding column is the result of running scan2drive’s <a href="https://github.com/stapelberg/scan2drive/blob/9856bfff7118111062998dc5034b9f7e4709101b/internal/turbojpeg/bench_test.go"><code>turbojpeg</code>
+micro-benchmark</a></p>
+<p>The json column is the result of running the <code>json</code> benchmark from the
+<a href="https://pkg.go.dev/golang.org/x/benchmarks">x/benchmarks repo</a>.</p>
 <table>
 <thead>
 <tr>
 <th>Hardware</th>
-<th>JPEG encoding</th>
+<th>turbojpeg encoding</th>
+<th>json</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>raspi5b</td>
+<td>0.32s</td>
+<td>24ms</td>
+</tr>
+<tr>
 <td>raspi4b</td>
-<td>0.69s</td>
+<td>1.00s</td>
+<td>38ms</td>
 </tr>
 <tr>
 <td>raspi3b</td>
-<td>1.22s</td>
+<td>1.05s</td>
+<td>216ms</td>
 </tr>
 <tr>
 <td>raspizero2w</td>
-<td>1.47s</td>
+<td>1.04s</td>
+<td>184ms</td>
 </tr>
 </tbody>
 </table>
 <h2 id="power-usage">Power Usage</h2>
-<p>These power measurements were done using a HomeMatic HM-ES-PMSw1-Pl power switch
-with measurement feature. The Raspberry Pi 4 was using the original Raspberry Pi
-power supply, the others were measured with a random USB power supply.</p>
+<p>These power measurements were done using a <a href="https://mystrom.ch/de/wifi-switch/">myStrom WiFi
+Switch</a> with measurement feature.</p>
+<p>The Raspberry Pi 4 and Pi 5 were using their original Raspberry Pi power supply,
+the others were measured with a random USB power supply.</p>
+<p>An Ethernet cable was connected in all tests, WiFi was not enabled.</p>
 <table>
 <thead>
 <tr>
 <th>Hardware</th>
-<th>Power Usage</th>
+<th>Power Usage (with Ethernet)</th>
+<th>Power Usage (with HDMI and WiFi)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>apu2c4</td>
 <td>4.0W</td>
+<td>n/a</td>
 </tr>
 <tr>
-<td>raspi3b</td>
-<td>1.5W</td>
-</tr>
-<tr>
-<td>raspi3b+</td>
-<td>2.5W</td>
+<td>raspi5b</td>
+<td>3.2W</td>
+<td>3.5W</td>
 </tr>
 <tr>
 <td>raspi4b</td>
 <td>2.8W</td>
+<td>3.3W</td>
+</tr>
+<tr>
+<td>raspi3b+</td>
+<td>2.5W</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>raspi3b</td>
+<td>1.5W</td>
+<td>TODO</td>
 </tr>
 <tr>
 <td>raspizero2w</td>
 <td>0.8W</td>
+<td>TODO</td>
 </tr>
 </tbody>
 </table>
@@ -1003,6 +1027,11 @@ power supply, the others were measured with a random USB power supply.</p>
 </tr>
 <tr>
 <td>raspi4b</td>
+<td><a href="/userguide/wifi/">open or WPA-PSK</a></td>
+<td><a href="/userguide/bluetooth/">limited</a></td>
+</tr>
+<tr>
+<td>raspi5b</td>
 <td><a href="/userguide/wifi/">open or WPA-PSK</a></td>
 <td><a href="/userguide/bluetooth/">limited</a></td>
 </tr>
@@ -1546,19 +1575,19 @@ new disk image.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1716397106"></script>
-    <script src="/js/perfect-scrollbar.min.js?1716397106"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1716397106"></script>
-    <script src="/js/jquery.sticky.js?1716397106"></script>
-    <script src="/js/featherlight.min.js?1716397106"></script>
-    <script src="/js/highlight.pack.js?1716397106"></script>
+    <script src="/js/clipboard.min.js?1717614248"></script>
+    <script src="/js/perfect-scrollbar.min.js?1717614248"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1717614248"></script>
+    <script src="/js/jquery.sticky.js?1717614248"></script>
+    <script src="/js/featherlight.min.js?1717614248"></script>
+    <script src="/js/highlight.pack.js?1717614248"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1716397106"></script>
-    <script src="/js/learn.js?1716397106"></script>
-    <script src="/js/hugo-learn.js?1716397106"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1717614248"></script>
+    <script src="/js/learn.js?1717614248"></script>
+    <script src="/js/hugo-learn.js?1717614248"></script>
     
         
-            <script src="/mermaid/mermaid.js?1716397106"></script>
+            <script src="/mermaid/mermaid.js?1717614248"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
