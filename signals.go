@@ -8,6 +8,13 @@ import (
 	"golang.org/x/sys/unix"
 )
 
+func poweroff() {
+	log.Println("Powering off")
+	if err := unix.Reboot(unix.LINUX_REBOOT_CMD_POWER_OFF); err != nil {
+		log.Printf("POWER_OFF: %v", err)
+	}
+}
+
 func listenForSignals(sighup func()) {
 	{
 		c := make(chan os.Signal, 1)
@@ -33,17 +40,10 @@ func listenForSignals(sighup func()) {
 					reboot(true)
 
 				case unix.SIGUSR1:
-					log.Println("Halting")
-					if err := unix.Reboot(unix.LINUX_REBOOT_CMD_HALT); err != nil {
-						log.Printf("HALT: %v", err)
-					}
+					halt()
 
 				case unix.SIGUSR2:
-					log.Println("Powering off")
-					if err := unix.Reboot(unix.LINUX_REBOOT_CMD_POWER_OFF); err != nil {
-						log.Printf("POWER_OFF: %v", err)
-					}
-
+					poweroff()
 				}
 			}
 		}()
