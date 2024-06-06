@@ -34,7 +34,8 @@ func listenForSignals(sighup func()) {
 
 				case unix.SIGUSR1:
 					log.Println("Halting")
-					if err := unix.Reboot(unix.LINUX_REBOOT_CMD_HALT); err != nil {
+					code := uint(unix.LINUX_REBOOT_CMD_HALT)
+					if err := unix.Reboot(int(code)); err != nil {
 						log.Printf("HALT: %v", err)
 					}
 
