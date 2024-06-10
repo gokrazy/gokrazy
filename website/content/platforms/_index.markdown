@@ -44,20 +44,22 @@ temporarily broken at HEAD.
 
 The leading <code>github.com</code> in front of package import paths has been omitted for space reasons.
 
-| Target    | Hardware    | GOARCH | Kernel package   | Firmware package   | Appliances                                                                    |
-| --------- | ----------- | ------ | ---------------- | ------------------ | ----------------------------------------------------------------------------- |
-| apu2c4    | apu2c4      | amd64  | [rtr7/kernel]    | [rtr7/kernel]      | **[gokrazy/bakery/cmd/bake]**                                                 |
-|           |             |        |                  |                    | [rtr7/router7]                                                                |
-| x86-64    | qemu        | amd64  | [rtr7/kernel]    | [rtr7/kernel]      | **[gokrazy/bakery/cmd/bake]**                                                 |
-| rpi4b     | raspi4b     | arm64  | [gokrazy/kernel] | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**<br>[stapelberg/hmgo]<br>[stapelberg/scan2drive] |
-| rpi3b     | raspi3b     | arm64  | [gokrazy/kernel] | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**                                                 |
-| rpi3b+    | raspi3b+    | arm64  | [gokrazy/kernel] | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**                                                 |
-| rpizero2w | raspizero2w | arm64  | [gokrazy/kernel] | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**                                                 |
+| Target    | Hardware    | GOARCH | Kernel package       | Firmware package   | Appliances                                                |
+| --------- | ----------- | ------ | ----------------     | ------------------ | --------------------------------------------------------- |
+| apu2c4    | apu2c4      | amd64  | [rtr7/kernel]        | [rtr7/kernel]      | **[gokrazy/bakery/cmd/bake]**                             |
+|           |             |        |                      |                    | [rtr7/router7]                                            |
+| x86-64    | qemu        | amd64  | [rtr7/kernel]        | [rtr7/kernel]      | **[gokrazy/bakery/cmd/bake]**                             |
+| rpi5b     | raspi5b     | arm64  | [gokrazy/kernel.rpi] | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**<br>[stapelberg/scan2drive]  |
+| rpi4b     | raspi4b     | arm64  | [gokrazy/kernel]     | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**<br>[stapelberg/hmgo]        |
+| rpi3b     | raspi3b     | arm64  | [gokrazy/kernel]     | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**                             |
+| rpi3b+    | raspi3b+    | arm64  | [gokrazy/kernel]     | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**                             |
+| rpizero2w | raspizero2w | arm64  | [gokrazy/kernel]     | [gokrazy/firmware] | **[gokrazy/bakery/cmd/bake]**                             |
 
 [rtr7/kernel]: https://github.com/rtr7/kernel
 [gokrazy/bakery/cmd/bake]: https://github.com/gokrazy/bakery
 [rtr7/router7]: https://github.com/rtr7/router7
 [gokrazy/kernel]: https://github.com/gokrazy/kernel
+[gokrazy/kernel.rpi]: https://github.com/gokrazy/kernel.rpi
 [gokrazy/firmware]: https://github.com/gokrazy/firmware
 [stapelberg/hmgo]: https://github.com/stapelberg/hmgo
 [stapelberg/scan2drive]: https://github.com/stapelberg/scan2drive
