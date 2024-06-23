@@ -7,33 +7,52 @@ aliases:
   - /platforms.html
 ---
 
-## Recommended: Raspberry Pi 4 B
+## Recommended: Raspberry Pi 4 or Pi 5
 
-gokrazy development happens primarily on the Raspberry Pi 4 B.
+gokrazy development happens primarily on the Raspberry Pi 5, but the Pi 4 is
+also a great choice!
 
-{{< figure src="/img/pi4b.jpg" width="200" height="200" align="right" >}}
 
-<!--<img src="/img/pi4b.jpg" width="200" align="right">-->
+{{< figure src="/img/pi5.jpg" width="200" height="266" align="right" >}}
+
 
 ## All currently supported platforms
 
-### Raspberry Pi 4 B
+<div style="display: flex; flex-wrap: wrap">
 
-{{< figure src="/img/pi4b.jpg" width="150" >}}
+<div>
 
-### PC Engines APU
+{{< figure src="/img/pi5.jpg" width="150" title="Raspberry Pi 5" >}}
 
-{{< figure src="/img/apu2c4.jpg" width="150" >}}
+</div>
 
-### Raspberry Pi Zero 2 W
+<div>
 
-{{< figure src="/img/pizero2w.jpg" width="150" >}}
+{{< figure src="/img/pi4b.jpg" width="150" title="Raspberry Pi 4B" >}}
 
-### Raspberry Pi 3 B and 3 B+
+</div>
 
-{{< figure src="/img/pi3b.jpg" width="150" >}}
+<div>
 
-## Continuous Integration (CI)
+{{< figure src="/img/apu2c4.jpg" width="150" title="PC Engines APU" >}}
+
+</div>
+
+<div>
+
+{{< figure src="/img/pizero2w.jpg" width="150" title="Raspberry Pi Zero 2W" >}}
+
+</div>
+
+<div>
+
+{{< figure src="/img/pi3b.jpg" width="150" title="Raspberry Pi 3 B and 3 B+" >}}
+
+</div>
+
+</div>
+
+## Continuous Integration (CI) {#ci}
 
 Appliances which are marked in <strong>bold</strong> are tested in the CI
 setup on real hardware and gate new kernel and firmware versions, and hence
@@ -113,33 +132,52 @@ An Ethernet cable was connected in all tests, WiFi was not enabled.
 [open only!]: /userguide/wifi/
 [limited]: /userguide/bluetooth/
 
+## gokrazy kernel repository map
+
+### Officially supported kernels
+
+These kernels are tested in [Continuous Integration](#ci).
+
+They are built from one of two sources: Either from Raspberry Pi’s Linux kernel
+fork, or from the upstream Linux kernel from [kernel.org].
+
+The upstream Linux kernel gets security fixes the quickest, but the Raspberry Pi
+Linux kernel supports more Raspberry Pi models (notably the Pi 5, which upstream
+does not support) and peripherals.
+
+| repository             | source         | devices                       |
+|------------------------|----------------|-------------------------------|
+| [gokrazy/kernel.rpi]   | [Raspberry Pi] | Pi 3, Pi 4, Pi 5, Pi Zero 2 W |
+| [gokrazy/kernel]       | [kernel.org]   | Pi 3, Pi 4, Pi Zero 2 W       |
+| [gokrazy/kernel.amd64] | [kernel.org]   | PC x86_64, VMs                |
+| [gokrazy/kernel.arm64] | [kernel.org]   | PC arm64, VMs                 |
+
+### Community-supported kernels
+
+Independently from the officially supported gokrazy kernels listed above, people
+of our community provide alternative kernels and firmwares, in order to run
+gokrazy on unsupported platform or to provide new features. They may not be as
+thoroughly tested as the official platforms. Please report any issue to their
+respective repository.
+
+| repository                           | source         | devices                                            |
+|--------------------------------------|----------------|----------------------------------------------------|
+| [gokrazy-community/kernel-rpi-os-32] | [Raspberry Pi] | Pi 1, Pi 2, Pi 3, Pi 4, Pi 5, Pi Zero 2 W (32 bit) |
+| [anupcshan/gokrazy-odroidxu4-kernel] | [kernel.org]   | Odroid XU4, HC1, HC2                               |
+
+[Raspberry Pi]: https://github.com/raspberrypi/linux
+[kernel.org]: https://kernel.org/
+[gokrazy-community/kernel-rpi-os-32]: https://github.com/gokrazy-community/kernel-rpi-os-32
+[anupcshan/gokrazy-odroidxu4-kernel]: https://github.com/anupcshan/gokrazy-odroidxu4-kernel
+[gokrazy/kernel.rpi]: https://github.com/gokrazy/kernel.rpi
+[gokrazy/kernel]: https://github.com/gokrazy/kernel
+[gokrazy/kernel.amd64]: https://github.com/gokrazy/gokrazy/issues/263
+[gokrazy/kernel.arm64]: https://github.com/gokrazy/gokrazy/issues/263
+
+
 ## Community-supported platforms {#community}
 
-Independently from the official gokrazy
-[kernel](https://github.com/gokrazy/kernel) and
-[firmware](https://github.com/gokrazy/firmware), people of our community provide
-alternative kernels and firmwares, in order to run gokrazy on unsupported
-platform or to provide new features. They may not be as thoroughly tested as the
-official platforms. Please report any issue to their respective repostitory.
-
-### Community-supported Raspberry Pi OS 32-bit kernel/firmware
-
-gokrazy’s official kernel is an upstream Linux kernel (directly from kernel.org)
-that supports ARMv8 64-bit machines, meaning the Raspberry Pi 3 and newer. The
-primary reason for using the upstream kernel is so that security fixes can be
-immediately pulled in without having to wait on third parties.
-
-The community-supported [github.com/gokrazy-community/kernel-rpi-os-32] kernel
-on the other hand is the Raspberry Pi OS kernel (provided by the Raspberry Pi
-foundation) that supports ARMv6 32-bit machines, which includes all Raspberry
-Pis. The corresponding firmware for this kernel is
-[github.com/gokrazy-community/firmware-rpi].
-
-This kernel might generally be useful if you want to use hardware peripherals
-that are not yet supported in the upstream Linux kernel.
-
-This kernel is the only choice for you if you have a Raspberry Pi that’s older
-than the Raspberry Pi 3, but you still want to use gokrazy with it.
+This section provides more details for community-supported platforms.
 
 ### Community-supported Odroid XU4/HC1/HC2
 
