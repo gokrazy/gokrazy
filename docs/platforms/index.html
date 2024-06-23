@@ -12,20 +12,20 @@
     <title>Supported platforms :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1718002042" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1718002042" rel="stylesheet">
-    <link href="/css/hybrid.css?1718002042" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1718002042" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1718002042" rel="stylesheet">
-    <link href="/css/auto-complete.css?1718002042" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1718002042" rel="stylesheet">
-    <link href="/css/theme.css?1718002042" rel="stylesheet">
-    <link href="/css/tabs.css?1718002042" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1718002042" rel="stylesheet">
+    <link href="/css/nucleus.css?1719135747" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1719135747" rel="stylesheet">
+    <link href="/css/hybrid.css?1719135747" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1719135747" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1719135747" rel="stylesheet">
+    <link href="/css/auto-complete.css?1719135747" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1719135747" rel="stylesheet">
+    <link href="/css/theme.css?1719135747" rel="stylesheet">
+    <link href="/css/tabs.css?1719135747" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1719135747" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1718002042"></script>
+    <script src="/js/jquery-3.3.1.min.js?1719135747"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1718002042"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1718002042"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1719135747"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1719135747"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1718002042"></script>
+<script type="text/javascript" src="/js/search.js?1719135747"></script>
 
     
   </div>
@@ -773,22 +773,20 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#recommended-raspberry-pi-4-b">Recommended: Raspberry Pi 4 B</a></li>
-    <li><a href="#all-currently-supported-platforms">All currently supported platforms</a>
-      <ul>
-        <li><a href="#raspberry-pi-4-b">Raspberry Pi 4 B</a></li>
-        <li><a href="#pc-engines-apu">PC Engines APU</a></li>
-        <li><a href="#raspberry-pi-zero-2-w">Raspberry Pi Zero 2 W</a></li>
-        <li><a href="#raspberry-pi-3-b-and-3-b">Raspberry Pi 3 B and 3 B+</a></li>
-      </ul>
-    </li>
-    <li><a href="#continuous-integration-ci">Continuous Integration (CI)</a></li>
+    <li><a href="#recommended-raspberry-pi-4-or-pi-5">Recommended: Raspberry Pi 4 or Pi 5</a></li>
+    <li><a href="#all-currently-supported-platforms">All currently supported platforms</a></li>
+    <li><a href="#ci">Continuous Integration (CI)</a></li>
     <li><a href="#performance">Performance</a></li>
     <li><a href="#power-usage">Power Usage</a></li>
     <li><a href="#hardware-support">Hardware Support</a></li>
+    <li><a href="#gokrazy-kernel-repository-map">gokrazy kernel repository map</a>
+      <ul>
+        <li><a href="#officially-supported-kernels">Officially supported kernels</a></li>
+        <li><a href="#community-supported-kernels">Community-supported kernels</a></li>
+      </ul>
+    </li>
     <li><a href="#community">Community-supported platforms</a>
       <ul>
-        <li><a href="#community-supported-raspberry-pi-os-32-bit-kernelfirmware">Community-supported Raspberry Pi OS 32-bit kernel/firmware</a></li>
         <li><a href="#community-supported-odroid-xu4hc1hc2">Community-supported Odroid XU4/HC1/HC2</a></li>
       </ul>
     </li>
@@ -817,30 +815,51 @@
 
 
 
-	<h2 id="recommended-raspberry-pi-4-b">Recommended: Raspberry Pi 4 B</h2>
-<p>gokrazy development happens primarily on the Raspberry Pi 4 B.</p>
-<figure><img src="/img/pi4b.jpg" width="200" height="200"/>
+	<h2 id="recommended-raspberry-pi-4-or-pi-5">Recommended: Raspberry Pi 4 or Pi 5</h2>
+<p>gokrazy development happens primarily on the Raspberry Pi 5, but the Pi 4 is
+also a great choice!</p>
+<figure><img src="/img/pi5.jpg" width="200" height="266"/>
 </figure>
 
-<!--<img src="/img/pi4b.jpg" width="200" align="right">-->
 <h2 id="all-currently-supported-platforms">All currently supported platforms</h2>
-<h3 id="raspberry-pi-4-b">Raspberry Pi 4 B</h3>
-<figure><img src="/img/pi4b.jpg" width="150"/>
+<div style="display: flex; flex-wrap: wrap">
+<div>
+<figure><img src="/img/pi5.jpg" width="150"/><figcaption>
+            <h4>Raspberry Pi 5</h4>
+        </figcaption>
 </figure>
 
-<h3 id="pc-engines-apu">PC Engines APU</h3>
-<figure><img src="/img/apu2c4.jpg" width="150"/>
+</div>
+<div>
+<figure><img src="/img/pi4b.jpg" width="150"/><figcaption>
+            <h4>Raspberry Pi 4B</h4>
+        </figcaption>
 </figure>
 
-<h3 id="raspberry-pi-zero-2-w">Raspberry Pi Zero 2 W</h3>
-<figure><img src="/img/pizero2w.jpg" width="150"/>
+</div>
+<div>
+<figure><img src="/img/apu2c4.jpg" width="150"/><figcaption>
+            <h4>PC Engines APU</h4>
+        </figcaption>
 </figure>
 
-<h3 id="raspberry-pi-3-b-and-3-b">Raspberry Pi 3 B and 3 B+</h3>
-<figure><img src="/img/pi3b.jpg" width="150"/>
+</div>
+<div>
+<figure><img src="/img/pizero2w.jpg" width="150"/><figcaption>
+            <h4>Raspberry Pi Zero 2W</h4>
+        </figcaption>
 </figure>
 
-<h2 id="continuous-integration-ci">Continuous Integration (CI)</h2>
+</div>
+<div>
+<figure><img src="/img/pi3b.jpg" width="150"/><figcaption>
+            <h4>Raspberry Pi 3 B and 3 B&#43;</h4>
+        </figcaption>
+</figure>
+
+</div>
+</div>
+<h2 id="ci">Continuous Integration (CI)</h2>
 <p>Appliances which are marked in <strong>bold</strong> are tested in the CI
 setup on real hardware and gate new kernel and firmware versions, and hence
 can be considered supported.</p>
@@ -1050,27 +1069,74 @@ the others were measured with a random USB power supply.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="gokrazy-kernel-repository-map">gokrazy kernel repository map</h2>
+<h3 id="officially-supported-kernels">Officially supported kernels</h3>
+<p>These kernels are tested in <a href="#ci">Continuous Integration</a>.</p>
+<p>They are built from one of two sources: Either from Raspberry Pi’s Linux kernel
+fork, or from the upstream Linux kernel from <a href="https://kernel.org/">kernel.org</a>.</p>
+<p>The upstream Linux kernel gets security fixes the quickest, but the Raspberry Pi
+Linux kernel supports more Raspberry Pi models (notably the Pi 5, which upstream
+does not support) and peripherals.</p>
+<table>
+<thead>
+<tr>
+<th>repository</th>
+<th>source</th>
+<th>devices</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/gokrazy/kernel.rpi">gokrazy/kernel.rpi</a></td>
+<td><a href="https://github.com/raspberrypi/linux">Raspberry Pi</a></td>
+<td>Pi 3, Pi 4, Pi 5, Pi Zero 2 W</td>
+</tr>
+<tr>
+<td><a href="https://github.com/gokrazy/kernel">gokrazy/kernel</a></td>
+<td><a href="https://kernel.org/">kernel.org</a></td>
+<td>Pi 3, Pi 4, Pi Zero 2 W</td>
+</tr>
+<tr>
+<td><a href="https://github.com/gokrazy/gokrazy/issues/263">gokrazy/kernel.amd64</a></td>
+<td><a href="https://kernel.org/">kernel.org</a></td>
+<td>PC x86_64, VMs</td>
+</tr>
+<tr>
+<td><a href="https://github.com/gokrazy/gokrazy/issues/263">gokrazy/kernel.arm64</a></td>
+<td><a href="https://kernel.org/">kernel.org</a></td>
+<td>PC arm64, VMs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="community-supported-kernels">Community-supported kernels</h3>
+<p>Independently from the officially supported gokrazy kernels listed above, people
+of our community provide alternative kernels and firmwares, in order to run
+gokrazy on unsupported platform or to provide new features. They may not be as
+thoroughly tested as the official platforms. Please report any issue to their
+respective repository.</p>
+<table>
+<thead>
+<tr>
+<th>repository</th>
+<th>source</th>
+<th>devices</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/gokrazy-community/kernel-rpi-os-32">gokrazy-community/kernel-rpi-os-32</a></td>
+<td><a href="https://github.com/raspberrypi/linux">Raspberry Pi</a></td>
+<td>Pi 1, Pi 2, Pi 3, Pi 4, Pi 5, Pi Zero 2 W (32 bit)</td>
+</tr>
+<tr>
+<td><a href="https://github.com/anupcshan/gokrazy-odroidxu4-kernel">anupcshan/gokrazy-odroidxu4-kernel</a></td>
+<td><a href="https://kernel.org/">kernel.org</a></td>
+<td>Odroid XU4, HC1, HC2</td>
+</tr>
+</tbody>
+</table>
 <h2 id="community">Community-supported platforms</h2>
-<p>Independently from the official gokrazy
-<a href="https://github.com/gokrazy/kernel">kernel</a> and
-<a href="https://github.com/gokrazy/firmware">firmware</a>, people of our community provide
-alternative kernels and firmwares, in order to run gokrazy on unsupported
-platform or to provide new features. They may not be as thoroughly tested as the
-official platforms. Please report any issue to their respective repostitory.</p>
-<h3 id="community-supported-raspberry-pi-os-32-bit-kernelfirmware">Community-supported Raspberry Pi OS 32-bit kernel/firmware</h3>
-<p>gokrazy’s official kernel is an upstream Linux kernel (directly from kernel.org)
-that supports ARMv8 64-bit machines, meaning the Raspberry Pi 3 and newer. The
-primary reason for using the upstream kernel is so that security fixes can be
-immediately pulled in without having to wait on third parties.</p>
-<p>The community-supported <a href="https://github.com/gokrazy-community/kernel-rpi-os-32">github.com/gokrazy-community/kernel-rpi-os-32</a> kernel
-on the other hand is the Raspberry Pi OS kernel (provided by the Raspberry Pi
-foundation) that supports ARMv6 32-bit machines, which includes all Raspberry
-Pis. The corresponding firmware for this kernel is
-<a href="https://github.com/gokrazy-community/firmware-rpi">github.com/gokrazy-community/firmware-rpi</a>.</p>
-<p>This kernel might generally be useful if you want to use hardware peripherals
-that are not yet supported in the upstream Linux kernel.</p>
-<p>This kernel is the only choice for you if you have a Raspberry Pi that’s older
-than the Raspberry Pi 3, but you still want to use gokrazy with it.</p>
+<p>This section provides more details for community-supported platforms.</p>
 <h3 id="community-supported-odroid-xu4hc1hc2">Community-supported Odroid XU4/HC1/HC2</h3>
 <p>Odroid XU4/HC1/HC2 is based on a Samsung Exynos 5422 SOC (4 ARM Cortex-A15
 cores and 4 ARM Cortex-A7 cores) and has been on the market since ~2016. HC1
@@ -1583,19 +1649,19 @@ new disk image.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1718002042"></script>
-    <script src="/js/perfect-scrollbar.min.js?1718002042"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1718002042"></script>
-    <script src="/js/jquery.sticky.js?1718002042"></script>
-    <script src="/js/featherlight.min.js?1718002042"></script>
-    <script src="/js/highlight.pack.js?1718002042"></script>
+    <script src="/js/clipboard.min.js?1719135747"></script>
+    <script src="/js/perfect-scrollbar.min.js?1719135747"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1719135747"></script>
+    <script src="/js/jquery.sticky.js?1719135747"></script>
+    <script src="/js/featherlight.min.js?1719135747"></script>
+    <script src="/js/highlight.pack.js?1719135747"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1718002042"></script>
-    <script src="/js/learn.js?1718002042"></script>
-    <script src="/js/hugo-learn.js?1718002042"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1719135747"></script>
+    <script src="/js/learn.js?1719135747"></script>
+    <script src="/js/hugo-learn.js?1719135747"></script>
     
         
-            <script src="/mermaid/mermaid.js?1718002042"></script>
+            <script src="/mermaid/mermaid.js?1719135747"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
