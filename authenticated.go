@@ -4,16 +4,27 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
+	"net"
 	"net/http"
 	"strings"
 )
 
 func authenticated(w http.ResponseWriter, r *http.Request) {
-	// defense in depth
+	// If httpPassword is empty, we only allow access via the unix socket. Out
+	// of paranoia, even though it should only be listening via the unix socket,
+	// verify that's where it came from.
+	//
+	// See https://github.com/gokrazy/gokrazy/issues/265
 	if httpPassword == "" {
-		http.Error(w, "httpPassword not set", http.StatusInternalServerError)
+		addr, ok := r.Context().Value(http.LocalAddrContextKey).(*net.UnixAddr)
+		if ok && addr.Name == gokrazyHTTPUnixSocket {
+			http.DefaultServeMux.ServeHTTP(w, r)
+		} else {
+			http.Error(w, "httpPassword not set and request from unexpected address", http.StatusInternalServerError)
+		}
 		return
 	}
+
 	kind, encoded, found := strings.Cut(r.Header.Get("Authorization"), " ")
 	if !found || kind != "Basic" {
 		w.Header().Set("WWW-Authenticate", `Basic realm="gokrazy"`)
