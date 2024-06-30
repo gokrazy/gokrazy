@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/anatol/vmtest v0.0.0-20211215032353-afd7b1dd38ef
 	github.com/beevik/ntp v0.3.0
-	github.com/gokrazy/internal v0.0.0-20240607160728-3c7bf66a62e9
+	github.com/gokrazy/internal v0.0.0-20240629150625-a0f1dee26ef5
 	github.com/google/gopacket v1.1.19
 	github.com/google/renameio/v2 v2.0.0
 	github.com/kenshaw/evdev v0.1.0
