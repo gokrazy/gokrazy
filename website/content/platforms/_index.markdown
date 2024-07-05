@@ -164,11 +164,13 @@ respective repository.
 |--------------------------------------|----------------|----------------------------------------------------|
 | [gokrazy-community/kernel-rpi-os-32] | [Raspberry Pi] | Pi 1, Pi 2, Pi 3, Pi 4, Pi 5, Pi Zero 2 W (32 bit) |
 | [anupcshan/gokrazy-odroidxu4-kernel] | [kernel.org]   | Odroid XU4, HC1, HC2                               |
+| [anupcshan/gokrazy-rock64-kernel]    | [kernel.org]   | Pine64 Rock64                                      |
 
 [Raspberry Pi]: https://github.com/raspberrypi/linux
 [kernel.org]: https://kernel.org/
 [gokrazy-community/kernel-rpi-os-32]: https://github.com/gokrazy-community/kernel-rpi-os-32
 [anupcshan/gokrazy-odroidxu4-kernel]: https://github.com/anupcshan/gokrazy-odroidxu4-kernel
+[anupcshan/gokrazy-rock64-kernel]: https://github.com/anupcshan/gokrazy-rock64-kernel
 [gokrazy/kernel.rpi]: https://github.com/gokrazy/kernel.rpi
 [gokrazy/kernel]: https://github.com/gokrazy/kernel
 [gokrazy/kernel.amd64]: https://github.com/gokrazy/gokrazy/issues/263
@@ -209,7 +211,37 @@ new disk image.
 }
 {{< /highlight >}}
 
+### Community-supported Rock64
+
+Pine64 Rock64 is based on a Rockchip RK3328 SOC (4 ARM Cortex-A53 cores)
+and has been on the market since ~2017.
+
+Kernel for these devices is available at [github.com/anupcshan/gokrazy-rock64-kernel].
+This package contains a recent kernel and mainline U-boot required to initiate
+the boot process. These have been tested against real hardware with gigabit networking
+and USB working under Gokrazy.
+
+Usage of eMMC module is not supported yet - [github.com/gokrazy/gokrazy/issues/270].
+
+{{< highlight json "hl_lines=3 10-13" >}}
+{
+    "Hostname": "my-rock64",
+    "DeviceType": "rock64",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass"
+    ],
+    "KernelPackage": "github.com/anupcshan/gokrazy-rock64-kernel",
+    "FirmwarePackage": "",
+    "EEPROMPackage": ""
+}
+{{< /highlight >}}
+
 [github.com/gokrazy-community/kernel-rpi-os-32]: https://github.com/gokrazy-community/kernel-rpi-os-32
 [github.com/gokrazy-community/firmware-rpi]: https://github.com/gokrazy-community/firmware-rpi
 [github.com/anupcshan/gokrazy-odroidxu4-kernel]: https://github.com/anupcshan/gokrazy-odroidxu4-kernel
+[github.com/anupcshan/gokrazy-rock64-kernel]: https://github.com/anupcshan/gokrazy-rock64-kernel
+[github.com/gokrazy/gokrazy/issues/270]: https://github.com/gokrazy/gokrazy/issues/270
 [github.com/anupcshan/odroidbake]: https://github.com/anupcshan/odroidbake

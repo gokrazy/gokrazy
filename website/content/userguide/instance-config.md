@@ -124,6 +124,8 @@ instance should be built for.
   without a GPT (as the Odroid devices do not support GPT), and in extra
   bootloader files in the root partition.
 
+* `rock64`: target Pine64 Rock64 devices.
+
 The possible values are defined in
 [`github.com/gokrazy/internal/deviceconfig` (→ config.go)](https://github.com/gokrazy/internal/blob/main/deviceconfig/config.go)
 
