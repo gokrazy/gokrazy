@@ -12,20 +12,20 @@
     <title>Supported platforms :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1719135747" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1719135747" rel="stylesheet">
-    <link href="/css/hybrid.css?1719135747" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1719135747" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1719135747" rel="stylesheet">
-    <link href="/css/auto-complete.css?1719135747" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1719135747" rel="stylesheet">
-    <link href="/css/theme.css?1719135747" rel="stylesheet">
-    <link href="/css/tabs.css?1719135747" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1719135747" rel="stylesheet">
+    <link href="/css/nucleus.css?1720421690" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1720421690" rel="stylesheet">
+    <link href="/css/hybrid.css?1720421690" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1720421690" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1720421690" rel="stylesheet">
+    <link href="/css/auto-complete.css?1720421690" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1720421690" rel="stylesheet">
+    <link href="/css/theme.css?1720421690" rel="stylesheet">
+    <link href="/css/tabs.css?1720421690" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1720421690" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1719135747"></script>
+    <script src="/js/jquery-3.3.1.min.js?1720421690"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1719135747"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1719135747"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1720421690"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1720421690"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1719135747"></script>
+<script type="text/javascript" src="/js/search.js?1720421690"></script>
 
     
   </div>
@@ -788,6 +788,7 @@
     <li><a href="#community">Community-supported platforms</a>
       <ul>
         <li><a href="#community-supported-odroid-xu4hc1hc2">Community-supported Odroid XU4/HC1/HC2</a></li>
+        <li><a href="#community-supported-rock64">Community-supported Rock64</a></li>
       </ul>
     </li>
   </ul>
@@ -1133,6 +1134,11 @@ respective repository.</p>
 <td><a href="https://kernel.org/">kernel.org</a></td>
 <td>Odroid XU4, HC1, HC2</td>
 </tr>
+<tr>
+<td><a href="https://github.com/anupcshan/gokrazy-rock64-kernel">anupcshan/gokrazy-rock64-kernel</a></td>
+<td><a href="https://kernel.org/">kernel.org</a></td>
+<td>Pine64 Rock64</td>
+</tr>
 </tbody>
 </table>
 <h2 id="community">Community-supported platforms</h2>
@@ -1157,6 +1163,27 @@ new disk image.</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;KernelPackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/anupcshan/gokrazy-odroidxu4-kernel&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;FirmwarePackage&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;EEPROMPackage&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>}</span></span></code></pre></div>
+<h3 id="community-supported-rock64">Community-supported Rock64</h3>
+<p>Pine64 Rock64 is based on a Rockchip RK3328 SOC (4 ARM Cortex-A53 cores)
+and has been on the market since ~2017.</p>
+<p>Kernel for these devices is available at <a href="https://github.com/anupcshan/gokrazy-rock64-kernel">github.com/anupcshan/gokrazy-rock64-kernel</a>.
+This package contains a recent kernel and mainline U-boot required to initiate
+the boot process. These have been tested against real hardware with gigabit networking
+and USB working under Gokrazy.</p>
+<p>Usage of eMMC module is not supported yet - <a href="https://github.com/gokrazy/gokrazy/issues/270">github.com/gokrazy/gokrazy/issues/270</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;my-rock64&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;DeviceType&#34;</span>: <span style="color:#e6db74">&#34;rock64&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;KernelPackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/anupcshan/gokrazy-rock64-kernel&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;FirmwarePackage&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;EEPROMPackage&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>}</span></span></code></pre></div>
@@ -1649,19 +1676,19 @@ new disk image.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1719135747"></script>
-    <script src="/js/perfect-scrollbar.min.js?1719135747"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1719135747"></script>
-    <script src="/js/jquery.sticky.js?1719135747"></script>
-    <script src="/js/featherlight.min.js?1719135747"></script>
-    <script src="/js/highlight.pack.js?1719135747"></script>
+    <script src="/js/clipboard.min.js?1720421690"></script>
+    <script src="/js/perfect-scrollbar.min.js?1720421690"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1720421690"></script>
+    <script src="/js/jquery.sticky.js?1720421690"></script>
+    <script src="/js/featherlight.min.js?1720421690"></script>
+    <script src="/js/highlight.pack.js?1720421690"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1719135747"></script>
-    <script src="/js/learn.js?1719135747"></script>
-    <script src="/js/hugo-learn.js?1719135747"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1720421690"></script>
+    <script src="/js/learn.js?1720421690"></script>
+    <script src="/js/hugo-learn.js?1720421690"></script>
     
         
-            <script src="/mermaid/mermaid.js?1719135747"></script>
+            <script src="/mermaid/mermaid.js?1720421690"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
