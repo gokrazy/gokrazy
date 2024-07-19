@@ -736,6 +736,60 @@ Pi OS Linux driver.
 }
 {{< /highlight >}}
 
+## Device mount configuration {#mountconfig}
+
+This allows enabling the [Raspberry Pi-provided Device Tree
+Overlays](https://www.raspberrypi.com/documentation/computers/configuration.html#part3.1)
+— the example below enables [1-Wire](https://en.wikipedia.org/wiki/1-Wire)
+support. Note that not all Device Tree Overlays are guaranteed to work;
+compatibility depends on whether the upstream Linux driver matches the Raspberry
+Pi OS Linux driver.
+
+
+### Device mount configuration → Source {#mountconfigsource}
+
+Currently, the following formats are supported:
+
+* `PARTUUID=`, where you identify a partition by its GPT partition UUID (print with [blkid(8)](https://manpages.debian.org/blkid.8))
+* `/dev/sda4`, where you provide the (hopefully stable) path of a device node directly
+
+**Example:**
+
+{{< highlight json "hl_lines=9-16" >}}
+{
+    "Hostname": "hello",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass"
+    ],
+    "MountDevices": [
+		{
+		    "Source": "PARTUUID=c995c848-1d29-4f08-a34d-cd811e84a763",
+		    "Type": "ext4",
+		    "Target": "/mnt/usb-thumb-drive",
+		    "Options": ""
+		}
+	]
+}
+{{< /highlight >}}
+
+
+### Device mount configuration → Type {#mountconfigtype}
+
+The `Type` field specifies the file system type to mount. Typically `ext4`, or
+any other file system your kernel supports. You can use `cat /proc/filesystems`
+in a [breakglass](https://github.com/gokrazy/breakglass/) shell to list them.
+
+### Device mount configuration → Target {#mountconfigtarget}
+
+File system path under `/mnt` in which to mount the device, e.g. `/mnt/usb-thumb-drive`
+
+### Device mount configuration → Options {#mountconfigoptions}
+
+TODO: not yet implemented, see https://github.com/gokrazy/gokrazy/issues/236
+
 ## Update {#update}
 
 The `Update` field contains a struct that configures how gokrazy updates are done.
