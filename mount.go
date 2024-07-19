@@ -190,9 +190,51 @@ func findGPTPartUUID(uuid string) (_ string, _ error) {
 	return dev, nil
 }
 
+func findFilesystemUUID(uuid string) (string, error) {
+	var dev string
+	uuid = strings.ToLower(uuid)
+	dirents, err := os.ReadDir("/dev")
+	if err != nil {
+		return "", err
+	}
+	for _, de := range dirents {
+		dev := de.Name()
+		if strings.HasPrefix(dev, "mmcblk") ||
+			strings.HasPrefix(dev, "loop") ||
+			strings.HasPrefix(dev, "nvme") ||
+			strings.HasPrefix(dev, "sd") ||
+			strings.HasPrefix(dev, "hd") ||
+			strings.HasPrefix(dev, "vd") {
+			devname := filepath.Join("/dev", dev)
+			f, err := os.Open(devname)
+			if err != nil {
+				log.Printf("findFilesystemUUID: %v", err)
+				continue
+			}
+			defer f.Close()
+			fsUUID, err := probeExt4(f)
+			if err != nil {
+				log.Printf("probeExt4(%s): %v", dev, err)
+				continue
+			}
+			if strings.ToLower(fsUUID) == uuid {
+				return devname, nil
+			}
+			log.Printf("  not matching: %s with UUID=%s", devname, fsUUID)
+		}
+	}
+	if dev == "" {
+		return "", fmt.Errorf("UUID=%s not found", uuid)
+	}
+	return dev, nil
+}
+
 func deviceForSource(source string) (string, error) {
 	if strings.HasPrefix(source, "PARTUUID=") {
 		return findGPTPartUUID(strings.TrimPrefix(source, "PARTUUID="))
+	}
+	if strings.HasPrefix(source, "UUID=") {
+		return findFilesystemUUID(strings.TrimPrefix(source, "UUID="))
 	}
 
 	return source, nil

@@ -750,6 +750,7 @@ This allows you to make use of e.g. an external SSD as fast and reliable storage
 Currently, the following formats are supported:
 
 * `PARTUUID=`, where you identify a partition by its GPT partition UUID (print with [blkid(8)](https://manpages.debian.org/blkid.8))
+* `UUID=`, where you identify an ext2, ext3 or ext4 file system by its UUID (print with [blkid(8)](https://manpages.debian.org/blkid.8))
 * `/dev/sda4`, where you provide the (hopefully stable) path of a device node directly
 
 **Example:**
