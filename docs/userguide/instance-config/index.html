@@ -12,20 +12,20 @@
     <title>Instance Config Reference :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1721401943" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1721401943" rel="stylesheet">
-    <link href="/css/hybrid.css?1721401943" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1721401943" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1721401943" rel="stylesheet">
-    <link href="/css/auto-complete.css?1721401943" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1721401943" rel="stylesheet">
-    <link href="/css/theme.css?1721401943" rel="stylesheet">
-    <link href="/css/tabs.css?1721401943" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1721401943" rel="stylesheet">
+    <link href="/css/nucleus.css?1721402345" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1721402345" rel="stylesheet">
+    <link href="/css/hybrid.css?1721402345" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1721402345" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1721402345" rel="stylesheet">
+    <link href="/css/auto-complete.css?1721402345" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1721402345" rel="stylesheet">
+    <link href="/css/theme.css?1721402345" rel="stylesheet">
+    <link href="/css/tabs.css?1721402345" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1721402345" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1721401943"></script>
+    <script src="/js/jquery-3.3.1.min.js?1721402345"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1721401943"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1721401943"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1721402345"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1721402345"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1721401943"></script>
+<script type="text/javascript" src="/js/search.js?1721402345"></script>
 
     
   </div>
@@ -1413,12 +1413,11 @@ Pi OS Linux driver.</p>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>	]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 <h2 id="mountconfig">Device mount configuration</h2>
-<p>This allows enabling the <a href="https://www.raspberrypi.com/documentation/computers/configuration.html#part3.1">Raspberry Pi-provided Device Tree
-Overlays</a>
-— the example below enables <a href="https://en.wikipedia.org/wiki/1-Wire">1-Wire</a>
-support. Note that not all Device Tree Overlays are guaranteed to work;
-compatibility depends on whether the upstream Linux driver matches the Raspberry
-Pi OS Linux driver.</p>
+<p>gokrazy allows specifying additional devices that will be mounted under <code>/mnt</code>
+when a gokrazy instance boots. The <code>gok</code> CLI will create the directory in the
+root file system, the gokrazy init system will (repeatedly, indefinitely) try to
+find the device specified by <code>Source</code> and mount it at <code>Target</code>.</p>
+<p>This allows you to make use of e.g. an external SSD as fast and reliable storage.</p>
 <h3 id="mountconfigsource">Device mount configuration → Source</h3>
 <p>Currently, the following formats are supported:</p>
 <ul>
@@ -2053,19 +2052,19 @@ certificate.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1721401943"></script>
-    <script src="/js/perfect-scrollbar.min.js?1721401943"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1721401943"></script>
-    <script src="/js/jquery.sticky.js?1721401943"></script>
-    <script src="/js/featherlight.min.js?1721401943"></script>
-    <script src="/js/highlight.pack.js?1721401943"></script>
+    <script src="/js/clipboard.min.js?1721402345"></script>
+    <script src="/js/perfect-scrollbar.min.js?1721402345"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1721402345"></script>
+    <script src="/js/jquery.sticky.js?1721402345"></script>
+    <script src="/js/featherlight.min.js?1721402345"></script>
+    <script src="/js/highlight.pack.js?1721402345"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1721401943"></script>
-    <script src="/js/learn.js?1721401943"></script>
-    <script src="/js/hugo-learn.js?1721401943"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1721402345"></script>
+    <script src="/js/learn.js?1721402345"></script>
+    <script src="/js/hugo-learn.js?1721402345"></script>
     
         
-            <script src="/mermaid/mermaid.js?1721401943"></script>
+            <script src="/mermaid/mermaid.js?1721402345"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
