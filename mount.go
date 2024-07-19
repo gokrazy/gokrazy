@@ -162,6 +162,9 @@ func findGPTPartUUID(uuid string) (_ string, _ error) {
 		defer f.Close()
 		for idx, partUUID := range gpt.PartitionUUIDs(f) {
 			if strings.ToLower(partUUID) != uuid {
+				if partUUID != "00000000-0000-0000-0000-000000000000" {
+					log.Printf("  not matching: %s with PARTUUID=%s", devname, partUUID)
+				}
 				continue
 			}
 			dev = devname
