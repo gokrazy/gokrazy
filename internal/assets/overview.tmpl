@@ -85,6 +85,10 @@ No permanent storage mounted. To create a filesystem for permanent storage, plug
 <strong>{{ .PermDev }}</strong>: {{ gigabytes .PermTotal }} total, {{ gigabytes .PermUsed }} used, {{ gigabytes .PermAvail }} avail<br>
 {{ end }}
 
+{{ range $idx, $dev := .MountDevices }}
+<strong>{{ $dev.Dev }}</strong>: {{ gigabytes $dev.Total }} total, {{ gigabytes $dev.Used }} used, {{ gigabytes $dev.Avail }} avail<br>
+{{ end }}
+
 <h2>private network addresses</h2>
 <ul>
 {{ range $idx, $addr := .PrivateAddrs }}

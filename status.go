@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -18,6 +19,7 @@ import (
 	"time"
 
 	"github.com/gokrazy/gokrazy/internal/assets"
+	"github.com/gokrazy/internal/config"
 	"github.com/gokrazy/internal/rootdev"
 
 	"golang.org/x/sys/unix"
@@ -189,6 +191,32 @@ var templates = template.Must(template.New("root").
 	}).
 	ParseFS(assets.Assets, "*.tmpl"))
 
+func mountTargets() ([]string, error) {
+	b, err := os.ReadFile("/etc/gokrazy/mountdevices.json")
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("reading mountdevices.json: %v", err)
+	}
+	var mountdevices []config.MountDevice
+	if err := json.Unmarshal(b, &mountdevices); err != nil {
+		return nil, fmt.Errorf("reading mountdevices.json: %v", err)
+	}
+	var targets []string
+	for _, dev := range mountdevices {
+		targets = append(targets, dev.Target)
+	}
+	return targets, nil
+}
+
+type filesystemStatus struct {
+	Dev   string
+	Used  int64
+	Avail int64
+	Total int64
+}
+
 func initStatus() {
 	model := Model()
 
@@ -201,6 +229,11 @@ func initStatus() {
 	_, sbomHash, err := ReadSBOM()
 	if err != nil {
 		log.Printf("getting SBOM: %v", err)
+	}
+
+	mountTargets, err := mountTargets()
+	if err != nil {
+		log.Printf("getting mount targets: %v", err)
 	}
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assets.Assets))))
@@ -352,6 +385,21 @@ func initStatus() {
 		} else {
 			permUUID += "-04"
 		}
+
+		var mountDevices []filesystemStatus
+		for _, target := range mountTargets {
+			var st unix.Statfs_t
+			if err := unix.Statfs(target, &st); err != nil {
+				log.Printf("could not stat %s: %v", target, err)
+			}
+			mountDevices = append(mountDevices, filesystemStatus{
+				Dev:   target,
+				Used:  int64(st.Bsize) * int64(st.Blocks-st.Bfree),
+				Avail: int64(st.Bsize) * int64(st.Bavail),
+				Total: int64(st.Bsize) * int64(st.Blocks),
+			})
+		}
+
 		services.Lock()
 		defer services.Unlock()
 		status := struct {
@@ -370,6 +418,7 @@ func initStatus() {
 			PermUUID       string
 			EEPROM         *eepromVersion
 			Kernel         string
+			MountDevices   []filesystemStatus
 		}{
 			Services:       services.S,
 			PermDev:        rootdev.Partition(rootdev.Perm),
@@ -386,6 +435,7 @@ func initStatus() {
 			PermUUID:       permUUID,
 			EEPROM:         lastInstalledEepromVersion,
 			Kernel:         kernel,
+			MountDevices:   mountDevices,
 		}
 
 		if jsonRequested(r) {
