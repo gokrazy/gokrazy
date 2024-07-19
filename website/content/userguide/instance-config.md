@@ -738,13 +738,12 @@ Pi OS Linux driver.
 
 ## Device mount configuration {#mountconfig}
 
-This allows enabling the [Raspberry Pi-provided Device Tree
-Overlays](https://www.raspberrypi.com/documentation/computers/configuration.html#part3.1)
-— the example below enables [1-Wire](https://en.wikipedia.org/wiki/1-Wire)
-support. Note that not all Device Tree Overlays are guaranteed to work;
-compatibility depends on whether the upstream Linux driver matches the Raspberry
-Pi OS Linux driver.
+gokrazy allows specifying additional devices that will be mounted under `/mnt`
+when a gokrazy instance boots. The `gok` CLI will create the directory in the
+root file system, the gokrazy init system will (repeatedly, indefinitely) try to
+find the device specified by `Source` and mount it at `Target`.
 
+This allows you to make use of e.g. an external SSD as fast and reliable storage.
 
 ### Device mount configuration → Source {#mountconfigsource}
 
