@@ -229,13 +229,17 @@ func mountDevices() error {
 	for _, md := range mountdevices {
 		md := md // remove once we are on Go 1.22
 		go func() {
-			for {
+			for attempt := 0; ; attempt++ {
 				err := mountDevice(md)
 				if err == nil {
 					return
 				}
 				log.Printf("mounting %s: %v", md.Source, err)
-				time.Sleep(1 * time.Second)
+				if attempt < 10 {
+					time.Sleep(1 * time.Second)
+				} else {
+					time.Sleep(5 * time.Second)
+				}
 			}
 		}()
 	}
