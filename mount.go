@@ -12,10 +12,50 @@ import (
 	"syscall"
 	"time"
 
+	"golang.org/x/sys/unix"
+
 	"github.com/gokrazy/internal/config"
 	"github.com/gokrazy/internal/gpt"
 	"github.com/gokrazy/internal/rootdev"
 )
+
+var flagKeywords = map[string]struct {
+	clear bool
+	flag  uintptr
+}{
+	"ro":            {false, unix.MS_RDONLY},
+	"rw":            {true, unix.MS_RDONLY},
+	"suid":          {true, unix.MS_NOSUID},
+	"nosuid":        {false, unix.MS_NOSUID},
+	"dev":           {true, unix.MS_NODEV},
+	"nodev":         {false, unix.MS_NODEV},
+	"exec":          {true, unix.MS_NOEXEC},
+	"noexec":        {false, unix.MS_NOEXEC},
+	"sync":          {false, unix.MS_SYNCHRONOUS},
+	"async":         {true, unix.MS_SYNCHRONOUS},
+	"dirsync":       {false, unix.MS_DIRSYNC},
+	"remount":       {false, unix.MS_REMOUNT},
+	"mand":          {false, unix.MS_MANDLOCK},
+	"nomand":        {true, unix.MS_MANDLOCK},
+	"atime":         {true, unix.MS_NOATIME},
+	"noatime":       {false, unix.MS_NOATIME},
+	"diratime":      {true, unix.MS_NODIRATIME},
+	"nodiratime":    {false, unix.MS_NODIRATIME},
+	"bind":          {false, unix.MS_BIND},
+	"rbind":         {false, unix.MS_BIND | unix.MS_REC},
+	"unbindable":    {false, unix.MS_UNBINDABLE},
+	"runbindable":   {false, unix.MS_UNBINDABLE | unix.MS_REC},
+	"private":       {false, unix.MS_PRIVATE},
+	"rprivate":      {false, unix.MS_PRIVATE | unix.MS_REC},
+	"shared":        {false, unix.MS_SHARED},
+	"rshared":       {false, unix.MS_SLAVE | unix.MS_REC},
+	"slave":         {false, unix.MS_SLAVE},
+	"rslave":        {false, unix.MS_SHARED | unix.MS_REC},
+	"relatime":      {false, unix.MS_RELATIME},
+	"norelatime":    {true, unix.MS_RELATIME},
+	"strictatime":   {false, unix.MS_STRICTATIME},
+	"nostrictatime": {true, unix.MS_STRICTATIME},
+}
 
 // mountCompat deals with old FAT root file systems, to cover the case where
 // users use an old gokr-packer with a new github.com/gokrazy/gokrazy package.
@@ -240,18 +280,46 @@ func deviceForSource(source string) (string, error) {
 	return source, nil
 }
 
+// Parse a comma-delimited mount options string into the flags and data
+// arguments which may be passed to syscall.Mount.
+// This function is derived from github.com/moby/sys.
+func parseMountOptions(options string) (uintptr, string) {
+	var (
+		flags uintptr
+		data  []string
+	)
+
+	for _, o := range strings.Split(options, ",") {
+		// If the option does not exist in the flags table, it is a data value
+		// for a specific fs type
+		if f, exists := flagKeywords[o]; exists && f.flag != 0 {
+			if f.clear {
+				flags &= ^f.flag
+			} else {
+				flags |= f.flag
+			}
+		} else {
+			data = append(data, o)
+		}
+	}
+	return flags, strings.Join(data, ",")
+
+}
+
 func mountDevice(md config.MountDevice) error {
 	dev, err := deviceForSource(md.Source)
 	if err != nil {
 		return err
 	}
 
+	flags, data := parseMountOptions(md.Options)
+
 	options := ""
 	if md.Options != "" {
 		options = " with options: " + md.Options
 	}
 	log.Printf("mounting %s on %s%s", dev, md.Target, options)
-	if err := syscall.Mount(dev, md.Target, md.Type, 0, ""); err != nil {
+	if err := syscall.Mount(dev, md.Target, md.Type, flags, data); err != nil {
 		return err
 	}
 
