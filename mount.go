@@ -246,7 +246,11 @@ func mountDevice(md config.MountDevice) error {
 		return err
 	}
 
-	log.Printf("mounting %s on %s", dev, md.Target)
+	options := ""
+	if md.Options != "" {
+		options = " with options: " + md.Options
+	}
+	log.Printf("mounting %s on %s%s", dev, md.Target, options)
 	if err := syscall.Mount(dev, md.Target, md.Type, 0, ""); err != nil {
 		return err
 	}
