@@ -788,7 +788,12 @@ File system path under `/mnt` in which to mount the device, e.g. `/mnt/usb-thumb
 
 ### Device mount configuration → Options {#mountconfigoptions}
 
-TODO: not yet implemented, see https://github.com/gokrazy/gokrazy/issues/236
+gokrazy supports the usual [filesystem-independent mount
+options](https://manpages.debian.org/mount.8#FILESYSTEM-INDEPENDENT_MOUNT_OPTIONS)
+like `ro`, `noexec`, etc.
+
+The full list of supported options can be found in
+https://github.com/gokrazy/gokrazy/blob/main/mount.go#L26
 
 ## Update {#update}
 
