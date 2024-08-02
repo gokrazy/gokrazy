@@ -173,8 +173,8 @@ respective repository.
 [anupcshan/gokrazy-rock64-kernel]: https://github.com/anupcshan/gokrazy-rock64-kernel
 [gokrazy/kernel.rpi]: https://github.com/gokrazy/kernel.rpi
 [gokrazy/kernel]: https://github.com/gokrazy/kernel
-[gokrazy/kernel.amd64]: https://github.com/gokrazy/gokrazy/kernel.amd64
-[gokrazy/kernel.arm64]: https://github.com/gokrazy/gokrazy/kernel.arm64
+[gokrazy/kernel.amd64]: https://github.com/gokrazy/kernel.amd64
+[gokrazy/kernel.arm64]: https://github.com/gokrazy/kernel.arm64
 
 
 ## Community-supported platforms {#community}
