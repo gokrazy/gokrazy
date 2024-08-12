@@ -355,15 +355,33 @@ func (s *service) RSS() int64 {
 
 var syslogRaddr string
 
-func initRemoteSyslog() {
+func readRemoteSyslogTarget() string {
 	b, err := os.ReadFile("/perm/remote_syslog/target")
-	if err != nil {
-		if !os.IsNotExist(err) {
-			log.Print(err)
+	if err == nil {
+		return strings.TrimSpace(string(b))
+	}
+	if !os.IsNotExist(err) {
+		log.Print(err)
+	}
+
+	// As another option, support reading the target value from
+	// the Linux command line. This is intended for use in
+	// integration tests where Linux is being booted from a qemu
+	// microvm, booting the kernel directly.
+	b, _ = os.ReadFile("/proc/cmdline")
+	for _, s := range strings.Fields(string(b)) {
+		if v, ok := strings.CutPrefix(s, "gokrazy.remote_syslog.target="); ok {
+			return v
 		}
+	}
+	return ""
+}
+
+func initRemoteSyslog() {
+	raddr := readRemoteSyslogTarget()
+	if raddr == "" {
 		return
 	}
-	raddr := strings.TrimSpace(string(b))
 	log.Printf("sending process stdout/stderr to remote syslog %s", raddr)
 	syslogRaddr = raddr
 }
