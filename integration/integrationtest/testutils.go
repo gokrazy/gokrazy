@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -49,7 +48,29 @@ func copyFile(dest string, src fs.DirEntry) error {
 
 func Run(t *testing.T, pkgName string, deviceType string, qemuArgs []string) {
 	tempdir := t.TempDir()
-	err := ioutil.WriteFile(
+	err := os.WriteFile(
+		filepath.Join(tempdir, "config.json"),
+		[]byte(fmt.Sprintf(`
+{
+    "Hostname": "qemu",
+    "DeviceType": "%s",
+    "Update": {
+        "HTTPPassword": "foobar"
+    },
+    "Packages": [
+        "%s"
+    ],
+    "SerialConsole": "ttyS0,115200",
+    "KernelPackage": "github.com/gokrazy/kernel.amd64",
+    "FirmwarePackage": "github.com/gokrazy/kernel.amd64",
+    "EEPROMPackage": "",
+    "InternalCompatibilityFlags": {}
+}
+`, deviceType, pkgName)), 0644)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = os.WriteFile(
 		filepath.Join(tempdir, "go.mod"),
 		[]byte(fmt.Sprintf(`module %s
 
@@ -74,26 +95,12 @@ replace %s => %s
 	diskImage := filepath.Join(tempdir, "gokrazy.img")
 	// diskImage := "/tmp/gokrazy.img" // for debugging
 
-	args := []string{
-		"-overwrite=" + diskImage,
-		"-target_storage_bytes=" + strconv.Itoa(2*1024*1024*1024),
-		"-serial_console=ttyS0,115200",
-		"-hostname=qemu",
-		"-gokrazy_pkgs=",
-		"-kernel_package=github.com/rtr7/kernel",
-		"-firmware_package=github.com/rtr7/kernel",
-		"-eeprom_package=",
-	}
-
-	if deviceType != "" {
-		args = append(args, "-device_type="+deviceType)
-	}
-
-	args = append(args, pkgName)
-
-	packer := exec.Command("gokr-packer",
-		args...,
-	)
+	packer := exec.Command("gok",
+		"overwrite",
+		"--instance="+filepath.Base(tempdir),
+		"--parent_dir="+filepath.Dir(tempdir),
+		"--full="+diskImage,
+		"--target_storage_bytes="+strconv.Itoa(2*1024*1024*1024))
 	packer.Env = append(os.Environ(), "GOARCH=amd64")
 	packer.Dir = tempdir
 	packer.Stdout = os.Stdout

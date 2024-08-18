@@ -21,7 +21,7 @@ jobs:
         [ "$(gofmt -l $(find . -name '*.go') 2>&1)" = "" ]
 
     - name: install gokr-packer
-      run: GOPROXY=direct go install github.com/gokrazy/tools/cmd/gokr-packer@main
+      run: GOPROXY=direct go install github.com/gokrazy/tools/cmd/gok@main
 
     - name: install qemu
       run: sudo apt update && sudo apt-get install qemu-system-x86
@@ -32,4 +32,5 @@ jobs:
     - name: generate gokrazy disk image
       run: |
         export PATH=$PATH:$(go env GOPATH)/bin
-        gokr-packer -overwrite=full.img -target_storage_bytes=1610612736 github.com/gokrazy/hello
+        gok new
+        gok overwrite --full=full.img --target_storage_bytes=1610612736
