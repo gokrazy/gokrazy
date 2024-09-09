@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Process interface / requirements :: gokrazy</title>
+    <title>DHCP Client :: gokrazy</title>
 
     
     <link href="/css/nucleus.css?1725897696" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/development/process-interface/">
+  <body class="" data-url="/userguide/dhcp/">
     <nav id="sidebar" class="">
 
 
@@ -139,7 +139,7 @@
   
     
     <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        
+        parent
         
         
         ">
@@ -249,7 +249,7 @@
  
   
     
-      <li data-nav-id="/userguide/dhcp/" title="DHCP Client" class="dd-item ">
+      <li data-nav-id="/userguide/dhcp/" title="DHCP Client" class="dd-item active">
         <a href="/userguide/dhcp/">
         DHCP Client
         
@@ -585,7 +585,7 @@
   
     
     <li data-nav-id="/development/" title="Package development" class="dd-item
-        parent
+        
         
         
         ">
@@ -611,7 +611,7 @@
  
   
     
-      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item active">
+      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item ">
         <a href="/development/process-interface/">
         Process interface / requirements
         
@@ -754,7 +754,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/development/process-interface.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/dhcp.md" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -785,7 +785,7 @@
             
           
           
-            <a href='/'>gokrazy Go appliances</a> > <a href='/development/'>Package development</a> > Process interface / requirements
+            <a href='/'>gokrazy Go appliances</a> > <a href='/userguide/'>Configuration</a> > DHCP Client
           
         
           
@@ -800,9 +800,9 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#process-supervision">Process supervision</a></li>
-    <li><a href="#environment-variables">Environment variables</a></li>
-    <li><a href="#privilege-dropping--security">Privilege dropping / security</a></li>
+    <li><a href="#network-interfaces">Network Interfaces</a></li>
+    <li><a href="#static-network-configuration">Static Network Configuration</a></li>
+    <li><a href="#interface-priority">Interface priority</a></li>
   </ul>
 </nav>
     </div>
@@ -820,77 +820,112 @@
           
             <h1>
               
-              Process interface / requirements
+              DHCP Client
             </h1>
           
 
         
 
 
-<h2 id="process-supervision">Process supervision</h2>
-
-<div class="notices tip" ><p>You can find the corresponding code in
-<a href="https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/gokrazy/gokrazy%24+type:symbol+%5Esupervise%24&amp;patternType=regexp&amp;case=yes">func gokrazy.supervise</a>.</p>
-</div>
-
-<p>gokrazy’s init process (pid 1) supervises all the binaries the user specified via <code>gokr-packer</code> flags.</p>
-<p>More specifically, gokrazy:</p>
-<ol>
-<li>Starts your binary using Go’s <code>os/exec.Command</code> API.
-<ul>
-<li>The <code>stdout</code> and <code>stderr</code> file descriptors are hooked up to a ring buffer and can be viewed via gokrazy’s web interface.</li>
-<li>Extra command-line flags or environment variables can be specified using
-<a href="/userguide/package-config/">per-package configuration</a>.</li>
-</ul>
-</li>
-<li>When your binary’s process exits, gokrazy restarts it!
-<ul>
-<li>If the process exits with status code <code>0</code> (or <code>125</code>), gokrazy will stop
-supervision. Exiting immediately with status code <code>0</code> when the
-<code>GOKRAZY_FIRST_START=1</code> environment variable is set means “don’t start the
-program on boot”</li>
-</ul>
-</li>
-</ol>
-<h2 id="environment-variables">Environment variables</h2>
-<p>gokrazy sets the <code>HOME</code> environment variable to <code>HOME=/perm/home/&lt;cmd&gt;</code>, where
-<code>&lt;cmd&gt;</code> is the name of your binary. For example, <code>tailscale.com/cmd/tailscaled</code>
-is started with <code>HOME=/perm/home/tailscaled</code>.</p>
-<p>When your binary is first started, gokrazy sets the <code>GOKRAZY_FIRST_START=1</code>
-environment variable.</p>
-<h2 id="privilege-dropping--security">Privilege dropping / security</h2>
-<p>An easy way to implement privilege dropping in Go is to re-execute the process
-with <a href="https://pkg.go.dev/syscall#SysProcAttr">syscall.SysProcAttr</a> fields
-set. For example, this is how you would drop privileges to user <code>nobody</code>
-(uid/gid 65534):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// mustDropPrivileges re-executes the program in a child process,
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// dropping root privileges to user nobody.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">mustDropPrivileges</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;NTP_PRIVILEGES_DROPPED&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;1&#34;</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">exec</span>.<span style="color:#a6e22e">Command</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Args</span>[<span style="color:#ae81ff">0</span>])
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Env</span> = append(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Environ</span>(), <span style="color:#e6db74">&#34;NTP_PRIVILEGES_DROPPED=1&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Stdout</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Stderr</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stderr</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">SysProcAttr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SysProcAttr</span>{
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Credential</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">Credential</span>{
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">Uid</span>: <span style="color:#ae81ff">65534</span>,
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">Gid</span>: <span style="color:#ae81ff">65534</span>,
-</span></span><span style="display:flex;"><span>		},
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">cmd</span>.<span style="color:#a6e22e">Run</span>())
+<p>Each gokrazy instance comes with a built-in DHCP client (see <a href="/userguide/instance-config/#gokrazypackages">Instance Config →
+GokrazyPackages</a> for more details
+on system packages) to set the IP address after obtaining a
+<a href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol">DHCPv4</a>
+lease from the local network’s DHCP server.</p>
+<h2 id="network-interfaces">Network Interfaces</h2>
+<p>The gokrazy DHCP client by default runs for <code>eth0</code>. If you want to use a
+different network interface, perhaps a USB ethernet adapter, you can set the
+<code>-interface</code> <a href="/userguide/package-config/">command-line flag</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;dynamic&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/gokrazy/gokrazy/cmd/dhcp&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;-interface=enp0s58&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ]
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>If you configure gokrazy to <a href="/userguide/wifi/">connect to a WiFi network</a>, the
+<code>gokrazy/wifi</code> package will <a href="https://github.com/gokrazy/wifi/blob/320785ba3e91dac849e28d888c1cf6e6568320d0/wifi.go#L83">run another
+instance</a>
+of the gokrazy DHCP client with the <code>-interface=wlan0</code> flag set.</p>
+<h2 id="static-network-configuration">Static Network Configuration</h2>
+<p>If you want the DHCP client to not actually fetch a lease, but apply a
+statically supplied network configuration instead, you can set the
+<code>-static_network_config</code> flag to the name of a file which contains a
+JSON-encoded <a href="https://github.com/rtr7/dhcp4/blob/18c84d089b4648dc5ea2ffe30efa65dfcb8a31ca/parseopts.go#L167">DHCP lease in <code>rtr7/dhcp4.Lease</code>
+format</a>, for example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;IP&#34;</span>:      <span style="color:#e6db74">&#34;192.168.178.2&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Netmask&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Router&#34;</span>:  <span style="color:#e6db74">&#34;192.168.178.1&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;DNS&#34;</span>:     [<span style="color:#e6db74">&#34;192.168.178.1&#34;</span>, <span style="color:#e6db74">&#34;8.8.8.8&#34;</span>]
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Examples:</p>
+</span></span></code></pre></div><p>Specifically, the following fields are currently respected:</p>
 <ul>
-<li><a href="https://sourcegraph.com/github.com/gokrazy/gokrazy/-/blob/cmd/ntp/privdrop.go"><code>github.com/gokrazy/gokrazy/cmd/ntp</code></a>
-is a rather involved example which retains the CAP_SYS_TIME capability in the
-child process</li>
-<li><a href="https://sourcegraph.com/github.com/gokrazy/rsync/-/blob/internal/maincmd/namespacing_linux.go"><code>github.com/gokrazy/rsync</code></a> uses Linux
-mount namespaces and constructs a file system with read-only bind mounts of
-the configured rsync modules</li>
+<li>IP+Netmask</li>
+<li>Router</li>
+<li>DNS</li>
 </ul>
+<p>You can configure the gokrazy DHCP client to pick up this configuration by
+setting <a href="/userguide/package-config/#flags">Package config: Command-line flags</a>
+and <a href="/userguide/package-config/#extrafiles">Package config: Extra files</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;dynamic&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/gokrazy/gokrazy/cmd/dhcp&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;-static_network_config=/etc/gokrazy/static-dhcp-lease.json&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ],
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;ExtraFilePaths&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#f92672">&#34;/etc/gokrazy/static-dhcp-lease.json&#34;</span>: <span style="color:#e6db74">&#34;static-dhcp-lease.json&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            }
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h2 id="interface-priority">Interface priority</h2>
+<p>The gokrazy DHCP client <a href="https://github.com/gokrazy/gokrazy/commit/4c375187675fd3c3f2fb1381be87b7d046dd1f42">automatically configures the route
+priority</a>
+for default routes of ethernet interfaces (<code>eth*</code>) to 1, whereas on WiFi
+interfaces (<code>wlan*</code>), the priority is 5 (Linux prefers lower priorities).</p>
+<p>This means you can configure your gokrazy instance to work with both, WiFi and
+wired network. Whenever a link is down, the gokrazy DHCP client changes its
+priority to 1024, meaning outgoing traffic will quickly switch away when an
+interface loses its link. In other words: When you un-plug the network cable,
+the device still works via WiFi.</p>
+<p>If you need to influence the interface’s route priority, you can use the
+<code>-extra_route_priority</code> flag to add to the default priority. For example, to
+prefer sending traffic out via the WiFi interface if both WiFi and ethernet are
+connected, use:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;dynamic&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/gokrazy/gokrazy/cmd/dhcp&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;-extra_route_priority=10&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ]
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 
 
 <footer class="footline">
@@ -963,6 +998,7 @@ the configured rsync modules</li>
             
                 
                     
+                    
                 
                 
 
@@ -975,6 +1011,93 @@ the configured rsync modules</li>
             
             
                 
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -1083,86 +1206,6 @@ the configured rsync modules</li>
             
         
                     
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
             
         
                     
@@ -1283,7 +1326,6 @@ the configured rsync modules</li>
             
                 
                     
-                    
                 
                 
 
@@ -1296,7 +1338,6 @@ the configured rsync modules</li>
             
             
                 
-                    
                     
                 
                 
@@ -1313,9 +1354,6 @@ the configured rsync modules</li>
             
             
                 
-                    
-                        
-                        
                     
                 
                 

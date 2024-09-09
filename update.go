@@ -307,10 +307,12 @@ func initUpdate() error {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(b)
 	})
+	inactiveRootPartition := rootdev.InactiveRootPartition()
+	log.Printf("update handler will be called with inactiveRootPartition = %v", inactiveRootPartition)
 	http.HandleFunc("/update/mbr", nonConcurrentUpdateHandler(rootdev.BlockDevice()))
-	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(rootdev.InactiveRootPartition())))
-	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(rootdev.InactiveRootPartition()))
-	http.HandleFunc("/update/testboot", nonConcurrentTestbootHandler(rootdev.InactiveRootPartition()))
+	http.HandleFunc("/update/root", nonConcurrentUpdateHandler(rootdev.Partition(inactiveRootPartition)))
+	http.HandleFunc("/update/switch", nonConcurrentSwitchHandler(inactiveRootPartition))
+	http.HandleFunc("/update/testboot", nonConcurrentTestbootHandler(inactiveRootPartition))
 
 	for _, extraUpdateHandler := range extraUpdateHandlers {
 		http.HandleFunc(fmt.Sprintf("/update/device-specific/%s", extraUpdateHandler.name), nonConcurrentLimitedUpdateHandler(extraUpdateHandler.device, extraUpdateHandler.offset, extraUpdateHandler.maxLength))

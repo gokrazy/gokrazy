@@ -178,6 +178,8 @@ func maybeSwitchToInactive() {
 		return
 	}
 
+	log.Printf("cmdline: %s", string(cmdline))
+
 	if !strings.Contains(string(cmdline), "gokrazy.try_boot_inactive=1") {
 		return
 	}
