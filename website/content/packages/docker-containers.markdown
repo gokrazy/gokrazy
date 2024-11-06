@@ -37,7 +37,6 @@ Use [breakglass](https://github.com/gokrazy/breakglass) to login to your gokrazy
 instance and run a container manually:
 
 ```shell
-/tmp/breakglass187145741 $ mount -t tmpfs tmpfs /var
 /tmp/breakglass187145741 $ podman run --rm -ti docker.io/library/debian:sid
 root@gokrazy:/# cat /etc/debian_version
 12.0
