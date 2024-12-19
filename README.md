@@ -1,5 +1,6 @@
 [![GitHub Actions CI](https://github.com/gokrazy/gokrazy/actions/workflows/main.yml/badge.svg)](https://github.com/gokrazy/gokrazy/actions/workflows/main.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gokrazy/gokrazy)](https://goreportcard.com/report/github.com/gokrazy/gokrazy)
+[![go-recipes](https://raw.githubusercontent.com/nikolaydubina/go-recipes/main/badge.svg?raw=true)](https://github.com/nikolaydubina/go-recipes)
 
 # Overview
 
