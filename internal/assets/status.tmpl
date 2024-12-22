@@ -76,11 +76,18 @@
       };
     }
 
-    new EventSource("/log?path={{ .Service.Name }}&stream=stderr", {
+    var stderr = new EventSource("/log?path={{ .Service.Name }}&stream=stderr", {
       withCredentials: true,
-    }).onmessage = newLogrotate(document.getElementById("stderr"));
+    })
+    stderr.onmessage = newLogrotate(document.getElementById("stderr"));
 
-    new EventSource("/log?path={{ .Service.Name }}&stream=stdout", {
+    var stdout = new EventSource("/log?path={{ .Service.Name }}&stream=stdout", {
       withCredentials: true,
-    }).onmessage = newLogrotate(document.getElementById("stdout"));
+    })
+    stdout.onmessage = newLogrotate(document.getElementById("stdout"));
+
+    window.onbeforeunload = function() {
+        stderr.close();
+        stdout.close();
+    };
 </script>
