@@ -44,6 +44,9 @@ gok new
 # alternatively, to use a different instance name: gok -i myname new
 ```
 
+The `--parent_dir` can also be changed permanently by setting the
+`GOKRAZY_PARENT_DIR` environment variable.
+
 If you’re curious, you can run `gok edit` to open the generated `config.json` in
 your editor.
 
