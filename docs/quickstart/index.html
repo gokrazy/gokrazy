@@ -845,7 +845,9 @@ and insert an SD card. Copy the highlighted device name:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok new
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># creates an instance named “hello” in --parent_dir default directory ~/gokrazy</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># alternatively, to use a different instance name: gok -i myname new</span>
-</span></span></code></pre></div><p>If you’re curious, you can run <code>gok edit</code> to open the generated <code>config.json</code> in
+</span></span></code></pre></div><p>The <code>--parent_dir</code> can also be changed permanently by setting the
+<code>GOKRAZY_PARENT_DIR</code> environment variable.</p>
+<p>If you’re curious, you can run <code>gok edit</code> to open the generated <code>config.json</code> in
 your editor.</p>
 <p>To overwrite the entire SD card <code>/dev/sdx</code> with a build of this
 gokrazy installation, use:</p>
