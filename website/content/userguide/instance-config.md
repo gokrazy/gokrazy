@@ -499,6 +499,36 @@ http://:80 {
 EOT
 ```
 
+## Environment {#environment}
+
+The `Environment` field sets the default environment variables that the `gok`
+commands use. When you create a new instance using `gok new`, the default
+environment will be set to `GOOS=linux` and `GOARCH=arm64` (as gokrazy is a
+Linux system and the default target is the Raspberry Pi).
+
+The following example builds a gokrazy instance for `linux/amd64` PCs, perhaps run
+as a Virtual Machine on Proxmox.
+
+**Example:**
+
+{{< highlight json "hl_lines=11" >}}
+{
+    "Hostname": "vm",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass"
+    ],
+    "Environment": [
+        "GOOS=linux",
+        "GOARCH=amd64"
+    ],
+    "KernelPackage": "github.com/gokrazy/kernel.amd64",
+    "FirmwarePackage": "github.com/gokrazy/kernel.amd64"
+}
+{{< /highlight >}}
+
 ## SerialConsole {#serialconsole}
 
 (Corresponds to the former `-serial_console` gokr-packer flag.)
