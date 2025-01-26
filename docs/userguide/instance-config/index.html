@@ -12,20 +12,20 @@
     <title>Instance Config Reference :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1737485309" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1737485309" rel="stylesheet">
-    <link href="/css/hybrid.css?1737485309" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1737485309" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1737485309" rel="stylesheet">
-    <link href="/css/auto-complete.css?1737485309" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1737485309" rel="stylesheet">
-    <link href="/css/theme.css?1737485309" rel="stylesheet">
-    <link href="/css/tabs.css?1737485309" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1737485309" rel="stylesheet">
+    <link href="/css/nucleus.css?1737928621" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1737928621" rel="stylesheet">
+    <link href="/css/hybrid.css?1737928621" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1737928621" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1737928621" rel="stylesheet">
+    <link href="/css/auto-complete.css?1737928621" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1737928621" rel="stylesheet">
+    <link href="/css/theme.css?1737928621" rel="stylesheet">
+    <link href="/css/tabs.css?1737928621" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1737928621" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1737485309"></script>
+    <script src="/js/jquery-3.3.1.min.js?1737928621"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1737485309"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1737485309"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1737928621"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1737928621"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1737485309"></script>
+<script type="text/javascript" src="/js/search.js?1737928621"></script>
 
     
   </div>
@@ -815,6 +815,7 @@
         <li><a href="#packageextrafilepaths">PackageConfig → ExtraFilePaths</a></li>
       </ul>
     </li>
+    <li><a href="#environment">Environment</a></li>
     <li><a href="#serialconsole">SerialConsole</a></li>
     <li><a href="#gokrazypackages">GokrazyPackages</a></li>
     <li><a href="#kernelpackage">KernelPackage</a></li>
@@ -1248,7 +1249,30 @@ handled as if you had configured <code>ExtraFilePaths: &quot;/home/michael/go/sr
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">	file_server browse 
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span>
-</span></span></code></pre></div><h2 id="serialconsole">SerialConsole</h2>
+</span></span></code></pre></div><h2 id="environment">Environment</h2>
+<p>The <code>Environment</code> field sets the default environment variables that the <code>gok</code>
+commands use. When you create a new instance using <code>gok new</code>, the default
+environment will be set to <code>GOOS=linux</code> and <code>GOARCH=arm64</code> (as gokrazy is a
+Linux system and the default target is the Raspberry Pi).</p>
+<p>The following example builds a gokrazy instance for <code>linux/amd64</code> PCs, perhaps run
+as a Virtual Machine on Proxmox.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;vm&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Environment&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;GOOS=linux&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#e6db74">&#34;GOARCH=amd64&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;KernelPackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/gokrazy/kernel.amd64&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;FirmwarePackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/gokrazy/kernel.amd64&#34;</span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h2 id="serialconsole">SerialConsole</h2>
 <p>(Corresponds to the former <code>-serial_console</code> gokr-packer flag.)</p>
 <p>The <code>SerialConsole</code> field controls whether the Linux kernel provides a serial
 console on the Raspberry Pi’s UART0 RX/TX ports (see
@@ -2094,19 +2118,19 @@ certificate.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1737485309"></script>
-    <script src="/js/perfect-scrollbar.min.js?1737485309"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1737485309"></script>
-    <script src="/js/jquery.sticky.js?1737485309"></script>
-    <script src="/js/featherlight.min.js?1737485309"></script>
-    <script src="/js/highlight.pack.js?1737485309"></script>
+    <script src="/js/clipboard.min.js?1737928621"></script>
+    <script src="/js/perfect-scrollbar.min.js?1737928621"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1737928621"></script>
+    <script src="/js/jquery.sticky.js?1737928621"></script>
+    <script src="/js/featherlight.min.js?1737928621"></script>
+    <script src="/js/highlight.pack.js?1737928621"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1737485309"></script>
-    <script src="/js/learn.js?1737485309"></script>
-    <script src="/js/hugo-learn.js?1737485309"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1737928621"></script>
+    <script src="/js/learn.js?1737928621"></script>
+    <script src="/js/hugo-learn.js?1737928621"></script>
     
         
-            <script src="/mermaid/mermaid.js?1737485309"></script>
+            <script src="/mermaid/mermaid.js?1737928621"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
