@@ -9,7 +9,7 @@
         <th>Actions</th>
       </tr>
       <tr>
-        <td><a href="#{{ .Service.Name }}">{{ .Service.Name }}</a></td>
+        <td>{{ .Service.Name }}</td>
         <td>{{ .Service.Started.Format "Mon Jan _2 15:04:05 MST 2006" }}</td>
         <td style="display: flex; flex-wrap: wrap; gap: 1em">
 {{ if .Service.Stopped }}
