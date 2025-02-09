@@ -15,9 +15,9 @@ func authenticated(w http.ResponseWriter, r *http.Request) {
 	// verify that's where it came from.
 	//
 	// See https://github.com/gokrazy/gokrazy/issues/265
-	if httpPassword == "" {
-		addr, ok := r.Context().Value(http.LocalAddrContextKey).(*net.UnixAddr)
-		if ok && addr.Name == GokrazyHTTPUnixSocket {
+	addr, ok := r.Context().Value(http.LocalAddrContextKey).(*net.UnixAddr)
+	if ok {
+		if addr.Name == GokrazyHTTPUnixSocket {
 			http.DefaultServeMux.ServeHTTP(w, r)
 		} else {
 			http.Error(w, "httpPassword not set and request from unexpected address", http.StatusInternalServerError)
