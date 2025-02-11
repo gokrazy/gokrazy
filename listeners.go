@@ -43,8 +43,8 @@ var (
 	listeners   = make(map[string][]*krazyServer) // by unix socket path and private IP address
 )
 
-// GokrazyHTTPUnixSocket is the unix socket path that the HTTP server listens on.
-const GokrazyHTTPUnixSocket = "/run/gokrazy-http.sock"
+// HTTPUnixSocket is the unix socket path that the HTTP server listens on.
+const HTTPUnixSocket = "/run/gokrazy-http.sock"
 
 // tlsConfig: tlsConfig. nil, if the listeners should not use https (e.g. for redirects)
 func updateListeners(port, redirectPort string, tlsEnabled bool, tlsConfig *tls.Config) error {
@@ -58,7 +58,7 @@ func updateListeners(port, redirectPort string, tlsEnabled bool, tlsConfig *tls.
 	// If NoPassword is used, the HTTP server doesn't run over HTTP
 	// and instead only listens on a Unix socket. Packages running
 	// in the appliance can proxy to the Unix socket as desired.
-	hosts := []string{GokrazyHTTPUnixSocket}
+	hosts := []string{HTTPUnixSocket}
 	if httpPassword != "" {
 		addrs, err := PrivateInterfaceAddrs()
 		if err != nil {
@@ -120,7 +120,7 @@ func updateListeners(port, redirectPort string, tlsEnabled bool, tlsConfig *tls.
 		}
 		// add a new listener
 		var srv *http.Server
-		if tlsEnabled && tlsConfig == nil && host != GokrazyHTTPUnixSocket {
+		if tlsEnabled && tlsConfig == nil && host != HTTPUnixSocket {
 			// "Redirect" server
 			srv = &http.Server{
 				Handler:   http.HandlerFunc(httpsRedirect(redirectPort)),
