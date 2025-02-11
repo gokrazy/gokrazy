@@ -50,10 +50,9 @@ const HTTPUnixSocket = "/run/gokrazy-http.sock"
 func updateListeners(port, redirectPort string, tlsEnabled bool, tlsConfig *tls.Config) error {
 	// Always listen on a Unix socket.
 	//
-	// Local packages running as root can connect through the Unix socket
-	// regardless of TLS settings. With TLS enabled: Avoids the complexity
-	// of certificate validation. Without TLS: Provides security through
-	// Unix file system permissions.
+	// Local processes running as root can connect through the Unix socket,
+	// which removes the complexity of connecting via HTTP+TCP (which might
+	// need a custom port, or TLS credentials).
 	//
 	// If NoPassword is used, the HTTP server doesn't run over HTTP
 	// and instead only listens on a Unix socket. Packages running
