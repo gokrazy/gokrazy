@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 
@@ -39,28 +40,30 @@ type krazyServer struct {
 
 var (
 	listenersMu sync.Mutex
-	listeners   = make(map[string][]*krazyServer) // by private IP address or unix socket path
+	listeners   = make(map[string][]*krazyServer) // by unix socket path and private IP address
 )
 
-// gokrazyHTTPUnixSocket is the unix socket path that
-// the HTTP server listens on when httpPassword is empty.
-const gokrazyHTTPUnixSocket = "/run/gokrazy-http.sock"
+// HTTPUnixSocket is the unix socket path that the HTTP server listens on.
+const HTTPUnixSocket = "/run/gokrazy-http.sock"
 
 // tlsConfig: tlsConfig. nil, if the listeners should not use https (e.g. for redirects)
 func updateListeners(port, redirectPort string, tlsEnabled bool, tlsConfig *tls.Config) error {
-	var hosts []string // private IP addresses or unix socket path
-	var err error
-
+	// Always listen on a Unix socket.
+	//
+	// Local processes running as root can connect through the Unix socket,
+	// which removes the complexity of connecting via HTTP+TCP (which might
+	// need a custom port, or TLS credentials).
+	//
 	// If NoPassword is used, the HTTP server doesn't run over HTTP
 	// and instead only listens on a Unix socket. Packages running
 	// in the appliance can proxy to the Unix socket as desired.
-	if httpPassword == "" {
-		hosts = []string{gokrazyHTTPUnixSocket}
-	} else {
-		hosts, err = PrivateInterfaceAddrs()
+	hosts := []string{HTTPUnixSocket}
+	if httpPassword != "" {
+		addrs, err := PrivateInterfaceAddrs()
 		if err != nil {
 			return err
 		}
+		hosts = append(hosts, addrs...)
 	}
 
 	listenersMu.Lock()
@@ -86,11 +89,22 @@ func updateListeners(port, redirectPort string, tlsEnabled bool, tlsConfig *tls.
 		}
 		var ln net.Listener
 		var addr string
+		var err error
 		if strings.HasPrefix(host, "/") {
 			// Unix socket
+			if conn, err := net.Dial("unix", host); err == nil {
+				conn.Close()
+				continue
+			}
+			_ = os.Remove(host)
 			ln, err = net.Listen("unix", host)
 			if err != nil {
 				log.Printf("listen: %v", err)
+				continue
+			}
+			if err := os.Chmod(host, 0o600); err != nil {
+				log.Printf("chmod: %v", err)
+				ln.Close()
 				continue
 			}
 			log.Printf("now listening on %s", host)
@@ -105,7 +119,7 @@ func updateListeners(port, redirectPort string, tlsEnabled bool, tlsConfig *tls.
 		}
 		// add a new listener
 		var srv *http.Server
-		if tlsEnabled && tlsConfig == nil {
+		if tlsEnabled && tlsConfig == nil && host != HTTPUnixSocket {
 			// "Redirect" server
 			srv = &http.Server{
 				Handler:   http.HandlerFunc(httpsRedirect(redirectPort)),
