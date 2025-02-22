@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - uses: actions/setup-go@v4
+    - uses: actions/setup-go@v5
       with:
         # Latest stable version of Go, e.g. 1.20.2
         go-version: 'stable'
@@ -20,7 +20,7 @@ jobs:
       run: |
         [ "$(gofmt -l $(find . -name '*.go') 2>&1)" = "" ]
 
-    - name: install gokr-packer
+    - name: install gok CLI
       run: GOPROXY=direct go install github.com/gokrazy/tools/cmd/gok@main
 
     - name: install qemu
