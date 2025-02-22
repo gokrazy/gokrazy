@@ -9,23 +9,23 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Permanent data backup with the gokrazy rsyncd :: gokrazy</title>
+    <title>Permanent data backup with the gokrazy rsync :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1737928621" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1737928621" rel="stylesheet">
-    <link href="/css/hybrid.css?1737928621" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1737928621" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1737928621" rel="stylesheet">
-    <link href="/css/auto-complete.css?1737928621" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1737928621" rel="stylesheet">
-    <link href="/css/theme.css?1737928621" rel="stylesheet">
-    <link href="/css/tabs.css?1737928621" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1737928621" rel="stylesheet">
+    <link href="/css/nucleus.css?1740216290" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1740216290" rel="stylesheet">
+    <link href="/css/hybrid.css?1740216290" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1740216290" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1740216290" rel="stylesheet">
+    <link href="/css/auto-complete.css?1740216290" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1740216290" rel="stylesheet">
+    <link href="/css/theme.css?1740216290" rel="stylesheet">
+    <link href="/css/tabs.css?1740216290" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1740216290" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1737928621"></script>
+    <script src="/js/jquery-3.3.1.min.js?1740216290"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1737928621"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1737928621"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1740216290"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1740216290"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1737928621"></script>
+<script type="text/javascript" src="/js/search.js?1740216290"></script>
 
     
   </div>
@@ -396,7 +396,7 @@
  
   
     
-      <li data-nav-id="/userguide/rsync-backups/" title="Permanent data backup with the gokrazy rsyncd" class="dd-item active">
+      <li data-nav-id="/userguide/rsync-backups/" title="Permanent data backup with the gokrazy rsync" class="dd-item active">
         <a href="/userguide/rsync-backups/">
         Data backup with rsync
         
@@ -785,7 +785,7 @@
             
           
           
-            <a href='/'>gokrazy Go appliances</a> > <a href='/userguide/'>Configuration</a> > Permanent data backup with the gokrazy rsyncd
+            <a href='/'>gokrazy Go appliances</a> > <a href='/userguide/'>Configuration</a> > Permanent data backup with the gokrazy rsync
           
         
           
@@ -821,7 +821,7 @@
           
             <h1>
               
-              Permanent data backup with the gokrazy rsyncd
+              Permanent data backup with the gokrazy rsync
             </h1>
           
 
@@ -840,8 +840,8 @@ requirements.</p>
 <p>(You don’t typically need backups of your gokrazy device’s root partition
 because it can be built reproducibly any time using Go.)</p>
 <h2 id="install">Step 1. Install the gokrazy rsync daemon</h2>
-<p>Add the gokrazy rsync daemon <code>gokr-rsyncd</code> to your gokrazy instance:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/rsync/cmd/gokr-rsyncd
+<p>Add the gokrazy rsync implementation <code>gokr-rsync</code> to your gokrazy instance:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/rsync/cmd/gokr-rsync
 </span></span></code></pre></div><h2 id="configure">Step 2. Configure the gokrazy rsync daemon</h2>
 <p>Open your gokrazy instance’s <code>config.json</code> in your editor:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit
@@ -853,13 +853,13 @@ because it can be built reproducibly any time using Go.)</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/rsync/cmd/gokr-rsyncd&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/rsync/cmd/gokr-rsync&#34;</span>
 </span></span><span style="display:flex;"><span>    ],
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
-</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/gokrazy/rsync/cmd/gokr-rsyncd&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/gokrazy/rsync/cmd/gokr-rsync&#34;</span>: {
 </span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;CommandLineFlags&#34;</span>: [
-</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--gokr.config=/etc/gokr-rsyncd.toml&#34;</span>,
-</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--daemon&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--daemon&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;--gokr.config=/etc/gokr-rsyncd.toml&#34;</span>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>            ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;ExtraFilePaths&#34;</span>: {
 </span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#f92672">&#34;/etc/gokr-rsyncd.toml&#34;</span>: <span style="color:#e6db74">&#34;gokr-rsyncd.toml&#34;</span>,
@@ -1412,19 +1412,19 @@ to monitor your periodic transfer with <a href="https://prometheus.io/">Promethe
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1737928621"></script>
-    <script src="/js/perfect-scrollbar.min.js?1737928621"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1737928621"></script>
-    <script src="/js/jquery.sticky.js?1737928621"></script>
-    <script src="/js/featherlight.min.js?1737928621"></script>
-    <script src="/js/highlight.pack.js?1737928621"></script>
+    <script src="/js/clipboard.min.js?1740216290"></script>
+    <script src="/js/perfect-scrollbar.min.js?1740216290"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1740216290"></script>
+    <script src="/js/jquery.sticky.js?1740216290"></script>
+    <script src="/js/featherlight.min.js?1740216290"></script>
+    <script src="/js/highlight.pack.js?1740216290"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1737928621"></script>
-    <script src="/js/learn.js?1737928621"></script>
-    <script src="/js/hugo-learn.js?1737928621"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1740216290"></script>
+    <script src="/js/learn.js?1740216290"></script>
+    <script src="/js/hugo-learn.js?1740216290"></script>
     
         
-            <script src="/mermaid/mermaid.js?1737928621"></script>
+            <script src="/mermaid/mermaid.js?1740216290"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
