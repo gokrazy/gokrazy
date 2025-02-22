@@ -1,5 +1,5 @@
 ---
-title: "Permanent data backup with the gokrazy rsyncd"
+title: "Permanent data backup with the gokrazy rsync"
 menuTitle: "Data backup with rsync"
 weight: 80
 ---
@@ -20,10 +20,10 @@ because it can be built reproducibly any time using Go.)
 
 ## Step 1. Install the gokrazy rsync daemon {#install}
 
-Add the gokrazy rsync daemon `gokr-rsyncd` to your gokrazy instance:
+Add the gokrazy rsync implementation `gokr-rsync` to your gokrazy instance:
 
 ```bash
-gok add github.com/gokrazy/rsync/cmd/gokr-rsyncd
+gok add github.com/gokrazy/rsync/cmd/gokr-rsync
 ```
 
 ## Step 2. Configure the gokrazy rsync daemon {#configure}
@@ -44,13 +44,13 @@ Configure [Package config: Command-line flags](/userguide/package-config/#flags)
         "github.com/gokrazy/hello",
         "github.com/gokrazy/serial-busybox",
         "github.com/gokrazy/breakglass",
-        "github.com/gokrazy/rsync/cmd/gokr-rsyncd"
+        "github.com/gokrazy/rsync/cmd/gokr-rsync"
     ],
     "PackageConfig": {
-        "github.com/gokrazy/rsync/cmd/gokr-rsyncd": {
+        "github.com/gokrazy/rsync/cmd/gokr-rsync": {
             "CommandLineFlags": [
-                "--gokr.config=/etc/gokr-rsyncd.toml",
-                "--daemon"
+                "--daemon",
+                "--gokr.config=/etc/gokr-rsyncd.toml"
             ],
             "ExtraFilePaths": {
                 "/etc/gokr-rsyncd.toml": "gokr-rsyncd.toml",
