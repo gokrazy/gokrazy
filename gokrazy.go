@@ -245,14 +245,15 @@ func Boot(userBuildTimestamp string) error {
 	}
 	hostname = string(hostnameb)
 
-	httpPassword, err = readConfigFile("gokr-pw.txt")
-	if err != nil && !os.IsNotExist(err) {
-		// Only return an error for e.g. corruption reasons.
-		// The file may legitimately be absent if the image
-		// was built with NoPassword. In that case,
-		// httpPassword remains the empty string, meaning
-		// no access other than via unix socket.
-		return err
+	if _, err := os.Stat("/etc/gokr-pw.txt"); os.IsNotExist(err) {
+		// This instance was built with the NoPassword option
+		// (because there is no password file in the root fs),
+		// so do not read a password from any location.
+	} else {
+		httpPassword, err = readConfigFile("gokr-pw.txt")
+		if err != nil {
+			return err
+		}
 	}
 
 	if err := configureLoopback(); err != nil {
