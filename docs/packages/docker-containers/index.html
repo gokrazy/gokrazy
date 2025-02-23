@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.116.0-DEV">
+    <meta name="generator" content="Hugo 0.144.2">
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Docker containers :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1740216290" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1740216290" rel="stylesheet">
-    <link href="/css/hybrid.css?1740216290" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1740216290" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1740216290" rel="stylesheet">
-    <link href="/css/auto-complete.css?1740216290" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1740216290" rel="stylesheet">
-    <link href="/css/theme.css?1740216290" rel="stylesheet">
-    <link href="/css/tabs.css?1740216290" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1740216290" rel="stylesheet">
+    <link href="/css/nucleus.css?1740309874" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1740309874" rel="stylesheet">
+    <link href="/css/hybrid.css?1740309874" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1740309874" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1740309874" rel="stylesheet">
+    <link href="/css/auto-complete.css?1740309874" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1740309874" rel="stylesheet">
+    <link href="/css/theme.css?1740309874" rel="stylesheet">
+    <link href="/css/tabs.css?1740309874" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1740309874" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1740216290"></script>
+    <script src="/js/jquery-3.3.1.min.js?1740309874"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1740216290"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1740216290"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1740309874"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1740309874"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1740216290"></script>
+<script type="text/javascript" src="/js/search.js?1740309874"></script>
 
     
   </div>
@@ -897,11 +897,11 @@ program to run <a href="https://irssi.org/">irssi</a>.</p>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">irssi</span>() <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Ensure we have an up-to-date clock, which in turn also means that
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// networking is up. This is relevant because podman takes what’s in
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// /etc/resolv.conf (nothing at boot) and holds on to it, meaning your
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// container will never have working networking if it starts too early.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">gokrazy</span>.<span style="color:#a6e22e">WaitForClock</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Ensure we have an up-to-date clock, which in turn also means that</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// networking is up. This is relevant because podman takes what’s in</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// /etc/resolv.conf (nothing at boot) and holds on to it, meaning your</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// container will never have working networking if it starts too early.</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">gokrazy</span>.<span style="color:#a6e22e">WaitForClock</span>()
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">podman</span>(<span style="color:#e6db74">&#34;kill&#34;</span>, <span style="color:#e6db74">&#34;irssi&#34;</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Print</span>(<span style="color:#a6e22e">err</span>)
@@ -911,8 +911,8 @@ program to run <a href="https://irssi.org/">irssi</a>.</p>
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Print</span>(<span style="color:#a6e22e">err</span>)
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// You could podman pull here.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// You could podman pull here.</span>
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">podman</span>(<span style="color:#e6db74">&#34;run&#34;</span>,
 </span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;-td&#34;</span>,
 </span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;-v&#34;</span>, <span style="color:#e6db74">&#34;/perm/irssi:/home/michael/.irssi&#34;</span>,
@@ -935,16 +935,16 @@ program to run <a href="https://irssi.org/">irssi</a>.</p>
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// expandPath returns env, but with PATH= modified or added
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// such that both /user and /usr/local/bin are included, which podman needs.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">expandPath</span>(<span style="color:#a6e22e">env</span> []<span style="color:#66d9ef">string</span>) []<span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// expandPath returns env, but with PATH= modified or added</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// such that both /user and /usr/local/bin are included, which podman needs.</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">expandPath</span>(<span style="color:#a6e22e">env</span> []<span style="color:#66d9ef">string</span>) []<span style="color:#66d9ef">string</span> {
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">extra</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;/user:/usr/local/bin&#34;</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">found</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">idx</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">env</span> {
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">parts</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">val</span>, <span style="color:#e6db74">&#34;=&#34;</span>)
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">parts</span>) &lt; <span style="color:#ae81ff">2</span> {
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">continue</span> <span style="color:#75715e">// malformed entry
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">continue</span> <span style="color:#75715e">// malformed entry</span>
+</span></span><span style="display:flex;"><span>		}
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">key</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">parts</span>[<span style="color:#ae81ff">0</span>]
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">key</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;PATH&#34;</span> {
 </span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">continue</span>
@@ -1465,19 +1465,19 @@ program to run <a href="https://irssi.org/">irssi</a>.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1740216290"></script>
-    <script src="/js/perfect-scrollbar.min.js?1740216290"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1740216290"></script>
-    <script src="/js/jquery.sticky.js?1740216290"></script>
-    <script src="/js/featherlight.min.js?1740216290"></script>
-    <script src="/js/highlight.pack.js?1740216290"></script>
+    <script src="/js/clipboard.min.js?1740309874"></script>
+    <script src="/js/perfect-scrollbar.min.js?1740309874"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1740309874"></script>
+    <script src="/js/jquery.sticky.js?1740309874"></script>
+    <script src="/js/featherlight.min.js?1740309874"></script>
+    <script src="/js/highlight.pack.js?1740309874"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1740216290"></script>
-    <script src="/js/learn.js?1740216290"></script>
-    <script src="/js/hugo-learn.js?1740216290"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1740309874"></script>
+    <script src="/js/learn.js?1740309874"></script>
+    <script src="/js/hugo-learn.js?1740309874"></script>
     
         
-            <script src="/mermaid/mermaid.js?1740216290"></script>
+            <script src="/mermaid/mermaid.js?1740309874"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
