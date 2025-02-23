@@ -1,6 +1,7 @@
 package gokrazy
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -25,10 +26,8 @@ import (
 //     that while the local network may be up, internet connectivity
 //     might not be available (see net-online), for example
 //     right after a power outage.
-//   - net-online: wait for a connectivity check to succeed
-//
-// TODO(https://github.com/gokrazy/gokrazy/issues/168): implement
-// net-online connectivity check
+//   - net-online: wait for a connectivity check to succeed,
+//     specifically resolving the gokrazy.org domain name
 func WaitFor(things ...string) {
 	if len(things) == 0 {
 		return // skip log messages for no-op waits
@@ -41,12 +40,15 @@ func WaitFor(things ...string) {
 		case "clock":
 			log.Printf("waiting for clock")
 			waitForClock()
+
 		case "net-route":
 			log.Printf("waiting for net-route")
 			waitForNetRoute()
+
 		case "net-online":
 			log.Printf("waiting for net-online")
-			waitForNetRoute() // TODO: implement net-online check
+			waitForNetOnline()
+
 		default:
 			panic(fmt.Sprintf("BUG: gokrazy.WaitFor(%q) unknown", thing))
 		}
@@ -106,6 +108,34 @@ func waitForNetRoute() {
 	for {
 		if err := waitForNetRoute1(); err != nil {
 			log.Printf("waiting for net-route: %v", err)
+			time.Sleep(1 * time.Second)
+			continue
+		}
+		break // no error, wait succeeded
+	}
+}
+
+func waitForNetOnline1() error {
+	// Cap the time for each resolution attempt to 5s.
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	var resolver net.Resolver
+	// If the gokrazy.org domain name is no longer resolveable,
+	// the entire project is truly defunct and over.
+	addrs, err := resolver.LookupIPAddr(ctx, "gokrazy.org")
+	if err != nil {
+		return fmt.Errorf("lookup(gokrazy.org): %v", err)
+	}
+	if len(addrs) == 0 {
+		return fmt.Errorf("lookup(gokrazy.org) unexpectedly returned no addresses")
+	}
+	return nil // connectivity check succeeded
+}
+
+func waitForNetOnline() {
+	for {
+		if err := waitForNetOnline1(); err != nil {
+			log.Printf("waiting for net-online: %v", err)
 			time.Sleep(1 * time.Second)
 			continue
 		}
