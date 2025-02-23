@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.116.0-DEV">
+    <meta name="generator" content="Hugo 0.144.2">
     <meta name="description" content="">
 
 
@@ -12,20 +12,20 @@
     <title>Controlling a GPIO input/output pin :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1740216290" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1740216290" rel="stylesheet">
-    <link href="/css/hybrid.css?1740216290" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1740216290" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1740216290" rel="stylesheet">
-    <link href="/css/auto-complete.css?1740216290" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1740216290" rel="stylesheet">
-    <link href="/css/theme.css?1740216290" rel="stylesheet">
-    <link href="/css/tabs.css?1740216290" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1740216290" rel="stylesheet">
+    <link href="/css/nucleus.css?1740309874" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1740309874" rel="stylesheet">
+    <link href="/css/hybrid.css?1740309874" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1740309874" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1740309874" rel="stylesheet">
+    <link href="/css/auto-complete.css?1740309874" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1740309874" rel="stylesheet">
+    <link href="/css/theme.css?1740309874" rel="stylesheet">
+    <link href="/css/tabs.css?1740309874" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1740309874" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1740216290"></script>
+    <script src="/js/jquery-3.3.1.min.js?1740309874"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1740216290"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1740216290"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1740309874"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1740309874"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1740216290"></script>
+<script type="text/javascript" src="/js/search.js?1740309874"></script>
 
     
   </div>
@@ -858,16 +858,16 @@ example at <a href="https://periph.io/device/led/">periph.io/device/led</a>:</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doGPIO</span>() <span style="color:#66d9ef">error</span> {
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Loading periph.io drivers&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Load periph.io drivers:
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">host</span>.<span style="color:#a6e22e">Init</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Load periph.io drivers:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">host</span>.<span style="color:#a6e22e">Init</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Toggling GPIO forever&#34;</span>)
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTicker</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">Low</span>; ; <span style="color:#a6e22e">l</span> = !<span style="color:#a6e22e">l</span> {
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;setting GPIO pin number 18 (signal BCM24) to %v&#34;</span>, <span style="color:#a6e22e">l</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Lookup a pin by its location on the board:
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rpi</span>.<span style="color:#a6e22e">P1_18</span>.<span style="color:#a6e22e">Out</span>(<span style="color:#a6e22e">l</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Lookup a pin by its location on the board:</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rpi</span>.<span style="color:#a6e22e">P1_18</span>.<span style="color:#a6e22e">Out</span>(<span style="color:#a6e22e">l</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
 </span></span><span style="display:flex;"><span>		}
 </span></span><span style="display:flex;"><span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">C</span>
@@ -922,23 +922,23 @@ polling interval will increase CPU usage.</p>
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Find Pin by name
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gpioreg</span>.<span style="color:#a6e22e">ByName</span>(<span style="color:#a6e22e">pinName</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Find Pin by name</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gpioreg</span>.<span style="color:#a6e22e">ByName</span>(<span style="color:#a6e22e">pinName</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Configure Pin for input, configure pull as needed
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// Edge mode is currently not supported
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">In</span>(<span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">PullNoChange</span>, <span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">NoEdge</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Configure Pin for input, configure pull as needed</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Edge mode is currently not supported</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">In</span>(<span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">PullNoChange</span>, <span style="color:#a6e22e">gpio</span>.<span style="color:#a6e22e">NoEdge</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Setup Input signalling
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Setup Input signalling</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">lastLevel</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">Read</span>()
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// How often to poll levels, 100-150ms is fairly responsive unless
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#75715e">// button presses are very fast.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#75715e">// Shortening the polling interval &lt;100ms significantly increases
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#75715e">// CPU load.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">for</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Tick</span>(<span style="color:#ae81ff">100</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Millisecond</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// How often to poll levels, 100-150ms is fairly responsive unless</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// button presses are very fast.</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Shortening the polling interval &lt;100ms significantly increases</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// CPU load.</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Tick</span>(<span style="color:#ae81ff">100</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Millisecond</span>) {
 </span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">currentLevel</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">Read</span>()
 </span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;level: %v&#34;</span>, <span style="color:#a6e22e">currentLevel</span>)
 </span></span><span style="display:flex;"><span>
@@ -952,28 +952,28 @@ polling interval will increase CPU usage.</p>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Channel for communicating Pin levels
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">levelChan</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">pinLevelMessage</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Channel for communicating Pin levels</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">levelChan</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">pinLevelMessage</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">p</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">setupGPIOInput</span>(<span style="color:#e6db74">&#34;GPIO4&#34;</span>, <span style="color:#a6e22e">levelChan</span>)
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Main loop, act on level changes
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Main loop, act on level changes</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">select</span> {
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">msg</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">levelChan</span>:
 </span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">msg</span>.<span style="color:#a6e22e">State</span> {
 </span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Pin %s is High, processing high state tasks&#34;</span>, <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">Name</span>())
-</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Process high state tasks
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">msg</span>.<span style="color:#a6e22e">Reset</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Process high state tasks</span>
+</span></span><span style="display:flex;"><span>			} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">msg</span>.<span style="color:#a6e22e">Reset</span> {
 </span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Pin %s is Low, resetting to wait for high state&#34;</span>, <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">Name</span>())
-</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Process resetting logic, if any
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			}
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// Process resetting logic, if any</span>
+</span></span><span style="display:flex;"><span>			}
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">default</span>:
-</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Any other ongoing tasks
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		}
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Any other ongoing tasks</span>
+</span></span><span style="display:flex;"><span>		}
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div>
@@ -1482,19 +1482,19 @@ polling interval will increase CPU usage.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1740216290"></script>
-    <script src="/js/perfect-scrollbar.min.js?1740216290"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1740216290"></script>
-    <script src="/js/jquery.sticky.js?1740216290"></script>
-    <script src="/js/featherlight.min.js?1740216290"></script>
-    <script src="/js/highlight.pack.js?1740216290"></script>
+    <script src="/js/clipboard.min.js?1740309874"></script>
+    <script src="/js/perfect-scrollbar.min.js?1740309874"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1740309874"></script>
+    <script src="/js/jquery.sticky.js?1740309874"></script>
+    <script src="/js/featherlight.min.js?1740309874"></script>
+    <script src="/js/highlight.pack.js?1740309874"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1740216290"></script>
-    <script src="/js/learn.js?1740216290"></script>
-    <script src="/js/hugo-learn.js?1740216290"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1740309874"></script>
+    <script src="/js/learn.js?1740309874"></script>
+    <script src="/js/hugo-learn.js?1740309874"></script>
     
         
-            <script src="/mermaid/mermaid.js?1740216290"></script>
+            <script src="/mermaid/mermaid.js?1740309874"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
