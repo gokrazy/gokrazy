@@ -1,8 +1,13 @@
 package gokrazy
 
 import (
+	"errors"
 	"fmt"
+	"log"
+	"net"
 	"time"
+
+	"github.com/vishvananda/netlink"
 )
 
 // WaitFor allows waiting for one or more conditions to be true.
@@ -23,22 +28,30 @@ import (
 //   - net-online: wait for a connectivity check to succeed
 //
 // TODO(https://github.com/gokrazy/gokrazy/issues/168): implement
-// net-route and net-online conditions instead of just waiting
-// for the clock regardless of condition.
+// net-online connectivity check
 func WaitFor(things ...string) {
+	if len(things) == 0 {
+		return // skip log messages for no-op waits
+	}
+
+	start := time.Now()
 	// Wait in sequence (but we might wait concurrently in the future).
 	for _, thing := range things {
 		switch thing {
 		case "clock":
+			log.Printf("waiting for clock")
 			waitForClock()
 		case "net-route":
-			waitForClock() // TODO: implement net-route check
+			log.Printf("waiting for net-route")
+			waitForNetRoute()
 		case "net-online":
-			waitForClock() // TODO: implement net-online check
+			log.Printf("waiting for net-online")
+			waitForNetRoute() // TODO: implement net-online check
 		default:
 			panic(fmt.Sprintf("BUG: gokrazy.WaitFor(%q) unknown", thing))
 		}
 	}
+	log.Printf("done waiting after %v", time.Since(start))
 }
 
 // WaitForClock returns once the system clock appears to have been set.
@@ -57,5 +70,45 @@ func waitForClock() {
 		// Sleeps for 1 real second, regardless of wall-clock time.
 		// See https://github.com/golang/proposal/blob/master/design/12914-monotonic.md
 		time.Sleep(1 * time.Second)
+	}
+}
+
+var errNoDefaultRoute = errors.New("no default route found")
+
+func waitForNetRoute1() error {
+	nl, err := netlink.NewHandle(netlink.FAMILY_V4)
+	if err != nil {
+		return fmt.Errorf("netlink.New: %v", err)
+	}
+	defer nl.Delete()
+	// This is the address of k.root-servers.net,
+	// but it does not matter; we just need an IP address
+	// that will not be null-routed explicitly, so avoid
+	// public DNS server addresses in case any filtering
+	// software blocks these.
+	arbitraryIP := net.ParseIP("193.0.14.129")
+	routes, err := nl.RouteGet(arbitraryIP)
+	if err != nil {
+		return fmt.Errorf("RouteGet(%v): %v", arbitraryIP, err)
+	}
+	// We are looking for a route with a gateway, e.g.:
+	// [{Ifindex: 3 Dst: 193.0.14.129/32 Src: 10.0.0.135 Gw: 10.0.0.1 Flags: [] Table: 254}]
+	for _, route := range routes {
+		if route.Gw.IsUnspecified() {
+			continue
+		}
+		return nil // stop waiting, route with gateway found
+	}
+	return errNoDefaultRoute
+}
+
+func waitForNetRoute() {
+	for {
+		if err := waitForNetRoute1(); err != nil {
+			log.Printf("waiting for net-route: %v", err)
+			time.Sleep(1 * time.Second)
+			continue
+		}
+		break // no error, wait succeeded
 	}
 }
