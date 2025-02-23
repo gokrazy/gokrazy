@@ -5,25 +5,6 @@ import (
 	"time"
 )
 
-func waitForClock() {
-	epochPlus1Year := time.Unix(60*60*24*365, 0)
-	for {
-		if time.Now().After(epochPlus1Year) {
-			return
-		}
-		// Sleeps for 1 real second, regardless of wall-clock time.
-		// See https://github.com/golang/proposal/blob/master/design/12914-monotonic.md
-		time.Sleep(1 * time.Second)
-	}
-}
-
-// WaitForClock returns once the system clock appears to have been set.
-//
-// New usages should prefer directly calling WaitFor("clock") instead.
-func WaitForClock() {
-	WaitFor("clock")
-}
-
 // WaitFor allows waiting for one or more conditions to be true.
 // The currently defined conditions are:
 //
@@ -57,5 +38,24 @@ func WaitFor(things ...string) {
 		default:
 			panic(fmt.Sprintf("BUG: gokrazy.WaitFor(%q) unknown", thing))
 		}
+	}
+}
+
+// WaitForClock returns once the system clock appears to have been set.
+//
+// New usages should prefer directly calling WaitFor("clock") instead.
+func WaitForClock() {
+	WaitFor("clock")
+}
+
+func waitForClock() {
+	epochPlus1Year := time.Unix(60*60*24*365, 0)
+	for {
+		if time.Now().After(epochPlus1Year) {
+			return
+		}
+		// Sleeps for 1 real second, regardless of wall-clock time.
+		// See https://github.com/golang/proposal/blob/master/design/12914-monotonic.md
+		time.Sleep(1 * time.Second)
 	}
 }
