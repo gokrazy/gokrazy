@@ -499,6 +499,23 @@ http://:80 {
 EOT
 ```
 
+### PackageConfig → Basename {#packagebasename}
+
+By default the basename of a package is is derived from the name of the go package.
+This is done by taking the last part, so e.g. `github.com/gokrazy/iptables` will 
+become `iptables`. If want to change that you can override it with a custom name:
+
+```json
+{
+    "PackageConfig": {
+        "github.com/docker/compose/v2/cmd": {
+            "Basename": "docker-compose"
+        }
+    },
+    …
+}
+```
+
 ## Environment {#environment}
 
 The `Environment` field sets the default environment variables that the `gok`
