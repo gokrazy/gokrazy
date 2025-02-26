@@ -499,6 +499,26 @@ http://:80 {
 EOT
 ```
 
+### PackageConfig → Basename {#packagebasename}
+
+By default the basename of a package is the last part of the name of the Go
+package. For example, the basename for `github.com/gokrazy/rsync/cmd/gokr-rsync`
+will be `gokr-rsync`.
+
+To install the program under a different basename (for example, in case of
+`rsync`, for compatibility), set the `Basename` field:
+
+```json
+{
+    "PackageConfig": {
+        "github.com/gokrazy/rsync/cmd/gokr-rsync": {
+            "Basename": "rsync"
+        }
+    },
+    …
+}
+```
+
 ## Environment {#environment}
 
 The `Environment` field sets the default environment variables that the `gok`
