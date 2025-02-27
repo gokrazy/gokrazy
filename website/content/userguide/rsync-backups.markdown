@@ -36,7 +36,7 @@ gok edit
 
 Configure [Package config: Command-line flags](/userguide/package-config/#flags) and [Package config: Extra files](/userguide/package-config/#extrafiles):
 
-{{< highlight json "hl_lines=11-19" >}}
+{{< highlight json "hl_lines=11-21" >}}
 {
     "Hostname": "backedup",
     "Packages": [
@@ -48,6 +48,7 @@ Configure [Package config: Command-line flags](/userguide/package-config/#flags)
     ],
     "PackageConfig": {
         "github.com/gokrazy/rsync/cmd/gokr-rsync": {
+            "Basename": "rsync",
             "CommandLineFlags": [
                 "--daemon",
                 "--gokr.config=/etc/gokr-rsyncd.toml"
