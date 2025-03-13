@@ -1,6 +1,7 @@
 module github.com/gokrazy/gokrazy
 
 go 1.22
+toolchain go1.23.7
 
 require (
 	github.com/anatol/vmtest v0.0.0-20211215032353-afd7b1dd38ef
@@ -13,7 +14,7 @@ require (
 	github.com/mdlayher/watchdog v0.0.0-20201005150459-8bdc4f41966b
 	github.com/rtr7/dhcp4 v0.0.0-20220302171438-18c84d089b46
 	github.com/vishvananda/netlink v1.1.0
-	golang.org/x/sys v0.28.0
+	golang.org/x/sys v0.30.0
 )
 
 require (
@@ -21,6 +22,6 @@ require (
 	github.com/mdlayher/socket v0.2.3 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/vishvananda/netns v0.0.0-20211101163701-50045581ed74 // indirect
-	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/net v0.36.0 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 )
