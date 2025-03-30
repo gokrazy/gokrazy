@@ -183,6 +183,47 @@ be built into your instance, and how it will be started at runtime.
 
 See also the [Package Config](/userguide/package-config/) page.
 
+### PackageConfig → GoBuildEnvironment {#packagegobuildenvironment}
+
+The `GoBuildEnvironment` field configures extra environment variables that the
+`gok` CLI passes to `go build` when building your [`Packages`](#packages). See
+[the `cmd/go`
+documentation](https://pkg.go.dev/cmd/go#hdr-Environment_variables)
+for available environment variables.
+
+Note that no shell escaping or quoting (with single or double quotes) is
+required. The environment variables are passed when calling `go build` via [the
+`exec` system call](https://en.wikipedia.org/wiki/Exec_(system_call)).
+
+**Example:**
+
+{{< highlight json "hl_lines=10-15" >}}
+{
+    "Hostname": "scanner",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "github.com/stapelberg/scan2drive/cmd/scan2drive"
+    ],
+    "PackageConfig": {
+        "github.com/stapelberg/scan2drive/cmd/scan2drive": {
+            "GoBuildEnvironment": [
+                "CC=aarch64-linux-gnu-gcc",
+                "CGO_ENABLED=1"
+            ],
+            "GoBuildFlags": [
+                "-ldflags=-linkmode external -extldflags -static"
+            ],
+            "GoBuildTags": [
+                "turbojpeg"
+            ]
+        }
+    }
+}
+{{< /highlight >}}
+
 ### PackageConfig → GoBuildFlags {#packagegobuildflags}
 
 (Corresponds to the former `buildflags` per-package directory text files.)
@@ -202,7 +243,7 @@ system call](https://en.wikipedia.org/wiki/Exec_(system_call)).
 
 **Example:**
 
-{{< highlight json "hl_lines=10-16" >}}
+{{< highlight json "hl_lines=10-11 16-18" >}}
 {
     "Hostname": "scanner",
     "Packages": [
@@ -214,8 +255,15 @@ system call](https://en.wikipedia.org/wiki/Exec_(system_call)).
     ],
     "PackageConfig": {
         "github.com/stapelberg/scan2drive/cmd/scan2drive": {
+            "GoBuildEnvironment": [
+                "CC=aarch64-linux-gnu-gcc",
+                "CGO_ENABLED=1"
+            ],
             "GoBuildFlags": [
                 "-ldflags=-linkmode external -extldflags -static"
+            ],
+            "GoBuildTags": [
+                "turbojpeg"
             ]
         }
     }
@@ -240,7 +288,7 @@ gokrazy.
 
 **Example:**
 
-{{< highlight json "hl_lines=10-16" >}}
+{{< highlight json "hl_lines=10-11 19-21" >}}
 {
     "Hostname": "scanner",
     "Packages": [
@@ -252,6 +300,13 @@ gokrazy.
     ],
     "PackageConfig": {
         "github.com/stapelberg/scan2drive/cmd/scan2drive": {
+            "GoBuildEnvironment": [
+                "CC=aarch64-linux-gnu-gcc",
+                "CGO_ENABLED=1"
+            ],
+            "GoBuildFlags": [
+                "-ldflags=-linkmode external -extldflags -static"
+            ],
             "GoBuildTags": [
                 "turbojpeg"
             ]
