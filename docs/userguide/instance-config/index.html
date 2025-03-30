@@ -12,20 +12,20 @@
     <title>Instance Config Reference :: gokrazy</title>
 
     
-    <link href="/css/nucleus.css?1740685156" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1740685156" rel="stylesheet">
-    <link href="/css/hybrid.css?1740685156" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1740685156" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1740685156" rel="stylesheet">
-    <link href="/css/auto-complete.css?1740685156" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1740685156" rel="stylesheet">
-    <link href="/css/theme.css?1740685156" rel="stylesheet">
-    <link href="/css/tabs.css?1740685156" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1740685156" rel="stylesheet">
+    <link href="/css/nucleus.css?1743326640" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1743326640" rel="stylesheet">
+    <link href="/css/hybrid.css?1743326640" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1743326640" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1743326640" rel="stylesheet">
+    <link href="/css/auto-complete.css?1743326640" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1743326640" rel="stylesheet">
+    <link href="/css/theme.css?1743326640" rel="stylesheet">
+    <link href="/css/tabs.css?1743326640" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1743326640" rel="stylesheet">
     
     
 
-    <script src="/js/jquery-3.3.1.min.js?1740685156"></script>
+    <script src="/js/jquery-3.3.1.min.js?1743326640"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -56,14 +56,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1740685156"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1740685156"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1743326640"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1743326640"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/gokrazy.org\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1740685156"></script>
+<script type="text/javascript" src="/js/search.js?1743326640"></script>
 
     
   </div>
@@ -805,6 +805,7 @@
     <li><a href="#packages">Packages</a></li>
     <li><a href="#packageconfig">PackageConfig</a>
       <ul>
+        <li><a href="#packagegobuildenvironment">PackageConfig → GoBuildEnvironment</a></li>
         <li><a href="#packagegobuildflags">PackageConfig → GoBuildFlags</a></li>
         <li><a href="#packagegobuildtags">PackageConfig → GoBuildTags</a></li>
         <li><a href="#packageenvironment">PackageConfig → Environment</a></li>
@@ -1008,6 +1009,40 @@ disk.</p>
 be built into your instance, and how it will be started at runtime.</p>
 <p><code>PackageConfig</code> is a map that is keyed by the package Go import path.</p>
 <p>See also the <a href="/userguide/package-config/">Package Config</a> page.</p>
+<h3 id="packagegobuildenvironment">PackageConfig → GoBuildEnvironment</h3>
+<p>The <code>GoBuildEnvironment</code> field configures extra environment variables that the
+<code>gok</code> CLI passes to <code>go build</code> when building your <a href="#packages"><code>Packages</code></a>. See
+<a href="https://pkg.go.dev/cmd/go#hdr-Environment_variables">the <code>cmd/go</code>
+documentation</a>
+for available environment variables.</p>
+<p>Note that no shell escaping or quoting (with single or double quotes) is
+required. The environment variables are passed when calling <code>go build</code> via <a href="https://en.wikipedia.org/wiki/Exec_(system_call)">the
+<code>exec</code> system call</a>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;scanner&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/stapelberg/scan2drive/cmd/scan2drive&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/stapelberg/scan2drive/cmd/scan2drive&#34;</span>: {
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;GoBuildEnvironment&#34;</span>: [
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;CC=aarch64-linux-gnu-gcc&#34;</span>,
+</span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;CGO_ENABLED=1&#34;</span>
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ],
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;GoBuildFlags&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;-ldflags=-linkmode external -extldflags -static&#34;</span>
+</span></span><span style="display:flex;"><span>            ],
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;GoBuildTags&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;turbojpeg&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 <h3 id="packagegobuildflags">PackageConfig → GoBuildFlags</h3>
 <p>(Corresponds to the former <code>buildflags</code> per-package directory text files.)</p>
 <p>The <code>GoBuildFlags</code> field configures extra arguments that the <code>gok</code> CLI passes to
@@ -1032,11 +1067,18 @@ system call</a>.</p>
 </span></span><span style="display:flex;"><span>    ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/stapelberg/scan2drive/cmd/scan2drive&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;GoBuildEnvironment&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;CC=aarch64-linux-gnu-gcc&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;CGO_ENABLED=1&#34;</span>
+</span></span><span style="display:flex;"><span>            ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;GoBuildFlags&#34;</span>: [
 </span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;-ldflags=-linkmode external -extldflags -static&#34;</span>
-</span></span><span style="display:flex; background-color:#3c3d38"><span>            ]
-</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
-</span></span><span style="display:flex; background-color:#3c3d38"><span>    }
+</span></span><span style="display:flex; background-color:#3c3d38"><span>            ],
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;GoBuildTags&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;turbojpeg&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 <h3 id="packagegobuildtags">PackageConfig → GoBuildTags</h3>
 <p>(Corresponds to the former <code>buildtags</code> per-package directory text files.)</p>
@@ -1062,11 +1104,18 @@ gokrazy.</p>
 </span></span><span style="display:flex;"><span>    ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;github.com/stapelberg/scan2drive/cmd/scan2drive&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;GoBuildEnvironment&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;CC=aarch64-linux-gnu-gcc&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;CGO_ENABLED=1&#34;</span>
+</span></span><span style="display:flex;"><span>            ],
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;GoBuildFlags&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;-ldflags=-linkmode external -extldflags -static&#34;</span>
+</span></span><span style="display:flex;"><span>            ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>            <span style="color:#f92672">&#34;GoBuildTags&#34;</span>: [
 </span></span><span style="display:flex; background-color:#3c3d38"><span>                <span style="color:#e6db74">&#34;turbojpeg&#34;</span>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>            ]
-</span></span><span style="display:flex; background-color:#3c3d38"><span>        }
-</span></span><span style="display:flex; background-color:#3c3d38"><span>    }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 <h3 id="packageenvironment">PackageConfig → Environment</h3>
 <p>(Corresponds to the former <code>env</code> per-package directory text files.)</p>
@@ -2133,19 +2182,19 @@ certificate.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1740685156"></script>
-    <script src="/js/perfect-scrollbar.min.js?1740685156"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1740685156"></script>
-    <script src="/js/jquery.sticky.js?1740685156"></script>
-    <script src="/js/featherlight.min.js?1740685156"></script>
-    <script src="/js/highlight.pack.js?1740685156"></script>
+    <script src="/js/clipboard.min.js?1743326640"></script>
+    <script src="/js/perfect-scrollbar.min.js?1743326640"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1743326640"></script>
+    <script src="/js/jquery.sticky.js?1743326640"></script>
+    <script src="/js/featherlight.min.js?1743326640"></script>
+    <script src="/js/highlight.pack.js?1743326640"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1740685156"></script>
-    <script src="/js/learn.js?1740685156"></script>
-    <script src="/js/hugo-learn.js?1740685156"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1743326640"></script>
+    <script src="/js/learn.js?1743326640"></script>
+    <script src="/js/hugo-learn.js?1743326640"></script>
     
         
-            <script src="/mermaid/mermaid.js?1740685156"></script>
+            <script src="/mermaid/mermaid.js?1743326640"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
