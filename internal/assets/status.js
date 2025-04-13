@@ -16,10 +16,30 @@ function newLogrotate(elt) {
   };
 }
 
-new EventSource("/log?path=" + ServiceName + "&stream=stderr", {
-  withCredentials: true,
-}).onmessage = newLogrotate(document.getElementById("stderr"));
+var stream = undefined;
+function watch() {
+  if (stream !== undefined) {
+   console.log('stream still alive');
+   return;
+  }
+  stream = new EventSource("/log?path=" + ServiceName + "&stream=both", {
+    withCredentials: true,
+  });
+  stream.addEventListener('stdout', newLogrotate(document.getElementById("stdout")));
+  stream.addEventListener('stderr', newLogrotate(document.getElementById("stderr")));
+}
 
-new EventSource("/log?path=" + ServiceName + "&stream=stdout", {
-  withCredentials: true,
-}).onmessage = newLogrotate(document.getElementById("stdout"));
+function unwatch() {
+  if (stream === undefined) {
+    return;
+  }
+  console.log('closing stream');
+  stream.close();
+  stream = undefined;
+}
+
+// TODO: wire up visibility change event
+
+window.addEventListener("unload", unwatch);
+window.addEventListener("pagehide", unwatch);
+window.addEventListener("pageshow", watch);
