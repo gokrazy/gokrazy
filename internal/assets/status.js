@@ -16,6 +16,8 @@ function newLogrotate(elt) {
   };
 }
 
+var stdout = document.getElementById("stdout");
+var stderr = document.getElementById("stderr");
 var stream = undefined;
 function watch() {
   if (stream !== undefined) {
@@ -25,8 +27,12 @@ function watch() {
   stream = new EventSource("/log?path=" + ServiceName + "&stream=both", {
     withCredentials: true,
   });
-  stream.addEventListener('stdout', newLogrotate(document.getElementById("stdout")));
-  stream.addEventListener('stderr', newLogrotate(document.getElementById("stderr")));
+  stream.addEventListener('open', (event) => {
+    stdout.innerText = '';
+    stderr.innerText = '';
+  });
+  stream.addEventListener('stdout', newLogrotate(stdout));
+  stream.addEventListener('stderr', newLogrotate(stderr));
 }
 
 function unwatch() {
@@ -38,7 +44,14 @@ function unwatch() {
   stream = undefined;
 }
 
-// TODO: wire up visibility change event
+// Only watch stdout+stderr while the tab is visible.
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    unwatch();
+  } else {
+    watch();
+  }
+});
 
 window.addEventListener("unload", unwatch);
 window.addEventListener("pagehide", unwatch);
