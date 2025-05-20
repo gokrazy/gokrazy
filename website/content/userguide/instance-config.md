@@ -807,6 +807,30 @@ If empty, no files will be included.
 }
 {{< /highlight >}}
 
+## Kernel command line configuration {#kernelextraargs}
+
+Certain hardware might require enabling workarounds in the Linux kernel via the
+[kernel’s
+command-line](https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html). For
+example, you might need to specify `acpi_enforce_resources=lax`:
+
+**Example:**
+
+{{< highlight json "hl_lines=9-11" >}}
+{
+    "Hostname": "hello",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass"
+    ],
+    "KernelExtraArgs": [
+	    "acpi_enforce_resources=lax"
+	]
+}
+{{< /highlight >}}
+
 ## Bootloader configuration {#bootloader}
 
 The Raspberry Pi’s “system configuration parameters” (interpreted by the
