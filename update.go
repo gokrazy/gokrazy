@@ -331,75 +331,63 @@ func initUpdate() error {
 		}
 	})
 	http.HandleFunc("/reboot", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			http.Error(w, "expected a POST request", http.StatusBadRequest)
-			return
-		}
-
-		signalDelay := defaultSignalDelay
-		if s := r.FormValue("wait_per_signal"); s != "" {
-			var err error
-			signalDelay, err = time.ParseDuration(s)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-		}
-
-		rc := http.NewResponseController(w)
-		start := time.Now()
-		killSupervisedServicesAndUmountPerm(signalDelay)
-		fmt.Fprintf(w, "All services killed in %s\n", time.Since(start))
-		rc.Flush()
-
-		log.Println("Rebooting")
-		w.Write([]byte("Rebooting...\n"))
-		rc.Flush()
-
-		go func() {
-			time.Sleep(time.Second) // give the http response some time to be sent
-			if err := reboot(r.FormValue("kexec") != "off"); err != nil {
-				log.Println("could not reboot:", err)
-			}
-		}()
+		powerHandler(w, r, "reboot", "Rebooting", func() error {
+			return reboot(r.FormValue("kexec") != "off")
+		})
 	})
 	http.HandleFunc("/poweroff", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			http.Error(w, "expected a POST request", http.StatusBadRequest)
-			return
-		}
-
-		signalDelay := defaultSignalDelay
-		if s := r.FormValue("wait_per_signal"); s != "" {
-			var err error
-			signalDelay, err = time.ParseDuration(s)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-		}
-
-		rc := http.NewResponseController(w)
-		start := time.Now()
-		killSupervisedServicesAndUmountPerm(signalDelay)
-		fmt.Fprintf(w, "All services killed in %s\n", time.Since(start))
-		rc.Flush()
-
-		log.Println("Powering off")
-		w.Write([]byte("Powering off...\n"))
-		rc.Flush()
-
-		go func() {
-			time.Sleep(time.Second) // give the http response some time to be sent
-			if err := unix.Reboot(unix.LINUX_REBOOT_CMD_POWER_OFF); err != nil {
-				log.Println("could not power off:", err)
-			}
-		}()
+		powerHandler(w, r, "power off", "Powering off", func() error {
+			return unix.Reboot(unix.LINUX_REBOOT_CMD_POWER_OFF)
+		})
 	})
 	http.HandleFunc("/uploadtemp/", uploadTemp)
 	http.HandleFunc("/divert", divert)
 
 	return nil
+}
+
+func powerHandler(w http.ResponseWriter, r *http.Request, operationName, powerMsg string, powerFunc func() error) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "expected a POST request", http.StatusBadRequest)
+		return
+	}
+
+	signalDelay := defaultSignalDelay
+	if s := r.FormValue("wait_per_signal"); s != "" {
+		var err error
+		signalDelay, err = time.ParseDuration(s)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+	}
+
+	rc := http.NewResponseController(w)
+
+	if r.FormValue("async") == "true" {
+		log.Printf("Asynchronous %s requested", operationName)
+		go func() {
+			start := time.Now()
+			killSupervisedServicesAndUmountPerm(signalDelay)
+			log.Printf("All services killed in %s\n", time.Since(start))
+		}()
+	} else {
+		log.Printf("Synchronous %s requested", operationName)
+		start := time.Now()
+		killSupervisedServicesAndUmountPerm(signalDelay)
+		fmt.Fprintf(w, "All services killed in %s\n", time.Since(start))
+	}
+
+	log.Println(powerMsg)
+	w.Write([]byte(powerMsg + "..." + "\n"))
+	rc.Flush()
+
+	go func() {
+		time.Sleep(time.Second) // give the http response some time to be sent
+		if err := powerFunc(); err != nil {
+			log.Printf("could not %s: %v", operationName, err)
+		}
+	}()
 }
 
 func killSupervisedServicesAndUmountPerm(signalDelay time.Duration) {
