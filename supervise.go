@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -472,6 +473,17 @@ func supervise(s *service) {
 			// Process execution fails when cmd.Dir points to
 			// a non-existant directory.
 			cmd.Dir = homeDir
+		}
+
+		// If $USER isn't already set, set it to root
+		// in order to further increase the chance of daemons
+		// working properly out of the box
+		hasUser := slices.ContainsFunc(cmd.Env, func(s string) bool {
+			return strings.HasPrefix(s, "USER=")
+		})
+
+		if !hasUser {
+			cmd.Env = append(cmd.Env, "USER=root")
 		}
 
 		l.Printf("gokrazy: attempt %d, starting %q", attempt, cmd.Args)
