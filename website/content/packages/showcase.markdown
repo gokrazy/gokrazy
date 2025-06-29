@@ -63,6 +63,17 @@ setup and other configurations which are available in
 movies/series/animes ratings and comments. Running it requires some setup but the
 README describes every step to make it work.
 
+### The relax switch
+
+[The relax switch](https://github.com/drio/relaxswitch) is a gokrazy appliance
+to enhance your bathroom experience. A friend of mine had a hilarious idea:
+having a dedicated switch in your bathroom that, when switched, would play a
+90s relaxing song. The original prototype ran on top of Raspbian OS, but
+gokrazy is a much better fit for this project. You wire a smart relay to your
+switch. The switch talks MQTT. When the person turns on the switch, the service
+running on the Pi plays a 90s relaxing song. When they turn off the switch the
+music go off. Simple and relaxing.
+
 ## Successfully tested
 
 The following third-party programs have been successfully used with gokrazy
@@ -93,17 +104,6 @@ and monitoring.
 object storage service.
 
 See also [Available packages → MinIO](/packages/minio/).
-
-### The relax switch
-
-[The relax switch](https://github.com/drio/relaxswitch) is a gokrazy appliance
-to enhance your bathroom experience. A friend of mine had a hilarious idea:
-having a dedicated switch in your bathroom that, when switched, would play a
-90s relaxing song. The original prototype ran on top of Raspbian OS, but
-gokrazy is a much better fit for this project. You wire a smart relay to your
-switch. The switch talks MQTT. When the person turns on the switch, the service
-running on the Pi plays a 90s relaxing song. When they turn off the switch the
-music go off. Simple and relaxing.
 
 ## No Go software for your idea?
 
