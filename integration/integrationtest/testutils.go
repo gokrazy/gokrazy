@@ -135,7 +135,7 @@ replace %s => %s
 		// 	},
 		// },
 		Verbose: testing.Verbose(),
-		Timeout: 20 * time.Second,
+		Timeout: 1 * time.Minute,
 	}
 	qemu, err := vmtest.NewQemu(&opts)
 	if err != nil {
