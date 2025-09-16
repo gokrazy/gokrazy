@@ -69,6 +69,19 @@ table {
           <td>{{ shortenSHA256 .EEPROM.PieepromSHA256 }}<br>{{ shortenSHA256 .EEPROM.VL805SHA256 }}</td>
         </tr>
         {{ end }}
+        <tr>
+          <td></td>
+          <td>
+            <details>
+              <summary style="display: revert;margin-left: -1.25rem;">Power Management</summary>
+              <form action="/reboot" method="post" style="display:inline">
+                <button type="submit">Reboot</button>
+              </form>
+              <form action="/poweroff" method="post" style="display:inline">
+                <button type="submit">Poweroff</button>
+              </form>
+            </details>
+          </td>
       </table>
 
     </div><!-- /.navbar-collapse -->
