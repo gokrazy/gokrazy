@@ -831,7 +831,7 @@ example, you might need to specify `acpi_enforce_resources=lax`:
 }
 {{< /highlight >}}
 
-## Bootloader configuration {#bootloader}
+## Bootloader configuration (config.txt) {#bootloader}
 
 The Raspberry Pi’s “system configuration parameters” (interpreted by the
 bootloader, or “boot firmware”) can be configured via [the `config.txt`
@@ -864,6 +864,38 @@ Pi OS Linux driver.
 	]
 }
 {{< /highlight >}}
+
+## Bootloader configuration (EEPROM) {#bootloaderextraeeprom}
+
+The Raspberry Pi’s [bootloader
+configuration](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-bootloader-configuration)
+uses the same syntax as the [config.txt](#bootloader), but applies earlier in
+the boot process.
+
+The `BootloaderExtraEEPROM` array contains one string per extra line that should
+be added to the `bootconf.txt` EEPROM section when the gokrazy packer creates
+the `pieeprom.upd` file on the boot file system.
+
+**Example:**
+
+{{< highlight json "hl_lines=9-11" >}}
+{
+    "Hostname": "hello",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass"
+    ],
+    "BootloaderExtraEEPROM": [
+	    "BOOT_ORDER=0xf16"
+	]
+}
+{{< /highlight >}}
+
+This [`BOOT_ORDER` setting
+`0xf16`](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#BOOT_ORDER)
+boots from NVMe disk first, then falls back to SD card.
 
 ## Device mount configuration {#mountconfig}
 
