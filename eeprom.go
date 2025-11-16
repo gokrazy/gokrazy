@@ -44,7 +44,9 @@ func readLastInstalledEepromVersion(model string) (*eepromVersion, error) {
 	}
 	offsetV, lengthV, err := rd.Extents("/vl805.sig")
 	if err != nil {
-		return nil, err
+		if strings.HasPrefix(model, "Raspberry Pi 4 ") {
+			return nil, err
+		}
 	}
 	result := &eepromVersion{}
 
@@ -59,7 +61,7 @@ func readLastInstalledEepromVersion(model string) (*eepromVersion, error) {
 		result.PieepromSHA256 = strings.TrimSpace(string(b))
 	}
 
-	{
+	if offsetV > 0 && lengthV > 0 {
 		if _, err := f.Seek(offsetV, io.SeekStart); err != nil {
 			return nil, err
 		}
