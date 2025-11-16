@@ -1,804 +1,126 @@
 <!DOCTYPE html>
-<html lang="en" class="js csstransforms3d">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.116.0-DEV">
-    <meta name="description" content="">
-
-
-    <link rel="icon" href="/images/favicon.png" type="image/png">
-
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.147.3">
+    <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
+    <meta name="description" content="Each gokrazy instance has a config.json file that contains the instance configuration.
+You can open the instance config in your editor by running gok edit:
+gok edit will open the config of the default instance, which is named “hello”. gok -i scanner edit will open the config of instance “scanner”. If you prefer, you can also locate and edit the file directly on disk: ~/gokrazy/hello/config.json
+This document is a reference, explaining all configuration fields. You don’t need to read through it all before you first start using gokrazy — follow the other configuration guides in this section instead. In case anything should be unclear, you can look at the config.go source code (and send feedback, please!).">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Instance Config Reference :: gokrazy">
+    <meta name="twitter:description" content="Each gokrazy instance has a config.json file that contains the instance configuration.
+You can open the instance config in your editor by running gok edit:
+gok edit will open the config of the default instance, which is named “hello”. gok -i scanner edit will open the config of instance “scanner”. If you prefer, you can also locate and edit the file directly on disk: ~/gokrazy/hello/config.json
+This document is a reference, explaining all configuration fields. You don’t need to read through it all before you first start using gokrazy — follow the other configuration guides in this section instead. In case anything should be unclear, you can look at the config.go source code (and send feedback, please!).">
+    <meta property="og:url" content="https://gokrazy.org/userguide/instance-config/index.html">
+    <meta property="og:site_name" content="gokrazy">
+    <meta property="og:title" content="Instance Config Reference :: gokrazy">
+    <meta property="og:description" content="Each gokrazy instance has a config.json file that contains the instance configuration.
+You can open the instance config in your editor by running gok edit:
+gok edit will open the config of the default instance, which is named “hello”. gok -i scanner edit will open the config of instance “scanner”. If you prefer, you can also locate and edit the file directly on disk: ~/gokrazy/hello/config.json
+This document is a reference, explaining all configuration fields. You don’t need to read through it all before you first start using gokrazy — follow the other configuration guides in this section instead. In case anything should be unclear, you can look at the config.go source code (and send feedback, please!).">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Configuration">
+    <meta itemprop="name" content="Instance Config Reference :: gokrazy">
+    <meta itemprop="description" content="Each gokrazy instance has a config.json file that contains the instance configuration.
+You can open the instance config in your editor by running gok edit:
+gok edit will open the config of the default instance, which is named “hello”. gok -i scanner edit will open the config of instance “scanner”. If you prefer, you can also locate and edit the file directly on disk: ~/gokrazy/hello/config.json
+This document is a reference, explaining all configuration fields. You don’t need to read through it all before you first start using gokrazy — follow the other configuration guides in this section instead. In case anything should be unclear, you can look at the config.go source code (and send feedback, please!).">
+    <meta itemprop="wordCount" content="3263">
     <title>Instance Config Reference :: gokrazy</title>
-
-    
-    <link href="/css/nucleus.css?1751187386" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1751187386" rel="stylesheet">
-    <link href="/css/hybrid.css?1751187386" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1751187386" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1751187386" rel="stylesheet">
-    <link href="/css/auto-complete.css?1751187386" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1751187386" rel="stylesheet">
-    <link href="/css/theme.css?1751187386" rel="stylesheet">
-    <link href="/css/tabs.css?1751187386" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1751187386" rel="stylesheet">
-    
-    
-
-    <script src="/js/jquery-3.3.1.min.js?1751187386"></script>
-
-    <style>
-      :root #header + #content > #left > #rlblock_left{
-          display:none !important;
-      }
-      
-        :not(pre) > code + span.copy-to-clipboard {
-            display: none;
+    <link href="/images/favicon.png?1763319501" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1763319501" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1763319501" defer></script>
+    <script src="/js/search-lunr.min.js?1763319501" defer></script>
+    <script src="/js/search.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1763319501";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1763319501" rel="stylesheet">
+    <link href="/css/theme.min.css?1763319501" rel="stylesheet">
+    <link href="/css/format-html.min.css?1763319501" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/userguide\/instance-config\/index.html';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/gokrazy.org';
+      window.relearn.disableInlineCopyToClipboard=true;
+      window.relearn.enableBlockCodeWrap=true;
+      // legal
+      window.relearn.getItem = (s,n) => {return s.getItem(n)};
+      window.relearn.setItem = (s,n,v) => {return s.setItem(n,v)};
+      window.relearn.removeItem = (s,n) => {return s.removeItem(n)};
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
         }
-      
-    </style>
-    
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
   </head>
-  <body class="" data-url="/userguide/instance-config/">
-    <nav id="sidebar" class="">
-
-
-
-  <div id="header-wrapper">
-    <div id="header">
-      <img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
-
-    </div>
-    
-        <div class="searchbox">
-    <label for="search-by"><i class="fas fa-search"></i></label>
-    <input data-search-input id="search-by" type="search" placeholder="Search...">
-    <span data-search-clear=""><i class="fas fa-times"></i></span>
-</div>
-
-<script type="text/javascript" src="/js/lunr.min.js?1751187386"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1751187386"></script>
-<script type="text/javascript">
-    
-        var baseurl = "https:\/\/gokrazy.org\/";
-    
-</script>
-<script type="text/javascript" src="/js/search.js?1751187386"></script>
-
-    
-  </div>
-  
-    <section id="homelinks">
-      <ul>
-        <li>
-            <a class="padding" href='/'><i class='fas fa-home'></i> Home</a>
-        </li>
-      </ul>
-    </section>
-  
-
-    <div class="highlightable">
-    <ul class="topics">
-
-        
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/quickstart/" title="Quickstart" class="dd-item
-        
-        
-        
-        ">
-      <a href="/quickstart/">
-          <b>1. </b>Quickstart
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/platforms/" title="Supported platforms" class="dd-item
-        
-        
-        
-        ">
-      <a href="/platforms/">
-          <b>2. </b>Supported platforms
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        parent
-        
-        
-        ">
-      <a href="/userguide/">
-          <b>3. </b>Configuration
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item active">
-        <a href="/userguide/instance-config/">
-        Instance Config Reference
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
-        <a href="/userguide/migration-guide/">
-        Instance Config Migration Guide
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
-        <a href="/userguide/automation/">
-        Automation
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
-        <a href="/userguide/package-config/">
-        Flags, environment variables, …
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/dhcp/" title="DHCP Client" class="dd-item ">
-        <a href="/userguide/dhcp/">
-        DHCP Client
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/remotesyslog/" title="Remote Syslog: sending gokrazy logs over the network" class="dd-item ">
-        <a href="/userguide/remotesyslog/">
-        Remote Syslog
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item ">
-        <a href="/userguide/bluetooth/">
-        Using Bluetooth
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/permanent-data/" title="Access permanent data" class="dd-item ">
-        <a href="/userguide/permanent-data/">
-        Access permanent data
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/qemu/" title="QEMU x86-64 virtual machine" class="dd-item ">
-        <a href="/userguide/qemu/">
-        QEMU x86-64 virtual machine
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/rsync-backups/" title="Permanent data backup with the gokrazy rsync" class="dd-item ">
-        <a href="/userguide/rsync-backups/">
-        Data backup with rsync
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/packages/" title="Available packages" class="dd-item
-        
-        
-        
-        ">
-      <a href="/packages/">
-          <b>4. </b>Available packages
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/showcase/" title="Showcase" class="dd-item ">
-        <a href="/packages/showcase/">
-        Showcase
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/tailscale/" title="Tailscale VPN" class="dd-item ">
-        <a href="/packages/tailscale/">
-        Tailscale VPN
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/caddy-http-server/" title="Caddy HTTP server" class="dd-item ">
-        <a href="/packages/caddy-http-server/">
-        Caddy HTTP server
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/minio/" title="MinIO object storage" class="dd-item ">
-        <a href="/packages/minio/">
-        MinIO object storage
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/docker-containers/" title="Docker containers" class="dd-item ">
-        <a href="/packages/docker-containers/">
-        Docker containers
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/prometheus/" title="Prometheus" class="dd-item ">
-        <a href="/packages/prometheus/">
-        Prometheus
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/development/" title="Package development" class="dd-item
-        
-        
-        
-        ">
-      <a href="/development/">
-          <b>5. </b>Package development
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item ">
-        <a href="/development/process-interface/">
-        Process interface / requirements
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
-        <a href="/development/gpio/">
-        Input/output via GPIO pins
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/modules/" title="Working with Go modules" class="dd-item ">
-        <a href="/development/modules/">
-        Working with Go modules
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/buildtags/" title="The gokrazy Go build tag" class="dd-item ">
-        <a href="/development/buildtags/">
-        The gokrazy Go build tag
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/non-go/" title="Non-Go Prototyping" class="dd-item ">
-        <a href="/development/non-go/">
-        Non-Go Prototyping
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-        
-    </ul>
-
-    
-    
-      <section id="shortcuts">
-        <h3>More</h3>
-        <ul>
-          
-              <li>
-                  <a class="padding" href="https://github.com/gokrazy/gokrazy"><i class='fab fa-github'></i> GitHub repo</a>
-              </li>
-          
-        </ul>
-      </section>
-    
-
-    
-    <section id="footer">
-      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
-
-    </section>
-  </div>
-</nav>
-
-
-
-
-        <section id="body">
-        <div id="overlay"></div>
-        <div class="padding highlightable">
-              
-              <div>
-                <div id="top-bar">
-                
-                  
-                  
-                  
-                  <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/instance-config.md" target="blank">
-                      <i class="fas fa-code-branch"></i>
-                      <span id="top-github-link-text">Edit this page</span>
-                    </a>
-                  </div>
-                  
-                
-                
-                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                    <span id="sidebar-toggle-span">
-                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
-                          <i class="fas fa-bars"></i>
-                        </a>
-                    </span>
-                  
-                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
-                  
-                  <span class="links">
-                 
-                 
-                    
-          
-          
-            
-            
-          
-          
-            
-            
-          
-          
-            <a href='/'>gokrazy Go appliances</a> > <a href='/userguide/'>Configuration</a> > Instance Config Reference
-          
-        
-          
-        
-          
-        
-                 
-                  </span>
-                </div>
-                
-                    <div class="progress">
-    <div class="wrapper">
-<nav id="TableOfContents">
+  <body class="mobile-support html" data-url="/userguide/instance-config/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
   <ul>
     <li><a href="#hostname">Hostname</a></li>
     <li><a href="#devicetype">DeviceType</a></li>
@@ -846,27 +168,36 @@
     </li>
   </ul>
 </nav>
-    </div>
-</div>
-
-                
+                </div>
               </div>
             </div>
-            
-        <div id="head-tags">
-        
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">gokrazy Go appliances</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/userguide/index.html"><span itemprop="name">Configuration</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Instance Config Reference</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-edit" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/instance-config.md" rel="external" title="Edit (CTRL+ALT+w)"><i class="fa-fw fas fa-pen"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div id="body-inner">
-          
-            <h1>
-              
-              Instance Config Reference
-            </h1>
-          
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable userguide" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
 
-        
-
+<h1 id="instance-config-reference">Instance Config Reference</h1>
 
 <p>Each gokrazy instance has a <code>config.json</code> file that contains the instance
 configuration.</p>
@@ -880,17 +211,17 @@ configuration.</p>
 <p>This document is a reference, explaining all configuration fields. You don’t
 need to read through it all before you first start using gokrazy — follow the
 other configuration guides in this section instead. In case anything should be
-unclear, you can look at <a href="https://github.com/gokrazy/internal/blob/main/config/config.go">the <code>config.go</code> source
+unclear, you can look at <a href="https://github.com/gokrazy/internal/blob/main/config/config.go" rel="external">the <code>config.go</code> source
 code</a> (and send
 feedback, please!).</p>
 <p>Older versions of gokrazy only used command-line flags and plain-text config
 files instead of a central instance configuration. See the design document
-<a href="https://docs.google.com/document/d/1AUDmc8lygLR59O29Oc4ckv-Buk2R9zrvPDO9JbPOts8/edit?usp=sharing">gokrazy “instance-centric” config
+<a href="https://docs.google.com/document/d/1AUDmc8lygLR59O29Oc4ckv-Buk2R9zrvPDO9JbPOts8/edit?usp=sharing" rel="external">gokrazy “instance-centric” config
 re-design</a>
 for details on why the change was made, how old setups are kept working and how
 they can be migrated.</p>
 <p>Here is a minimal instance configuration example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;hello&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -898,9 +229,9 @@ they can be migrated.</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/serial-busybox&#34;</span>,
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ]
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Most instance configuration files will be more complicated, for example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>Most instance configuration files will be more complicated, for example:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -930,20 +261,20 @@ they can be migrated.</p>
 </span></span><span style="display:flex;"><span>            ]
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h2 id="hostname">Hostname</h2>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h2 id="hostname">Hostname<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>(Corresponds to the former <code>-hostname</code> gokr-packer flag.)</p>
-<p>The <code>Hostname</code> field sets the <a href="https://en.wikipedia.org/wiki/Hostname">hostname</a>
+<p>The <code>Hostname</code> field sets the <a href="https://en.wikipedia.org/wiki/Hostname" rel="external">hostname</a>
 of your gokrazy instance.</p>
 <p>The gokrazy
-<a href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol">DHCP</a> client
+<a href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol" rel="external">DHCP</a> client
 sends this hostname when acquiring a lease, so if hostname resolution is working
 in your local network, you will be able to access the device in your browser by
 entering the hostname, e.g. <code>http://hello/</code> (username <code>gokrazy</code>, password as
-configured in <a href="#updatehttppassword"><code>HTTPPassword</code></a> or
+configured in <a href="/userguide/instance-config/index.html#updatehttppassword"><code>HTTPPassword</code></a> or
 <code>~/.config/gokrazy/http-password.txt</code>).</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;example&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -952,15 +283,16 @@ configured in <a href="#updatehttppassword"><code>HTTPPassword</code></a> or
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="devicetype">DeviceType</h2>
+
+<h2 id="devicetype">DeviceType<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>(Corresponds to the former <code>-device_type</code> gokr-packer flag.)</p>
 <p>The <code>DeviceType</code> field specifies which kind of target device this gokrazy
 instance should be built for.</p>
 <ul>
 <li>
-<p>empty (&quot;&quot;): target the Raspberry Pi (default) or UEFI/BIOS PCs (<a href="https://github.com/rtr7/kernel">router7
+<p>empty (&quot;&quot;): target the Raspberry Pi (default) or UEFI/BIOS PCs (<a href="https://github.com/rtr7/kernel" rel="external">router7
 kernel</a>), depending on the
-<a href="#kernelpackage"><code>KernelPackage</code></a> and <a href="#firmwarepackage"><code>FirmwarePackage</code></a>
+<a href="/userguide/instance-config/index.html#kernelpackage"><code>KernelPackage</code></a> and <a href="/userguide/instance-config/index.html#firmwarepackage"><code>FirmwarePackage</code></a>
 you specify.</p>
 </li>
 <li>
@@ -973,9 +305,9 @@ bootloader files in the root partition.</p>
 </li>
 </ul>
 <p>The possible values are defined in
-<a href="https://github.com/gokrazy/internal/blob/main/deviceconfig/config.go"><code>github.com/gokrazy/internal/deviceconfig</code> (→ config.go)</a></p>
+<a href="https://github.com/gokrazy/internal/blob/main/deviceconfig/config.go" rel="external"><code>github.com/gokrazy/internal/deviceconfig</code> (→ config.go)</a></p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;alternative&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;DeviceType&#34;</span>: <span style="color:#e6db74">&#34;odroidhc1&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
@@ -985,17 +317,18 @@ bootloader files in the root partition.</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="packages">Packages</h2>
+
+<h2 id="packages">Packages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>(Corresponds to the former gokr-packer command line arguments.)</p>
 <p>The <code>Packages</code> field lists the Go packages that should be built and included in
 your gokrazy instance.</p>
-<p>Each listed package is a <a href="https://go.dev/doc/code#Organization">Go import path</a>
+<p>Each listed package is a <a href="https://go.dev/doc/code#Organization" rel="external">Go import path</a>
 referencing an executable Go program (<code>package main</code>).</p>
 <p>To add a package to a gokrazy instance, use the <code>gok add</code> command, which also
 works for packages that have not yet been published and are stored on your local
 disk.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;hello&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1005,22 +338,23 @@ disk.</p>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#e6db74">&#34;github.com/stapelberg/scan2drive/cmd/scan2drive&#34;</span>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="packageconfig">PackageConfig</h2>
+
+<h2 id="packageconfig">PackageConfig<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>The <code>PackageConfig</code> field specifies how each package listed in <code>Packages</code> will
 be built into your instance, and how it will be started at runtime.</p>
 <p><code>PackageConfig</code> is a map that is keyed by the package Go import path.</p>
-<p>See also the <a href="/userguide/package-config/">Package Config</a> page.</p>
-<h3 id="packagegobuildenvironment">PackageConfig → GoBuildEnvironment</h3>
+<p>See also the <a href="/userguide/package-config/index.html">Package Config</a> page.</p>
+<h3 id="packagegobuildenvironment">PackageConfig → GoBuildEnvironment<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>The <code>GoBuildEnvironment</code> field configures extra environment variables that the
-<code>gok</code> CLI passes to <code>go build</code> when building your <a href="#packages"><code>Packages</code></a>. See
-<a href="https://pkg.go.dev/cmd/go#hdr-Environment_variables">the <code>cmd/go</code>
+<code>gok</code> CLI passes to <code>go build</code> when building your <a href="/userguide/instance-config/index.html#packages"><code>Packages</code></a>. See
+<a href="https://pkg.go.dev/cmd/go#hdr-Environment_variables" rel="external">the <code>cmd/go</code>
 documentation</a>
 for available environment variables.</p>
 <p>Note that no shell escaping or quoting (with single or double quotes) is
-required. The environment variables are passed when calling <code>go build</code> via <a href="https://en.wikipedia.org/wiki/Exec_(system_call)">the
+required. The environment variables are passed when calling <code>go build</code> via <a href="https://en.wikipedia.org/wiki/Exec_(system_call)" rel="external">the
 <code>exec</code> system call</a>.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;scanner&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1044,20 +378,21 @@ required. The environment variables are passed when calling <code>go build</code
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="packagegobuildflags">PackageConfig → GoBuildFlags</h3>
+
+<h3 id="packagegobuildflags">PackageConfig → GoBuildFlags<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>buildflags</code> per-package directory text files.)</p>
 <p>The <code>GoBuildFlags</code> field configures extra arguments that the <code>gok</code> CLI passes to
-<code>go build</code> when building your <a href="#packages"><code>Packages</code></a>. See <a href="https://pkg.go.dev/cmd/go#hdr-Compile_packages_and_dependencies">the <code>cmd/go</code>
+<code>go build</code> when building your <a href="/userguide/instance-config/index.html#packages"><code>Packages</code></a>. See <a href="https://pkg.go.dev/cmd/go#hdr-Compile_packages_and_dependencies" rel="external">the <code>cmd/go</code>
 documentation</a>
 for available flags.</p>
 <p>To pass build tags, do not use <code>-tags=mycustomtag</code>, as that will overwrite
-gokrazy’s own build tags. Instead, set the <a href="#packagegobuildtags"><code>GoBuildTags</code></a>
+gokrazy’s own build tags. Instead, set the <a href="/userguide/instance-config/index.html#packagegobuildtags"><code>GoBuildTags</code></a>
 field.</p>
 <p>Note that no shell escaping or quoting (with single or double quotes) is
-required. The build flags are passed when calling <code>go build</code> via <a href="https://en.wikipedia.org/wiki/Exec_(system_call)">the <code>exec</code>
+required. The build flags are passed when calling <code>go build</code> via <a href="https://en.wikipedia.org/wiki/Exec_(system_call)" rel="external">the <code>exec</code>
 system call</a>.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;scanner&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1081,20 +416,21 @@ system call</a>.</p>
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="packagegobuildtags">PackageConfig → GoBuildTags</h3>
+
+<h3 id="packagegobuildtags">PackageConfig → GoBuildTags<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>buildtags</code> per-package directory text files.)</p>
-<p>The <code>GoBuildTags</code> field configures additional <a href="https://pkg.go.dev/cmd/go#hdr-Build_constraints">Go build
+<p>The <code>GoBuildTags</code> field configures additional <a href="https://pkg.go.dev/cmd/go#hdr-Build_constraints" rel="external">Go build
 tags</a> (also known as build
 constraints) to use when building your program.</p>
 <p>Note: Some Go packages use build tags to optionally build code which uses
-<a href="https://go.dev/blog/cgo">cgo</a>. Because gokrazy intentionally does not include a
+<a href="https://go.dev/blog/cgo" rel="external">cgo</a>. Because gokrazy intentionally does not include a
 C runtime environment, configuring such build tags results either in compilation
 failures, or in programs that compile but won’t start. But, for certain specific
 use-cases (<code>scan2drive</code>’s turbojpeg support, for example), you can enable just
 enough cgo to end up with a fully statically linked program, which does work on
 gokrazy.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;scanner&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1118,15 +454,16 @@ gokrazy.</p>
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="packageenvironment">PackageConfig → Environment</h3>
+
+<h3 id="packageenvironment">PackageConfig → Environment<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>env</code> per-package directory text files.)</p>
-<p>The <code>Environment</code> field configures <a href="https://en.wikipedia.org/wiki/Environment_variable">environment
+<p>The <code>Environment</code> field configures <a href="https://en.wikipedia.org/wiki/Environment_variable" rel="external">environment
 variables</a> that will be set
 when starting your program.</p>
 <p>Each entry is a <code>key=value</code> pair, like in Go’s
-<a href="https://pkg.go.dev/os#Environ"><code>os.Environ()</code></a>.</p>
+<a href="https://pkg.go.dev/os#Environ" rel="external"><code>os.Environ()</code></a>.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1144,16 +481,17 @@ when starting your program.</p>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        }
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="packagecommandlineflags">PackageConfig → CommandLineFlags</h3>
+
+<h3 id="packagecommandlineflags">PackageConfig → CommandLineFlags<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>flags</code> per-package directory text files.)</p>
-<p>The <code>CommandLineFlags</code> field configures <a href="https://en.wikipedia.org/wiki/Command-line_interface#Arguments">command line
+<p>The <code>CommandLineFlags</code> field configures <a href="https://en.wikipedia.org/wiki/Command-line_interface#Arguments" rel="external">command line
 flags</a> that will
 be set when starting your program.</p>
 <p>Note that no shell escaping or quoting (with single or double quotes) is
-required. The command line flags are passed when starting your program via <a href="https://en.wikipedia.org/wiki/Exec_(system_call)">the
+required. The command line flags are passed when starting your program via <a href="https://en.wikipedia.org/wiki/Exec_(system_call)" rel="external">the
 <code>exec</code> system call</a>.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1171,7 +509,8 @@ required. The command line flags are passed when starting your program via <a hr
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        }
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="packagedontstart">PackageConfig → DontStart</h3>
+
+<h3 id="packagedontstart">PackageConfig → DontStart<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>dontstart</code> per-package directory text files.)</p>
 <p>Enabling the <code>DontStart</code> field makes the gokrazy init system not start your
 program automatically.</p>
@@ -1180,7 +519,7 @@ via <code>breakglass</code>.</p>
 <p>This is useful for programs that are interactive command line tools, instead of
 permanently running services.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;ts&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1196,15 +535,16 @@ permanently running services.</p>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        }
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="packagewaitforclock">PackageConfig → WaitForClock</h3>
+
+<h3 id="packagewaitforclock">PackageConfig → WaitForClock<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>waitforclock</code> per-package directory text files.)</p>
 <p>The <code>WaitForClock</code> field makes the gokrazy init system wait for clock
 synchronization before starting the program. This is useful when modifying the
 program source to call
-<a href="https://pkg.go.dev/github.com/gokrazy/gokrazy#WaitForClock"><code>gokrazy.WaitForClock()</code></a>
+<a href="https://pkg.go.dev/github.com/gokrazy/gokrazy#WaitForClock" rel="external"><code>gokrazy.WaitForClock()</code></a>
 is inconvenient.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;scanner&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1219,7 +559,8 @@ is inconvenient.</p>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        }
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="packageextrafilecontents">PackageConfig → ExtraFileContents</h3>
+
+<h3 id="packageextrafilecontents">PackageConfig → ExtraFileContents<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>extrafiles</code> per-package directory text files.)</p>
 <p>The <code>ExtraFileContents</code> field allows adding extra files into the root file
 system of your gokrazy instance. Any file aside from the built Go program
@@ -1231,9 +572,9 @@ permissions (UNIX mode <code>644</code>, or <code>-rw-r--r--</code>). Note that 
 system is read-only.</p>
 <p>It can be more convenient to manage extra files as standalone, separate files
 (not as part of <code>config.json</code>), which the
-<a href="#packageextrafilepaths"><code>ExtraFilePaths</code></a> field allows you to do.</p>
+<a href="/userguide/instance-config/index.html#packageextrafilepaths"><code>ExtraFilePaths</code></a> field allows you to do.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;webserver&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1254,7 +595,8 @@ system is read-only.</p>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        }
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="packageextrafilepaths">PackageConfig → ExtraFilePaths</h3>
+
+<h3 id="packageextrafilepaths">PackageConfig → ExtraFilePaths<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>extrafiles</code> per-package directory text files.)</p>
 <p>The <code>ExtraFilePaths</code> field allows adding extra files into the root file
 system of your gokrazy instance. Any file aside from the built Go program
@@ -1268,7 +610,7 @@ e.g. <code>~/gokrazy/hello</code> — the same directory in which <code>config.j
 <li>a regular file. File modes are retained, including the executable bit.</li>
 <li>a directory. All files and directories within the directory are recursively
 included.</li>
-<li>a <a href="https://en.wikipedia.org/wiki/Tar_(computing)">.tar archive</a>:
+<li>a <a href="https://en.wikipedia.org/wiki/Tar_(computing)" rel="external">.tar archive</a>:
 <code>&lt;path&gt;.tar</code>. All files contained in the archive are included.</li>
 <li>an architecture-dependent .tar file: <code>&lt;path&gt;_&lt;target_goarch&gt;.tar</code>, for example
 <code>firmware_amd64.tar</code></li>
@@ -1277,7 +619,7 @@ included.</li>
 in which gokrazy will look for extrafiles. Conceptually, the directory is
 handled as if you had configured <code>ExtraFilePaths: &quot;/home/michael/go/src/github.com/gokrazy/wifi/_gokrazy/extrafiles&quot;</code>.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;webserver&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1294,27 +636,28 @@ handled as if you had configured <code>ExtraFilePaths: &quot;/home/michael/go/sr
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        }
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; ~/gokrazy/webserver/Caddyfile <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; ~/gokrazy/webserver/Caddyfile <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">http://:80 {
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">	root * /tmp
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">	file_server browse 
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span>
-</span></span></code></pre></div><h3 id="packagebasename">PackageConfig → Basename</h3>
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span></span></span></code></pre></div>
+<h3 id="packagebasename">PackageConfig → Basename<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>By default the basename of a package is the last part of the name of the Go
 package. For example, the basename for <code>github.com/gokrazy/rsync/cmd/gokr-rsync</code>
 will be <code>gokr-rsync</code>.</p>
 <p>To install the program under a different basename (for example, in case of
 <code>rsync</code>, for compatibility), set the <code>Basename</code> field:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;PackageConfig&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;github.com/gokrazy/rsync/cmd/gokr-rsync&#34;</span>: {
 </span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Basename&#34;</span>: <span style="color:#e6db74">&#34;rsync&#34;</span>
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    },
 </span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">…</span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h2 id="environment">Environment</h2>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h2 id="environment">Environment<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>The <code>Environment</code> field sets the default environment variables that the <code>gok</code>
 commands use. When you create a new instance using <code>gok new</code>, the default
 environment will be set to <code>GOOS=linux</code> and <code>GOARCH=arm64</code> (as gokrazy is a
@@ -1322,7 +665,7 @@ Linux system and the default target is the Raspberry Pi).</p>
 <p>The following example builds a gokrazy instance for <code>linux/amd64</code> PCs, perhaps run
 as a Virtual Machine on Proxmox.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;vm&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1337,11 +680,12 @@ as a Virtual Machine on Proxmox.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;KernelPackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/gokrazy/kernel.amd64&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;FirmwarePackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/gokrazy/kernel.amd64&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="serialconsole">SerialConsole</h2>
+
+<h2 id="serialconsole">SerialConsole<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>(Corresponds to the former <code>-serial_console</code> gokr-packer flag.)</p>
 <p>The <code>SerialConsole</code> field controls whether the Linux kernel provides a serial
 console on the Raspberry Pi’s UART0 RX/TX ports (see
-<a href="https://pinout.xyz">pinout.xyz</a>). To use this serial console, a popular option
+<a href="https://pinout.xyz" rel="external">pinout.xyz</a>). To use this serial console, a popular option
 is to connect a USB-to-serial adapter.</p>
 <p>Linux supports multiple consoles, but only one can be the default
 console. Kernel messages during boot will be printed to the default
@@ -1363,11 +707,11 @@ which will save a little bit of power by running the Pi at lower clock speeds.</
 </ul>
 <p>If you want to write an application that uses the serial port, open
 <code>/dev/serial0</code>
-(<a href="https://github.com/stapelberg/hmgo/blob/4c33c14a7c1e2e2baeccd53f281e440c4653d67b/ccu.go#L92">example</a>),
+(<a href="https://github.com/stapelberg/hmgo/blob/4c33c14a7c1e2e2baeccd53f281e440c4653d67b/ccu.go#L92" rel="external">example</a>),
 which is a symlink that points to the device handling the RX/TX pins (typically
 <code>ttyAMA0</code> or <code>ttyS0</code>).</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;router7&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1377,30 +721,31 @@ which is a symlink that points to the device handling the RX/TX pins (typically
 </span></span><span style="display:flex;"><span>    ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;SerialConsole&#34;</span>: <span style="color:#e6db74">&#34;ttyS0,115200&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="gokrazypackages">GokrazyPackages</h2>
+
+<h2 id="gokrazypackages">GokrazyPackages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>(Corresponds to the former <code>-gokrazy_pkgs</code> gokr-packer flag.)</p>
-<p>Aside from the user-specified <a href="#packages"><code>Packages</code></a>, a gokrazy instance also
+<p>Aside from the user-specified <a href="/userguide/instance-config/index.html#packages"><code>Packages</code></a>, a gokrazy instance also
 includes a couple of packages that are considered part of the system, because
 they are needed to boot the system into a useful state. These are placed in the
 <code>/gokrazy</code> directory (other packages are placed in the <code>/user</code> directory).</p>
 <p>If unset, the following packages will be included by default:</p>
 <ul>
 <li><code>github.com/gokrazy/gokrazy/cmd/dhcp</code> sets the IP address after obtaining a
-<a href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol">DHCPv4</a>
+<a href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol" rel="external">DHCPv4</a>
 lease.</li>
 <li><code>github.com/gokrazy/gokrazy/cmd/ntp</code> synchronizes the hardware clock via
-<a href="https://en.wikipedia.org/wiki/Network_Time_Protocol">NTP</a>.</li>
-<li><code>github.com/gokrazy/gokrazy/cmd/randomd</code> stores/loads a kernel <a href="https://en.wikipedia.org/wiki/Random_seed">random
+<a href="https://en.wikipedia.org/wiki/Network_Time_Protocol" rel="external">NTP</a>.</li>
+<li><code>github.com/gokrazy/gokrazy/cmd/randomd</code> stores/loads a kernel <a href="https://en.wikipedia.org/wiki/Random_seed" rel="external">random
 seed</a> across boots.</li>
 </ul>
 <p>Typically you don’t need to configure this field, but it can be useful to
 overwrite the <code>GokrazyPackages</code> if some component clashes with how you want to
-use your device. For example, for <a href="https://router7.org">router7</a>, I need to
+use your device. For example, for <a href="https://router7.org" rel="external">router7</a>, I need to
 remove the gokrazy <code>dhcp</code> package as router7 has its own DHCP client. Or, if you
 were building a local NTP server, you might want to remove the gokrazy <code>ntp</code>
 package.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;router7&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1413,7 +758,8 @@ package.</p>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/gokrazy/cmd/randomd&#34;</span>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="kernelpackage">KernelPackage</h2>
+
+<h2 id="kernelpackage">KernelPackage<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>(Corresponds to the former <code>-kernel_package</code> gokr-packer flag.)</p>
 <p>The <code>KernelPackage</code> field specifies a Go import path that references a package
 which does not contain any Go code, but instead contains a Linux kernel image
@@ -1422,18 +768,18 @@ which does not contain any Go code, but instead contains a Linux kernel image
 in the boot file system of your gokrazy instance:</p>
 <ul>
 <li><code>vmlinuz</code>, a compiled Linux kernel image</li>
-<li><code>*.dtb</code>, <a href="https://en.wikipedia.org/wiki/Devicetree">Linux device tree</a> files</li>
-<li><code>boot.scr</code>, <a href="https://en.wikipedia.org/wiki/Das_U-Boot">U-Boot script</a></li>
+<li><code>*.dtb</code>, <a href="https://en.wikipedia.org/wiki/Devicetree" rel="external">Linux device tree</a> files</li>
+<li><code>boot.scr</code>, <a href="https://en.wikipedia.org/wiki/Das_U-Boot" rel="external">U-Boot script</a></li>
 </ul>
 <p>Additionally, the <code>lib/modules</code> subdirectory (containing loadable Linux kernel
 modules) is included in the root file system. Note that these modules are only
 included, but not automatically loaded (there is no <code>udev</code> or equivalent on
 gokrazy). If you need to load modules for your hardware, see
-<a href="https://github.com/gokrazy/bluetooth/blob/main/bluetooth.go"><code>bluetooth.go</code></a>
+<a href="https://github.com/gokrazy/bluetooth/blob/main/bluetooth.go" rel="external"><code>bluetooth.go</code></a>
 for an example program that loads kernel modules.</p>
 <p>Default if unset: <code>github.com/gokrazy/kernel</code></p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;router7&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1443,7 +789,8 @@ for an example program that loads kernel modules.</p>
 </span></span><span style="display:flex;"><span>    ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;KernelPackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/rtr7/kernel&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="firmwarepackage">FirmwarePackage</h2>
+
+<h2 id="firmwarepackage">FirmwarePackage<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>(Corresponds to the former <code>-firmware_package</code> gokr-packer flag.)</p>
 <p>The <code>FirmwarePackage</code> field specifies a Go import path that references a package
 which does not contain any Go code, but instead contains Raspberry Pi firmware
@@ -1461,7 +808,7 @@ included in the boot file system of your gokrazy instance:</p>
 <p>Default if unset: <code>github.com/gokrazy/firmware</code></p>
 <p>If empty, no files will be included.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;router7&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1471,7 +818,8 @@ included in the boot file system of your gokrazy instance:</p>
 </span></span><span style="display:flex;"><span>    ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;FirmwarePackage&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="eeprompackage">EEPROMPackage</h2>
+
+<h2 id="eeprompackage">EEPROMPackage<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>(Corresponds to the former <code>-eeprom_package</code> gokr-packer flag.)</p>
 <p>The <code>EEPROMPackage</code> field specifies a Go import path that references a package
 which does not contain any Go code, but instead contains Raspberry Pi EEPROM
@@ -1486,7 +834,7 @@ included in the boot file system of your gokrazy instance:</p>
 <p>Default if unset: <code>github.com/gokrazy/rpi-eeprom</code></p>
 <p>If empty, no files will be included.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;router7&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1496,13 +844,14 @@ included in the boot file system of your gokrazy instance:</p>
 </span></span><span style="display:flex;"><span>    ],
 </span></span><span style="display:flex; background-color:#3c3d38"><span>    <span style="color:#f92672">&#34;EEPROMPackage&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="kernelextraargs">Kernel command line configuration</h2>
+
+<h2 id="kernelextraargs">Kernel command line configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>Certain hardware might require enabling workarounds in the Linux kernel via the
-<a href="https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html">kernel’s
+<a href="https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html" rel="external">kernel’s
 command-line</a>. For
 example, you might need to specify <code>acpi_enforce_resources=lax</code>:</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;hello&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1514,21 +863,22 @@ example, you might need to specify <code>acpi_enforce_resources=lax</code>:</p>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>	    <span style="color:#e6db74">&#34;acpi_enforce_resources=lax&#34;</span>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>	]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="bootloader">Bootloader configuration</h2>
+
+<h2 id="bootloader">Bootloader configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>The Raspberry Pi’s “system configuration parameters” (interpreted by the
-bootloader, or “boot firmware”) can be configured via <a href="https://www.raspberrypi.com/documentation/computers/config_txt.html">the <code>config.txt</code>
+bootloader, or “boot firmware”) can be configured via <a href="https://www.raspberrypi.com/documentation/computers/config_txt.html" rel="external">the <code>config.txt</code>
 file</a> on
 the boot file system.</p>
 <p>The <code>BootloaderExtraLines</code> array contains one string per extra line that should
 be added to <code>config.txt</code> when the gokrazy packer creates the boot file system.</p>
-<p>This allows enabling the <a href="https://www.raspberrypi.com/documentation/computers/configuration.html#part3.1">Raspberry Pi-provided Device Tree
+<p>This allows enabling the <a href="https://www.raspberrypi.com/documentation/computers/configuration.html#part3.1" rel="external">Raspberry Pi-provided Device Tree
 Overlays</a>
-— the example below enables <a href="https://en.wikipedia.org/wiki/1-Wire">1-Wire</a>
+— the example below enables <a href="https://en.wikipedia.org/wiki/1-Wire" rel="external">1-Wire</a>
 support. Note that not all Device Tree Overlays are guaranteed to work;
 compatibility depends on whether the upstream Linux driver matches the Raspberry
 Pi OS Linux driver.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;hello&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1540,21 +890,22 @@ Pi OS Linux driver.</p>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>	    <span style="color:#e6db74">&#34;dtoverlay=w1-gpio&#34;</span>
 </span></span><span style="display:flex; background-color:#3c3d38"><span>	]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h2 id="mountconfig">Device mount configuration</h2>
+
+<h2 id="mountconfig">Device mount configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>gokrazy allows specifying additional devices that will be mounted under <code>/mnt</code>
 when a gokrazy instance boots. The <code>gok</code> CLI will create the directory in the
 root file system, the gokrazy init system will (repeatedly, indefinitely) try to
 find the device specified by <code>Source</code> and mount it at <code>Target</code>.</p>
 <p>This allows you to make use of e.g. an external SSD as fast and reliable storage.</p>
-<h3 id="mountconfigsource">Device mount configuration → Source</h3>
+<h3 id="mountconfigsource">Device mount configuration → Source<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>Currently, the following formats are supported:</p>
 <ul>
-<li><code>PARTUUID=</code>, where you identify a partition by its GPT partition UUID (print with <a href="https://manpages.debian.org/blkid.8">blkid(8)</a>)</li>
-<li><code>UUID=</code>, where you identify an ext2, ext3 or ext4 file system by its UUID (print with <a href="https://manpages.debian.org/blkid.8">blkid(8)</a>)</li>
+<li><code>PARTUUID=</code>, where you identify a partition by its GPT partition UUID (print with <a href="https://manpages.debian.org/blkid.8" rel="external">blkid(8)</a>)</li>
+<li><code>UUID=</code>, where you identify an ext2, ext3 or ext4 file system by its UUID (print with <a href="https://manpages.debian.org/blkid.8" rel="external">blkid(8)</a>)</li>
 <li><code>/dev/sda4</code>, where you provide the (hopefully stable) path of a device node directly</li>
 </ul>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;hello&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -1571,35 +922,36 @@ find the device specified by <code>Source</code> and mount it at <code>Target</c
 </span></span><span style="display:flex; background-color:#3c3d38"><span>		}
 </span></span><span style="display:flex; background-color:#3c3d38"><span>	]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="mountconfigtype">Device mount configuration → Type</h3>
+
+<h3 id="mountconfigtype">Device mount configuration → Type<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>The <code>Type</code> field specifies the file system type to mount. Typically <code>ext4</code>, or
 any other file system your kernel supports. You can use <code>cat /proc/filesystems</code>
-in a <a href="https://github.com/gokrazy/breakglass/">breakglass</a> shell to list them.</p>
-<h3 id="mountconfigtarget">Device mount configuration → Target</h3>
+in a <a href="https://github.com/gokrazy/breakglass/" rel="external">breakglass</a> shell to list them.</p>
+<h3 id="mountconfigtarget">Device mount configuration → Target<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>File system path under <code>/mnt</code> in which to mount the device, e.g. <code>/mnt/usb-thumb-drive</code></p>
-<h3 id="mountconfigoptions">Device mount configuration → Options</h3>
-<p>gokrazy supports the usual <a href="https://manpages.debian.org/mount.8#FILESYSTEM-INDEPENDENT_MOUNT_OPTIONS">filesystem-independent mount
+<h3 id="mountconfigoptions">Device mount configuration → Options<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>gokrazy supports the usual <a href="https://manpages.debian.org/mount.8#FILESYSTEM-INDEPENDENT_MOUNT_OPTIONS" rel="external">filesystem-independent mount
 options</a>
 like <code>ro</code>, <code>noexec</code>, etc.</p>
 <p>The full list of supported options can be found in
-<a href="https://github.com/gokrazy/gokrazy/blob/main/mount.go#L26">https://github.com/gokrazy/gokrazy/blob/main/mount.go#L26</a></p>
-<h2 id="update">Update</h2>
+<a href="https://github.com/gokrazy/gokrazy/blob/main/mount.go#L26" rel="external">https://github.com/gokrazy/gokrazy/blob/main/mount.go#L26</a></p>
+<h2 id="update">Update<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>The <code>Update</code> field contains a struct that configures how gokrazy updates are done.</p>
 <p>You typically don’t need to configure the <code>Update</code> field.</p>
-<h3 id="updatehostname">Update → Hostname</h3>
+<h3 id="updatehostname">Update → Hostname<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>Hostname (in UpdateStruct) overrides Struct.Hostname, but only for
 deploying the update via HTTP, not in the generated image.</p>
-<h3 id="updateusetls">Update → UseTLS</h3>
+<h3 id="updateusetls">Update → UseTLS<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>The <code>UseTLS</code> field accepts the following values:</p>
 <ul>
 <li>empty (&quot;&quot;): use TLS if certificates already exist on disk</li>
 <li><code>off</code>: disable TLS even if certificates exist</li>
 <li><code>self-signed</code>: create (self-signed) TLS certificates if needed</li>
 </ul>
-<p>See <a href="/userguide/tls-for-untrusted-networks/">Using TLS in untrusted networks</a>
+<p>See <a href="/userguide/tls-for-untrusted-networks/index.html">Using TLS in untrusted networks</a>
 for more details.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;webserver&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Update&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;HTTPPassword&#34;</span>: <span style="color:#e6db74">&#34;secret&#34;</span>,
@@ -1612,18 +964,19 @@ for more details.</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="updatehttpport">Update → HTTPPort</h3>
+
+<h3 id="updatehttpport">Update → HTTPPort<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>-http_port</code> gokr-packer flag.)</p>
 <p>The <code>HTTPPort</code> field sets the HTTP port (port 80 by default) on which the
 gokrazy web interface will be available. This field controls both: which port
 your gokrazy instance listens on (server), and which port the <code>gok</code> CLI will use
 for updating your instance (client).</p>
-<p>It can be useful to configure a different port if you want to <a href="/packages/caddy-http-server/">run a web server
+<p>It can be useful to configure a different port if you want to <a href="/packages/caddy-http-server/index.html">run a web server
 on port 80</a>, for example.</p>
-<p>If <a href="#updateusetls"><code>UseTLS</code></a> is enabled, this field is ignored and
-<a href="#updatehttpsport"><code>HTTPSPort</code></a> is used instead.</p>
+<p>If <a href="/userguide/instance-config/index.html#updateusetls"><code>UseTLS</code></a> is enabled, this field is ignored and
+<a href="/userguide/instance-config/index.html#updatehttpsport"><code>HTTPSPort</code></a> is used instead.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;webserver&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Update&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;HTTPPassword&#34;</span>: <span style="color:#e6db74">&#34;secret&#34;</span>,
@@ -1636,12 +989,13 @@ on port 80</a>, for example.</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="updatehttpsport">Update → HTTPSPort</h3>
+
+<h3 id="updatehttpsport">Update → HTTPSPort<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>-https_port</code> gokr-packer flag.)</p>
-<p>See <a href="#updatehttpport"><code>HTTPPort</code></a>, but <a href="#updateusetls">when TLS is enabled</a>
+<p>See <a href="/userguide/instance-config/index.html#updatehttpport"><code>HTTPPort</code></a>, but <a href="/userguide/instance-config/index.html#updateusetls">when TLS is enabled</a>
 (default 443).</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;webserver&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Update&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;HTTPPassword&#34;</span>: <span style="color:#e6db74">&#34;secret&#34;</span>,
@@ -1655,14 +1009,15 @@ on port 80</a>, for example.</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="updatehttppassword">Update → HTTPPassword</h3>
+
+<h3 id="updatehttppassword">Update → HTTPPassword<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>http-password.txt</code> host-specific config file.)</p>
 <p>The <code>HTTPPassword</code> field configures the secret password that allows accessing
 and updating your gokrazy instance.</p>
 <p>When creating a new gokrazy instance (<code>gok new</code>), the <code>gok</code> CLI will create a
 random password.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;webserver&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Update&#34;</span>: {
 </span></span><span style="display:flex; background-color:#3c3d38"><span>        <span style="color:#f92672">&#34;HTTPPassword&#34;</span>: <span style="color:#e6db74">&#34;secret&#34;</span>
@@ -1674,13 +1029,14 @@ random password.</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="updatecertpem">Update → CertPEM</h3>
+
+<h3 id="updatecertpem">Update → CertPEM<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>cert.pem</code> host-specific config file.)</p>
-<p><a href="#updateusetls">When enabling TLS</a>, the <code>CertPEM</code> field allows you to use a
+<p><a href="/userguide/instance-config/index.html#updateusetls">When enabling TLS</a>, the <code>CertPEM</code> field allows you to use a
 custom certificate file. This can be useful if you already have a certificate
 setup for your environment (self-signed or otherwise).</p>
 <p><strong>Example:</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;webserver&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Update&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;HTTPPassword&#34;</span>: <span style="color:#e6db74">&#34;secret&#34;</span>,
@@ -1694,533 +1050,96 @@ setup for your environment (self-signed or otherwise).</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
-<h3 id="updatekeypem">Update → KeyPEM</h3>
+
+<h3 id="updatekeypem">Update → KeyPEM<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>(Corresponds to the former <code>key.pem</code> host-specific config file.)</p>
-<p>Like <a href="#updatecertpem"><code>CertPEM</code></a>, but for the private key instead of the
+<p>Like <a href="/userguide/instance-config/index.html#updatecertpem"><code>CertPEM</code></a>, but for the private key instead of the
 certificate.</p>
 
-
-<footer class="footline">
-	
-</footer>
-
-        
+  <footer class="footline">
+  </footer>
+</article>
         </div>
-        
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
 
+        </div>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
       </div>
-
-    <div id="navigation">
-        
-        
-
-        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-            
-        
-
-        
-
-
-	 
-	 
-    </div>
-
-    </section>
-
-    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
-      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
-    </div>
-    <script src="/js/clipboard.min.js?1751187386"></script>
-    <script src="/js/perfect-scrollbar.min.js?1751187386"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1751187386"></script>
-    <script src="/js/jquery.sticky.js?1751187386"></script>
-    <script src="/js/featherlight.min.js?1751187386"></script>
-    <script src="/js/highlight.pack.js?1751187386"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1751187386"></script>
-    <script src="/js/learn.js?1751187386"></script>
-    <script src="/js/hugo-learn.js?1751187386"></script>
-    
-        
-            <script src="/mermaid/mermaid.js?1751187386"></script>
-        
-        <script>
-            mermaid.initialize({ startOnLoad: true });
-        </script>
-    
-    
-
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-url="/quickstart/index.html"><a class="padding" href="/quickstart/index.html"><b>1. </b>Quickstart</a></li>
+            <li class="" data-nav-url="/platforms/index.html"><a class="padding" href="/platforms/index.html"><b>2. </b>Supported platforms</a></li>
+            <li class="parent " data-nav-url="/userguide/index.html"><a class="padding" href="/userguide/index.html"><b>3. </b>Configuration</a><ul id="R-subsections-74b4df3a3d9365853f09e9f1dfe7bbba" class="collapsible-menu">
+            <li class="active " data-nav-url="/userguide/instance-config/index.html"><a class="padding" href="/userguide/instance-config/index.html">Instance Config Reference</a></li>
+            <li class="" data-nav-url="/userguide/migration-guide/index.html"><a class="padding" href="/userguide/migration-guide/index.html">Instance Config Migration Guide</a></li>
+            <li class="" data-nav-url="/userguide/automation/index.html"><a class="padding" href="/userguide/automation/index.html">Automation</a></li>
+            <li class="" data-nav-url="/userguide/package-config/index.html"><a class="padding" href="/userguide/package-config/index.html">Package config: flags, environment variables, extra files</a></li>
+            <li class="" data-nav-url="/userguide/dhcp/index.html"><a class="padding" href="/userguide/dhcp/index.html">DHCP Client</a></li>
+            <li class="" data-nav-url="/userguide/remotesyslog/index.html"><a class="padding" href="/userguide/remotesyslog/index.html">Remote Syslog: sending gokrazy logs over the network</a></li>
+            <li class="" data-nav-url="/userguide/wifi/index.html"><a class="padding" href="/userguide/wifi/index.html">Connecting to WiFi networks</a></li>
+            <li class="" data-nav-url="/userguide/tls-for-untrusted-networks/index.html"><a class="padding" href="/userguide/tls-for-untrusted-networks/index.html">Using TLS in untrusted networks</a></li>
+            <li class="" data-nav-url="/userguide/bluetooth/index.html"><a class="padding" href="/userguide/bluetooth/index.html">Using Bluetooth</a></li>
+            <li class="" data-nav-url="/userguide/permanent-data/index.html"><a class="padding" href="/userguide/permanent-data/index.html">Access permanent data</a></li>
+            <li class="" data-nav-url="/userguide/nvme-disk/index.html"><a class="padding" href="/userguide/nvme-disk/index.html">NVMe disk (Pi 5)</a></li>
+            <li class="" data-nav-url="/userguide/qemu/index.html"><a class="padding" href="/userguide/qemu/index.html">QEMU x86-64 virtual machine</a></li>
+            <li class="" data-nav-url="/userguide/rsync-backups/index.html"><a class="padding" href="/userguide/rsync-backups/index.html">Permanent data backup with the gokrazy rsync</a></li></ul></li>
+            <li class="" data-nav-url="/packages/index.html"><a class="padding" href="/packages/index.html"><b>4. </b>Available packages</a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-url="/development/index.html"><a class="padding" href="/development/index.html"><b>5. </b>Package development</a><ul id="R-subsections-54b0ce3c97b111c8cd4d107325fd580c" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="https://github.com/gokrazy/gokrazy"><a class="padding" href="https://github.com/gokrazy/gokrazy" rel="external"><i class='fab fa-github'></i> GitHub repo</a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1763319501" defer></script>
+    <script src="/js/theme.min.js?1763319501" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
-

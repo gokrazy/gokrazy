@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.147.3">
+    <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
+    <meta name="description" content="This page shows you how to use an M.2 NVMe disk on your Raspberry Pi 5 with gokrazy.
+The high-level plan is:
+Install an M.2 HAT (with compatible NVMe SSD disk) on your Pi 5. Boot an SD card once on the Pi 5 to update the bootloader. Write gokrazy to the NVMe disk. Step 1. Install an M.2 HAT There are various products available to extend the Raspberry Pi 5 with an M.2 disk slot.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="NVMe disk (Pi 5) :: gokrazy">
+    <meta name="twitter:description" content="This page shows you how to use an M.2 NVMe disk on your Raspberry Pi 5 with gokrazy.
+The high-level plan is:
+Install an M.2 HAT (with compatible NVMe SSD disk) on your Pi 5. Boot an SD card once on the Pi 5 to update the bootloader. Write gokrazy to the NVMe disk. Step 1. Install an M.2 HAT There are various products available to extend the Raspberry Pi 5 with an M.2 disk slot.">
+    <meta property="og:url" content="https://gokrazy.org/userguide/nvme-disk/index.html">
+    <meta property="og:site_name" content="gokrazy">
+    <meta property="og:title" content="NVMe disk (Pi 5) :: gokrazy">
+    <meta property="og:description" content="This page shows you how to use an M.2 NVMe disk on your Raspberry Pi 5 with gokrazy.
+The high-level plan is:
+Install an M.2 HAT (with compatible NVMe SSD disk) on your Pi 5. Boot an SD card once on the Pi 5 to update the bootloader. Write gokrazy to the NVMe disk. Step 1. Install an M.2 HAT There are various products available to extend the Raspberry Pi 5 with an M.2 disk slot.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Configuration">
+    <meta itemprop="name" content="NVMe disk (Pi 5) :: gokrazy">
+    <meta itemprop="description" content="This page shows you how to use an M.2 NVMe disk on your Raspberry Pi 5 with gokrazy.
+The high-level plan is:
+Install an M.2 HAT (with compatible NVMe SSD disk) on your Pi 5. Boot an SD card once on the Pi 5 to update the bootloader. Write gokrazy to the NVMe disk. Step 1. Install an M.2 HAT There are various products available to extend the Raspberry Pi 5 with an M.2 disk slot.">
+    <meta itemprop="wordCount" content="836">
+    <title>NVMe disk (Pi 5) :: gokrazy</title>
+    <link href="/images/favicon.png?1763319501" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1763319501" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1763319501" defer></script>
+    <script src="/js/search-lunr.min.js?1763319501" defer></script>
+    <script src="/js/search.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1763319501";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1763319501" rel="stylesheet">
+    <link href="/css/theme.min.css?1763319501" rel="stylesheet">
+    <link href="/css/format-html.min.css?1763319501" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/userguide\/nvme-disk\/index.html';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/gokrazy.org';
+      window.relearn.disableInlineCopyToClipboard=true;
+      window.relearn.enableBlockCodeWrap=true;
+      // legal
+      window.relearn.getItem = (s,n) => {return s.getItem(n)};
+      window.relearn.setItem = (s,n,v) => {return s.setItem(n,v)};
+      window.relearn.removeItem = (s,n) => {return s.removeItem(n)};
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/userguide/nvme-disk/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#step-1-install-an-m2-hat">Step 1. Install an M.2 HAT</a></li>
+    <li><a href="#step-2-bootloader-update">Step 2. Bootloader update</a>
+      <ul>
+        <li><a href="#option-a-gokrazy">Option A: gokrazy</a></li>
+        <li><a href="#option-b-raspberry-pi-imager">Option B: Raspberry Pi Imager</a></li>
+      </ul>
+    </li>
+    <li><a href="#step-3-using-the-nvme-disk">Step 3. Using the NVMe disk</a>
+      <ul>
+        <li><a href="#option-a-writing-to-the-nvme-disk-directly">Option A: Writing to the NVMe disk directly</a></li>
+        <li><a href="#option-b-copying-a-running-system">Option B: Copying a running system</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">gokrazy Go appliances</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/userguide/index.html"><span itemprop="name">Configuration</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">NVMe disk (Pi 5)</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-edit" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/nvme-disk.markdown" rel="external" title="Edit (CTRL+ALT+w)"><i class="fa-fw fas fa-pen"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable userguide" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="nvme-disk-pi-5">NVMe disk (Pi 5)</h1>
+
+<p>This page shows you how to use an M.2 NVMe disk on your Raspberry Pi 5 with gokrazy.</p>
+<p>The high-level plan is:</p>
+<ol>
+<li>Install an M.2 HAT (with compatible NVMe SSD disk) on your Pi 5.</li>
+<li>Boot an SD card once on the Pi 5 to update the bootloader.</li>
+<li>Write gokrazy to the NVMe disk.</li>
+</ol>
+<h2 id="step-1-install-an-m2-hat">Step 1. Install an M.2 HAT<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>There are various products available to extend the Raspberry Pi 5 with an M.2
+disk slot.</p>
+<p>Unfortunately, all of them require compromises:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Product</th>
+          <th>fan?</th>
+          <th>case?</th>
+          <th>GPIO?</th>
+          <th>M.2 form factor</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>official <a href="https://www.raspberrypi.com/products/m2-hat-plus/" rel="external">Pi M.2 HAT+</a></td>
+          <td>✅ yes</td>
+          <td>❌ no</td>
+          <td>❌ no</td>
+          <td>2230, 2242</td>
+      </tr>
+      <tr>
+          <td>official <a href="https://www.raspberrypi.com/products/m2-hat-plus/" rel="external">Pi M.2 HAT+ Compact</a></td>
+          <td>✅ yes</td>
+          <td>✅ yes</td>
+          <td>❌ no</td>
+          <td>2230</td>
+      </tr>
+      <tr>
+          <td><a href="https://shop.pimoroni.com/products/nvme-base" rel="external">Pimoroni NVMe Base</a></td>
+          <td>✅ yes</td>
+          <td>❌ no</td>
+          <td>✅ yes</td>
+          <td>2230, 2242, 2260, 2280</td>
+      </tr>
+  </tbody>
+</table>
+<p>(All of the above products have been successfully tested with gokrazy.)</p>
+<h2 id="step-2-bootloader-update">Step 2. Bootloader update<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>On all three different Raspberry Pi 5 devices I tested, I needed to first update
+the bootloader firmware (stored in the EEPROM) before the NVMe port would start
+working.</p>
+<p>You have multiple options for updating the firmware.</p>
+<h3 id="option-a-gokrazy">Option A: gokrazy<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>If you don’t have a gokrazy instance yet, follow the <a href="/quickstart/index.html">Quickstart</a>
+guide to create one.</p>
+<p>Set the <a href="/userguide/instance-config/index.html#eeprompackage"><code>EEPROMPackage</code> instance config
+field</a> as follows:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">…</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;EEPROMPackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/gokrazy/rpi5-eeprom&#34;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">…</span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>Once you boot this gokrazy system, the EEPROM will be updated.</p>
+<p>If you want, you can customize the boot order by setting the
+<a href="/userguide/instance-config/index.html#bootloaderextraeeprom"><code>BootloaderExtraEEPROM</code> instance config
+field</a>, for example:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">…</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;BootloaderExtraEEPROM&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;BOOT_ORDER=0xf16&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">…</span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>This <a href="https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#BOOT_ORDER" rel="external"><code>BOOT_ORDER</code> setting
+<code>0xf16</code></a>
+boots from NVMe disk first, then falls back to SD card.</p>
+<h3 id="option-b-raspberry-pi-imager">Option B: Raspberry Pi Imager<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>A gokrazy-managed bootloader (Option A) is the recommended way, but in case you
+need a different option, you can install and start the official <a href="https://www.raspberrypi.com/software/" rel="external">Raspberry Pi
+Imager</a>.</p>
+<p>Click “Operating System”, then chose <em>Misc utility images</em> → <em>Bootloader (Pi 5 family)</em> → <em>NVMe/USB Boot</em>.</p>
+<p>Boot the created SD card and observe the green LED. The LED is solid green for a
+few seconds, then starts blinking rapidly while the EEPROM is being written and
+ultimately blinks slowly. If you have an HDMI screen connected, the screen turns
+solid green once the EEPROM was written.</p>
+<h2 id="step-3-using-the-nvme-disk">Step 3. Using the NVMe disk<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>If you want, you can <a href="/userguide/instance-config/index.html#mountconfig">mount the NVMe
+disk</a> as an extra storage device, which
+requires no extra steps.</p>
+<p>The rest of this section shows how to use the NVMe disk to store the entire
+gokrazy system.</p>
+<h3 id="option-a-writing-to-the-nvme-disk-directly">Option A: Writing to the NVMe disk directly<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The best way to write to the NVMe disk is to plug it into your computer, if you
+have a spare M.2 slot.</p>
+<p>If you don’t have an M.2 slot, you can use an USB M.2 NVMe SSD enclosure like
+the <a href="https://www.digitec.ch/de/s1/product/icy-box-gehaeuse-1x-nvme-ib-1817m-c31-m2-2260-m2-2242-m2-2230-m2-2280-festplattengehaeuse-10695604" rel="external">Icy Box
+IB-1817M-C31</a>
+(costs about 25 bucks).</p>
+<p>After plugging in the SSD, write gokrazy to it as usual:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>gok overwrite --full /dev/disk/by-id/…</span></span></code></pre></div>
+<h3 id="option-b-copying-a-running-system">Option B: Copying a running system<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>If you don’t have a convenient way to write to an NVMe disk, you can boot
+gokrazy from SD card on the Raspberry Pi 5, then log in via SSH (using
+<a href="https://github.com/gokrazy/breakglass" rel="external">breakglass</a>) and copy the running
+system.</p>
+<p>After using the <code>breakglass</code> command to log into your gokrazy instance, you
+should be able to list the <code>/dev/mmcblk*</code> and <code>/dev/nvme*</code> devices. With a fresh
+NVMe disk, you would expect to see no partitions after <code>nvme0n1</code>, and four
+partitions on <code>mmcblk0</code>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>$ breakglass gokrazy
+</span></span><span style="display:flex;"><span>2025/11/16 16:46:54 checking breakglass status on gokrazy instance &#34;gokrazy&#34;
+</span></span><span style="display:flex;"><span>2025/11/16 16:46:54 polling SSH port to become available
+</span></span><span style="display:flex;"><span>2025/11/16 16:46:54 [ssh gokrazy.lan]
+</span></span><span style="display:flex;"><span>Warning: Permanently added &#39;gokrazy.lan&#39; (RSA) to the list of known hosts.
+</span></span><span style="display:flex;"><span>              __                           
+</span></span><span style="display:flex;"><span> .-----.-----|  |--.----.---.-.-----.--.--.
+</span></span><span style="display:flex;"><span> |  _  |  _  |    &lt;|   _|  _  |-- __|  |  |
+</span></span><span style="display:flex;"><span> |___  |_____|__|__|__| |___._|_____|___  |
+</span></span><span style="display:flex;"><span> |_____|  host:  &#34;gokrazy&#34;          |_____|
+</span></span><span style="display:flex;"><span>          model: Raspberry Pi 5 Model B Rev 1.0
+</span></span><span style="display:flex;"><span>          build: 2025-11-16T15:55:04+01:00
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/tmp/breakglass4067757295 # ls -l /dev/mmcblk*
+</span></span><span style="display:flex;"><span>brw-------    1 0        0         179,   0 Nov 16 15:55 /dev/mmcblk0
+</span></span><span style="display:flex;"><span>brw-------    1 0        0         179,   1 Nov 16 15:55 /dev/mmcblk0p1
+</span></span><span style="display:flex;"><span>brw-------    1 0        0         179,   2 Nov 16 15:55 /dev/mmcblk0p2
+</span></span><span style="display:flex;"><span>brw-------    1 0        0         179,   3 Nov 16 15:55 /dev/mmcblk0p3
+</span></span><span style="display:flex;"><span>brw-------    1 0        0         179,   4 Nov 16 15:55 /dev/mmcblk0p4
+</span></span><span style="display:flex;"><span>/tmp/breakglass4067757295 # ls -l /dev/nvme*
+</span></span><span style="display:flex;"><span>crw-------    1 0        0         239,   0 Nov 16 15:55 /dev/nvme0
+</span></span><span style="display:flex;"><span>brw-------    1 0        0         259,   0 Nov 16 15:55 /dev/nvme0n1
+</span></span><span style="display:flex;"><span>/tmp/breakglass4067757295 # </span></span></code></pre></div>
+<p>Copy the first 1100 MB, which includes the gokrazy boot partition and gokrazy
+root A+B partitions, all of which are read-only and hence can be safely copied:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/tmp # dd if=/dev/mmcblk0 of=/dev/nvme0n1 bs=1MB count=1100
+</span></span><span style="display:flex;"><span>1100+0 records in
+</span></span><span style="display:flex;"><span>1100+0 records out
+</span></span><span style="display:flex;"><span>1100000000 bytes (1.0GB) copied, 14.651804 seconds, 71.6MB/s
+</span></span><span style="display:flex;"><span>/tmp # poweroff
+</span></span><span style="display:flex;"><span>Connection to gokrazy.lan closed by remote host.</span></span></code></pre></div>
+<p>Unplug the SD card and the Pi will now boot from the NVMe disk.</p>
+<p>Afterwards, <a href="/userguide/permanent-data/index.html">create a permanent partition</a> as usual
+and copy your files from the SD card to the partition, e.g. using <code>scp</code> (quick
+and built-in) or <a href="/userguide/rsync-backups/index.html"><code>rsync</code> for larger transfers</a>.</p>
+<p>TODO: the partition table is not updated with this approach, meaning the
+permanent partition will be limited to the size of the SD card! See
+<a href="https://github.com/gokrazy/gokrazy/issues/267" rel="external">https://github.com/gokrazy/gokrazy/issues/267</a> for details.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
+
+        </div>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-url="/quickstart/index.html"><a class="padding" href="/quickstart/index.html"><b>1. </b>Quickstart</a></li>
+            <li class="" data-nav-url="/platforms/index.html"><a class="padding" href="/platforms/index.html"><b>2. </b>Supported platforms</a></li>
+            <li class="parent " data-nav-url="/userguide/index.html"><a class="padding" href="/userguide/index.html"><b>3. </b>Configuration</a><ul id="R-subsections-74b4df3a3d9365853f09e9f1dfe7bbba" class="collapsible-menu">
+            <li class="" data-nav-url="/userguide/instance-config/index.html"><a class="padding" href="/userguide/instance-config/index.html">Instance Config Reference</a></li>
+            <li class="" data-nav-url="/userguide/migration-guide/index.html"><a class="padding" href="/userguide/migration-guide/index.html">Instance Config Migration Guide</a></li>
+            <li class="" data-nav-url="/userguide/automation/index.html"><a class="padding" href="/userguide/automation/index.html">Automation</a></li>
+            <li class="" data-nav-url="/userguide/package-config/index.html"><a class="padding" href="/userguide/package-config/index.html">Package config: flags, environment variables, extra files</a></li>
+            <li class="" data-nav-url="/userguide/dhcp/index.html"><a class="padding" href="/userguide/dhcp/index.html">DHCP Client</a></li>
+            <li class="" data-nav-url="/userguide/remotesyslog/index.html"><a class="padding" href="/userguide/remotesyslog/index.html">Remote Syslog: sending gokrazy logs over the network</a></li>
+            <li class="" data-nav-url="/userguide/wifi/index.html"><a class="padding" href="/userguide/wifi/index.html">Connecting to WiFi networks</a></li>
+            <li class="" data-nav-url="/userguide/tls-for-untrusted-networks/index.html"><a class="padding" href="/userguide/tls-for-untrusted-networks/index.html">Using TLS in untrusted networks</a></li>
+            <li class="" data-nav-url="/userguide/bluetooth/index.html"><a class="padding" href="/userguide/bluetooth/index.html">Using Bluetooth</a></li>
+            <li class="" data-nav-url="/userguide/permanent-data/index.html"><a class="padding" href="/userguide/permanent-data/index.html">Access permanent data</a></li>
+            <li class="active " data-nav-url="/userguide/nvme-disk/index.html"><a class="padding" href="/userguide/nvme-disk/index.html">NVMe disk (Pi 5)</a></li>
+            <li class="" data-nav-url="/userguide/qemu/index.html"><a class="padding" href="/userguide/qemu/index.html">QEMU x86-64 virtual machine</a></li>
+            <li class="" data-nav-url="/userguide/rsync-backups/index.html"><a class="padding" href="/userguide/rsync-backups/index.html">Permanent data backup with the gokrazy rsync</a></li></ul></li>
+            <li class="" data-nav-url="/packages/index.html"><a class="padding" href="/packages/index.html"><b>4. </b>Available packages</a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-url="/development/index.html"><a class="padding" href="/development/index.html"><b>5. </b>Package development</a><ul id="R-subsections-54b0ce3c97b111c8cd4d107325fd580c" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="https://github.com/gokrazy/gokrazy"><a class="padding" href="https://github.com/gokrazy/gokrazy" rel="external"><i class='fab fa-github'></i> GitHub repo</a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1763319501" defer></script>
+    <script src="/js/theme.min.js?1763319501" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

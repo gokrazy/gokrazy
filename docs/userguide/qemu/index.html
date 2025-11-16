@@ -1,804 +1,118 @@
 <!DOCTYPE html>
-<html lang="en" class="js csstransforms3d">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.116.0-DEV">
-    <meta name="description" content="">
-
-
-    <link rel="icon" href="/images/favicon.png" type="image/png">
-
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.147.3">
+    <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
+    <meta name="description" content="In addition to running gokrazy on a Raspberry Pi or another ARM board, you can also run it in a QEMU x86-64 virtual machine. The following guide covers what’s necessary to build and run a gokrazy image on QEMU. Your hypervisor may require additional configuration.
+Building the image Create a new gokrazy instance gok -i virtual new The -i flag specifies the name of the instance. In this case, we’re using virtual, but you can use any name you like. The instance configuration will be created in your home directory under ~/gokrazy/virtual.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="QEMU x86-64 virtual machine :: gokrazy">
+    <meta name="twitter:description" content="In addition to running gokrazy on a Raspberry Pi or another ARM board, you can also run it in a QEMU x86-64 virtual machine. The following guide covers what’s necessary to build and run a gokrazy image on QEMU. Your hypervisor may require additional configuration.
+Building the image Create a new gokrazy instance gok -i virtual new The -i flag specifies the name of the instance. In this case, we’re using virtual, but you can use any name you like. The instance configuration will be created in your home directory under ~/gokrazy/virtual.">
+    <meta property="og:url" content="https://gokrazy.org/userguide/qemu/index.html">
+    <meta property="og:site_name" content="gokrazy">
+    <meta property="og:title" content="QEMU x86-64 virtual machine :: gokrazy">
+    <meta property="og:description" content="In addition to running gokrazy on a Raspberry Pi or another ARM board, you can also run it in a QEMU x86-64 virtual machine. The following guide covers what’s necessary to build and run a gokrazy image on QEMU. Your hypervisor may require additional configuration.
+Building the image Create a new gokrazy instance gok -i virtual new The -i flag specifies the name of the instance. In this case, we’re using virtual, but you can use any name you like. The instance configuration will be created in your home directory under ~/gokrazy/virtual.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Configuration">
+    <meta itemprop="name" content="QEMU x86-64 virtual machine :: gokrazy">
+    <meta itemprop="description" content="In addition to running gokrazy on a Raspberry Pi or another ARM board, you can also run it in a QEMU x86-64 virtual machine. The following guide covers what’s necessary to build and run a gokrazy image on QEMU. Your hypervisor may require additional configuration.
+Building the image Create a new gokrazy instance gok -i virtual new The -i flag specifies the name of the instance. In this case, we’re using virtual, but you can use any name you like. The instance configuration will be created in your home directory under ~/gokrazy/virtual.">
+    <meta itemprop="wordCount" content="534">
     <title>QEMU x86-64 virtual machine :: gokrazy</title>
-
-    
-    <link href="/css/nucleus.css?1751187386" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1751187386" rel="stylesheet">
-    <link href="/css/hybrid.css?1751187386" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1751187386" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1751187386" rel="stylesheet">
-    <link href="/css/auto-complete.css?1751187386" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1751187386" rel="stylesheet">
-    <link href="/css/theme.css?1751187386" rel="stylesheet">
-    <link href="/css/tabs.css?1751187386" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1751187386" rel="stylesheet">
-    
-    
-
-    <script src="/js/jquery-3.3.1.min.js?1751187386"></script>
-
-    <style>
-      :root #header + #content > #left > #rlblock_left{
-          display:none !important;
-      }
-      
-        :not(pre) > code + span.copy-to-clipboard {
-            display: none;
+    <link href="/images/favicon.png?1763319501" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1763319501" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1763319501" defer></script>
+    <script src="/js/search-lunr.min.js?1763319501" defer></script>
+    <script src="/js/search.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1763319501";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1763319501" rel="stylesheet">
+    <link href="/css/theme.min.css?1763319501" rel="stylesheet">
+    <link href="/css/format-html.min.css?1763319501" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/userguide\/qemu\/index.html';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/gokrazy.org';
+      window.relearn.disableInlineCopyToClipboard=true;
+      window.relearn.enableBlockCodeWrap=true;
+      // legal
+      window.relearn.getItem = (s,n) => {return s.getItem(n)};
+      window.relearn.setItem = (s,n,v) => {return s.setItem(n,v)};
+      window.relearn.removeItem = (s,n) => {return s.removeItem(n)};
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
         }
-      
-    </style>
-    
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
   </head>
-  <body class="" data-url="/userguide/qemu/">
-    <nav id="sidebar" class="">
-
-
-
-  <div id="header-wrapper">
-    <div id="header">
-      <img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
-
-    </div>
-    
-        <div class="searchbox">
-    <label for="search-by"><i class="fas fa-search"></i></label>
-    <input data-search-input id="search-by" type="search" placeholder="Search...">
-    <span data-search-clear=""><i class="fas fa-times"></i></span>
-</div>
-
-<script type="text/javascript" src="/js/lunr.min.js?1751187386"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1751187386"></script>
-<script type="text/javascript">
-    
-        var baseurl = "https:\/\/gokrazy.org\/";
-    
-</script>
-<script type="text/javascript" src="/js/search.js?1751187386"></script>
-
-    
-  </div>
-  
-    <section id="homelinks">
-      <ul>
-        <li>
-            <a class="padding" href='/'><i class='fas fa-home'></i> Home</a>
-        </li>
-      </ul>
-    </section>
-  
-
-    <div class="highlightable">
-    <ul class="topics">
-
-        
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/quickstart/" title="Quickstart" class="dd-item
-        
-        
-        
-        ">
-      <a href="/quickstart/">
-          <b>1. </b>Quickstart
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/platforms/" title="Supported platforms" class="dd-item
-        
-        
-        
-        ">
-      <a href="/platforms/">
-          <b>2. </b>Supported platforms
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        parent
-        
-        
-        ">
-      <a href="/userguide/">
-          <b>3. </b>Configuration
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item ">
-        <a href="/userguide/instance-config/">
-        Instance Config Reference
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
-        <a href="/userguide/migration-guide/">
-        Instance Config Migration Guide
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
-        <a href="/userguide/automation/">
-        Automation
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
-        <a href="/userguide/package-config/">
-        Flags, environment variables, …
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/dhcp/" title="DHCP Client" class="dd-item ">
-        <a href="/userguide/dhcp/">
-        DHCP Client
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/remotesyslog/" title="Remote Syslog: sending gokrazy logs over the network" class="dd-item ">
-        <a href="/userguide/remotesyslog/">
-        Remote Syslog
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item ">
-        <a href="/userguide/bluetooth/">
-        Using Bluetooth
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/permanent-data/" title="Access permanent data" class="dd-item ">
-        <a href="/userguide/permanent-data/">
-        Access permanent data
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/qemu/" title="QEMU x86-64 virtual machine" class="dd-item active">
-        <a href="/userguide/qemu/">
-        QEMU x86-64 virtual machine
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/rsync-backups/" title="Permanent data backup with the gokrazy rsync" class="dd-item ">
-        <a href="/userguide/rsync-backups/">
-        Data backup with rsync
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/packages/" title="Available packages" class="dd-item
-        
-        
-        
-        ">
-      <a href="/packages/">
-          <b>4. </b>Available packages
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/showcase/" title="Showcase" class="dd-item ">
-        <a href="/packages/showcase/">
-        Showcase
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/tailscale/" title="Tailscale VPN" class="dd-item ">
-        <a href="/packages/tailscale/">
-        Tailscale VPN
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/caddy-http-server/" title="Caddy HTTP server" class="dd-item ">
-        <a href="/packages/caddy-http-server/">
-        Caddy HTTP server
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/minio/" title="MinIO object storage" class="dd-item ">
-        <a href="/packages/minio/">
-        MinIO object storage
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/docker-containers/" title="Docker containers" class="dd-item ">
-        <a href="/packages/docker-containers/">
-        Docker containers
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/prometheus/" title="Prometheus" class="dd-item ">
-        <a href="/packages/prometheus/">
-        Prometheus
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/development/" title="Package development" class="dd-item
-        
-        
-        
-        ">
-      <a href="/development/">
-          <b>5. </b>Package development
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item ">
-        <a href="/development/process-interface/">
-        Process interface / requirements
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
-        <a href="/development/gpio/">
-        Input/output via GPIO pins
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/modules/" title="Working with Go modules" class="dd-item ">
-        <a href="/development/modules/">
-        Working with Go modules
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/buildtags/" title="The gokrazy Go build tag" class="dd-item ">
-        <a href="/development/buildtags/">
-        The gokrazy Go build tag
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/non-go/" title="Non-Go Prototyping" class="dd-item ">
-        <a href="/development/non-go/">
-        Non-Go Prototyping
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-        
-    </ul>
-
-    
-    
-      <section id="shortcuts">
-        <h3>More</h3>
-        <ul>
-          
-              <li>
-                  <a class="padding" href="https://github.com/gokrazy/gokrazy"><i class='fab fa-github'></i> GitHub repo</a>
-              </li>
-          
-        </ul>
-      </section>
-    
-
-    
-    <section id="footer">
-      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
-
-    </section>
-  </div>
-</nav>
-
-
-
-
-        <section id="body">
-        <div id="overlay"></div>
-        <div class="padding highlightable">
-              
-              <div>
-                <div id="top-bar">
-                
-                  
-                  
-                  
-                  <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/qemu.md" target="blank">
-                      <i class="fas fa-code-branch"></i>
-                      <span id="top-github-link-text">Edit this page</span>
-                    </a>
-                  </div>
-                  
-                
-                
-                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                    <span id="sidebar-toggle-span">
-                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
-                          <i class="fas fa-bars"></i>
-                        </a>
-                    </span>
-                  
-                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
-                  
-                  <span class="links">
-                 
-                 
-                    
-          
-          
-            
-            
-          
-          
-            
-            
-          
-          
-            <a href='/'>gokrazy Go appliances</a> > <a href='/userguide/'>Configuration</a> > QEMU x86-64 virtual machine
-          
-        
-          
-        
-          
-        
-                 
-                  </span>
-                </div>
-                
-                    <div class="progress">
-    <div class="wrapper">
-<nav id="TableOfContents">
+  <body class="mobile-support html" data-url="/userguide/qemu/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
   <ul>
     <li><a href="#building-the-image">Building the image</a>
       <ul>
@@ -814,89 +128,99 @@
     </li>
   </ul>
 </nav>
-    </div>
-</div>
-
-                
+                </div>
               </div>
             </div>
-            
-        <div id="head-tags">
-        
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">gokrazy Go appliances</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/userguide/index.html"><span itemprop="name">Configuration</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">QEMU x86-64 virtual machine</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-edit" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/qemu.md" rel="external" title="Edit (CTRL+ALT+w)"><i class="fa-fw fas fa-pen"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div id="body-inner">
-          
-            <h1>
-              
-              QEMU x86-64 virtual machine
-            </h1>
-          
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable userguide" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
 
-        
-
+<h1 id="qemu-x86-64-virtual-machine">QEMU x86-64 virtual machine</h1>
 
 <p>In addition to running gokrazy on a Raspberry Pi or another ARM board, you can
 also run it in a QEMU x86-64 virtual machine. The following guide covers what&rsquo;s
 necessary to build and run a gokrazy image on QEMU. Your hypervisor may require
 additional configuration.</p>
-<h2 id="building-the-image">Building the image</h2>
-<h3 id="create-a-new-gokrazy-instance">Create a new gokrazy instance</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual new
-</span></span></code></pre></div><p>The <code>-i</code> flag specifies the name of the instance. In this case, we&rsquo;re using
+<h2 id="building-the-image">Building the image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="create-a-new-gokrazy-instance">Create a new gokrazy instance<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual new</span></span></code></pre></div>
+<p>The <code>-i</code> flag specifies the name of the instance. In this case, we&rsquo;re using
 <code>virtual</code>, but you can use any name you like. The instance configuration will be
 created in your home directory under <code>~/gokrazy/virtual</code>.</p>
-<h3 id="edit-the-instance-configuration">Edit the instance configuration</h3>
-<p>Run <code>gok -i virtual edit</code> to open the <a href="/userguide/instance-config">instance
+<h3 id="edit-the-instance-configuration">Edit the instance configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Run <code>gok -i virtual edit</code> to open the <a href="/userguide/instance-config/index.html">instance
 configuration</a> file in your favorite editor. You&rsquo;ll
 need to make the following changes:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;virtual&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>  <span style="color:#f92672">&#34;KernelPackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/rtr7/kernel&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>  <span style="color:#f92672">&#34;FirmwarePackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/rtr7/kernel&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>  <span style="color:#f92672">&#34;SerialConsole&#34;</span>: <span style="color:#e6db74">&#34;ttyS0,115200&#34;</span>,
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}</span></span></code></pre></div>
-<h3 id="build-the-image">Build the image</h3>
+
+<h3 id="build-the-image">Build the image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>The following command will build a single image file that contains the kernel,
 firmware, and root filesystem. The <code>--target_storage_bytes</code> flag must be
 specified to set the size of the image. The example below creates a 4GB image.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual overwrite --full virtual.img --target_storage_bytes <span style="color:#ae81ff">4294967296</span>
-</span></span></code></pre></div><p>The image will be written to the current directory as <code>virtual.img</code>.</p>
-<h3 id="use-the-image-with-qemu">Use the image with QEMU</h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual overwrite --full virtual.img --target_storage_bytes <span style="color:#ae81ff">4294967296</span></span></span></code></pre></div>
+<p>The image will be written to the current directory as <code>virtual.img</code>.</p>
+<h3 id="use-the-image-with-qemu">Use the image with QEMU<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>You can now use the image with QEMU. The following command will boot the image
 in QEMU with a serial console:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qemu-system-x86_64 <span style="color:#ae81ff">\
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qemu-system-x86_64 <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -machine accel<span style="color:#f92672">=</span>kvm <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -smp <span style="color:#ae81ff">8</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -m <span style="color:#ae81ff">2048</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -drive file<span style="color:#f92672">=</span>virtual.img,format<span style="color:#f92672">=</span>raw <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -nographic
-</span></span></code></pre></div><h3 id="use-the-image-with-proxmox">Use the image with Proxmox</h3>
-<p>You can also use the image with other hypervisors, such as <a href="https://www.proxmox.com/en/proxmox-virtual-environment/overview">Proxmox
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -nographic</span></span></code></pre></div>
+<h3 id="use-the-image-with-proxmox">Use the image with Proxmox<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>You can also use the image with other hypervisors, such as <a href="https://www.proxmox.com/en/proxmox-virtual-environment/overview" rel="external">Proxmox
 PVE</a>. Start by
 creating a new VM without a storage device. Then, upload the image to the
 Proxmox host and add it as a hard disk to the VM.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qm importdisk &lt;vmid&gt; virtual.img &lt;storage&gt;
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qm importdisk &lt;vmid&gt; virtual.img &lt;storage&gt;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># for example, for vmid 105 and local-zfs storage:</span>
-</span></span><span style="display:flex;"><span>qm importdisk <span style="color:#ae81ff">105</span> virtual.img local-zfs
-</span></span></code></pre></div><p>Visit the Proxmox web UI and choose the unattached disk on the VM Hardware
+</span></span><span style="display:flex;"><span>qm importdisk <span style="color:#ae81ff">105</span> virtual.img local-zfs</span></span></code></pre></div>
+<p>Visit the Proxmox web UI and choose the unattached disk on the VM Hardware
 tab. Click &ldquo;Edit&rdquo; and select &ldquo;SCSI&rdquo; as the Bus/Device. Click &ldquo;Add&rdquo; to add the
 disk to the VM. Visit the &ldquo;Options&rdquo; tab and edit &ldquo;Boot Order&rdquo;. Make sure the
 SCIS disk is checked and move it to the top of the list. Click &ldquo;OK&rdquo; to save your
 changes.</p>
-<h3 id="bonus-deploy-a-qemu-guest-agent">Bonus: Deploy a QEMU guest agent</h3>
+<h3 id="bonus-deploy-a-qemu-guest-agent">Bonus: Deploy a QEMU guest agent<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>If you&rsquo;re using Proxmox PVE, you can deploy a QEMU guest agent to the VM. This
 will allow you to discover the VM&rsquo;s IP address. The
-<a href="https://github.com/bradfitz/qemu-guest-kragent">qemu-guest-kragent</a> project
+<a href="https://github.com/bradfitz/qemu-guest-kragent" rel="external">qemu-guest-kragent</a> project
 provides a simple agent that can be used with gokrazy.</p>
 <p>To add the agent to your gokrazy instance, run the following command:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual add github.com/bradfitz/qemu-guest-kragent
-</span></span></code></pre></div><p>Visit the Proxmox web UI and choose the VM. Click &ldquo;Options&rdquo; and select &ldquo;QEMU
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual add github.com/bradfitz/qemu-guest-kragent</span></span></code></pre></div>
+<p>Visit the Proxmox web UI and choose the VM. Click &ldquo;Options&rdquo; and select &ldquo;QEMU
 Guest Agent&rdquo;. Make sure &ldquo;Use QEMU Guest Agent&rdquo; is checked. Click &ldquo;OK&rdquo; to save
 your changes.</p>
-<h3 id="tips-optimizing-the-vm">Tips: Optimizing the VM</h3>
+<h3 id="tips-optimizing-the-vm">Tips: Optimizing the VM<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>The following tips can be used to optimize the VM and reduce CPU usage:</p>
 <ul>
 <li>Disable USB hotplug</li>
@@ -904,538 +228,97 @@ your changes.</p>
 <li>Use the VirtIO graphics support. On Proxmox either &ldquo;VirtIO-GPU&rdquo; graphic card
 or <code>vga: virtio</code> in the config file.</li>
 </ul>
-<h3 id="next-steps">Next steps</h3>
+<h3 id="next-steps">Next steps<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>You can now use this gokrazy VM instance as you would any other gokrazy
 instance. For example, you can add packages, configure the instance, and update
 it.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual update
-</span></span></code></pre></div><p>For more information, see the <a href="/userguide/instance-config/">Instance config reference</a>.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual update</span></span></code></pre></div>
+<p>For more information, see the <a href="/userguide/instance-config/index.html">Instance config reference</a>.</p>
 
-
-<footer class="footline">
-	
-</footer>
-
-        
+  <footer class="footline">
+  </footer>
+</article>
         </div>
-        
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
 
+        </div>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
       </div>
-
-    <div id="navigation">
-        
-        
-
-        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-            
-        
-
-        
-
-
-	 
-	 
-    </div>
-
-    </section>
-
-    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
-      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
-    </div>
-    <script src="/js/clipboard.min.js?1751187386"></script>
-    <script src="/js/perfect-scrollbar.min.js?1751187386"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1751187386"></script>
-    <script src="/js/jquery.sticky.js?1751187386"></script>
-    <script src="/js/featherlight.min.js?1751187386"></script>
-    <script src="/js/highlight.pack.js?1751187386"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1751187386"></script>
-    <script src="/js/learn.js?1751187386"></script>
-    <script src="/js/hugo-learn.js?1751187386"></script>
-    
-        
-            <script src="/mermaid/mermaid.js?1751187386"></script>
-        
-        <script>
-            mermaid.initialize({ startOnLoad: true });
-        </script>
-    
-    
-
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-url="/quickstart/index.html"><a class="padding" href="/quickstart/index.html"><b>1. </b>Quickstart</a></li>
+            <li class="" data-nav-url="/platforms/index.html"><a class="padding" href="/platforms/index.html"><b>2. </b>Supported platforms</a></li>
+            <li class="parent " data-nav-url="/userguide/index.html"><a class="padding" href="/userguide/index.html"><b>3. </b>Configuration</a><ul id="R-subsections-74b4df3a3d9365853f09e9f1dfe7bbba" class="collapsible-menu">
+            <li class="" data-nav-url="/userguide/instance-config/index.html"><a class="padding" href="/userguide/instance-config/index.html">Instance Config Reference</a></li>
+            <li class="" data-nav-url="/userguide/migration-guide/index.html"><a class="padding" href="/userguide/migration-guide/index.html">Instance Config Migration Guide</a></li>
+            <li class="" data-nav-url="/userguide/automation/index.html"><a class="padding" href="/userguide/automation/index.html">Automation</a></li>
+            <li class="" data-nav-url="/userguide/package-config/index.html"><a class="padding" href="/userguide/package-config/index.html">Package config: flags, environment variables, extra files</a></li>
+            <li class="" data-nav-url="/userguide/dhcp/index.html"><a class="padding" href="/userguide/dhcp/index.html">DHCP Client</a></li>
+            <li class="" data-nav-url="/userguide/remotesyslog/index.html"><a class="padding" href="/userguide/remotesyslog/index.html">Remote Syslog: sending gokrazy logs over the network</a></li>
+            <li class="" data-nav-url="/userguide/wifi/index.html"><a class="padding" href="/userguide/wifi/index.html">Connecting to WiFi networks</a></li>
+            <li class="" data-nav-url="/userguide/tls-for-untrusted-networks/index.html"><a class="padding" href="/userguide/tls-for-untrusted-networks/index.html">Using TLS in untrusted networks</a></li>
+            <li class="" data-nav-url="/userguide/bluetooth/index.html"><a class="padding" href="/userguide/bluetooth/index.html">Using Bluetooth</a></li>
+            <li class="" data-nav-url="/userguide/permanent-data/index.html"><a class="padding" href="/userguide/permanent-data/index.html">Access permanent data</a></li>
+            <li class="" data-nav-url="/userguide/nvme-disk/index.html"><a class="padding" href="/userguide/nvme-disk/index.html">NVMe disk (Pi 5)</a></li>
+            <li class="active " data-nav-url="/userguide/qemu/index.html"><a class="padding" href="/userguide/qemu/index.html">QEMU x86-64 virtual machine</a></li>
+            <li class="" data-nav-url="/userguide/rsync-backups/index.html"><a class="padding" href="/userguide/rsync-backups/index.html">Permanent data backup with the gokrazy rsync</a></li></ul></li>
+            <li class="" data-nav-url="/packages/index.html"><a class="padding" href="/packages/index.html"><b>4. </b>Available packages</a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-url="/development/index.html"><a class="padding" href="/development/index.html"><b>5. </b>Package development</a><ul id="R-subsections-54b0ce3c97b111c8cd4d107325fd580c" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="https://github.com/gokrazy/gokrazy"><a class="padding" href="https://github.com/gokrazy/gokrazy" rel="external"><i class='fab fa-github'></i> GitHub repo</a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1763319501" defer></script>
+    <script src="/js/theme.min.js?1763319501" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
-

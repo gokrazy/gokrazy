@@ -1,840 +1,167 @@
 <!DOCTYPE html>
-<html lang="en" class="js csstransforms3d">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.116.0-DEV">
-    <meta name="description" content="">
-
-
-    <link rel="icon" href="/images/favicon.png" type="image/png">
-
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.147.3">
+    <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
+    <meta name="description" content="Let’s assume that you have installed gokrazy on a Raspberry Pi and are currently successfully updating it over the network like so:
+gok update Enabling TLS To start using TLS, edit your gokrazy instance’s config.json:
+gok edit In the config.json, in the Update field, add a &#34;UseTLS&#34;: &#34;self-signed&#34; line (don’t forget adding a comma to the previous line):">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Using TLS in untrusted networks :: gokrazy">
+    <meta name="twitter:description" content="Let’s assume that you have installed gokrazy on a Raspberry Pi and are currently successfully updating it over the network like so:
+gok update Enabling TLS To start using TLS, edit your gokrazy instance’s config.json:
+gok edit In the config.json, in the Update field, add a &#34;UseTLS&#34;: &#34;self-signed&#34; line (don’t forget adding a comma to the previous line):">
+    <meta property="og:url" content="https://gokrazy.org/userguide/tls-for-untrusted-networks/index.html">
+    <meta property="og:site_name" content="gokrazy">
+    <meta property="og:title" content="Using TLS in untrusted networks :: gokrazy">
+    <meta property="og:description" content="Let’s assume that you have installed gokrazy on a Raspberry Pi and are currently successfully updating it over the network like so:
+gok update Enabling TLS To start using TLS, edit your gokrazy instance’s config.json:
+gok edit In the config.json, in the Update field, add a &#34;UseTLS&#34;: &#34;self-signed&#34; line (don’t forget adding a comma to the previous line):">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Configuration">
+    <meta itemprop="name" content="Using TLS in untrusted networks :: gokrazy">
+    <meta itemprop="description" content="Let’s assume that you have installed gokrazy on a Raspberry Pi and are currently successfully updating it over the network like so:
+gok update Enabling TLS To start using TLS, edit your gokrazy instance’s config.json:
+gok edit In the config.json, in the Update field, add a &#34;UseTLS&#34;: &#34;self-signed&#34; line (don’t forget adding a comma to the previous line):">
+    <meta itemprop="wordCount" content="216">
     <title>Using TLS in untrusted networks :: gokrazy</title>
-
-    
-    <link href="/css/nucleus.css?1751187386" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1751187386" rel="stylesheet">
-    <link href="/css/hybrid.css?1751187386" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1751187386" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1751187386" rel="stylesheet">
-    <link href="/css/auto-complete.css?1751187386" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1751187386" rel="stylesheet">
-    <link href="/css/theme.css?1751187386" rel="stylesheet">
-    <link href="/css/tabs.css?1751187386" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1751187386" rel="stylesheet">
-    
-    
-
-    <script src="/js/jquery-3.3.1.min.js?1751187386"></script>
-
-    <style>
-      :root #header + #content > #left > #rlblock_left{
-          display:none !important;
-      }
-      
-        :not(pre) > code + span.copy-to-clipboard {
-            display: none;
+    <link href="/images/favicon.png?1763319501" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1763319501" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1763319501" defer></script>
+    <script src="/js/search-lunr.min.js?1763319501" defer></script>
+    <script src="/js/search.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1763319501";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1763319501" rel="stylesheet">
+    <link href="/css/theme.min.css?1763319501" rel="stylesheet">
+    <link href="/css/format-html.min.css?1763319501" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/userguide\/tls-for-untrusted-networks\/index.html';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/gokrazy.org';
+      window.relearn.disableInlineCopyToClipboard=true;
+      window.relearn.enableBlockCodeWrap=true;
+      // legal
+      window.relearn.getItem = (s,n) => {return s.getItem(n)};
+      window.relearn.setItem = (s,n,v) => {return s.setItem(n,v)};
+      window.relearn.removeItem = (s,n) => {return s.removeItem(n)};
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
         }
-      
-    </style>
-    
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
   </head>
-  <body class="" data-url="/userguide/tls-for-untrusted-networks/">
-    <nav id="sidebar" class="">
-
-
-
-  <div id="header-wrapper">
-    <div id="header">
-      <img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
-
-    </div>
-    
-        <div class="searchbox">
-    <label for="search-by"><i class="fas fa-search"></i></label>
-    <input data-search-input id="search-by" type="search" placeholder="Search...">
-    <span data-search-clear=""><i class="fas fa-times"></i></span>
-</div>
-
-<script type="text/javascript" src="/js/lunr.min.js?1751187386"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1751187386"></script>
-<script type="text/javascript">
-    
-        var baseurl = "https:\/\/gokrazy.org\/";
-    
-</script>
-<script type="text/javascript" src="/js/search.js?1751187386"></script>
-
-    
-  </div>
-  
-    <section id="homelinks">
-      <ul>
-        <li>
-            <a class="padding" href='/'><i class='fas fa-home'></i> Home</a>
-        </li>
-      </ul>
-    </section>
-  
-
-    <div class="highlightable">
-    <ul class="topics">
-
-        
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/quickstart/" title="Quickstart" class="dd-item
-        
-        
-        
-        ">
-      <a href="/quickstart/">
-          <b>1. </b>Quickstart
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/platforms/" title="Supported platforms" class="dd-item
-        
-        
-        
-        ">
-      <a href="/platforms/">
-          <b>2. </b>Supported platforms
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        parent
-        
-        
-        ">
-      <a href="/userguide/">
-          <b>3. </b>Configuration
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item ">
-        <a href="/userguide/instance-config/">
-        Instance Config Reference
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
-        <a href="/userguide/migration-guide/">
-        Instance Config Migration Guide
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
-        <a href="/userguide/automation/">
-        Automation
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
-        <a href="/userguide/package-config/">
-        Flags, environment variables, …
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/dhcp/" title="DHCP Client" class="dd-item ">
-        <a href="/userguide/dhcp/">
-        DHCP Client
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/remotesyslog/" title="Remote Syslog: sending gokrazy logs over the network" class="dd-item ">
-        <a href="/userguide/remotesyslog/">
-        Remote Syslog
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item active">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item ">
-        <a href="/userguide/bluetooth/">
-        Using Bluetooth
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/permanent-data/" title="Access permanent data" class="dd-item ">
-        <a href="/userguide/permanent-data/">
-        Access permanent data
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/qemu/" title="QEMU x86-64 virtual machine" class="dd-item ">
-        <a href="/userguide/qemu/">
-        QEMU x86-64 virtual machine
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/rsync-backups/" title="Permanent data backup with the gokrazy rsync" class="dd-item ">
-        <a href="/userguide/rsync-backups/">
-        Data backup with rsync
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/packages/" title="Available packages" class="dd-item
-        
-        
-        
-        ">
-      <a href="/packages/">
-          <b>4. </b>Available packages
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/showcase/" title="Showcase" class="dd-item ">
-        <a href="/packages/showcase/">
-        Showcase
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/tailscale/" title="Tailscale VPN" class="dd-item ">
-        <a href="/packages/tailscale/">
-        Tailscale VPN
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/caddy-http-server/" title="Caddy HTTP server" class="dd-item ">
-        <a href="/packages/caddy-http-server/">
-        Caddy HTTP server
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/minio/" title="MinIO object storage" class="dd-item ">
-        <a href="/packages/minio/">
-        MinIO object storage
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/docker-containers/" title="Docker containers" class="dd-item ">
-        <a href="/packages/docker-containers/">
-        Docker containers
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/prometheus/" title="Prometheus" class="dd-item ">
-        <a href="/packages/prometheus/">
-        Prometheus
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/development/" title="Package development" class="dd-item
-        
-        
-        
-        ">
-      <a href="/development/">
-          <b>5. </b>Package development
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item ">
-        <a href="/development/process-interface/">
-        Process interface / requirements
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
-        <a href="/development/gpio/">
-        Input/output via GPIO pins
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/modules/" title="Working with Go modules" class="dd-item ">
-        <a href="/development/modules/">
-        Working with Go modules
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/buildtags/" title="The gokrazy Go build tag" class="dd-item ">
-        <a href="/development/buildtags/">
-        The gokrazy Go build tag
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/non-go/" title="Non-Go Prototyping" class="dd-item ">
-        <a href="/development/non-go/">
-        Non-Go Prototyping
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-        
-    </ul>
-
-    
-    
-      <section id="shortcuts">
-        <h3>More</h3>
-        <ul>
-          
-              <li>
-                  <a class="padding" href="https://github.com/gokrazy/gokrazy"><i class='fab fa-github'></i> GitHub repo</a>
-              </li>
-          
-        </ul>
-      </section>
-    
-
-    
-    <section id="footer">
-      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
-
-    </section>
-  </div>
-</nav>
-
-
-
-
-        <section id="body">
-        <div id="overlay"></div>
-        <div class="padding highlightable">
-              
-              <div>
-                <div id="top-bar">
-                
-                  
-                  
-                  
-                  <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/tls-for-untrusted-networks.md" target="blank">
-                      <i class="fas fa-code-branch"></i>
-                      <span id="top-github-link-text">Edit this page</span>
-                    </a>
-                  </div>
-                  
-                
-                
-                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                    <span id="sidebar-toggle-span">
-                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
-                          <i class="fas fa-bars"></i>
-                        </a>
-                    </span>
-                  
-                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
-                  
-                  <span class="links">
-                 
-                 
-                    
-          
-          
-            
-            
-          
-          
-            
-            
-          
-          
-            <a href='/'>gokrazy Go appliances</a> > <a href='/userguide/'>Configuration</a> > Using TLS in untrusted networks
-          
-        
-          
-        
-          
-        
-                 
-                  </span>
-                </div>
-                
-                    <div class="progress">
-    <div class="wrapper">
-<nav id="TableOfContents">
+  <body class="mobile-support html" data-url="/userguide/tls-for-untrusted-networks/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
   <ul>
     <li><a href="#enabling-tls">Enabling TLS</a></li>
     <li><a href="#disabling-tls">Disabling TLS</a></li>
   </ul>
 </nav>
-    </div>
-</div>
-
-                
+                </div>
               </div>
             </div>
-            
-        <div id="head-tags">
-        
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">gokrazy Go appliances</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/userguide/index.html"><span itemprop="name">Configuration</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Using TLS in untrusted networks</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-edit" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="https://github.com/gokrazy/gokrazy/tree/master/website/content/userguide/tls-for-untrusted-networks.md" rel="external" title="Edit (CTRL+ALT+w)"><i class="fa-fw fas fa-pen"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div id="body-inner">
-          
-            <h1>
-              
-              Using TLS in untrusted networks
-            </h1>
-          
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable userguide" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
 
-        
+<h1 id="using-tls-in-untrusted-networks">Using TLS in untrusted networks</h1>
 
-
-<p>Let’s assume that you have <a href="/quickstart/">installed gokrazy on a Raspberry Pi</a>
+<p>Let’s assume that you have <a href="/quickstart/index.html">installed gokrazy on a Raspberry Pi</a>
 and are currently successfully updating it over the network like so:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update
-</span></span></code></pre></div><h2 id="enabling-tls">Enabling TLS</h2>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update</span></span></code></pre></div>
+<h2 id="enabling-tls">Enabling TLS<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>To start using TLS, edit your gokrazy instance’s <code>config.json</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit
-</span></span></code></pre></div><p>In the <code>config.json</code>, in the <code>Update</code> field, add a <code>&quot;UseTLS&quot;: &quot;self-signed&quot;</code>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit</span></span></code></pre></div>
+<p>In the <code>config.json</code>, in the <code>Update</code> field, add a <code>&quot;UseTLS&quot;: &quot;self-signed&quot;</code>
 line (don’t forget adding a comma to the previous line):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;docs&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Update&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;HTTPPassword&#34;</span>: <span style="color:#e6db74">&#34;secret&#34;</span>,
@@ -847,10 +174,11 @@ line (don’t forget adding a comma to the previous line):</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/breakglass&#34;</span>
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+
 <p>Save your changes and close the file, then run a first update with the
 <code>--insecure</code> flag:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update --insecure
-</span></span></code></pre></div><p>The gok CLI will:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update --insecure</span></span></code></pre></div>
+<p>The gok CLI will:</p>
 <ul>
 <li>generate a self-signed certificate</li>
 <li>include the certificate in the gokrazy installation</li>
@@ -861,539 +189,98 @@ connections and redirect any HTTP traffic to HTTPS. When opening the gokrazy web
 interface in your browser, you will need to explicitly permit communication due
 to the self-signed certificate.</p>
 <p>For all future updates, remove the <code>--insecure</code> flag:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update
-</span></span></code></pre></div><p>You can now safely update your gokrazy installation over untrusted networks,
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update</span></span></code></pre></div>
+<p>You can now safely update your gokrazy installation over untrusted networks,
 such as <a href="/userguide/unencrypted-wifi/">unencrypted WiFi networks</a>.</p>
-<h2 id="disabling-tls">Disabling TLS</h2>
+<h2 id="disabling-tls">Disabling TLS<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>Change the <code>UseTLS</code> line to <code>&quot;UseTLS&quot;: &quot;off&quot;</code> in your instance’s <code>config.json</code>.</p>
 <p>Run <code>gok update --insecure</code>, and afterwards gokrazy will no longer contain the
 certificates and will serve unencrypted HTTP again.</p>
 
-
-<footer class="footline">
-	
-</footer>
-
-        
+  <footer class="footline">
+  </footer>
+</article>
         </div>
-        
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
 
+        </div>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
       </div>
-
-    <div id="navigation">
-        
-        
-
-        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-            
-        
-
-        
-
-
-	 
-	 
-    </div>
-
-    </section>
-
-    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
-      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
-    </div>
-    <script src="/js/clipboard.min.js?1751187386"></script>
-    <script src="/js/perfect-scrollbar.min.js?1751187386"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1751187386"></script>
-    <script src="/js/jquery.sticky.js?1751187386"></script>
-    <script src="/js/featherlight.min.js?1751187386"></script>
-    <script src="/js/highlight.pack.js?1751187386"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1751187386"></script>
-    <script src="/js/learn.js?1751187386"></script>
-    <script src="/js/hugo-learn.js?1751187386"></script>
-    
-        
-            <script src="/mermaid/mermaid.js?1751187386"></script>
-        
-        <script>
-            mermaid.initialize({ startOnLoad: true });
-        </script>
-    
-    
-
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-url="/quickstart/index.html"><a class="padding" href="/quickstart/index.html"><b>1. </b>Quickstart</a></li>
+            <li class="" data-nav-url="/platforms/index.html"><a class="padding" href="/platforms/index.html"><b>2. </b>Supported platforms</a></li>
+            <li class="parent " data-nav-url="/userguide/index.html"><a class="padding" href="/userguide/index.html"><b>3. </b>Configuration</a><ul id="R-subsections-74b4df3a3d9365853f09e9f1dfe7bbba" class="collapsible-menu">
+            <li class="" data-nav-url="/userguide/instance-config/index.html"><a class="padding" href="/userguide/instance-config/index.html">Instance Config Reference</a></li>
+            <li class="" data-nav-url="/userguide/migration-guide/index.html"><a class="padding" href="/userguide/migration-guide/index.html">Instance Config Migration Guide</a></li>
+            <li class="" data-nav-url="/userguide/automation/index.html"><a class="padding" href="/userguide/automation/index.html">Automation</a></li>
+            <li class="" data-nav-url="/userguide/package-config/index.html"><a class="padding" href="/userguide/package-config/index.html">Package config: flags, environment variables, extra files</a></li>
+            <li class="" data-nav-url="/userguide/dhcp/index.html"><a class="padding" href="/userguide/dhcp/index.html">DHCP Client</a></li>
+            <li class="" data-nav-url="/userguide/remotesyslog/index.html"><a class="padding" href="/userguide/remotesyslog/index.html">Remote Syslog: sending gokrazy logs over the network</a></li>
+            <li class="" data-nav-url="/userguide/wifi/index.html"><a class="padding" href="/userguide/wifi/index.html">Connecting to WiFi networks</a></li>
+            <li class="active " data-nav-url="/userguide/tls-for-untrusted-networks/index.html"><a class="padding" href="/userguide/tls-for-untrusted-networks/index.html">Using TLS in untrusted networks</a></li>
+            <li class="" data-nav-url="/userguide/bluetooth/index.html"><a class="padding" href="/userguide/bluetooth/index.html">Using Bluetooth</a></li>
+            <li class="" data-nav-url="/userguide/permanent-data/index.html"><a class="padding" href="/userguide/permanent-data/index.html">Access permanent data</a></li>
+            <li class="" data-nav-url="/userguide/nvme-disk/index.html"><a class="padding" href="/userguide/nvme-disk/index.html">NVMe disk (Pi 5)</a></li>
+            <li class="" data-nav-url="/userguide/qemu/index.html"><a class="padding" href="/userguide/qemu/index.html">QEMU x86-64 virtual machine</a></li>
+            <li class="" data-nav-url="/userguide/rsync-backups/index.html"><a class="padding" href="/userguide/rsync-backups/index.html">Permanent data backup with the gokrazy rsync</a></li></ul></li>
+            <li class="" data-nav-url="/packages/index.html"><a class="padding" href="/packages/index.html"><b>4. </b>Available packages</a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-url="/development/index.html"><a class="padding" href="/development/index.html"><b>5. </b>Package development</a><ul id="R-subsections-54b0ce3c97b111c8cd4d107325fd580c" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="https://github.com/gokrazy/gokrazy"><a class="padding" href="https://github.com/gokrazy/gokrazy" rel="external"><i class='fab fa-github'></i> GitHub repo</a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1763319501" defer></script>
+    <script src="/js/theme.min.js?1763319501" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
-

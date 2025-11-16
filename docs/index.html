@@ -1,770 +1,171 @@
 <!DOCTYPE html>
-<html lang="en" class="js csstransforms3d">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.116.0-DEV">
-    <meta name="description" content="">
-
-
-    <link rel="icon" href="/images/favicon.png" type="image/png">
-
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.147.3">
+    <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
+    <meta name="description" content="gokrazy Go appliances With gokrazy, you can deploy one or more Go programs as appliances to a Raspberry Pi, Virtual Machine, embedded or normal PC (see supported platforms).
+gokrazy uses its own minimal Go userland instead of a traditional Linux distribution base.
+This minimalist approach offers several advantages in terms of security, maintainability and reliability:
+The surface area for security vulnerabilities is drastically reduced. The root filesystem is entirely read-only (making persistent malware installation hard) and new versions of the system are installed by overwriting the root file system with the new version. No default shell access: There is neither xz nor OpenSSH on a gokrazy system. Interactive access for debugging is possible, but needs to be explicitly started. Backstory For a long time, we were unhappy about having to spend so much time on each of our various Raspberry Pis, taking care of security updates and other general Linux distribution maintenance.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="gokrazy Go appliances :: gokrazy">
+    <meta name="twitter:description" content="gokrazy Go appliances With gokrazy, you can deploy one or more Go programs as appliances to a Raspberry Pi, Virtual Machine, embedded or normal PC (see supported platforms).
+gokrazy uses its own minimal Go userland instead of a traditional Linux distribution base.
+This minimalist approach offers several advantages in terms of security, maintainability and reliability:
+The surface area for security vulnerabilities is drastically reduced. The root filesystem is entirely read-only (making persistent malware installation hard) and new versions of the system are installed by overwriting the root file system with the new version. No default shell access: There is neither xz nor OpenSSH on a gokrazy system. Interactive access for debugging is possible, but needs to be explicitly started. Backstory For a long time, we were unhappy about having to spend so much time on each of our various Raspberry Pis, taking care of security updates and other general Linux distribution maintenance.">
+    <meta property="og:url" content="https://gokrazy.org/index.html">
+    <meta property="og:site_name" content="gokrazy">
+    <meta property="og:title" content="gokrazy Go appliances :: gokrazy">
+    <meta property="og:description" content="gokrazy Go appliances With gokrazy, you can deploy one or more Go programs as appliances to a Raspberry Pi, Virtual Machine, embedded or normal PC (see supported platforms).
+gokrazy uses its own minimal Go userland instead of a traditional Linux distribution base.
+This minimalist approach offers several advantages in terms of security, maintainability and reliability:
+The surface area for security vulnerabilities is drastically reduced. The root filesystem is entirely read-only (making persistent malware installation hard) and new versions of the system are installed by overwriting the root file system with the new version. No default shell access: There is neither xz nor OpenSSH on a gokrazy system. Interactive access for debugging is possible, but needs to be explicitly started. Backstory For a long time, we were unhappy about having to spend so much time on each of our various Raspberry Pis, taking care of security updates and other general Linux distribution maintenance.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="website">
+    <meta itemprop="name" content="gokrazy Go appliances :: gokrazy">
+    <meta itemprop="description" content="gokrazy Go appliances With gokrazy, you can deploy one or more Go programs as appliances to a Raspberry Pi, Virtual Machine, embedded or normal PC (see supported platforms).
+gokrazy uses its own minimal Go userland instead of a traditional Linux distribution base.
+This minimalist approach offers several advantages in terms of security, maintainability and reliability:
+The surface area for security vulnerabilities is drastically reduced. The root filesystem is entirely read-only (making persistent malware installation hard) and new versions of the system are installed by overwriting the root file system with the new version. No default shell access: There is neither xz nor OpenSSH on a gokrazy system. Interactive access for debugging is possible, but needs to be explicitly started. Backstory For a long time, we were unhappy about having to spend so much time on each of our various Raspberry Pis, taking care of security updates and other general Linux distribution maintenance.">
+    <meta itemprop="wordCount" content="529">
     <title>gokrazy Go appliances :: gokrazy</title>
-
-    
-    <link href="/css/nucleus.css?1751187386" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1751187386" rel="stylesheet">
-    <link href="/css/hybrid.css?1751187386" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1751187386" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1751187386" rel="stylesheet">
-    <link href="/css/auto-complete.css?1751187386" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1751187386" rel="stylesheet">
-    <link href="/css/theme.css?1751187386" rel="stylesheet">
-    <link href="/css/tabs.css?1751187386" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1751187386" rel="stylesheet">
-    
-    
-
-    <script src="/js/jquery-3.3.1.min.js?1751187386"></script>
-
-    <style>
-      :root #header + #content > #left > #rlblock_left{
-          display:none !important;
-      }
-      
-        :not(pre) > code + span.copy-to-clipboard {
-            display: none;
+    <link href="/index.json" rel="alternate" type="application/json" title="gokrazy Go appliances :: gokrazy">
+    <link href="/images/favicon.png?1763319501" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1763319501" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1763319501" defer></script>
+    <script src="/js/search-lunr.min.js?1763319501" defer></script>
+    <script src="/js/search.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1763319501";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1763319501" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1763319501" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763319501" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1763319501" rel="stylesheet">
+    <link href="/css/theme.min.css?1763319501" rel="stylesheet">
+    <link href="/css/format-html.min.css?1763319501" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/index.html';
+      window.relearn.relBasePath='.';
+      window.relearn.relBaseUri='.';
+      window.relearn.absBaseUri='https:\/\/gokrazy.org';
+      window.relearn.disableInlineCopyToClipboard=true;
+      window.relearn.enableBlockCodeWrap=true;
+      // legal
+      window.relearn.getItem = (s,n) => {return s.getItem(n)};
+      window.relearn.setItem = (s,n,v) => {return s.setItem(n,v)};
+      window.relearn.removeItem = (s,n) => {return s.removeItem(n)};
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
         }
-      
-    </style>
-    
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
   </head>
-  <body class="" data-url="/">
-    <nav id="sidebar" class="">
-
-
-
-  <div id="header-wrapper">
-    <div id="header">
-      <img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
-
-    </div>
-    
-        <div class="searchbox">
-    <label for="search-by"><i class="fas fa-search"></i></label>
-    <input data-search-input id="search-by" type="search" placeholder="Search...">
-    <span data-search-clear=""><i class="fas fa-times"></i></span>
-</div>
-
-<script type="text/javascript" src="/js/lunr.min.js?1751187386"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1751187386"></script>
-<script type="text/javascript">
-    
-        var baseurl = "https:\/\/gokrazy.org\/";
-    
-</script>
-<script type="text/javascript" src="/js/search.js?1751187386"></script>
-
-    
-  </div>
-  
-    <section id="homelinks">
-      <ul>
-        <li>
-            <a class="padding" href='/'><i class='fas fa-home'></i> Home</a>
-        </li>
-      </ul>
-    </section>
-  
-
-    <div class="highlightable">
-    <ul class="topics">
-
-        
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/quickstart/" title="Quickstart" class="dd-item
-        
-        
-        
-        ">
-      <a href="/quickstart/">
-          <b>1. </b>Quickstart
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/platforms/" title="Supported platforms" class="dd-item
-        
-        
-        
-        ">
-      <a href="/platforms/">
-          <b>2. </b>Supported platforms
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/userguide/" title="Configuration" class="dd-item
-        
-        
-        
-        ">
-      <a href="/userguide/">
-          <b>3. </b>Configuration
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/instance-config/" title="Instance Config Reference" class="dd-item ">
-        <a href="/userguide/instance-config/">
-        Instance Config Reference
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/migration-guide/" title="Instance Config Migration Guide" class="dd-item ">
-        <a href="/userguide/migration-guide/">
-        Instance Config Migration Guide
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/automation/" title="Automation" class="dd-item ">
-        <a href="/userguide/automation/">
-        Automation
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/package-config/" title="Package config: flags, environment variables, extra files" class="dd-item ">
-        <a href="/userguide/package-config/">
-        Flags, environment variables, …
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/dhcp/" title="DHCP Client" class="dd-item ">
-        <a href="/userguide/dhcp/">
-        DHCP Client
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/remotesyslog/" title="Remote Syslog: sending gokrazy logs over the network" class="dd-item ">
-        <a href="/userguide/remotesyslog/">
-        Remote Syslog
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/wifi/" title="Connecting to WiFi networks" class="dd-item ">
-        <a href="/userguide/wifi/">
-        Connecting to WiFi
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/tls-for-untrusted-networks/" title="Using TLS in untrusted networks" class="dd-item ">
-        <a href="/userguide/tls-for-untrusted-networks/">
-        Using TLS in untrusted networks
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/bluetooth/" title="Using Bluetooth" class="dd-item ">
-        <a href="/userguide/bluetooth/">
-        Using Bluetooth
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/permanent-data/" title="Access permanent data" class="dd-item ">
-        <a href="/userguide/permanent-data/">
-        Access permanent data
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/qemu/" title="QEMU x86-64 virtual machine" class="dd-item ">
-        <a href="/userguide/qemu/">
-        QEMU x86-64 virtual machine
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/userguide/rsync-backups/" title="Permanent data backup with the gokrazy rsync" class="dd-item ">
-        <a href="/userguide/rsync-backups/">
-        Data backup with rsync
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/packages/" title="Available packages" class="dd-item
-        
-        
-        
-        ">
-      <a href="/packages/">
-          <b>4. </b>Available packages
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/showcase/" title="Showcase" class="dd-item ">
-        <a href="/packages/showcase/">
-        Showcase
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/tailscale/" title="Tailscale VPN" class="dd-item ">
-        <a href="/packages/tailscale/">
-        Tailscale VPN
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/caddy-http-server/" title="Caddy HTTP server" class="dd-item ">
-        <a href="/packages/caddy-http-server/">
-        Caddy HTTP server
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/minio/" title="MinIO object storage" class="dd-item ">
-        <a href="/packages/minio/">
-        MinIO object storage
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/docker-containers/" title="Docker containers" class="dd-item ">
-        <a href="/packages/docker-containers/">
-        Docker containers
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/packages/prometheus/" title="Prometheus" class="dd-item ">
-        <a href="/packages/prometheus/">
-        Prometheus
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/development/" title="Package development" class="dd-item
-        
-        
-        
-        ">
-      <a href="/development/">
-          <b>5. </b>Package development
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-          
-
-        
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/process-interface/" title="Process interface / requirements" class="dd-item ">
-        <a href="/development/process-interface/">
-        Process interface / requirements
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/gpio/" title="Controlling a GPIO input/output pin" class="dd-item ">
-        <a href="/development/gpio/">
-        Input/output via GPIO pins
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/modules/" title="Working with Go modules" class="dd-item ">
-        <a href="/development/modules/">
-        Working with Go modules
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/buildtags/" title="The gokrazy Go build tag" class="dd-item ">
-        <a href="/development/buildtags/">
-        The gokrazy Go build tag
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
-      <li data-nav-id="/development/non-go/" title="Non-Go Prototyping" class="dd-item ">
-        <a href="/development/non-go/">
-        Non-Go Prototyping
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-        
-        </ul>
-      
-    </li>
-  
- 
-
-          
-        
-    </ul>
-
-    
-    
-      <section id="shortcuts">
-        <h3>More</h3>
-        <ul>
-          
-              <li>
-                  <a class="padding" href="https://github.com/gokrazy/gokrazy"><i class='fab fa-github'></i> GitHub repo</a>
-              </li>
-          
-        </ul>
-      </section>
-    
-
-    
-    <section id="footer">
-      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
-
-    </section>
-  </div>
+  <body class="mobile-support html" data-url="/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#backstory">Backstory</a></li>
+    <li><a href="#your-apps--only-4-moving-parts">Your app(s) + only 4 moving parts</a></li>
+    <li><a href="#uniformity">Uniformity</a></li>
+    <li><a href="#web-status-interface">Web status interface</a></li>
+    <li><a href="#debugging">Debugging</a></li>
+    <li><a href="#network-updates">Network updates</a></li>
+    <li><a href="#minimal-state-and-configuration">Minimal state and configuration</a></li>
+  </ul>
 </nav>
-
-
-
-
-        <section id="body">
-        <div id="overlay"></div>
-        <div class="padding highlightable">
-              
-        <div id="head-tags">
-        
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">gokrazy Go appliances</span><meta itemprop="position" content="1"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-edit" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="https://github.com/gokrazy/gokrazy/tree/master/website/content/_index.markdown" rel="external" title="Edit (CTRL+ALT+w)"><i class="fa-fw fas fa-pen"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div id="body-inner">
-          
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable page" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
 
-        
-
-<span id="sidebar-toggle-span">
-<a href="#" id="sidebar-toggle" data-sidebar-toggle=""><i class="fas fa-bars"></i> navigation</a>
-</span>
-
- 
 <h1 id="gokrazy-go-appliances">gokrazy Go appliances</h1>
+
+<h1 id="gokrazy-go-appliances">gokrazy Go appliances<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
 <p>With gokrazy, you can deploy one or more Go programs as
-<a href="https://en.wikipedia.org/wiki/Computer_appliance">appliances</a> to a Raspberry
-Pi, Virtual Machine, embedded or normal PC (see <a href="/platforms/">supported
+<a href="https://en.wikipedia.org/wiki/Computer_appliance" rel="external">appliances</a> to a Raspberry
+Pi, Virtual Machine, embedded or normal PC (see <a href="/platforms/index.html">supported
 platforms</a>).</p>
 <p>gokrazy uses its own minimal Go userland instead of a traditional Linux
 distribution base.</p>
@@ -779,7 +180,7 @@ the root file system with the new version.</li>
 system. Interactive access for debugging is possible, but needs to be
 explicitly started.</li>
 </ul>
-<h2 id="backstory">Backstory</h2>
+<h2 id="backstory">Backstory<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>For a long time, we were unhappy about having to spend so much time on each of
 our various Raspberry Pis, taking care of security updates and other general
 Linux distribution maintenance.</p>
@@ -787,27 +188,26 @@ Linux distribution maintenance.</p>
 complexity by getting rid of all software we don’t strictly need, and instead
 built up a minimal system from scratch entirely in Go, a memory safe programming
 language?</p>
-<p>Turns out this is feasible. gokrazy is the result. See it in action in <a href="https://www.youtube.com/watch?v=6FBGjdT8ZW4&amp;list=PLxMVx8p-A48A6H-EWqzN-HStDH1dOW5PU">this
+<p>Turns out this is feasible. gokrazy is the result. See it in action in <a href="https://www.youtube.com/watch?v=6FBGjdT8ZW4&list=PLxMVx8p-A48A6H-EWqzN-HStDH1dOW5PU" rel="external">this
 first installation demo
 video</a>:</p>
-
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-  <iframe src="https://www.youtube-nocookie.com/embed/6FBGjdT8ZW4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="gokrazy demo: first installation and adding programs"></iframe>
-</div>
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/6FBGjdT8ZW4?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="gokrazy demo: first installation and adding programs"></iframe>
+    </div>
 
 <!--<img src="logo.svg" width="50" height="50" alt="gokrazy logo" title="gokrazy logo">-->
-<h2 id="your-apps--only-4-moving-parts">Your app(s) + only 4 moving parts</h2>
+<h2 id="your-apps--only-4-moving-parts">Your app(s) + only 4 moving parts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <ol>
-<li>the <a href="https://github.com/gokrazy/kernel">Linux kernel</a>
+<li>the <a href="https://github.com/gokrazy/kernel" rel="external">Linux kernel</a>
 <ul>
 <li>new versions are typically available &lt; 24h after upstream release!</li>
 </ul>
 </li>
-<li>the <a href="https://github.com/gokrazy/firmware">Raspberry Pi firmware files</a></li>
-<li>the <a href="https://go.dev/">Go</a> compiler and standard library</li>
+<li>the <a href="https://github.com/gokrazy/firmware" rel="external">Raspberry Pi firmware files</a></li>
+<li>the <a href="https://go.dev/" rel="external">Go</a> compiler and standard library</li>
 <li>the gokrazy system (minimal init system, updater, DHCP, NTP, …)</li>
 </ol>
-<h2 id="uniformity">Uniformity</h2>
+<h2 id="uniformity">Uniformity<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>What’s appealing about building an appliance entirely in Go? You get the same
 advantages you get when building Go software elsewhere:</p>
 <ul>
@@ -816,19 +216,19 @@ modules, using the same tooling you’re already familiar with.</li>
 <li>Go has very quick compilation times; the <code>gok run</code> command allows for a fast
 edit-run loop.</li>
 <li>Go’s
-<a href="https://about.sourcegraph.com/blog/go/an-introduction-to-go-tool-trace-rhys-hiltner">tracing</a>
-and <a href="https://go.dev/blog/pprof">profiling</a> support can be used on the entire
+<a href="https://about.sourcegraph.com/blog/go/an-introduction-to-go-tool-trace-rhys-hiltner" rel="external">tracing</a>
+and <a href="https://go.dev/blog/pprof" rel="external">profiling</a> support can be used on the entire
 system</li>
-<li>With Go’s <a href="https://go.dev/wiki/Modules#when-should-i-use-the-replace-directive">replace
+<li>With Go’s <a href="https://go.dev/wiki/Modules#when-should-i-use-the-replace-directive" rel="external">replace
 directive</a>,
 you can quickly modify any part of the system with the same workflow.</li>
 </ul>
-<h2 id="web-status-interface">Web status interface</h2>
+<h2 id="web-status-interface">Web status interface<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>On a regular Linux distribution, we’d largely use systemctl’s start,
 stop, restart and status verbs to manage our applications. gokrazy
 comes with a <a href="overview.png">convenient web interface</a> for
 seeing process status and stopping/restarting processes.</p>
-<h2 id="debugging">Debugging</h2>
+<h2 id="debugging">Debugging<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>Sometimes, an interactive <code>busybox</code> session or a quick
 <code>tcpdump</code> run are invaluable. <a
 href="https://github.com/gokrazy/breakglass">breakglass</a> allows
@@ -840,530 +240,88 @@ with the environment variable <code>CGO_ENABLED=0</code>. To
 cross-compile for the Raspberry Pi 3 or 4,
 use <code>GOARCH=arm64</code>. If your program still builds, you’re
 good to go!</p>
-<h2 id="network-updates">Network updates</h2>
+<h2 id="network-updates">Network updates<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>After building a new gokrazy image on your computer, you can easily
 update an existing gokrazy installation in-place thanks to the A/B
 partitioning scheme we use. Just use the <code>gok update</code>
 command.</p>
-<h2 id="minimal-state-and-configuration">Minimal state and configuration</h2>
+<h2 id="minimal-state-and-configuration">Minimal state and configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>A tiny amount of configuration is built into the images (e.g.
 hostname, password, serial console behavior). In general, we prefer
 auto-configuration (e.g. DHCP) over config files. If you need more
 configurability, you may need to replace some of our programs.</p>
-	
-  
-        
+
+  <footer class="footline">
+  </footer>
+</article>
         </div>
-        
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="/logo.svg" width="100%" alt="gokrazy logo" title="gokrazy logo">
 
+        </div>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
       </div>
-
-    <div id="navigation">
-        
-        
-
-        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-            
-        
-
-        
-
-
-	 
-	 
-    </div>
-
-    </section>
-
-    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
-      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
-    </div>
-    <script src="/js/clipboard.min.js?1751187386"></script>
-    <script src="/js/perfect-scrollbar.min.js?1751187386"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1751187386"></script>
-    <script src="/js/jquery.sticky.js?1751187386"></script>
-    <script src="/js/featherlight.min.js?1751187386"></script>
-    <script src="/js/highlight.pack.js?1751187386"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1751187386"></script>
-    <script src="/js/learn.js?1751187386"></script>
-    <script src="/js/hugo-learn.js?1751187386"></script>
-    
-        
-            <script src="/mermaid/mermaid.js?1751187386"></script>
-        
-        <script>
-            mermaid.initialize({ startOnLoad: true });
-        </script>
-    
-    
-
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks">
+          <ul class="space collapsible-menu">
+            <li class="active " data-nav-url="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-url="/quickstart/index.html"><a class="padding" href="/quickstart/index.html"><b>1. </b>Quickstart</a></li>
+            <li class="" data-nav-url="/platforms/index.html"><a class="padding" href="/platforms/index.html"><b>2. </b>Supported platforms</a></li>
+            <li class="" data-nav-url="/userguide/index.html"><a class="padding" href="/userguide/index.html"><b>3. </b>Configuration</a><ul id="R-subsections-74b4df3a3d9365853f09e9f1dfe7bbba" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-url="/packages/index.html"><a class="padding" href="/packages/index.html"><b>4. </b>Available packages</a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-url="/development/index.html"><a class="padding" href="/development/index.html"><b>5. </b>Package development</a><ul id="R-subsections-54b0ce3c97b111c8cd4d107325fd580c" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="https://github.com/gokrazy/gokrazy"><a class="padding" href="https://github.com/gokrazy/gokrazy" rel="external"><i class='fab fa-github'></i> GitHub repo</a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1763319501" defer></script>
+    <script src="/js/theme.min.js?1763319501" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
-
