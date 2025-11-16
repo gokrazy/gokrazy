@@ -22,6 +22,7 @@ Turns out this is feasible. gokrazy is the result.
 * [github.com/gokrazy/tools](https://github.com/gokrazy/tools): SD card image creation code, pulling in:
     * [github.com/gokrazy/firmware](https://github.com/gokrazy/firmware): Raspberry Pi 3 or 4 firmware files
     * [github.com/gokrazy/rpi-eeprom](https://github.com/gokrazy/rpi-eeprom): Raspberry Pi 4 EEPROM files
+    * [github.com/gokrazy/rpi5-eeprom](https://github.com/gokrazy/rpi5-eeprom): Raspberry Pi 5 EEPROM files
     * [github.com/gokrazy/kernel](https://github.com/gokrazy/kernel): pre-built kernel image and bootloader config
 
 # Documentation
