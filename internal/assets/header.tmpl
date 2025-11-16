@@ -66,7 +66,10 @@ table {
         {{ if .EEPROM }}
         <tr>
           <th>EEPROM<br>(SHA256)</th>
-          <td>{{ shortenSHA256 .EEPROM.PieepromSHA256 }}<br>{{ shortenSHA256 .EEPROM.VL805SHA256 }}</td>
+          <td>
+	    {{ shortenSHA256 .EEPROM.PieepromSHA256 }} (bootloader)<br>
+	    {{ shortenSHA256 .EEPROM.VL805SHA256 }} (VL805)
+	  </td>
         </tr>
         {{ end }}
         <tr>
