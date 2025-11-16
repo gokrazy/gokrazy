@@ -18,7 +18,7 @@ type eepromVersion struct {
 // filled by SuperviseServices()
 var lastInstalledEepromVersion *eepromVersion
 
-func readLastInstalledEepromVersion() (*eepromVersion, error) {
+func readLastInstalledEepromVersion(model string) (*eepromVersion, error) {
 	f, err := os.OpenFile(rootdev.Partition(rootdev.Boot), os.O_RDONLY, 0600)
 	if err != nil {
 		return nil, err
@@ -29,8 +29,13 @@ func readLastInstalledEepromVersion() (*eepromVersion, error) {
 	if err != nil {
 		return nil, err
 	}
-	if _, err := rd.ModTime("/RECOVERY.000"); err != nil {
-		return nil, fmt.Errorf("RECOVERY.000 not found, assuming update unsuccessful")
+	if strings.HasPrefix(model, "Raspberry Pi 4 ") {
+		// Only the Pi 4 firmware renames recovery.bin to RECOVERY.000,
+		// the Pi 5 uses the timestamp from the .sig files to run/skip
+		// an update, but no files are renamed.
+		if _, err := rd.ModTime("/RECOVERY.000"); err != nil {
+			return nil, fmt.Errorf("RECOVERY.000 not found, assuming update unsuccessful")
+		}
 	}
 	// Get all extents before we start seeking, which confuses the fat.Reader.
 	offsetE, lengthE, err := rd.Extents("/pieeprom.sig")

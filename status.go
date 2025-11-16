@@ -188,6 +188,14 @@ var templates = template.Must(template.New("root").
 			used := float64(meminfo["MemTotal"] - meminfo["MemAvailable"])
 			return fmt.Sprintf("%.f", float64(rss)/used*100)
 		},
+
+		"modelIsPi4": func(model string) bool {
+			return strings.HasPrefix(model, "Raspberry Pi 4 ")
+		},
+
+		"modelIsPi5": func(model string) bool {
+			return strings.HasPrefix(model, "Raspberry Pi 5 ")
+		},
 	}).
 	ParseFS(assets.Assets, "*.tmpl"))
 
