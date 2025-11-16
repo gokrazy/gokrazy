@@ -9,7 +9,7 @@ require (
 	github.com/google/gopacket v1.1.19
 	github.com/google/renameio/v2 v2.0.0
 	github.com/kenshaw/evdev v0.1.0
-	github.com/mdlayher/packet v1.0.0
+	github.com/mdlayher/packet v1.1.2
 	github.com/mdlayher/watchdog v0.0.0-20201005150459-8bdc4f41966b
 	github.com/rtr7/dhcp4 v0.0.0-20220302171438-18c84d089b46
 	github.com/vishvananda/netlink v1.1.0
@@ -17,10 +17,10 @@ require (
 )
 
 require (
-	github.com/josharian/native v1.0.0 // indirect
-	github.com/mdlayher/socket v0.2.3 // indirect
+	github.com/josharian/native v1.1.0 // indirect
+	github.com/mdlayher/socket v0.4.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/vishvananda/netns v0.0.0-20211101163701-50045581ed74 // indirect
 	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
+	golang.org/x/sync v0.1.0 // indirect
 )
