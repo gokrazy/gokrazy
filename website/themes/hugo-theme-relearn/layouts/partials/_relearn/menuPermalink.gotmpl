@@ -1,0 +1,25 @@
+{{- $url := "" }}
+{{- /* because Hugo can not resolve a pageRef if it contains URL query params or
+  fragments, we simply don't access the .Page here */}}
+{{- with and . .menu }}
+  {{- if .PageRef }}
+    {{- $url = .PageRef }}
+    {{- $linkObject := partial "_relearn/refObject.gotmpl" (dict "page" $.page "objectRef" .PageRef "refObject" .Page) }}
+    {{- if $linkObject }}
+      {{- $url = partial "_relearn/decoratedLink.gotmpl" (dict "url" .PageRef "page" $.page "linkObject" $linkObject "param" "link" "hideFilepath" true) }}
+    {{- else }}
+      {{- $msg := printf "config option 'pageRef' %q for 'menu' entry %q is not a page or a resource" .PageRef (or .KeyName .Identifier .Name .Title) }}
+      {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .PageRef "page" $.page "param" "link" "msg" $msg) }}
+    {{- end }}
+  {{- else if .URL }}
+    {{- $url = .URL | relLangURL }}
+    {{- $u := urls.Parse $url }}
+    {{- if $u.IsAbs }}
+      {{- partialCached "_relearn/urlExists.gotmpl" (dict "url" $url "page" $.page "type" "menu link") $u.String }}
+    {{- else }}
+      {{- $msg := printf "config option 'url' %q for 'menu' entry %q is a local URL; if it references a page or a resource use 'pageRef' instead" .URL (or .KeyName .Identifier .Name .Title) }}
+      {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .URL "page" $.page "param" "link" "msg" $msg) }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- return $url }}

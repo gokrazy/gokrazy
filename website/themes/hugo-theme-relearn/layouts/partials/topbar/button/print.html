@@ -1,0 +1,23 @@
+{{- $onwidths := cond (isset . "onwidths") .onwidths "area-more" }}
+{{- $onwidthm := cond (isset . "onwidthm") .onwidthm "show" }}
+{{- $onwidthl := cond (isset . "onwidthl") .onwidthl "show" }}
+{{- with .page }}
+	{{- $format := .OutputFormats.Get "print" }}
+	{{- $show := and $format (not (.Param "disablePrintButton")) }}
+	{{- if $show }}
+		{{- $show = not (partial "_relearn/pageIsSpecial.gotmpl" .) }}
+	{{- end }}
+	{{- if $show }}
+		{{- $href := printf "%s?format=print" .Path }}
+		{{- partial "topbar/func/button.html" (dict
+			"page" .
+			"class" "topbar-button-print"
+			"href" $href
+			"icon" "print"
+			"onwidths" $onwidths
+			"onwidthm" $onwidthm
+			"onwidthl" $onwidthl
+			"hint" (printf "%s (CTRL+ALT+p)" (T "Print-this-chapter"))
+		)}}
+	{{- end }}
+{{- end }}

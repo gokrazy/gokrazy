@@ -1,0 +1,5 @@
+{{/* the following check avoids to print out content of headless bundles if called from nestedContent.gotmpl */}}
+{{- if .RelPermalink }}
+{{- partial "content-lead.html" . | safeHTML }}
+{{- partial "content.html" . | safeHTML }}
+{{- end }}

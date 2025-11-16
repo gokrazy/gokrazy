@@ -1,0 +1,100 @@
+{{- /* 1. set standard effects */}}
+{{- $effects := dict "border" false "dataurl" false "inlinecontent" false "lazy" true "lightbox" true "shadow" false "left" false "right" false "inline" false }}
+{{- $attributes := .attributes | default dict }}
+
+{{- /* 2. stack configured site effects */}}
+{{- if .page.Site.Params.imageeffects }}
+  {{- $effects = merge $effects .page.Site.Params.imageeffects }}
+{{- end }}
+
+{{- /* 3. stack pages frontmatter effects */}}
+{{- if .page.Params.imageeffects }}
+  {{- $effects = merge $effects .page.Params.imageeffects }}
+{{- end }}
+
+{{- /* 4. stack URL query parameter */}}
+{{- $height := "auto" }}
+{{- $width := "auto" }}
+{{- $u := urls.Parse .url }}
+{{- if $u.RawQuery }}
+
+  {{- /* 4.1 stack "classes" parameter effects; handle "no" prefix */}}
+  {{- if $u.Query.Has "classes" }}
+    {{- $classes := slice | append (split ($u.Query.Get "classes") ",") }}
+    {{- range $classes }}
+      {{- $k := . }}
+      {{- if isset $effects $k }}
+        {{- $v := true }}
+        {{- if strings.HasPrefix $k "no" }}
+          {{- $k := strings.TrimPrefix "no" $k }}
+          {{- $v := false }}
+        {{- end }}
+        {{- $effects = merge $effects (dict $k $v) }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+  {{- /* 4.2 stack other effect parameter; no handling for "no" prefix */}}
+  {{- range $k, $v := $effects }}
+    {{- if $u.Query.Has $k }}
+      {{- $paramValue := $u.Query.Get $k }}
+      {{- $newValue := true }}
+      {{- if eq $paramValue "" }}
+        {{- $newValue = true }}
+      {{- else if eq $paramValue "true" }}
+        {{- $newValue = true }}
+      {{- else if eq $paramValue "false" }}
+        {{- $newValue = false }}
+      {{- else }}
+        {{- $newValue = $paramValue }}
+      {{- end }}
+      {{- $effects = merge $effects (dict $k $newValue) }}
+    {{- end }}
+  {{- end }}
+
+  {{- /* 4.3 special case parameter */}}
+  {{- if $u.Query.Has "featherlight" }}
+    {{- $filepath := "[virtual file]" }}{{ with and .page .page.File .page.File.Filename }}{{ $filepath = . }}{{ end }}
+    {{- warnf "%q: DEPRECATED usage of 'featherlight' image CSS class found, use 'lightbox' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-11-0" $filepath }}
+    {{- $attributes = merge $attributes (dict "lightbox" (ne ($u.Query.Get "featherlight") "false")) }}
+  {{- end }}
+  {{- with $u.Query.Get "height" }}
+    {{- $height = . }}
+  {{- end }}
+  {{- with $u.Query.Get "width" }}
+    {{- $width = . }}
+  {{- end }}
+{{- end }}
+
+{{- /* manually translate effects to HTML attributes */}}
+{{- /* "class" should only contain boolean effects if they are true */}}
+{{- $classes := slice }}
+{{- range $k, $v := $effects }}
+  {{- if $v }}
+    {{- if eq (printf "%T" $v) "bool" }}
+      {{- $classes = $classes | append $k }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- if $attributes.class }}{{ $classes = $classes | append (split $attributes.class " ") }}{{ end }}
+{{- $classes = delimit $classes " " }}
+{{- $attributes = merge $attributes (dict "class" $classes ) }}
+
+{{- $styles := slice (printf "height: %s" $height) (printf "width: %s" $width) }}
+{{- if $attributes.style }}{{ $styles = $styles | append (split $attributes.style ";") }}{{ end }}
+{{- $styles = delimit $styles ";" }}
+{{- if $styles }}{{ $styles = print $styles ";" }}{{ end }}
+{{- $attributes = merge $attributes (dict "style" $styles) }}
+
+{{- if and .linkObject $effects.inlinecontent (eq .linkObject.MediaType.Type "image/svg+xml") }}
+  {{- $content := .linkObject.Content | replaceRE `(?s)^\s*<\?.*?\?>\s*` "" }}
+  {{- $attributes = merge $attributes (dict "content" $content) }}
+{{- else if and .linkObject $effects.dataurl }}
+  {{- $src := printf "data:%s;base64,%s" .linkObject.MediaType.Type (.linkObject.Content | base64Encode) }}
+  {{- $attributes = merge $attributes (dict "src" $src) }}
+{{- else }}
+  {{- $attributes = merge $attributes (dict "src" .url) }}
+  {{- if $effects.lazy }}{{ $attributes = merge $attributes (dict "loading" "lazy") }}{{ end }}
+{{- end }}
+
+{{- return $attributes }}

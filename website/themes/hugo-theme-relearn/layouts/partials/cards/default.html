@@ -1,0 +1,62 @@
+{{- $page := .page }}
+{{- $renderedtitle := .title | $page.RenderString }}
+{{- $renderedcontent := .content | $page.RenderString }}
+{{- $itemid := printf "R-card-%s" (printf "%s%s" $renderedtitle $renderedcontent | plainify | md5) }}
+{{- $popout := or .href .hrefattributes }}
+<li>
+  <article class="card{{ if $popout }} card-popout{{ end }}"{{if .title}} aria-labelledby="{{ $itemid }}"{{end}}>
+      {{- if or $renderedtitle $renderedcontent }}
+    <div class="card-content">
+        {{- if $renderedtitle }}
+      <div class="card-title" id="{{ $itemid }}">
+        {{- if .hrefattributes }}
+        <a
+          {{- range $k, $v := .hrefattributes }}
+            {{- if $v }}
+              {{- if eq (printf "%T" $v) "bool" }}
+                {{- printf " %s" $k | safeHTMLAttr }}
+              {{- else }}
+                {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+              {{- end }}
+            {{- end }}
+          {{- end }}>
+        {{- else if .href }}
+        <a href="{{ .href | safeJS }}">
+        {{- end }}
+        {{ $renderedtitle | safeHTML }}
+        {{- if or .hrefattributes .href }}
+        </a>
+        {{- end }}
+      </div>
+        {{- end }}
+        {{- with .content }}
+      <div class="card-content-text">
+          {{ $renderedcontent | safeHTML }}
+      </div>
+        {{- end }}
+    </div>
+      {{- end }}
+      {{- if .image }}
+    <div class="card-image">
+        {{- if and (not $renderedtitle) .hrefattributes }}
+      <a
+          {{- range $k, $v := .hrefattributes }}
+            {{- if $v }}
+              {{- if eq (printf "%T" $v) "bool" }}
+                {{- printf " %s" $k | safeHTMLAttr }}
+              {{- else }}
+                {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+              {{- end }}
+            {{- end }}
+          {{- end }}>
+        {{- else if and (not $renderedtitle) .href }}
+      <a href="{{ .href | safeJS }}">
+        {{- end }}
+        <img src="{{ .image }}">
+        {{- if and (not $renderedtitle) (or .hrefattributes .href) }}
+      </a>
+        {{- end }}
+    </div>
+      {{- end }}
+  </article>
+</li>

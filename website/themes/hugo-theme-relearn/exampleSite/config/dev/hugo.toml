@@ -1,0 +1,15 @@
+# Configuration to create a complete website locally, containing of the docs
+# and the exampleSite. This resembles the same structure as the GitHub Pages
+#
+# 1. Build the docs by either `hugo` or `hugo server` from the `docs` directory
+# 2. Build the exampleSite by `hugo -e dev` or `hugo server -e dev` from the `exampleSite` directory
+#`
+# After that, a complete website is available in the docs/public folder
+# and can be used from the file system. The links between both projects
+# will not work as they are pointing the the GitHub Pages copy. So
+# for testing you will have to type them manually.
+
+# Standard adjustments for deveolpment, to make this site work
+baseURL = 'https://example.com/exampleSite/'
+relativeURLs = false
+publishDir = '../docs/public/exampleSite'

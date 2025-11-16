@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Diese Seite zeigt Version {{.pageVersion.title}}. Die aktuelle Version befindet sich <a href="{{.latestUrl}}">hier</a>.'
+
+[Search]
+other = "Suchen"
+
+[Search-placeholder]
+other = "Suchen..."
+
+[Clear-search]
+other = "Suche löschen"
+
+[No-results-found]
+other = "Keine Ergebnisse gefunden für \"{0}\""
+
+[N-results-found]
+other = "{1} Ergebnisse gefunden für \"{0}\""
+
+[Clear-History]
+other = "Verlauf löschen"
+
+[Reset-view]
+other = "Ansicht zurücksetzen"
+
+[View-reset]
+other = "Ansicht zurückgesetzt!"
+
+[Attachments-label]
+other = "Anhänge"
+
+[title-404]
+other = "Nicht gefunden"
+
+[message-404]
+other = "Huch. Diese Seite scheint nicht zu existieren ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Gehe zur Homepage"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "Bearbeiten"
+
+[Show-Markdown]
+other = "Markdown anzeigen"
+
+[Show-source]
+other = "Quelldatei anzeigen"
+
+[Print-this-chapter]
+other = "Ganzes Kapitel drucken"
+
+[More-action]
+other = "Mehr"
+
+[shortcuts-menuTitle]
+other = "Mehr"
+
+[Expand-title]
+other = "Erweitere mich..."
+
+[Navigation-toggle]
+other = "Menu"
+
+[Toc-toggle]
+other = "Inhalt"
+
+[Byte-symbol]
+other = "B"
+
+[Kilobyte-symbol]
+other = "KB"
+
+[Megabyte-symbol]
+other = "MB"
+
+[caution]
+other = "Vorsicht"
+
+[important]
+other = "Wichtig"
+
+[info]
+other = "Info"
+
+[note]
+other = "Anmerkung"
+
+[tip]
+other = "Tipp"
+
+[warning]
+other = "Warnung"
+
+[Copy-to-clipboard]
+other = "Text in Zwischenablage kopieren"
+
+[Copied-to-clipboard]
+other = "Text in Zwischenablage kopiert!"
+
+[Copy-link-to-clipboard]
+other = "Link in Zwischenablage kopieren"
+
+[Link-copied-to-clipboard]
+other = "Link in Zwischenablage kopiert!"
+
+[Chapter]
+other = "Kapitel {{.}}"
+
+[Language]
+other = "Sprache"
+
+[Theme]
+other = "Theme"
+
+[Submenu]
+other = "Untermenu {{.}}"
+
+[Subsections]
+other = "Unterabschnitte von {{.}}"
+
+[tags]
+other = "Stichworte"
+
+[tag]
+other = "Stichwort"
+
+[categories]
+other = "Kategorien"
+
+[category]
+other = "Kategorie"
+
+[Details]
+other = "Details"
+
+[Version]
+other = "Version"
+
+[Browser-unsupported-feature]
+other = "Dieser Browser unterstützt diese Funktion nicht"

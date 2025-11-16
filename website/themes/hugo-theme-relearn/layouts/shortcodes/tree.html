@@ -1,0 +1,5 @@
+{{- $_hugo_config := `{ "version": 1 }` }}
+{{- partial "shortcodes/tree.html" (dict
+  "page"    .Page
+  "content" .Inner
+) }}

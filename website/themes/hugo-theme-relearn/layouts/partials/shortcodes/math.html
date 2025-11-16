@@ -1,0 +1,33 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'math' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $content := .content }}
+{{- $align := .align | default "center" }}
+
+{{- /* separate shortcode attributes from rest */}}
+{{- $attributes := .attributes | default dict }}
+{{- $otherAttributes := dict }}
+{{- range $k, $v := $attributes }}
+  {{- if eq $k "align" }}
+  {{- else }}
+    {{- $otherAttributes = (dict $k $v) | merge $otherAttributes }}
+  {{- end }}
+{{- end }}
+{{- $attributes = $otherAttributes }}
+
+{{- /* enrich attributes */}}
+{{- $attributes = merge $attributes (dict "class" (delimit (append (index $attributes "class" | default slice) "math" slice) " ")) }}
+{{- $attributes = merge $attributes (dict "class" (delimit (append (index $attributes "class" | default slice) (printf "align-%s" $align) slice) " ")) }}
+
+{{- with $page -}}
+<span
+  {{- range $k, $v := $attributes }}
+    {{- if $v }}
+      {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+    {{- end }}
+  {{- end }}>{{ $content | safeHTML }}</span>
+{{- .Store.Set "hasMath" true }}
+{{- end }}

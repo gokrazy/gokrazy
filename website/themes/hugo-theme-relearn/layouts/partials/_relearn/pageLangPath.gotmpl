@@ -1,0 +1,12 @@
+{{- $home_path := site.Home.RelPermalink }}
+{{- $this_path := .RelPermalink }}
+{{- $path := print "/" (strings.TrimPrefix $home_path $this_path) }}
+{{- $path = partial "permalink.gotmpl" (dict "link" $path) }}
+{{- $default_home_lang_path := site.Sites.Default.Home.Permalink }}
+{{- $this_home_lang_path := site.Home.Permalink }}
+{{- $lang_path := strings.TrimPrefix "/" (strings.TrimPrefix (strings.TrimSuffix "/" $default_home_lang_path) (strings.TrimSuffix "/" $this_home_lang_path)) }}
+{{- $lang := .Language.Lang }}
+{{- if eq $lang_path $lang }}
+	{{- $path = printf "/%s%s" $lang_path $path }}
+{{- end }}
+{{- return $path }}

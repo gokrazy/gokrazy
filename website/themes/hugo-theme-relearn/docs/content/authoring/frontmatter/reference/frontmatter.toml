@@ -1,0 +1,457 @@
+# If an option value is said to be not set, you can achieve the same behavior
+# by giving it an empty string value.
+
+###############################################################################
+# Hugo
+# These options usually apply to other themes as well.
+
+# The social media image of your page.
+# Default: not set
+# This is used for generating social media meta information for the opengraph
+# protocol and twitter cards.
+# If not set, the set value of your site's hugo.toml is used.
+# images = [ 'images/hero.png' ]
+
+# The title of your page.
+# Default: not set
+# A page without a title is treated as a hidden page.
+# title = 'Example Page'
+
+# The description of your page.
+# Default: not set
+# This is used for generating HTML meta tags, social media meta information
+# for the opengraph protocol and twitter cards.
+# If not set, the set value of your site's hugo.toml is used for the html
+# meta tag, social media meta information for the opengraph protocol and
+# twitter cards.
+# description = ''
+
+# The page design to be used
+# Default: not set
+# This decides the layout of your page. The theme ships 'home', 'chapter' and
+# 'default'. If not set, 'default' is taken.
+# type = ''
+
+###############################################################################
+# Relearn Theme
+# These options are specific to the Relearn theme.
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# General
+# These options are defining general, non visual behavior.
+
+# Conditionally ignore errorlevel settings
+# Default: []
+# The theme supports checking referenced address (e.g. with
+# link.errorlevel, image.errorlevel, etc. see below). Sometimes checks lead
+# to console output due to false negatives. You can turn off the checks
+# for individual referenced addresses by defining regular expressions here.
+# The referenced address will be checked against all regexes of this array.
+# If it matches at least one, no output will be written to the console.
+# This array can be expanded globally in your site's hugo.toml.
+urlIgnoreCheck = []
+
+# Check external URLs
+# Default: false
+# If `true` the theme checks during build if an external URL is reachable.
+# If it fails, it write errors according to the errorlevel settings. A check
+# is omitted if the URL is found in the `urlIgnoreCheck` list.
+# If not set, the set value of your site's hugo.toml is used.
+urlExternalCheck = false
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Topbar
+# These options modify the topbar appearance.
+
+# Hide the table of contents button.
+# Default: false
+# If the TOC button is hidden, also the keyboard shortcut is disabled.
+# If not set, the set value of your site's hugo.toml is used.
+disableToc = false
+
+# Hide the breadcrumbs.
+# Default: false
+# If the breadcrumbs are hidden, the title of the displayed page will still be
+# shown in the topbar.
+disableBreadcrumb = false
+
+# Hide the Markdown button.
+# Default: false
+# This hides the Markdown button if you activated the Markdown output format.
+# If not set, the set value of your site's hugo.toml is used.
+disableMarkdownButton = false
+
+# Hide the Source button.
+# Default: false
+# This hides the Source button if you activated the Source output format.
+# If not set, the set value of your site's hugo.toml is used.
+disableSourceButton = false
+
+# Hide the Print button.
+# Default: false
+# This hides the print button if you activated the print output format.
+# If not set, the set value of your site's hugo.toml is used.
+disablePrintButton = false
+
+# Hide Next and Previous navigation buttons.
+# Default: false
+# If the navigation buttons are hidden, also the keyboard shortcuts are
+# disabled.
+disableNextPrev = false
+
+# The URL prefix to edit a page.
+# Default: not set
+# If set, an edit button will be shown in the topbar. If the button is hidden,
+# also the keyboard shortcuts are disabled. The value can contain the macro
+# `${FilePath}` which will be replaced by the file path of your displayed page.
+# If not set, the set value of your site's hugo.toml is used. If the global
+# parameter is given but you want to hide the button for the displayed page,
+# you can set the value to an empty string. If instead of hiding you want to have
+# an disabled button, you can set the value to a string containing just spaces.
+# This is useful if you want to give the opportunity for people to create merge
+# request for your content.
+editURL = ''
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Menu
+# These options modify the menu appearance.
+
+# Menu specific title
+# Default: not set
+# The title displayed in the menu. If not set the `title` front matter will
+# be used.
+linkTitle = ''
+
+# Prefix for the title in navigation menu.
+# Default: not set
+# The title of the page in the menu will be prefixed by this HTML content.
+menuPre = ''
+
+# Suffix for the title in navigation menu.
+# Default: not set
+# The title of the page in the menu will be suffixed by this HTML content.
+menuPost = ''
+
+# Link the menu entry to a different internal page instead.
+# Default: not set
+# This will effectivly hide the page and its content from the viewer by
+# linking to the given URL instead.
+menuPageRef = ''
+
+# Link the menu entry to an external URL instead of a page.
+# Default: not set
+# This will effectivly hide the page and its content from the viewer by
+# linking to the given URL instead.
+menuUrl = ''
+
+# The order of navigation menu submenus.
+# Default: 'weight'
+# Submenus can be ordered by 'weight', 'title', 'linktitle', 'modifieddate',
+# 'expirydate', 'publishdate', 'date', 'length' or 'default' (adhering to
+# Hugo's default sort order).
+# If not set, the value of the parent menu entry is used.
+ordersectionsby = 'weight'
+
+# The initial expand state of submenus.
+# Default: not set
+# This controls whether submenus will be expanded (true), or collapsed (false)
+# in the menu. If not set, the first menu level is set to false, all others
+# levels are set to true. If not set, the value of the parent menu entry is used.
+# If the displayed page has submenus, they will always been displayed expanded
+# regardless of this option.
+alwaysopen = ''
+
+# Shows expander for submenus.
+# Default: false
+# If set to true, a submenu in the sidebar will be displayed in a collapsible
+# tree view and a clickable expander is set in front of the entry.
+# Note that if set to `true` can have a major performance impact on build
+# for sites with many pages.
+# If not set, the set value of your site's hugo.toml is used.
+collapsibleMenu = true
+
+# Define your own sidebar menus.
+# Menus are written from the sidebar's top to buttom in the order given in
+# these arrays. If not set, the set value of your site's hugo.toml is used.
+# Each entry can contain the following keys:
+# - `type` is mandatory. Either `page` in case it should generate a tree from
+#    the page structure, `menu` in case it should generate a tree from a
+#    defined menu, `custom` for arbitrary HTML snippets or `divider` for a
+#    horizontal ruler.
+# - `identifier` is mandatory. In case of `type=page`, anything can be used,
+#    in case of `type=menu` the `identifier` key must be identical to the
+#    key of the menu definition.
+# - `main`, boolean. If `true`, the first tree level is spaced more generous
+#    and the text is emphasized. Default: `true` for `type=page` and `false`
+#    for `type=menu` and `type=custom`
+# - `disableTitle`, boolean. If `true`, there is no title above the tree.
+#    Default: `true` for `type=page` and `false` for `type=menu`. If a title
+#    should be used, in case of `type=page` it will be taken from the page's
+#    `menuTitle` front matter and if not set, from the translation files, using
+#    the menu `identifier` as key. In case of `type=menu` it will be taken
+#    from the menu `title` according to Hugo's documentation and if not set
+#    from the menu `name` and if this is not set form the page's `linkTitle`.
+# - `pageRef`, optional. In case of `type=page` this is the starting page's
+#    path. If not set, the home page will be used.
+# - `elements`, optional. In case of `type=custom` the list of elements to
+#    display. The theme shipps with the following predefined snippets which
+#    all accept the `icon` parameter to overwrite the default icon
+#    - languageswitcher: will display the language switcher
+#    - variantswitcher: will display the variant switcher
+#    - versionswitcher: will display the version switcher
+#    - historyclearer: will display a button to clear the history of visited links
+
+# The sidebar header menu.
+# Default: see notes
+# If not given, defaults to
+# - a home button if configured; if you redefine this, use a Hugo menu and a type=menu to replicate this
+# - a divider to separate from the sidebarmenus (depending on the configuration of the theme variant)
+sidebarheadermenus = ''
+
+# The main sidebar header.
+# Default: see notes
+# - the main page menu based on your content structure
+# - the shortcuts menu including the title if configured
+sidebarmenus = ''
+
+# The main sidebar header.
+# Default: see notes
+# - a divider to separate from the sidebarmenus if any of the following is configured
+# - the language switcher if multilingual is configured
+# - the variant switcher if multiple variants are configured
+# - the history clearer if you configured to mark visited pages
+sidebarfootermenus = ''
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Hidden pages
+# These options configure how hidden pages are treated.
+# A page flagged as hidden, is only removed from the navigation menu if you are
+# currently not on this page or the hidden page is not part of current page's
+# ancestors. For all other functionality in Hugo a hidden page behaves like any
+# other page if not otherwise configured.
+
+# Hide a page's menu entry.
+# Default: false
+# If this value is true, the page is hidden from the menu.
+hidden = false
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Content
+# These options modify how your content is displayed.
+
+# Prefix for the title in the content area.
+# Default: not set
+# The title of the page heading will be prefixed by this HTML content.
+headingPre = ''
+
+# Suffix for the title in the content area.
+# Default: not set
+# The title of the page heading will be suffixed by this HTML content.
+headingPost = ''
+
+# Display name of the page's last editor.
+# Default: not set
+# If set, it will be displayed in the default footer.
+LastModifierDisplayName = ''
+
+# Email address of the page's last editor.
+# Default: not set
+# If set together with LastModifierDisplayName, it will be displayed in the
+# default footer.
+LastModifierEmail = ''
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Highlight
+# These options configure how code is displayed.
+
+# Wrap for code blocks.
+# Default: true
+# By default lines of code blocks wrap around if the line is too long to be
+# displayed on screen. If you dislike this behavior, you can reconfigure it
+# here.
+# Note that lines always wrap in print mode regardless of this option.
+# If not set, the set value of your site's hugo.toml is used or given as a
+# parameter to individual code blocks.
+highlightWrap = true
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Include
+# These options configure how the include shortcode works.
+
+# What to do when path is not resolved.
+# Default: ''
+# You can control what should happen if a path can not be resolved to as
+# a resource or via the file system. If not set, no output will be written
+# for the unresolved path. If set to `warning` the same happens and an additional
+# warning is printed. If set to `error` an error message is printed and the build
+# is aborted.
+# If not set, the set value of your site's hugo.toml is used.
+include.errorlevel = ''
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Images
+# These options configure how images are displayed.
+
+# What to do when local image link is not resolved.
+# Default: ''
+# You can control what should happen if a local image can not be resolved to as
+# a resource. If not set, the unresolved link is written as given into the resulting
+# output. If set to `warning` the same happens and an additional warning is
+# printed. If set to `error` an error message is printed and the build is
+# aborted.
+# Please note that this can not resolve files inside of your `static` directory.
+# If not set, the set value of your site's hugo.toml is used.
+image.errorlevel = ''
+
+# Image effects.
+# See the documentation for how you can even add your own arbitrary effects to
+# the list.
+# All effect values default to the values of your site's hugo.toml and can be
+# overridden through URL parameter given to the image. See the documentation for
+# details.
+
+# Default: false
+imageEffects.border = true
+# Default: false
+imageEffects.dataurl = false
+# Default: false
+imageEffects.inlinecontent = false
+# Default: true
+imageEffects.lazy = true
+# Default: true
+imageEffects.lightbox = true
+# Default: false
+imageEffects.shadow = false
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Links
+# These options configure how links are displayed.
+
+# How to open external links.
+# Default: '_blank'
+# For external links you can define how they are opened in your browser. All
+# values for the HTML `target` attribute of the `a` element are allowed. The
+# default value opens external links in a separate browser tab. If you want
+# to open those links in the same tab, use '_self'.
+# If you want to set the default behavior for all links, use link effects.
+# If not set, the set value of your site's hugo.toml is used.
+externalLinkTarget = '_self'
+
+# What to do when local page link is not resolved.
+# Default: ''
+# You can control what should happen if a local link can not be resolved to a
+# page. If not set, the unresolved link is written as given into the resulting
+# output. If set to `warning` the same happens and an additional warning is
+# printed. If set to `error` an error message is printed and the build is
+# aborted.
+# Please note that with Hugo < 0.123.0 + `uglyURLs=true` this can lead to false
+# negatives.
+# If not set, the set value of your site's hugo.toml is used.
+link.errorlevel = ''
+
+# Link effects.
+# See the documentation for how you can even add your own arbitrary effects to
+# the list.
+# All effect values default to the values of your site's hugo.toml and can be
+# overridden through URL parameter given to the link. See the documentation for
+# details.
+
+# Default: false
+linkEffects.download = false
+# Default: false
+linkEffects.target = false
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# MathJax
+# These options configure how math formulae are displayed.
+
+# Initialization options for MathJax.
+# Default: not set
+# A JSON value. See the MathJaxdocumentation for possible parameter.
+# If not set, the set value of your site's hugo.toml is used.
+mathJaxInitialize = '{}'
+
+# Force load Math on every page.
+# Default: false
+# If a Math shortcode or codefence is found, the option will be ignored and
+# Math will be loaded regardlessly. This option is useful in case you
+# are using passthrough configuration to render your math. In this case no shortcode or
+# codefence is involved and the library is not loaded by default so you can
+# force loading it by setting `math.force=true`.
+# This option has an alias `math=true`.
+# If not set, the set value of your site's hugo.toml is used.
+math.force = false
+
+# URL for external MathJax library.
+# Default: not set
+# Specifies the remote location of the MathJax library. By default the shipped
+# version will be used.
+# If not set, the set value of your site's hugo.toml is used.
+customMathJaxURL = '' # 'https://unpkg.com/mathjax/es5/tex-mml-chtml.js'
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Mermaid
+# These options configure how Mermaid graphs are displayed.
+
+# Make graphs panable and zoomable
+# Default: false
+# For huge graphs it can be helpful to make them zoomable. Zoomable graphs come
+# with a reset button for the zoom.
+# If not set, the set value of your site's hugo.toml is used or given as a
+# parameter to individual graphs.
+mermaidZoom = true
+
+# Initialization options for Mermaid.
+# Default: not set
+# A JSON value. See the Mermaid documentation for possible parameter.
+# If not set, the set value of your site's hugo.toml is used.
+mermaidInitialize = '{ "securityLevel": "loose" }'
+
+# Force load Mermaid on every page.
+# Default: false
+# If a Mermaid shortcode or codefence is found, the option will be ignored and
+# Mermaid will be loaded regardlessly. This option is useful in case you
+# are using scripting to render your graph. In this case no shortcode or
+# codefence is involved and the library is not loaded by default so you can
+# force loading it by setting `mermaid.force=true`.
+# If not set, the set value of your site's hugo.toml is used.
+mermaid.force = false
+
+# URL for external Mermaid library.
+# Default: not set
+# Specifies the remote location of the Mermaid library. By default the shipped
+# version will be used.
+# If not set, the set value of your site's hugo.toml is used.
+customMermaidURL = '' # 'https://unpkg.com/mermaid/dist/mermaid.min.js'
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# OpenApi
+# These options configure how OpenAPI specifications are displayed.
+
+# Load OpenAPI on every page.
+# Default: false
+# If a OpenAPI shortcode or codefence is found, the option will be ignored and
+# OpenAPI will be loaded regardlessly. This option is useful in case you
+# are using scripting to render your spec. In this case no shortcode or
+# codefence is involved and the library is not loaded by default so you can
+# force loading it by setting `openapi.force=true`.
+# If not set, the set value of your site's hugo.toml is used.
+openapi.force = false
+
+# URL for external OpenAPI library.
+# Default: not set
+# Specifies the remote location of the OpenAPI library. By default the shipped
+# version will be used.
+# If not set, the set value of your site's hugo.toml is used.
+customOpenapiURL = '' # 'https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js'
+
+# What to do when a local OpenAPI spec link is not resolved.
+# Default: ''
+# You can control what should happen if a local OpenAPI spec link can not be resolved
+# to a resource. If not set, the unresolved link is written as given into the resulting
+# output. If set to `warning` the same happens and an additional warning is
+# printed. If set to `error` an error message is printed and the build is
+# aborted.
+# Please note that this can not resolve files inside of your `static` directory.
+# If not set, the set value of your site's hugo.toml is used.
+openapi.errorlevel = ''

@@ -1,0 +1,19 @@
+{{- $_hugo_config := `{ "version": 1 }` }}
+{{- if (.Get "icon-position") }}
+  {{- $filepath := "[virtual file]" }}{{ with and .Page .Page.File .Page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'icon-position' for shortcode 'button' found, use 'iconposition' instead; see https://mcshelby.github.io/hugo-theme-relearn/shortcodes/button#parameter" $filepath }}
+{{- end }}
+{{- partial "shortcodes/button.html" (dict
+  "page"          .Page
+  "borderless"    (.Get "borderless")
+  "color"         (.Get "color")
+  "content"       .Inner
+  "hint"          (.Get "hint")
+  "href"          (.Get "href")
+  "icon"          (.Get "icon")
+  "iconposition"  ((.Get "iconposition") | default (.Get "icon-position"))
+  "style"         (.Get "style")
+  "title"         (.Get "title")
+  "target"        (.Get "target")
+  "type"          (.Get "type")
+) }}

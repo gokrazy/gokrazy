@@ -1,0 +1,8 @@
+{{- partial "shortcodes/pages.html" (dict
+  "page"           .Page
+  "hidevisible"    (.Get "hidevisible")
+  "showhidden"     (.Get "showhidden")
+  "showtitle"      (.Get "showtitle")
+  "showdivider"    (.Get "showdivider")
+  "reverse"        (.Get "reverse")
+) }}

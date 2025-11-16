@@ -1,0 +1,66 @@
+{{- $page := .page }}
+{{- $location := .location }}
+{{- if eq $location "footer" }}
+  {{- with $page }}
+    {{- $assetBusting := partialCached "assetbusting.gotmpl" . }}
+    {{- $minify := not hugo.IsServer }}
+    {{- if and (isset site.Params "minify") (ne site.Params.minify "") }}
+      {{- $minify = site.Params.minify }}
+    {{- end }}
+    {{- $cssInProject := false }}
+    {{- $cssUrl := "" }}
+    {{- $urlOpenapi := "" }}
+    {{- with resources.Get "/js/js-yaml/js-yaml.min.js" }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+    {{- end }}
+    {{- with resources.Get "/css/swagger-light.css" }}
+      {{- $res := . }}
+      {{- if $minify }}
+        {{- $res = $res | minify }}
+      {{- end }}
+      {{- /* the following code causes Hugo to generate our file in public */}}
+      {{- $url := $res.RelPermalink }}
+    {{- end }}
+    {{- with resources.Get "/css/swagger-dark.css" }}
+      {{- $res := . }}
+      {{- if $minify }}
+        {{- $res = $res | minify }}
+      {{- end }}
+      {{- /* the following code causes Hugo to generate our file in public */}}
+      {{- $url := $res.RelPermalink }}
+    {{- end }}
+    {{- if and (isset .Params "custommermaidurl") .Params.customMermaidURL }}
+      {{- $cssUrl = .Params.customOpenapiURL }}
+      {{- $cssUrl = replace $cssUrl "swagger-ui-bundle" "swagger-ui" }}
+      {{- $cssUrl = replace $cssUrl ".js" ".css" }}
+      {{- $urlOpenapi = .Params.customOpenapiURL }}
+    <script src="{{ $urlOpenapi }}" defer></script>
+      {{- $urlOpenapi = replace $urlOpenapi "swagger-ui-bundle" "swagger-ui-standalone-preset" }}
+    <script src="{{ $urlOpenapi }}" defer></script>
+    {{- else if and (isset .Site.Params "custommermaidurl") .Site.Params.customMermaidURL }}
+      {{- $cssUrl = .Site.Params.customOpenapiURL }}
+      {{- $cssUrl = replace $cssUrl "swagger-ui-bundle" "swagger-ui" }}
+      {{- $cssUrl = replace $cssUrl ".js" ".css" }}
+      {{- $urlOpenapi = .Site.Params.customOpenapiURL }}
+    <script src="{{ $urlOpenapi }}" defer></script>
+      {{- $urlOpenapi = replace $urlOpenapi "swagger-ui-bundle" "swagger-ui-standalone-preset" }}
+    <script src="{{ $urlOpenapi }}" defer></script>
+    {{- else }}
+      {{- $cssInProject = true }}
+      {{- $cssUrl = "/css/swagger-ui/swagger-ui.css" }}
+      {{- with resources.Get $cssUrl }}
+        {{- /* the following code causes Hugo to generate our file in public */}}
+        {{- $url := .RelPermalink }}
+      {{- end }}
+      {{- with resources.Get "/js/swagger-ui/swagger-ui-bundle.js" }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+      {{- end }}
+      {{- with resources.Get "/js/swagger-ui/swagger-ui-standalone-preset.js" }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+      {{- end }}
+    {{- end }}
+    <script>
+      window.relearn.themeUseOpenapi = { css: {{ $cssUrl }}, cssInProject: {{ $cssInProject | safeJS }}, assetsBuster: "{{ $assetBusting }}" };
+    </script>
+  {{- end }}
+{{- end }}

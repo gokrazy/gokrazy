@@ -1,0 +1,49 @@
+{{- $showtitle := .showtitle | default false }}
+{{- if eq (printf "%T" $showtitle) "string" }}
+  {{- $showtitle = (eq $showtitle "true") }}
+{{- end }}
+{{- $showdivider := .showdivider | default false }}
+{{- if eq (printf "%T" $showdivider) "string" }}
+  {{- $showdivider = (eq $showdivider "true") }}
+{{- end }}
+{{- $showhidden := .showhidden | default false }}
+{{- if eq (printf "%T" $showhidden) "string" }}
+  {{- $showhidden = (eq $showhidden "true") }}
+{{- end }}
+{{- $hidevisible := .hidevisible | default false }}
+{{- if eq (printf "%T" $hidevisible) "string" }}
+  {{- $hidevisible = (eq $hidevisible "true") }}
+{{- end }}
+{{- $reverse := .reverse | default false }}
+{{- if eq (printf "%T" $reverse) "string" }}
+  {{- $reverse = (eq $reverse "true") }}
+{{- end }}
+
+{{- $pages := .page.Pages }}
+{{- if $reverse }}
+  {{- $pages = $pages.Reverse }}
+{{- end }}
+{{- $needsdivider := false }}
+
+{{- range $pages }}
+  {{- $display := or
+    (and $showhidden (or .Params.hidden (eq .Title "")) )
+    (and (not $hidevisible) (not (or .Params.hidden (eq .Title ""))) )
+  }}
+  {{- if $display }}
+{{- if and $showdivider $needsdivider }}
+
+---
+
+{{ end }}
+{{ if and $showtitle .Title }}
+
+# {{ .Title }}
+
+{{ end }}
+
+{{ .RenderShortcodes }}
+
+{{ $needsdivider = true }}
+  {{- end }}
+{{- end }}

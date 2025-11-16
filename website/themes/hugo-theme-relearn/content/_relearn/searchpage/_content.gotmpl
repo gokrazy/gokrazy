@@ -1,0 +1,35 @@
+{{- $disableSearchIndex := false }}
+{{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.index) site.Params.search.index.disable }}
+	{{- $disableSearchIndex = . }}
+{{- end }}
+{{- $disableSearchPage := false }}
+{{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.page) site.Params.search.page.disable }}
+	{{- $disableSearchPage = . }}
+{{- end }}
+{{- $searchPageURL := "search" }}
+{{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.page) site.Params.search.page }}
+  {{- $searchPageURL = .URL | default $searchPageURL }}
+{{- end }}
+{{- $searchPageType := "_relearn_searchpage" }}
+{{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.page) site.Params.search.page }}
+  {{- $searchPageType = .type | default $searchPageType }}
+{{- end }}
+
+{{- if and (not $disableSearchIndex) (not $disableSearchPage) }}
+	{{- .EnableAllLanguages }}
+	{{- $url := trim $searchPageURL "/"  }}
+	{{- $content := dict
+		"mediaType" "text/markdown"
+		"value" ""
+	}}
+	{{- $page := dict
+		"content" $content
+		"kind" "page"
+		"outputs" (slice "html")
+		"path" "_relearn_searchpage"
+		"title" (T "Search")
+		"type" $searchPageType
+		"url" $url
+	}}
+	{{- .AddPage $page }}
+{{- end }}

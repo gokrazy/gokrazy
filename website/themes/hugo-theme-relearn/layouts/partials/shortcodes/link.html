@@ -1,0 +1,43 @@
+{{- /* based on Hugo 0.125.5 render-link.html */}}
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'link' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- if strings.HasPrefix .url "HAHAHUGOSHORTCODE" }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: WARNING you must call the ref / relref shortcode with '%% %%' instead of '< >' to work correctly for the anchor target attribute" $filepath }}
+{{- end }}
+{{- $attributes := .attributes | default dict }}
+{{- $title := .title | default "" }}
+{{- $title = trim $title " " }}
+{{- $attributes = merge $attributes (dict "title" ($title | transform.HTMLEscape)) }}
+{{- $content := .content }}
+{{- /* target will be boolean false if no user defined value was set and effect default should be applied */}}
+{{- $target := false }}
+{{- $u := urls.Parse .url }}
+{{- $href := $u.String }}
+{{- if $u.IsAbs }}
+  {{- partialCached "_relearn/urlExists.gotmpl" (dict "url" .url "page" $page "type" "link") $u.String }}
+{{- else }}
+  {{- $linkObject := partial "_relearn/linkObject.gotmpl" (dict "url" .url "page" $page) }}
+  {{- if $linkObject }}
+    {{- $href = partial "_relearn/decoratedLink.gotmpl" (dict "url" .url "page" $page "linkObject" $linkObject "param" "link") }}
+  {{- else }}
+    {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+    {{- $msg := printf "%q: link '%s' is not a page or a resource" $filepath .url }}
+    {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .url "page" $page "param" "link" "msg" $msg) }}
+  {{- end }}
+{{- end }}
+{{- $attributes = merge $attributes (partial "_relearn/linkAttributes.gotmpl" (dict "url" $href "page" $page "attributes" (dict "target" .target))) -}}
+<a
+  {{- range $k, $v := $attributes }}
+    {{- if $v }}
+      {{- if eq (printf "%T" $v) "bool" }}
+        {{- printf " %s" $k | safeHTMLAttr }}
+      {{- else }}
+        {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+      {{- end }}
+    {{- end }}
+  {{- end }}>{{ $content | safeHTML }}</a>

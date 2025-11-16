@@ -1,0 +1,20 @@
+{{- $page := .page }}
+<li>
+  <article class="card">
+    <div class="card-content">
+        {{- with .title }}
+      <div class="card-title">
+          {{ . | $page.RenderString}}
+      </div>
+        {{- end }}
+      <div class="card-content-text">
+        <p>All Parameter</p>
+{{ partial "shortcodes/highlight.html" (dict
+  "page"    $page
+  "content" (. | jsonify (dict "indent" "  "))
+  "type"    "json"
+)}}
+      </div>
+    </div>
+  </article>
+</li>

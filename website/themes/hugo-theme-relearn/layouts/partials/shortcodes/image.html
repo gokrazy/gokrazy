@@ -1,0 +1,73 @@
+{{- /* based on Hugo 0.125.5 render-image.html */}}
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'image' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $title := .title }}
+{{- $alt := .alt }}
+{{- $attributes := .attributes | default dict }}
+{{- $linkObject := "" }}
+{{- $u := urls.Parse .url }}
+{{- $src := $u.String }}
+{{- if $u.IsAbs }}
+  {{- partialCached "_relearn/urlExists.gotmpl" (dict "url" .url "page" $page "type" "image") $u.String }}
+{{- else }}
+  {{- $linkObject = partial "_relearn/linkObject.gotmpl" (dict "url" .url "page" $page "searchPage" false) }}
+  {{- if $linkObject }}
+    {{- $src = partial "_relearn/decoratedLink.gotmpl" (dict "url" .url "page" $page "linkObject" $linkObject "param" "image") }}
+  {{- else }}
+    {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+    {{- $msg := printf "%q: image '%s' is not a resource" $filepath .url }}
+    {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .url "page" $page "param" "image" "msg" $msg) }}
+  {{- end }}
+{{- end }}
+{{- $id := cond (or (eq .id nil) (eq .id "")) (partial "_relearn/makeRandomMd5.gotmpl" $page) .id }}
+{{- $attributes = merge $attributes (partial "_relearn/imageAttributes.gotmpl" (dict "url" $src "page" $page "linkObject" $linkObject)) }}
+{{- $attributes = merge $attributes (dict "alt" $alt "title" ($title | transform.HTMLEscape)) }}
+{{- $classes := split $attributes.class " " }}
+{{- $isLightbox := in $classes "lightbox" }}
+{{- if $isLightbox -}}
+<a href="#R-image-{{ $id }}" class="lightbox-link">
+{{- end }}
+{{- $attributes_figure := $attributes }}
+{{- $attributes_figure = merge $attributes_figure (dict "class" (delimit ((split $attributes_figure.class " ") | append "figure-image") " ")) }}
+{{- $attributes_figure = merge $attributes_figure (dict "style" (index $attributes_figure "style")) -}}
+{{- partial "inline/img" (dict "attributes" $attributes_figure) }}
+{{- if $isLightbox -}}
+</a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-{{ $id }}">
+{{- $attributes_lightbox := $attributes }}
+{{- $attributes_lightbox = merge $attributes_lightbox (dict "class" (delimit ((split $attributes_lightbox.class " ") | append "lightbox-image") " ")) }}
+{{- $attributes_lightbox = merge $attributes_lightbox (dict "style" "") -}}
+{{- partial "inline/img" (dict "attributes" $attributes_lightbox) }}</a>
+{{- end }}
+
+{{- define "partials/inline/img" }}
+  {{- if .attributes.content }}
+    {{- $attrs := ""}}
+    {{- range $k, $v := .attributes }}
+      {{- if eq $k "content" }}
+      {{- else if $v }}
+        {{- if eq (printf "%T" $v) "bool" }}
+          {{- $attrs = printf "%s %s" $attrs $k | safeHTMLAttr }}
+        {{- else }}
+          {{- $attrs = printf "%s %s=%q" $attrs $k $v | safeHTMLAttr }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- printf (.attributes.content | replaceRE "^<svg" (printf "<svg%s" $attrs)) | safeHTML }}
+  {{- else -}}
+    <img
+      {{- range $k, $v := .attributes }}
+        {{- if $v }}
+          {{- if eq (printf "%T" $v) "bool" }}
+            {{- printf " %s" $k | safeHTMLAttr }}
+          {{- else }}
+            {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+          {{- end }}
+        {{- end }}
+      {{- end }}>
+  {{- end }}
+{{- end }}

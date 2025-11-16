@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'This page shows version {{.pageVersion.title}}. The current version can be found <a href="{{.latestUrl}}">here</a>.'
+
+[Search]
+other = "Search"
+
+[Search-placeholder]
+other = "Search..."
+
+[Clear-search]
+other = "Clear search"
+
+[No-results-found]
+other = "No results found for \"{0}\""
+
+[N-results-found]
+other = "{1} results found for \"{0}\""
+
+[Clear-History]
+other = "Clear History"
+
+[Reset-view]
+other = "Reset view"
+
+[View-reset]
+other = "View reset!"
+
+[Attachments-label]
+other = "Attachments"
+
+[title-404]
+other = "Not found"
+
+[message-404]
+other = "Whoops. Looks like this page doesn't exist ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Go to homepage"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "Edit"
+
+[Show-Markdown]
+other = "Show Markdown"
+
+[Show-source]
+other = "Show source code"
+
+[Print-this-chapter]
+other = "Print whole chapter"
+
+[More-action]
+other = "More"
+
+[shortcuts-menuTitle]
+other = "More"
+
+[Expand-title]
+other = "Expand me..."
+
+[Navigation-toggle]
+other = "Menu"
+
+[Toc-toggle]
+other = "Table of Contents"
+
+[Byte-symbol]
+other = "B"
+
+[Kilobyte-symbol]
+other = "KB"
+
+[Megabyte-symbol]
+other = "MB"
+
+[caution]
+other = "Caution"
+
+[important]
+other = "Important"
+
+[info]
+other = "Info"
+
+[note]
+other = "Note"
+
+[tip]
+other = "Tip"
+
+[warning]
+other = "Warning"
+
+[Copy-to-clipboard]
+other = "Copy text to clipboard"
+
+[Copied-to-clipboard]
+other = "Text copied to clipboard!"
+
+[Copy-link-to-clipboard]
+other = "Copy link to clipboard"
+
+[Link-copied-to-clipboard]
+other = "Link copied to clipboard!"
+
+[Chapter]
+other = "Chapter {{.}}"
+
+[Language]
+other = "Language"
+
+[Theme]
+other = "Theme"
+
+[Submenu]
+other = "Submenu {{.}}"
+
+[Subsections]
+other = "Subsections of {{.}}"
+
+[tags]
+other = "Tags"
+
+[tag]
+other = "Tag"
+
+[categories]
+other = "Categories"
+
+[category]
+other = "Category"
+
+[Details]
+other = "Details"
+
+[Version]
+other = "Version"
+
+[Browser-unsupported-feature]
+other = "This browser doesn't support this feature"

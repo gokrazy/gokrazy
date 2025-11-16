@@ -1,0 +1,78 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'notice' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $content := trim .content "\n\r\t " }}
+{{- $hasContent := ne (strings.TrimPrefix "<p>" $content) "" }}
+{{- $groupid := .groupid }}
+
+{{- $style := .style | default "" }}
+{{- $color := .color | default "" }}
+{{- $icon := .icon | default "" }}
+{{- $title := .title | default "" }}
+{{- $boxStyle := partial "_relearn/boxStyle.gotmpl" (dict "mode" "notice" "style" $style "color" $color "icon" $icon "title" $title) }}
+{{- $style = $boxStyle.style }}
+{{- $color = $boxStyle.color }}
+{{- $icon = $boxStyle.icon }}
+{{- $title = $boxStyle.title }}
+
+{{- $expander := false }}
+{{- $expanded := .expanded | default "" }}
+{{- if $hasContent }}
+  {{- if eq (printf "%T" $expanded) "string" }}
+    {{- if ne (trim $expanded " ") "" }}
+      {{- $expander = true }}
+      {{- $expanded = (eq $expanded "true") }}
+    {{- end }}
+  {{- else }}
+    {{- $expander = true }}
+  {{- end }}
+{{- end }}
+
+{{- $params := dict }}
+{{- $classes := slice }}
+{{- $classes = $classes | append "box" }}
+{{- $classes = $classes | append "cstyle" }}
+{{- $classes = $classes | append (.class | default "notices") }}
+{{- $classes = $classes | append $style }}
+{{- if $expander }}
+  {{- $classes = $classes | append "expand" }}
+{{- else }}
+  {{- $expanded = true }}
+{{- end }}
+{{- $params = dict "class" (delimit $classes " ") | merge $params }}
+
+{{- if $color }}
+  {{- $styles := split (index $params "style" | default "") ";" }}
+  {{- $styles = $styles | append (printf "--VARIABLE-BOX-color: %s" $color) }}
+  {{- $params = dict "style" (delimit $styles ";") | merge $params }}
+{{- end }}
+{{ if $groupid }}
+  {{- $params = dict "name" $groupid | merge $params }}
+{{- end }}
+
+{{- with $page }}
+  {{- if or $icon $title $hasContent -}}
+<details
+  {{- if $expanded }} open{{ end }}
+  {{- range $k, $v := $params }}
+    {{- if and $v (not (in (slice "open" "summary") $k)) }}
+      {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+    {{- end }}
+  {{- end }}>
+  <summary class="box-label{{ if and (not $expander) (not $icon) (not $title) }} a11y-only{{ end }}"{{ if not $expander }} tabindex="-1"{{ end }}>{{ if $expander }}
+    <i class="expander-icon fa-fw fas fa-chevron-right"></i> {{ end }}{{ if $icon }}
+    <i class="{{ $icon }}"></i> {{ end }}{{ if $title }}
+    {{ $title | .RenderString }}{{ else }}
+    <span class="a11y-only">{{ T "Details" }}</span>{{ end }}
+  </summary>
+    {{- if $hasContent }}
+  <div class="box-content">
+{{ $content | safeHTML }}
+  </div>
+    {{- end }}
+</details>
+  {{- end }}
+{{- end }}

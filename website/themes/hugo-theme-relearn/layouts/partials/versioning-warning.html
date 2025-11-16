@@ -1,0 +1,8 @@
+{{- partial "shortcodes/notice.html" (dict
+  "page" .page
+  "class" "versioning-warning"
+  "content" (T "Versioning-warning" (dict "pageUrl" .pageUrl "pageVersion" .pageVersion "latestUrl" .latestUrl "latestVersion" .latestVersion ))
+  "icon" " "
+  "style" "warning"
+  "title" " "
+) }}

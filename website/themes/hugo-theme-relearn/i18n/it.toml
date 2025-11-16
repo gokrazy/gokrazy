@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Questa pagina mostra la versione {{.pageVersion.title}}. La versione attuale può essere trovata <a href="{{.latestUrl}}">qui</a>.'
+
+[Search]
+other = "Cerca"
+
+[Search-placeholder]
+other = "Cerca..."
+
+[Clear-search]
+other = "Cancella ricerca"
+
+[No-results-found]
+other = "Nessun risultato trovato per \"{0}\""
+
+[N-results-found]
+other = "{1} risultati trovati per \"{0}\""
+
+[Clear-History]
+other = "Reimposta storico"
+
+[Reset-view]
+other = "Azzeramento vista"
+
+[View-reset]
+other = "Vista azzerata!"
+
+[Attachments-label]
+other = "Allegati"
+
+[title-404]
+other = "Non localizzato"
+
+[message-404]
+other = "Oh no! Sembra che la pagina da te cercata non esista ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Ritorna alla pagina iniziale"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "Modifica"
+
+[Show-Markdown]
+other = "Mostra Markdown"
+
+[Show-source]
+other = "Mostra il codice sorgente"
+
+[Print-this-chapter]
+other = "Stampa l'intero capitolo"
+
+[More-action]
+other = "Altro"
+
+[shortcuts-menuTitle]
+other = "Altro"
+
+[Expand-title]
+other = "Espandi..."
+
+[Navigation-toggle]
+other = "Menu"
+
+[Toc-toggle]
+other = "Indice"
+
+[Byte-symbol]
+other = "B"
+
+[Kilobyte-symbol]
+other = "KB"
+
+[Megabyte-symbol]
+other = "MB"
+
+[caution]
+other = "Attenzione"
+
+[important]
+other = "Importante"
+
+[info]
+other = "Informazione"
+
+[note]
+other = "Nota"
+
+[tip]
+other = "Suggerimento"
+
+[warning]
+other = "Attenzione"
+
+[Copy-to-clipboard]
+other = "Copia il testo negli appunti"
+
+[Copied-to-clipboard]
+other = "Testo copiato negli appunti!"
+
+[Copy-link-to-clipboard]
+other = "Copia collegamento negli appunti"
+
+[Link-copied-to-clipboard]
+other = "Collegamento copiato negli appunti!"
+
+[Chapter]
+other = "Capitolo {{.}}"
+
+[Language]
+other = "Lingua"
+
+[Theme]
+other = "Tema"
+
+[Submenu]
+other = "Sottomenu {{.}}"
+
+[Subsections]
+other = "Sottosezioni di {{.}}"
+
+[tags]
+other = "Tag"
+
+[tag]
+other = "Tag"
+
+[categories]
+other = "Categorie"
+
+[category]
+other = "Categoria"
+
+[Details]
+other = "Dettagli"
+
+[Version]
+other = "Versione"
+
+[Browser-unsupported-feature]
+other = "Questo browser non supporta questa funzionalità"

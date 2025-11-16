@@ -1,0 +1,13 @@
+{{- $defaultmenuconfigs := slice }}
+{{- $defaultconfigelements := slice }}
+
+{{- $defaultmenuconfigs = $defaultmenuconfigs | append (dict "type" "divider") }}
+
+{{- $defaultconfigelements = $defaultconfigelements | append (dict "type" "languageswitcher") }}
+{{- $defaultconfigelements = $defaultconfigelements | append (dict "type" "variantswitcher") }}
+{{- $defaultconfigelements = $defaultconfigelements | append (dict "type" "historyclearer") }}
+{{- $defaultmenuconfigs = $defaultmenuconfigs | append
+  (dict "type" "custom" "identifier" "footercontrols" "elements" $defaultconfigelements)
+}}
+
+{{- return $defaultmenuconfigs }}

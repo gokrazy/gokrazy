@@ -1,0 +1,73 @@
+# The main configuration file.
+# Usable standalone for a fully functioning site
+# or as base values for all other configurations.
+
+# To use run `hugo` or `hugo server` from the `docs` directory
+
+# this is a required setting for this theme to appear on https://themes.gohugo.io/
+# change this to a value appropriate for you; if your site is served from a subdirectory
+# set it like 'https://example.com/mysite/'
+baseURL = 'https://example.com/'
+
+# required to be set to `true` to serve this page from a webserver AND the file system;
+# if you set this value to `true`, `baseURL` must not contain a subdirectory;
+# if you don't want to serve your page from the file system, you can also set this value
+# to `false`
+relativeURLs = true # true -> rewrite all site-relative URLs (those with a leading slash) to be relative to the current content
+
+# if you set uglyURLs to `false`, this theme will append 'index.html' to any page bundle link
+# so your site can be also served from the file system; if you don't want that,
+# set `disableExplicitIndexURLs=true` in the [params] section,
+# if st to `true`, adjusting the link is not necessary, so `disableExplicitIndexURLs` has
+# no effect
+uglyURLs = false    # true -> basic/index.html -> basic.html
+
+# the directory and theme where Hugo reads the theme files from; this is specific to
+# your installation; this configuration here is for running the docs as-is
+# from within the Relearn theme; you need to delete or change it, if you copy the
+# docs to somewhere outside the themes directory - which is NOT recommended;
+# if you want to use a starting project, use the exampleSite instead;
+# see also the "Getting Started" section in the themes documentation
+themesdir = '..'
+theme = ''
+
+# make sure your defaultContentLanguage is the first one in the [languages]
+# array below, as the theme needs to make assumptions on it
+defaultContentLanguage = 'en'
+# if you want to get rrrid o' ourrr pirrrates nonsense uncomment th' next line
+# disableLanguages = ['pir']
+
+# don't use any auto-generated summaries
+summaryLength = 10
+
+# add showcase-specific output formats
+[outputs]
+  # `print` - activate the themes feature to print whole chapters or leaf pages
+  home = ['html', 'rss', 'print']
+  section = ['html', 'rss', 'print']
+  page = ['html', 'print']
+
+# add two showcase specific taxonomies for the parameter documentation;
+# the standard taxonomies must be repeated if they should be available
+# in such a case
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+  frontmatter = 'frontmatter'
+  option = 'options'
+
+# Showcase-specific non-standard theme parameter that should be not
+# contained in the defauzlt params.toml; delete it!
+[params]
+  # Demo setting for displaying the siteparam shortcode the docs.
+  siteparam.test.text = 'A **nested** option <b>with</b> formatting'
+  # Extension to the image effects only for the docs.
+  imageEffects.bg-white = true
+  # This is for support of the variantgenerator in the docs, you don't need this!
+  variantgenerator.force = true
+
+  [params.relearn]
+    [params.relearn.dependencies]
+      # This is for support of the variantgenerator in the docs, you don't need this!
+      [params.relearn.dependencies.variantgenerator]
+        name = 'VariantGenerator'

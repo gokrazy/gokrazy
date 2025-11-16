@@ -1,0 +1,30 @@
+{{- $versions := partialCached "_relearn/siteVersions.gotmpl" . }}
+{{- $pageVersion := site.Params.version | default "" }}
+{{- if and $versions (not $pageVersion) }}
+	{{- warnf "WARNING you have configured `versions` but did not mark this site with a `version`; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-6-0" }}
+{{- end }}
+{{- $latestVersion := "" }}
+{{- with (where $versions "isLatest" true | first 1) }}
+	{{- range . }}
+		{{- $latestVersion = . }}
+	{{- end }}
+{{- end }}
+{{- with (where $versions "identifier" $pageVersion | first 1) }}
+	{{- range . }}
+		{{- $pageVersion = . }}
+	{{- end }}
+{{- end }}
+{{- if and
+	(not (site.Params.disableVersioningWarning | default .Params.disableVersioningWarning))
+	(eq (.Store.Get "relearnOutputFormat") "html")
+	$pageVersion
+	$latestVersion
+	(ne $pageVersion.identifier $latestVersion.identifier)
+}}
+	{{- $path := partial "_relearn/pageLangPath.gotmpl" . }}
+	{{- $url := print $latestVersion.baseURL $path }}
+	{{- if not $latestVersion.isAbs }}
+		{{- $url = print (partial "_relearn/relBaseUri.gotmpl" .) $url }}
+	{{- end }}
+	{{- partial "versioning-warning.html" (dict "page" . "pageUrl" (partial "permalink.gotmpl" (dict "to" .)) "pageVersion" $pageVersion "latestUrl" $url "latestVersion" "$latestVersion") }}
+{{- end }}

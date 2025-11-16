@@ -1,0 +1,6 @@
+{{- partial "shortcodes/replaceRE.html" (dict
+  "page"        .Page
+  "pattern"     (.Get "pattern" | default (.Get 0))
+  "replacement" (.Get "replacement" | default (.Get 1))
+  "input"       .Inner
+) }}

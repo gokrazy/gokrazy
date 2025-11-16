@@ -1,0 +1,67 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'resources' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+
+{{- $style := .style | default "" }}
+{{- $color := .color | default "" }}
+{{- $icon := .icon | default "" }}
+{{- $title := .title | default "" }}
+{{- $boxStyle := partial "_relearn/boxStyle.gotmpl" (dict "mode" "attachments" "style" $style "color" $color "icon" $icon "title" $title) }}
+{{- $style = $boxStyle.style }}
+{{- $color = $boxStyle.color }}
+{{- $icon = $boxStyle.icon }}
+{{- $title = $boxStyle.title }}
+
+{{- $expanded := .expanded | default "" }}
+{{- if eq (printf "%T" $expanded) "string" }}
+  {{- if ne (trim $expanded " ") "" }}
+    {{- $expanded = (eq $expanded "true") }}
+  {{- end }}
+{{- end }}
+{{- $sort := .sort | default "asc" }}
+{{- $pattern := .pattern | default "" }}
+{{- if eq $page.BundleType "" }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: UNSUPPORTED usage of 'resources' shortcode found, use a page bundle instead; see https://mcshelby.github.io/hugo-theme-relearn/shortcodes/resources" $filepath }}
+{{- end }}
+{{- $content := partial "inline/resource-list" (dict
+  "page"     $page
+  "sort"     $sort
+  "pattern"  $pattern
+) }}
+{{- partial "shortcodes/notice.html" (dict
+  "page"     $page
+  "class"    "attachments"
+  "color"    $color
+  "content"  ($content | $page.RenderString)
+  "expanded" $expanded
+  "icon"     $icon
+  "style"    $style
+  "title"    $title
+) }}
+
+{{- define "partials/inline/resource-list" }}
+  {{- $sort := .sort }}
+  {{- $pattern := .pattern }}
+  {{- with .page }}
+    {{- range sort .Resources "Name" $sort }}
+      {{- if findRE $pattern .Name }}
+        {{- $size := len .Content }}
+        {{- $unit := "Byte-symbol" }}
+        {{- if ge $size 1024 }}
+          {{- $size = div $size 1024 }}
+          {{- $unit = "Kilobyte-symbol" }}
+        {{- end }}
+        {{- if ge $size 1024 }}
+          {{- $size = div $size 1024 }}
+          {{- $unit = "Megabyte-symbol" }}
+        {{- end }}
+        {{- $unitsymbol := $unit | T }}
+- [{{.Name}}]({{.Name}}) ({{$size}} {{$unitsymbol}})
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}

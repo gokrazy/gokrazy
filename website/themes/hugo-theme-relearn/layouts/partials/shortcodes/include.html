@@ -1,0 +1,34 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'include' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $content := "" }}
+{{- $linkObject := or
+  (partial "_relearn/linkObject.gotmpl" (dict "url" .file "page" $page "searchGlobal" false "searchResource" false))
+  (partial "_relearn/linkObject.gotmpl" (dict "url" .file "page" $page "searchPage" false)) }}
+{{- if $linkObject }}
+  {{- $content = $linkObject.Content }}
+{{- else }}
+  {{- if (fileExists .file) }}
+    {{- $content = .file | readFile }}
+  {{- else }}
+    {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+    {{- $msg := printf "%q: include '%s' is not a page, a resource or a file" $filepath .file }}
+    {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .file "page" $page "param" "include" "msg" $msg) }}
+  {{- end }}
+{{- end }}
+{{- $hideFirstHeading := .hidefirstheading | default false }}
+{{- if eq (printf "%T" $hideFirstHeading) "string" }}
+	{{- $hideFirstHeading = (eq $hideFirstHeading "true") }}
+{{- end }}
+{{- if $content }}
+	{{- if $hideFirstHeading }}<div class="include hide-first-heading">
+
+{{ end }}
+	{{- with $page }}
+{{- $content | safeHTML }}
+	{{- end }}
+	{{- if $hideFirstHeading }}</div>{{ end }}
+{{- end }}

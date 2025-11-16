@@ -1,0 +1,29 @@
+{{- /* based on Hugo 0.125.5 alias.html */}}
+<!DOCTYPE html>
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ site.Language.LanguageDirection | default (T "Reading-direction") | default "ltr" }}">
+  <head>
+    {{- $url := .Permalink }}
+    {{- if site.BaseURL }}
+      {{- $url = replace .Permalink site.BaseURL "/" }}
+    {{- end }}
+    {{- $url = replace $url "//" "/" }}
+    {{- with site.GetPage $url }}
+      {{- /* if defaultContentLanguageInSubdir=false we are ending here for home page of the default language */}}
+      {{- $url = partial "permalink.gotmpl" (dict "to" .) }}
+    {{- else }}
+      {{- $url_alt := replaceRE "^/[^/]*(/.*)" "${1}" $url }}
+      {{- with site.GetPage $url_alt }}
+        {{- /* if defaultContentLanguageInSubdir=true we are ending here for home page */}}
+        {{- $url = partial "permalink.gotmpl" (dict "to" .) }}
+      {{- else }}
+        {{- /* for regular aliases we are ending here with no original page found */}}
+        {{- $url = partial "permalink.gotmpl" (dict "link" $url) }}
+      {{- end }}
+    {{- end }}
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url={{ $url }}">
+    {{- $link := "<link href=\"%s\" rel=\"%s\">" }}
+    <title>{{ $url }}</title>
+    {{ (printf $link $url "canonical") | safeHTML }}
+  </head>
+</html>

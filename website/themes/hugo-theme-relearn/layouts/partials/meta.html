@@ -1,0 +1,49 @@
+
+    <meta charset="utf-8">
+    {{- /* to avoid that user swiping to the left leaves a gap on the right side, we set minimum-scale, even if not advised to */}}
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    {{- if (ne .Site.Params.disableGeneratorVersion true) }}
+        {{- $gen := hugo.Generator }}
+        {{- $gen = replaceRE "\\s*/>$" ">" $gen }}
+    {{ $gen | safeHTML }}
+        {{- $ver := partial "version.txt" }}
+        {{- $ver := printf "<meta name=\"generator\" content=\"%s %s\">" "Relearn" $ver }}
+    {{ $ver | safeHTML }}
+    {{- end }}
+    {{- $title := partial "title.gotmpl" (dict "page" . "linkTitle" true) }}
+    {{- /* This wants to be partialCached but can't since Hugo 0.146.7 }}
+    {{- if not (and $title .RelPermalink (or (ne .Site.Params.disableSeoHiddenPages true) (not (partialCached "_relearn/pageIsHiddenSelfOrAncestor.gotmpl" (dict "page" . "to" .Site.Home) .Path .Site.Home.Path) ) ) ) */}}
+    {{- if not (and $title .RelPermalink (or (ne .Site.Params.disableSeoHiddenPages true) (not (partial "_relearn/pageIsHiddenSelfOrAncestor.gotmpl" (dict "page" . "to" .Site.Home) .Path .Site.Home.Path) ) ) ) }}
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    {{- end }}
+    {{- $url := "" }}
+    {{- $filepath := "[virtual file]" }}{{ with and .File .File.Filename }}{{ $filepath = . }}{{ end }}
+    {{- $errorlevel := or .Params.link.errorlevel .Site.Params.link.errorlevel }}
+    {{- if .Params.menuPageRef }}
+        {{- $url = .Params.menuPageRef }}
+        {{- $linkObject := partial "_relearn/refObject.gotmpl" (dict "page" . "objectRef" .Params.menuPageRef) }}
+        {{- if $linkObject }}
+            {{- $url = partial "_relearn/decoratedLink.gotmpl" (dict "url" .Params.menuPageRef "page" . "linkObject" $linkObject "param" "link") }}
+        {{- else }}
+            {{- $msg := printf "%q: front matter 'menuPageRef' %q is not a page or a resource" $filepath .Params.menuPageRef }}
+            {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .Params.menuPageRef "page" . "param" "link" "msg" $msg) }}
+        {{- end }}
+    {{- else if .Params.menuUrl }}
+        {{- $url = .Params.menuUrl | relLangURL }}
+        {{- $u := urls.Parse $url }}
+        {{- if $u.IsAbs }}
+            {{- partialCached "_relearn/urlExists.gotmpl" (dict "url" $url "page" . "type" "menu link") $u.String }}
+        {{- else }}
+            {{- $msg := printf "%q: front matter 'menuUrl' is a local URL; if it references a page or a resource use 'menuPageRef' instead" $filepath .Params.menuUrl }}
+            {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .Params.menuUrl "page" . "param" "link" "msg" $msg) }}
+        {{- end }}
+    {{- end }}
+    {{- if $url }}
+    <meta http-equiv="refresh" content="0; url={{ $url }}">
+    {{- end }}
+    <meta name="description" content="{{ with trim (or .Description .Summary | plainify | htmlUnescape) "\n\r\t " }}{{ . }}{{ end }}">
+    {{- $authorName := partialCached "_relearn/authorName.gotmpl" . }}
+    <meta name="author" content="{{ $authorName }}">
+    {{- partial "twitter_cards.html" . }}
+    {{- partial "opengraph.html" . }}
+    {{- partial "schema.html" . }}

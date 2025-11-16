@@ -1,0 +1,13 @@
+
+<article class="chapter narrow">
+  <header class="headline">
+    {{- partial "content-header.html" . }}
+  </header>
+{{ partial "heading-pre.html" . }}{{ with .Params.Weight }}<div class="article-subheading">{{ T "Chapter" . }}</div>{{ end }}
+{{ partial "heading.html" . }}{{ partial "heading-post.html" . }}
+
+{{ partial "article-content.html" . }}
+  <footer class="footline">
+    {{- partial "content-footer.html" . }}
+  </footer>
+</article>

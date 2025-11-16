@@ -1,0 +1,110 @@
+name: Check milestone
+description: Checks if the given milestone and its according tag are valid to be released
+inputs:
+  milestone:
+    description: Milestone for this release
+    required: true
+  github_token:
+    description: Secret GitHub token
+    required: true
+outputs:
+  outcome:
+    description: Result of the check, success or failure
+    value: ${{ steps.outcome.outputs.outcome }}
+runs:
+  using: composite
+  steps:
+    - name: Get closed issues for milestone
+      id: closed_issues
+      uses: octokit/graphql-action@v2.x
+      env:
+        MILESTONE: ${{ inputs.milestone }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+      with:
+        query: |
+          query {
+            search(first: 1, type: ISSUE, query: "repo:${{ github.repository_owner }}/${{ github.event.repository.name }} milestone:${{ env.MILESTONE }} state:closed") {
+              issueCount
+            }
+          }
+
+    - name: Get open issues for milestone
+      id: open_issues
+      uses: octokit/graphql-action@v2.x
+      env:
+        MILESTONE: ${{ inputs.milestone }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+      with:
+        query: |
+          query {
+            search(first: 1, type: ISSUE, query: "repo:${{ github.repository_owner }}/${{ github.event.repository.name }} milestone:${{ env.MILESTONE }} state:open") {
+              issueCount
+            }
+          }
+
+    - name: Get current major version number
+      id: majorvers
+      uses: ashley-taylor/regex-property-action@master
+      env:
+        MILESTONE: ${{ inputs.milestone }}
+      with:
+        value: ${{ env.MILESTONE }}
+        regex: (\d+)\.\d+\.\d+
+        replacement: "$1"
+
+    - name: Get current minor version number
+      id: minorvers
+      uses: ashley-taylor/regex-property-action@master
+      env:
+        MILESTONE: ${{ inputs.milestone }}
+      with:
+        value: ${{ env.MILESTONE }}
+        regex: \d+\.(\d+)\.\d+
+        replacement: "$1"
+
+    - name: Get current patch version number
+      id: patchvers
+      uses: ashley-taylor/regex-property-action@master
+      env:
+        MILESTONE: ${{ inputs.milestone }}
+      with:
+        value: ${{ env.MILESTONE }}
+        regex: \d+\.\d+\.(\d+)
+        replacement: "$1"
+
+    - name: Check if releasenotes exists
+      id: releasenotes
+      shell: bash
+      run: |
+        if [ -f "docs/content/introduction/releasenotes/${{ steps.majorvers.outputs.value }}/${{ steps.minorvers.outputs.value }}.en.md" ]; then
+          echo "file_exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "file_exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Set outcome
+      id: outcome
+      shell: bash
+      run: |
+        if [[ \
+          ${{ fromJSON(steps.closed_issues.outputs.data).search.issueCount }} -gt 0 && \
+          ${{ fromJSON(steps.open_issues.outputs.data).search.issueCount }} -eq 0 && \
+          ${{ steps.releasenotes.outputs.file_exists == 'true' }} \
+        ]]; then
+          echo "outcome=success" >> $GITHUB_OUTPUT
+        else
+          echo "outcome=failure" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Log results and exit
+      shell: bash
+      run: |
+        echo outcome                : ${{ steps.outcome.outputs.outcome }}
+        echo has closed issues      : ${{ fromJSON(steps.closed_issues.outputs.data).search.issueCount > 0 }}
+        echo   count                : ${{ fromJSON(steps.closed_issues.outputs.data).search.issueCount }}
+        echo has all issues closed  : ${{ fromJSON(steps.open_issues.outputs.data).search.issueCount == 0 }}
+        echo   count                : ${{ fromJSON(steps.open_issues.outputs.data).search.issueCount }}
+        echo has releasenotes       : ${{ steps.releasenotes.outputs.file_exists }}
+        if [ "${{ steps.outcome.outputs.outcome }}" = "failure" ]; then
+          exit 1
+        fi

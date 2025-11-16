@@ -1,0 +1,11 @@
+# Configuration to release this site on GitHub Pages.
+
+# To use run `hugo -e github` or `hugo server -e github` from the `docs` directory
+
+# For usual GH pages, your website resides in a subdirectory
+# making it necessary to disable headless server mode
+baseURL = 'https://mcshelby.github.io/hugo-theme-relearn/'
+relativeURLs = false
+
+[params]
+  urlExternalCheck = false

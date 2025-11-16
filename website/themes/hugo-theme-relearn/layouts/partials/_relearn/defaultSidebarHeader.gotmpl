@@ -1,0 +1,41 @@
+{{- $defaultmenuconfigs := slice }}
+{{- $defaultconfigentries := slice }}
+{{- $defaultconfigelements := slice }}
+
+{{- $defaultmenuconfigs = $defaultmenuconfigs | append (dict "type" "divider") }}
+
+{{- if not site.Params.disableLandingPageButton }}
+  {{- if (ne site.Params.landingPageURL nil) }}
+    {{- warnf "UNSUPPORTED usage of 'landingPageURL' config parameter found, remove it and optionally overwrite the `logo.html` partial to provide a link if it should not point to the project's home page; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/4/#4-2-0" }}
+  {{- end }}
+  {{- $title := trim (.Site.Params.landingPageName | plainify) "\n\r\t " }}
+  {{- $pre := "" }}
+  {{- $post := "" }}
+  {{- if $title }}
+    {{- $escapedTitle := replaceRE `([\.+*?()|[\]{}^$\\])` "\\$1" $title }}
+    {{- $pre = (replaceRE (printf `%s.*` $escapedTitle) "" site.Params.landingPageName) | safeHTML }}
+    {{- $post = (replaceRE (printf `.*?%s` $escapedTitle) "" site.Params.landingPageName) | safeHTML }}
+  {{- else }}
+    {{- $title = T "home-button" }}
+    {{- $pre = `<i class="fa-fw fas fa-home"></i> ` | safeHTML }}
+  {{- end }}
+  {{- $defaultconfigentries = $defaultconfigentries | append
+    (dict "Menu" "" "Pre" $pre "Post" $post "Title" $title "PageRef" "/" )
+  }}
+{{- end }}
+{{- $defaultmenuconfigs = $defaultmenuconfigs | append
+  (dict "type" "menu" "identifier" "homelinks" "disableTitle" true "entries" (slice
+    (dict "Menu" "" "Children" $defaultconfigentries)
+  ))
+}}
+
+{{- $defaultmenuconfigs = $defaultmenuconfigs | append (dict "type" "divider") }}
+
+{{- $defaultconfigelements = $defaultconfigelements | append (dict "type" "versionswitcher") }}
+{{- $defaultmenuconfigs = $defaultmenuconfigs | append
+  (dict "type" "custom" "identifier" "headercontrols" "elements" $defaultconfigelements)
+}}
+
+{{- $defaultmenuconfigs = $defaultmenuconfigs | append (dict "type" "divider") }}
+
+{{- return $defaultmenuconfigs }}

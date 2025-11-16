@@ -1,0 +1,11 @@
+{{- $defaultmenuconfigs := slice }}
+
+{{- $defaultmenuconfigs = $defaultmenuconfigs | append
+  (dict "type" "page" "identifier" "main")
+}}
+
+{{- $defaultmenuconfigs = $defaultmenuconfigs | append
+  (dict "type" "menu" "identifier" "shortcuts" "disableTitle" site.Params.disableShortcutsTitle)
+}}
+
+{{- return $defaultmenuconfigs }}

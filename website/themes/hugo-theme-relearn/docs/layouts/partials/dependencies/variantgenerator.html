@@ -1,0 +1,18 @@
+{{- $page := .page }}
+{{- $location := .location }}
+{{- if eq $location "header" }}
+  {{- with $page }}
+    {{- $assetBusting := partialCached "assetbusting.gotmpl" . }}
+    {{- $minify := not hugo.IsServer }}
+    {{- if and (isset site.Params "minify") (ne site.Params.minify "") }}
+      {{- $minify = site.Params.minify }}
+    {{- end }}
+    {{- with resources.Get "/js/variant.js" }}
+      {{- $res := . }}
+      {{- if $minify }}
+        {{- $res = $res | minify }}
+      {{- end }}
+    <script src="{{ $res.RelPermalink }}{{ $assetBusting }}"></script>
+    {{- end }}
+  {{- end }}
+{{- end }}

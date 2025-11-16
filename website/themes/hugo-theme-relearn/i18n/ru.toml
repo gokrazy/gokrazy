@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Эта страница показывает версию {{.pageVersion.title}}. Актуальную версию можно найти <a href="{{.latestUrl}}">здесь</a>.'
+
+[Search]
+other = "Поиск"
+
+[Search-placeholder]
+other = "Поиск..."
+
+[Clear-search]
+other = "Очистить поиск"
+
+[No-results-found]
+other = "Ничего не найдено для \"{0}\""
+
+[N-results-found]
+other = "{1} результатов найдено для \"{0}\""
+
+[Clear-History]
+other = "Очистить историю"
+
+[Reset-view]
+other = "Вид на сброс"
+
+[View-reset]
+other = "Посмотреть сброс!"
+
+[Attachments-label]
+other = "Присоединенные файлы"
+
+[title-404]
+other = "Не обнаружено"
+
+[message-404]
+other = "Упс. Выглядит будто такой страницы нет ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Перейти на главную"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "редактировать"
+
+[Show-Markdown]
+other = "Показать Markdown"
+
+[Show-source]
+other = "Показать исходный код"
+
+[Print-this-chapter]
+other = "Печать всей главы"
+
+[More-action]
+other = "Еще"
+
+[shortcuts-menuTitle]
+other = "Еще"
+
+[Expand-title]
+other = "Развернуть..."
+
+[Navigation-toggle]
+other = "Меню"
+
+[Toc-toggle]
+other = "Оглавление"
+
+[Byte-symbol]
+other = "Б"
+
+[Kilobyte-symbol]
+other = "КБ"
+
+[Megabyte-symbol]
+other = "МБ"
+
+[caution]
+other = "Внимание"
+
+[important]
+other = "Важно"
+
+[info]
+other = "Информация"
+
+[note]
+other = "Заметка"
+
+[tip]
+other = "Совет"
+
+[warning]
+other = "Внимание"
+
+[Copy-to-clipboard]
+other = "Копировать текст в буфер обмена"
+
+[Copied-to-clipboard]
+other = "Текст скопирован в буфер обмена!"
+
+[Copy-link-to-clipboard]
+other = "Копировать ссылку в буфер обмена"
+
+[Link-copied-to-clipboard]
+other = "Ссылка скопирована в буфер обмена!"
+
+[Chapter]
+other = "Глава {{.}}"
+
+[Language]
+other = "Язык"
+
+[Theme]
+other = "Тема"
+
+[Submenu]
+other = "Подменю {{.}}"
+
+[Subsections]
+other = "Подразделы {{.}}"
+
+[tags]
+other = "Теги"
+
+[tag]
+other = "Tag"
+
+[categories]
+other = "Категории"
+
+[category]
+other = "Категория"
+
+[Details]
+other = "Подробности"
+
+[Version]
+other = "Версия"
+
+[Browser-unsupported-feature]
+other = "Этот браузер не поддерживает эту функцию"

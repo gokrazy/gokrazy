@@ -1,0 +1,17 @@
+{{- $pages := slice }}
+{{- range .Data.Terms }}
+  {{- $count := 0 }}
+  {{- range .Pages }}
+    {{- /* count pages of term */}}
+    {{- /* This wants to be partialCached but can't since Hugo 0.146.7 }}
+    {{- if and .Title .RelPermalink (or (ne .Site.Params.disableTagHiddenPages true) (not (partialCached "_relearn/pageIsHiddenSelfOrAncestor.gotmpl" (dict "page" . "to" .Site.Home) .Path .Site.Home.Path) ) ) */}}
+    {{- if and .Title .RelPermalink (or (ne .Site.Params.disableTagHiddenPages true) (not (partial "_relearn/pageIsHiddenSelfOrAncestor.gotmpl" (dict "page" . "to" .Site.Home) .Path .Site.Home.Path) ) ) }}
+      {{- $count = add $count 1 }}
+    {{- end }}
+  {{- end }}
+  {{- if $count }}
+    {{- $pages = $pages| append (dict "Title" (partial "title.gotmpl" (dict "page" .Page "linkTitle" true)) "Page" .Page "Count" $count )}}
+  {{- end }}
+{{- end }}
+{{- $pages = sort $pages ".Title" }}
+{{- return $pages }}

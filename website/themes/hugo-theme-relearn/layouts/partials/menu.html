@@ -1,0 +1,387 @@
+    {{- $showvisitedlinks := site.Params.showVisitedLinks }}
+    <aside id="R-sidebar" class="default-animation">
+      {{- $currentNode := . }}
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+{{ partial "logo.html" . }}
+        </div>
+      {{- partial "dependencies.html" (dict "page" . "location" "search") }}
+      </div>
+      <div id="R-homelinks" class="default-animation{{ if not .Site.Params.disableLandingPageButton }} homelinks{{ end }}">
+        {{- $menuconfigs := .Params.sidebarheadermenus | default site.Params.sidebarheadermenus }}
+        {{- if or (eq (printf "%T" $menuconfigs) "string") (eq (printf "%T" $menuconfigs) "<nil>") }}
+          {{- $menuconfigs = partialCached "_relearn/defaultSidebarHeader.gotmpl" . }}
+        {{- end }}
+        {{- partial "inline/menu" (dict "currentnode" $currentNode "configs" $menuconfigs "showvisitedlinks" false) }}
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        {{- $menuconfigs := .Params.sidebarmenus | default site.Params.sidebarmenus }}
+        {{- if or (eq (printf "%T" $menuconfigs) "string") (eq (printf "%T" $menuconfigs) "<nil>") }}
+          {{- $menuconfigs = partialCached "_relearn/defaultSidebar.gotmpl" . }}
+        {{- end }}
+        {{- partial "inline/menu" (dict "currentnode" $currentNode "configs" $menuconfigs "showvisitedlinks" $showvisitedlinks) }}
+        <div id="R-footer-margin"></div>
+        {{- $menuconfigs := .Params.sidebarfootermenus | default site.Params.sidebarfootermenus }}
+        {{- if or (eq (printf "%T" $menuconfigs) "string") (eq (printf "%T" $menuconfigs) "<nil>") }}
+          {{- $menuconfigs = partialCached "_relearn/defaultSidebarFooter.gotmpl" . }}
+        {{- end }}
+        {{- partial "inline/menu" (dict "currentnode" $currentNode "configs" $menuconfigs "showvisitedlinks" $showvisitedlinks) }}
+<div id="R-footer">{{ partial "menu-footer.html" . }}</div>
+      </div>
+    </aside>
+
+{{- define "partials/inline/menu" }}
+  {{- $currentNode := .currentnode }}
+  {{- $configs := .configs }}
+  {{- $showvisitedlinks := .showvisitedlinks }}
+  {{- range $configs }}
+    {{- $config := . }}
+    {{- if eq $config.type "page" }}
+      {{- partial "inline/page-tree" (dict "currentnode" $currentNode "config" $config "showvisitedlinks" $showvisitedlinks) }}
+    {{- else if eq $config.type "menu" }}
+      {{- partial "inline/menu-tree" (dict "currentnode" $currentNode "config" $config "showvisitedlinks" $showvisitedlinks "entries" ($config.entries | default (index site.Menus $config.identifier))) }}
+    {{- else if eq $config.type "custom" }}
+      {{- partial "inline/custom-list" (dict "currentnode" $currentNode "config" $config "elements" $config.elements) }}
+    {{- else if eq $config.type "divider" }}
+      {{- partial "inline/divider" (dict "currentnode" $currentNode "config" $config "elements" $config.elements) }}
+    {{- else }}
+      {{- warnf "WARNING: unknown menu type '%s' found in parameter 'sidebarmenus' for menu '%s'; use either 'page', 'menu', 'custom' or 'divider'" $config.type $config.identifier }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- define "partials/inline/page-tree" }}
+  {{- $currentNode := .currentnode }}
+  {{- $config := .config }}
+  {{- $showvisitedlinks := .showvisitedlinks }}
+        <div class="R-sidebarmenu R-shortcutmenu-{{ $config.identifier }}">
+  {{- $rootObject := site.Home }}
+  {{- if $config.pageRef }}
+    {{- $rootObject = partial "_relearn/refObject.gotmpl" (dict "page" $currentNode "objectRef" $config.pageRef) }}
+    {{- if not $rootObject }}
+      {{- $msg := printf "config option 'pageRef' %q for 'sidebarmenus' %q is not a page or a resource" $config.pageRef $config.identifier }}
+      {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" $config.pageRef "page" $currentNode "param" "link" "msg" $msg) }}
+    {{- end }}
+  {{- end }}
+  {{- $title := "" }}
+  {{- if and $rootObject (not ($config.disableTitle | default true)) }}
+    {{- $title = $rootObject.Params.menuTitle | default (T (print $config.identifier "-menuTitle")) }}
+  {{- end }}
+  {{- $entries := "" }}
+  {{- with $rootObject }}
+    {{- $entries = partialCached "_relearn/pages.gotmpl" (dict "page" .) .Path }}
+  {{- end }}
+  {{- with and $entries $title }}
+          <div class="nav-title padding">{{ . }}</div>
+  {{- end }}
+  {{- $classes := "space " }}
+  {{- if ($config.main | default true) }}
+    {{- $classes = "enlarge morespace " }}
+  {{- end }}
+          <ul class="{{ $classes }}collapsible-menu">
+  {{- with $rootObject }}
+    {{- $entry := . }}
+    {{- $defaultAlwaysopen := site.Params.alwaysopen | default false }}
+    {{- range $entries }}
+      {{- $isSubSelf := eq . $currentNode }}
+      {{- $isSubAncestor := and (not $isSubSelf) (.IsAncestor $currentNode) }}
+      {{- $isSubHidden := or (.Params.hidden) (eq .Title "") }}
+      {{- $isSubCollapsible := .Params.collapsibleMenu | default site.Params.collapsibleMenu }}
+      {{- if or $isSubSelf $isSubAncestor }}
+        {{- partial "inline/page-walker" (dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden) }}
+      {{- else if and (not $isSubHidden) (or $isSubCollapsible (not $entry.RelPermalink) (eq $entry $currentNode) ($entry.IsAncestor $currentNode)) }}
+        {{- $id := md5 .Path }}
+        {{- /* This wants to be partialCached but can't since Hugo 0.146.7 }}
+        {{- partialCached "inline/page-walker" (dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden) $id */}}
+        {{- partial "inline/page-walker" (dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden) $id }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+          </ul>
+        </div>
+{{- end }}
+{{- define "partials/inline/page-walker" }}
+  {{- $currentNode := .currentnode }}
+  {{- $showvisitedlinks := .showvisitedlinks }}
+  {{- $alwaysopen := .alwaysopen }}
+  {{- $isSelf := .isSelf }}
+  {{- $isAncestor := .isAncestor }}
+  {{- $isHidden := .isHidden }}
+  {{- with .sect }}
+    {{- $isActive := $isSelf }}
+    {{- $entry := . }}
+    {{- $entries := partialCached "_relearn/pages.gotmpl" (dict "page" .) .Path }}
+    {{- $hasVisibleChildren := false }}
+    {{- range $entries }}
+      {{- $isSubSelf := eq . $currentNode }}
+      {{- $isSubAncestor := and (not $isSubSelf) (.IsAncestor $currentNode) }}
+      {{- $isSubHidden := or (.Params.hidden) (eq .Title "") }}
+      {{- if or $isSubAncestor $isSubSelf (not $isSubHidden) }}
+        {{- $hasVisibleChildren = true }}
+        {{- break }}
+      {{- end }}
+    {{- end }}
+    {{- $title := partial "title.gotmpl" (dict "page" . "linkTitle" true) }}
+    {{- $url := partial "permalink.gotmpl" (dict "to" .) }}
+    {{- $isCrosslink := false }}
+    {{- if .Params.menuPageRef }}
+      {{- $isCrosslink = true }}
+      {{- $url = .Params.menuPageRef }}
+      {{- $linkObject := partial "_relearn/refObject.gotmpl" (dict "page" . "objectRef" .Params.menuPageRef) }}
+      {{- if $linkObject }}
+        {{- $url = partial "_relearn/decoratedLink.gotmpl" (dict "url" .Params.menuPageRef "page" . "linkObject" $linkObject "param" "link") }}
+      {{- end }}
+    {{- else if .Params.menuUrl }}
+      {{- $isCrosslink = true }}
+      {{- $url = .Params.menuUrl | relLangURL }}
+    {{- end }}
+    {{- $pre := partial "menu-pre.html" . }}
+    {{- $post := partial "menu-post.html" . }}
+    {{- if and $hasVisibleChildren (not $isCrosslink) }}
+      {{- $isCollapsible := .Params.collapsibleMenu | default site.Params.collapsibleMenu }}
+      {{- $currentAlwaysopen := .Params.alwaysopen | default $alwaysopen }}
+      {{- if and (not $url) (not $isCollapsible) }}
+        {{- $currentAlwaysopen = true }}
+      {{- end }}
+      {{- $entryId := md5 .Path }}
+      {{- $isOpen := or $currentAlwaysopen $isSelf $isAncestor }}
+            <li class="{{if $isActive }}active {{end}}{{if (or $isSelf $isAncestor) }}parent {{end}}{{if $isHidden }}hidden {{end}}{{if not $url }}headless {{end}}{{if $currentAlwaysopen}}alwaysopen {{end}}" data-nav-url="{{ $url }}">
+      {{- if $isCollapsible }}<input type="checkbox" id="R-section-{{ $entryId }}" aria-controls="R-subsections-{{ $entryId }}"{{ if $isOpen }} checked{{ end }}><label for="R-section-{{ $entryId }}"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">{{ T "Submenu" $title }}</span></label>{{ end }}
+      {{- if $url }}
+        {{- $attributes := partial "_relearn/linkAttributes.gotmpl" (dict "url" $url "page" $currentNode "attributes" (dict "class" "padding")) -}}
+        <a
+          {{- range $k, $v := $attributes }}
+            {{- if $v }}
+              {{- if eq (printf "%T" $v) "bool" }}
+                {{- printf " %s" $k | safeHTMLAttr }}
+              {{- else }}
+                {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+              {{- end }}
+            {{- end }}
+          {{- end }}>
+      {{- else -}}
+        <span class="padding">
+      {{- end }}
+      {{- $pre }}{{ $title }}{{ $post }}
+      {{- if $url }}{{ if $showvisitedlinks }}<i class="fa-fw fas fa-check read-icon"></i>{{ end }}</a>{{ else }}</span>{{ end }}<ul id="R-subsections-{{ $entryId }}" class="collapsible-menu">
+      {{- $defaultAlwaysopen := site.Params.alwaysopen | default true }}
+      {{- range $entries }}
+        {{- $isSubSelf := eq . $currentNode }}
+        {{- $isSubAncestor := and (not $isSubSelf) (.IsAncestor $currentNode) }}
+        {{- $isSubHidden := or (.Params.hidden) (eq .Title "") }}
+        {{- $isSubCollapsible := .Params.collapsibleMenu | default site.Params.collapsibleMenu }}
+        {{- if or $isSubSelf $isSubAncestor }}
+          {{- partial "inline/page-walker" (dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden) }}
+        {{- else if and (not $isSubHidden) (or $isSubCollapsible (not $entry.RelPermalink) (eq $entry $currentNode) ($entry.IsAncestor $currentNode)) }}
+          {{- $id := md5 .Path }}
+          {{- /* This wants to be partialCached but can't since Hugo 0.146.7 }}
+          {{- partialCached "inline/page-walker" (dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden) $id */}}
+          {{- partial "inline/page-walker" (dict "sect" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden) $id }}
+        {{- end }}
+      {{- end }}</ul></li>
+    {{- else if $url }}
+            <li class="{{if $isActive }}active {{end}}{{if $isHidden }}hidden {{end}}{{if not $url }}headless {{end}}{{if $isCrosslink }}crosslink {{end}}" data-nav-url="{{ $url }}">
+      {{- if $url }}
+        {{- $attributes := partial "_relearn/linkAttributes.gotmpl" (dict "url" $url "page" $currentNode "attributes" (dict "class" "padding")) -}}
+        <a
+          {{- range $k, $v := $attributes }}
+            {{- if $v }}
+              {{- if eq (printf "%T" $v) "bool" }}
+                {{- printf " %s" $k | safeHTMLAttr }}
+              {{- else }}
+                {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+              {{- end }}
+            {{- end }}
+          {{- end }}>
+      {{- else -}}
+        <span class="padding">
+      {{- end }}
+      {{- $pre }}{{ $title }}{{ $post }}
+      {{- if $url }}{{ if $showvisitedlinks }}<i class="fa-fw fas fa-check read-icon"></i>{{ end }}</a>{{ else }}</span>{{ end }}</li>
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- define "partials/inline/menu-tree" }}
+  {{- $currentNode := .currentnode }}
+  {{- $config := .config }}
+  {{- $showvisitedlinks := .showvisitedlinks }}
+        <div class="R-sidebarmenu R-shortcutmenu-{{ $config.identifier }}">
+  {{- $topLevelMenu := "" }}
+  {{- $topLevelObject := "" }}
+  {{- $entries := .entries | default "" }}
+  {{- with and $entries (eq (len $entries) 1) (index $entries 0) }}
+    {{- if and (not .PageRef) (not .URL) }}
+      {{- /* because in Hugo menus can not have parameter but menu entries can,
+        we can flag a single top level menu entry as a container; this container
+        entry carrys just meta information and parameter, uses its children
+        to build the "real" menu, and has no own `url` or `pageRef` */}}
+      {{- $topLevelMenu = . }}
+      {{- $topLevelObject = partial "_relearn/menuObject.gotmpl" (dict "page" $currentNode "menu" $topLevelMenu) }}
+      {{- $entries = .Children }}
+    {{- end }}
+  {{- end }}
+  {{- $title := "" }}
+  {{- if not ($config.disableTitle | default false) }}
+    {{- if $topLevelMenu }}
+      {{- $title = partial "_relearn/menuTitle.gotmpl" (dict "page" $currentNode "menu" $topLevelMenu) }}
+    {{- else }}
+      {{- $title = T (print $config.identifier "-menuTitle") }}
+    {{- end }}
+  {{- end }}
+  {{- with and $entries $title }}
+          <div class="nav-title padding">{{ . }}</div>
+  {{- end }}
+  {{- $classes := "space " }}
+  {{- if ($config.main | default false) }}
+    {{- $classes = "enlarge morespace " }}
+  {{- end }}
+          <ul class="{{ $classes }}collapsible-menu">
+  {{- with $entries }}
+    {{- $entries := . }}
+    {{- $root := or $topLevelMenu site }}
+    {{- $defaultAlwaysopen := site.Params.alwaysopen | default false }}
+    {{- range $entries }}
+      {{- $entriesObject := partial "_relearn/menuObject.gotmpl" (dict "page" $currentNode "menu" .) }}
+      {{- $isSubSelf := eq $entriesObject $currentNode }}
+      {{- $isSubAncestor := and (not $isSubSelf) .Menu ($currentNode.HasMenuCurrent .Menu .) }}
+      {{- $isSubHidden := or (.Params.hidden) (eq (partial "_relearn/menuTitle.gotmpl" (dict "page" $currentNode "menu" .)) "") }}
+      {{- $isSubCollapsible := .Params.collapsibleMenu | default $root.Params.collapsibleMenu | default site.Params.collapsibleMenu }}
+      {{- if or $isSubSelf $isSubAncestor }}
+        {{- partial "inline/menu-walker" (dict "menu" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden "root" $root) }}
+      {{- else if and (not $isSubHidden) (or $isSubCollapsible (not (partial "_relearn/menuPermalink.gotmpl" (dict "page" $currentNode "menu" $topLevelMenu))) (eq $topLevelObject $currentNode) (and $topLevelMenu ($currentNode.HasMenuCurrent $topLevelMenu.Menu $topLevelMenu))) }}
+        {{- $id := md5 (print .) }}
+        {{- /* This wants to be partialCached but can't since Hugo 0.146.7 }}
+        {{- partialCached "inline/menu-walker" (dict "menu" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden "root" $root) $id */}}
+        {{- partial "inline/menu-walker" (dict "menu" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden "root" $root) $id }}
+      {{- end }}
+    {{- end }}
+  {{- else }}
+    {{- if and (not (isset $config "entries")) (ne $config.identifier "shortcuts") }}
+      {{- $msg := printf "config option 'identifier' for 'sidebarmenus' %q is not a menu" $config.identifier }}
+      {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" $config.pageRef "page" $currentNode "param" "link" "msg" $msg "applyErrorIgnore" false) }}
+    {{- end }}
+  {{- end }}
+          </ul>
+        </div>
+{{- end }}
+{{- define "partials/inline/menu-walker" }}
+  {{- $currentNode := .currentnode }}
+  {{- $showvisitedlinks := .showvisitedlinks }}
+  {{- $alwaysopen := .alwaysopen }}
+  {{- $isSelf := .isSelf }}
+  {{- $isAncestor := .isAncestor }}
+  {{- $isHidden := .isHidden }}
+  {{- $root := .root }}
+  {{- with .menu }}
+    {{- $isActive := $isSelf }}
+    {{- $entryMenu := . }}
+    {{- $entryObject := partial "_relearn/menuObject.gotmpl" (dict "page" $currentNode "menu" $entryMenu) }}
+    {{- $entries := .Children }}
+    {{- $hasVisibleChildren := false }}
+    {{- range $entries }}
+      {{- $entriesObject := partial "_relearn/menuObject.gotmpl" (dict "page" $currentNode "menu" .) }}
+      {{- $isSubSelf := eq $entriesObject $currentNode }}
+      {{- $isSubAncestor := and (not $isSubSelf) ($currentNode.HasMenuCurrent .Menu .) }}
+      {{- $isSubHidden := or (.Params.hidden) (eq (partial "_relearn/menuTitle.gotmpl" (dict "page" $currentNode "menu" .)) "") }}
+      {{- if or $isSubAncestor $isSubSelf (not $isSubHidden) }}
+        {{- $hasVisibleChildren = true }}
+        {{- break }}
+      {{- end }}
+    {{- end }}
+    {{- $title := partial "_relearn/menuTitle.gotmpl" (dict "page" $currentNode "menu" .) }}
+    {{- $url := partial "_relearn/menuPermalink.gotmpl" (dict "page" $currentNode "menu" .) }}
+    {{- $pre := .Pre }}
+    {{- $post := .Post }}
+    {{- with $entryObject }}
+      {{- $pre = or $pre (partial "menu-pre.html" .) }}
+      {{- $post = or $post (partial "menu-post.html" .) }}
+    {{- end }}
+    {{- if $hasVisibleChildren }}
+      {{- $isCollapsible := .Params.collapsibleMenu | default $root.Params.collapsibleMenu | default site.Params.collapsibleMenu }}
+      {{- $currentAlwaysopen := .Params.alwaysopen | default $root.Params.alwaysopen | default $alwaysopen }}
+      {{- if and (not $url) (not $isCollapsible) }}
+        {{- $currentAlwaysopen = true }}
+      {{- end }}
+      {{- $entryId := md5 (or $entryMenu.KeyName $entryMenu.Identifier $entryMenu.Name $entryMenu.Title) }}
+      {{- $isOpen := or $currentAlwaysopen $isSelf $isAncestor }}
+            <li class="{{if $isActive }}active {{end}}{{if (or $isSelf $isAncestor) }}parent {{end}}{{if $isHidden }}hidden {{end}}{{if not $url }}headless {{end}}{{if $currentAlwaysopen}}alwaysopen {{end}}" data-nav-url="{{ $url }}">
+      {{- if $isCollapsible }}<input type="checkbox" id="R-section-{{ $entryId }}" aria-controls="R-subsections-{{ $entryId }}"{{ if $isOpen }} checked{{ end }}><label for="R-section-{{ $entryId }}"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">{{ T "Submenu" $title }}</span></label>{{ end }}
+      {{- if $url }}
+        {{- $attributes := partial "_relearn/linkAttributes.gotmpl" (dict "url" $url "page" $currentNode "attributes" (dict "class" "padding")) -}}
+        <a
+          {{- range $k, $v := $attributes }}
+            {{- if $v }}
+              {{- if eq (printf "%T" $v) "bool" }}
+                {{- printf " %s" $k | safeHTMLAttr }}
+              {{- else }}
+                {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+              {{- end }}
+            {{- end }}
+          {{- end }}>
+      {{- else -}}
+        <span class="padding">
+      {{- end }}
+      {{- $pre }}{{ $title }}{{ $post }}
+      {{- if $url }}{{ if $showvisitedlinks }}<i class="fa-fw fas fa-check read-icon"></i>{{ end }}</a>{{ else }}</span>{{ end }}<ul id="R-subsections-{{ $entryId }}" class="collapsible-menu">
+      {{- $defaultAlwaysopen := site.Params.alwaysopen | default true }}
+      {{- range $entries }}
+        {{- $entriesObject := partial "_relearn/menuObject.gotmpl" (dict "page" $currentNode "menu" .) }}
+        {{- $isSubSelf := eq $entriesObject $currentNode }}
+        {{- $isSubAncestor := and (not $isSubSelf) .Menu ($currentNode.HasMenuCurrent .Menu .) }}
+        {{- $isSubHidden := or (.Params.hidden) (eq (partial "_relearn/menuTitle.gotmpl" (dict "page" $currentNode "menu" .)) "") }}
+        {{- $isSubCollapsible := .Params.collapsibleMenu | default $root.Params.collapsibleMenu | default site.Params.collapsibleMenu }}
+        {{- if or $isSubSelf $isSubAncestor }}
+          {{- partial "inline/menu-walker" (dict "menu" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden "root" $root) }}
+        {{- else if and (not $isSubHidden) (or $isSubCollapsible (not (partial "_relearn/menuPermalink.gotmpl" (dict "page" $currentNode "menu" $entryMenu))) (eq $entryObject $currentNode) ($currentNode.HasMenuCurrent $entryMenu.Menu $entryMenu)) }}
+          {{- $id := md5 (print .) }}
+          {{- /* This wants to be partialCached but can't since Hugo 0.146.7 }}
+          {{- partialCached "inline/menu-walker" (dict "menu" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden "root" $root) $id */}}
+          {{- partial "inline/menu-walker" (dict "menu" . "currentnode" $currentNode "showvisitedlinks" $showvisitedlinks "alwaysopen" $defaultAlwaysopen "isSelf" $isSubSelf "isAncestor" $isSubAncestor "isHidden" $isSubHidden "root" $root) $id }}
+        {{- end }}
+      {{- end }}</ul></li>
+    {{- else if $url }}
+            <li class="{{if $isActive }}active {{end}}{{if $isHidden }}hidden {{end}}{{if not $url }}headless {{end}}" data-nav-url="{{ $url }}">
+      {{- if $url }}
+        {{- $attributes := partial "_relearn/linkAttributes.gotmpl" (dict "url" $url "page" $currentNode "attributes" (dict "class" "padding")) -}}
+        <a
+          {{- range $k, $v := $attributes }}
+            {{- if $v }}
+              {{- if eq (printf "%T" $v) "bool" }}
+                {{- printf " %s" $k | safeHTMLAttr }}
+              {{- else }}
+                {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+              {{- end }}
+            {{- end }}
+          {{- end }}>
+      {{- else -}}
+        <span class="padding">
+      {{- end }}
+      {{- $pre }}{{ $title }}{{ $post }}
+      {{- if $url }}{{ if $showvisitedlinks }}<i class="fa-fw fas fa-check read-icon"></i>{{ end }}</a>{{ else }}</span>{{ end }}</li>
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- define "partials/inline/custom-list" }}
+  {{- $currentNode := .currentnode }}
+  {{- $config := .config }}
+        <div class="R-sidebarmenu R-shortcutmenu-{{ $config.identifier }}">
+  {{- $classes := "" }}
+  {{- if ($config.main | default false) }}
+    {{- $classes = "space" }}
+  {{- end }}
+          <ul class="{{ $classes }}">
+  {{- range .elements }}
+    {{- partial (printf "sidebar/element/%s.html" .type) (dict "page" $currentNode "config" $config "element" .) }}
+  {{- end }}
+          </ul>
+        </div>
+{{- end }}
+
+{{- define "partials/inline/divider" }}
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+{{- end }}

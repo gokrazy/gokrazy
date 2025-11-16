@@ -1,0 +1,11 @@
+{{- $page := .page }}
+{{- $location := .location }}
+
+{{- if eq $location "header" }}
+  {{- with $page }}
+    {{- range resources.Match "/js/orama/**" }}
+      {{- /* the following code causes Hugo to generate our file in public */}}
+      {{- $url := .RelPermalink }}
+    {{- end }}
+  {{- end }}
+{{- end }}

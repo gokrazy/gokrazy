@@ -1,0 +1,54 @@
+[module]
+  [module.hugoVersion]
+    min = '0.141.0'
+
+[mediaTypes]
+  [mediaTypes.'text/javascript']
+    suffixes = ['js']
+
+[outputFormats]
+  [outputFormats.print]
+    name= 'print'
+    baseName = 'index.print'
+    isHTML = true
+    mediaType = 'text/html'
+    permalinkable = false
+    noUgly = true
+
+  [outputFormats.source]
+    name= 'source'
+    baseName = 'index.source'
+    isHTML = false
+    mediaType = 'text/markdown'
+    permalinkable = false
+    noUgly = true
+
+  # unused since 7.0.0 but left in here to generate warnings
+  [outputFormats.search]
+    name= 'search'
+    baseName = 'index.searchindex'
+    isHTML = true
+    mediaType = 'text/html'
+    permalinkable = false
+    noUgly = true
+
+  # unused since 7.0.0 but left in here to generate warnings
+  [outputFormats.searchpage]
+    name= 'searchpage'
+    baseName = 'index.searchpage'
+    isHTML = true
+    mediaType = 'text/html'
+    permalinkable = false
+    noUgly = true
+
+[params.relearn.dependencies]
+  [params.relearn.dependencies.math]
+    name = 'Math'
+  [params.relearn.dependencies.mermaid]
+    name = 'Mermaid'
+  [params.relearn.dependencies.openapi]
+    name = 'OpenApi'
+  [params.relearn.dependencies.search]
+    name = 'Search'
+  [params.relearn.dependencies.theme]
+    name = 'Theme'

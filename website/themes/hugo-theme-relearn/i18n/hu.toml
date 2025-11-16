@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Ez az oldal a {{.pageVersion.title}} verziót mutatja. Az aktuális verzió megtalálható <a href="{{.latestUrl}}">itt</a>.'
+
+[Search]
+other = "Keresés"
+
+[Search-placeholder]
+other = "Keresés..."
+
+[No-results-found]
+other = "Nincs találat a(z) \"{0}\" kifejezésre"
+
+[N-results-found]
+other = "{1} találat a(z) \"{0}\" kifejezésre"
+
+[Clear-History]
+other = "Előzmények törlése"
+
+[Reset-view]
+other = "Nézet visszaállítása"
+
+[View-reset]
+other = "Visszaállítás megtekintése!"
+
+[Clear-search]
+other = "Keresések törlése"
+
+[Attachments-label]
+other = "Csatolmányok"
+
+[title-404]
+other = "Az oldal nem található"
+
+[message-404]
+other = "Hoppá. Úgy tűnik, hogy ez az oldal nem létezik ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Menj a kezdőlapra"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "Szerkesztés"
+
+[Show-Markdown]
+other = "Markdown megjelenítése"
+
+[Show-source]
+other = "Forráskód megjelenítése"
+
+[Print-this-chapter]
+other = "Teljes fejezet nyomtatása"
+
+[More-action]
+other = "Egyebek"
+
+[shortcuts-menuTitle]
+other = "Egyebek"
+
+[Expand-title]
+other = "Nyiss ki..."
+
+[Navigation-toggle]
+other = "Menü"
+
+[Toc-toggle]
+other = "Tartalomjegyzék"
+
+[Byte-symbol]
+other = "B"
+
+[Kilobyte-symbol]
+other = "KB"
+
+[Megabyte-symbol]
+other = "MB"
+
+[caution]
+other = "Vigyázat"
+
+[important]
+other = "Fontos"
+
+[info]
+other = "Infó"
+
+[note]
+other = "Jegyzet"
+
+[tip]
+other = "Tipp"
+
+[warning]
+other = "Figyelem"
+
+[Copy-to-clipboard]
+other = "Szöveg vágólapra másolása"
+
+[Copied-to-clipboard]
+other = "Szöveg vágólapra másolva!"
+
+[Copy-link-to-clipboard]
+other = "Link vágólapra másolása"
+
+[Link-copied-to-clipboard]
+other = "Link vágólapra másolva!"
+
+[Chapter]
+other = "{{.}} fejezet"
+
+[Language]
+other = "Nyelv"
+
+[Theme]
+other = "Téma"
+
+[Submenu]
+other = "{{.}} almenü"
+
+[Subsections]
+other = "{{.}} alszekciói"
+
+[tags]
+other = "Címkék"
+
+[tag]
+other = "Címke"
+
+[categories]
+other = "Kategóriák"
+
+[category]
+other = "Kategória"
+
+[Details]
+other = "Részletek"
+
+[Version]
+other = "Verzió"
+
+[Browser-unsupported-feature]
+other = "Ez a böngésző nem támogatja ezt a funkciót"

@@ -1,0 +1,17 @@
+
+<article>
+  <header class="headline">
+  </header>
+
+{{- $title := partial "title.gotmpl" (dict "page" .) }}
+<h1 id="{{ $title | plainify | anchorize }}">{{ $title }}</h1>
+{{- /* Make it compatible with Hugo 0.146.0 or newer - Don't ask... https://discourse.gohugo.io/t/terms-using-taxonomy-templates-for-html-since-0-146/54317 */}}
+{{- if eq .Kind "term" }}
+{{ partial "shortcodes/term.html" (dict "page" . "term" .) }}
+{{- else }}
+{{ partial "shortcodes/taxonomy.html" (dict "page" . "taxonomy" .) }}
+{{- end }}
+
+  <footer class="footline">
+  </footer>
+</article>

@@ -1,0 +1,30 @@
+# theme-specific options;
+# for a detailed explanation and many more options see
+# https://mcshelby.github.io/hugo-theme-relearn/configuration/reference/index.html#annotated-configuration-options
+
+# recommended theme parameter
+author.name = 'Captain Hugo'
+
+urlExternalCheck = true
+include.errorlevel = 'warning'
+image.errorlevel = 'warning'
+externalLinkTarget = '_self'
+link.errorlevel = 'warning'
+openapi.errorlevel = 'warning'
+
+# specific image effect for this showcase;
+imageEffects.purple = false
+
+# specific variant parameter for this showcase; you have the choice
+# between many more predefined variants and even can configure your own;
+# see the themes documentation
+[[themeVariant]]
+  identifier = 'auto'
+  name = 'Auto'
+  auto = [ 'learn', 'neon' ]
+[[themeVariant]]
+  identifier = 'neon'
+  name = 'Dark'
+[[themeVariant]]
+  identifier = 'learn'
+  name = 'Light'

@@ -1,0 +1,19 @@
+{{- /* based on Hugo 0.125.5 sitemap.xml */}}
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?>" | safeHTML }}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+{{- range where .Pages "Sitemap.Disable" "ne" true }}
+  {{- if partial "_relearn/pageIsSpecial.gotmpl" . }}
+  {{- /* This wants to be partialCached but can't since Hugo 0.146.7 }}
+  {{- else if and .Title .RelPermalink (or (ne .Site.Params.disableSeoHiddenPages true) (not (partialCached "_relearn/pageIsHiddenSelfOrAncestor.gotmpl" (dict "page" . "to" .Site.Home) .Path .Site.Home.Path) ) ) */}}
+  {{- else if and .Title .RelPermalink (or (ne .Site.Params.disableSeoHiddenPages true) (not (partial "_relearn/pageIsHiddenSelfOrAncestor.gotmpl" (dict "page" . "to" .Site.Home) .Path .Site.Home.Path) ) ) }}
+  <url>
+    <loc>{{ partial "permalink.gotmpl" (dict "to" . "abs" true) }}</loc>{{ if not .Lastmod.IsZero }}
+    <lastmod>{{ safeHTML ( .Lastmod.Format "2006-01-02T15:04:05-07:00" ) }}</lastmod>{{ end }}{{ with .Sitemap.ChangeFreq }}
+    <changefreq>{{ . }}</changefreq>{{ end }}{{ if ge .Sitemap.Priority 0.0 }}
+    <priority>{{ .Sitemap.Priority }}</priority>{{ end }}{{ if .IsTranslated }}{{ range $index, $trans := .AllTranslations }}{{- if eq $index 0 }}
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ partial "permalink.gotmpl" (dict "to" . "abs" true) }}" />{{ end }}
+    <xhtml:link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ partial "permalink.gotmpl" (dict "to" . "abs" true) }}" />{{ end }}{{ end }}
+  </url>
+  {{- end -}}
+{{- end }}
+</urlset>

@@ -1,0 +1,36 @@
+{{- $LastModifierDisplayName := "" }}
+{{- $LastModifierEmail := "" }}
+{{- $Date := "" }}
+{{- $dateFormat := site.Params.dateFormat | default ":date_medium" }}
+{{- with .GitInfo }}
+  {{- with and (not site.Params.hideAuthorName) .AuthorName }}
+    {{- $LastModifierDisplayName = . }}
+  {{- end }}
+  {{- with and (not site.Params.hideAuthorEmail) .AuthorEmail }}
+    {{- $LastModifierEmail = . }}
+  {{- end }}
+  {{- with and (not site.Params.hideAuthorDate) .AuthorDate }}
+    {{- $Date = . | time.Format $dateFormat }}
+  {{- end }}
+{{- else }}
+  {{- with and (not site.Params.hideAuthorName) .Params.LastModifierDisplayName }}
+    {{- $LastModifierDisplayName = . }}
+  {{- end }}
+  {{- with and (not site.Params.hideAuthorEmail) .Params.LastModifierEmail }}
+    {{- $LastModifierEmail = . }}
+  {{- end }}
+  {{- with and (not site.Params.hideAuthorDate) .Date }}
+    {{- $Date = . | time.Format $dateFormat }}
+  {{- end }}
+{{- end }}
+{{- if $LastModifierDisplayName }}
+              <i class='fa-fw fas fa-user'></i> {{ with $LastModifierEmail }}<a href="mailto:{{ . }}">{{ end }}{{ $LastModifierDisplayName }}{{ with $LastModifierEmail }}</a>{{ end }}
+{{- end }}
+{{- with $Date }}
+              <i class='fa-fw fas fa-calendar'></i> {{ . }}
+{{- end }}
+{{- partial "term-list.html" (dict
+  "page" .
+  "taxonomy" "categories"
+  "icon" "layer-group"
+) }}

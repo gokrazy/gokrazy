@@ -1,0 +1,25 @@
+# This configuration file disables all performance intensive features.
+
+# To use run `hugo -e performance` or `hugo server -e performance` from the `exampleSite` directory
+
+# The Piratish pages are slow due to the mechanism used to autotranslate
+# the original english content via the piratify shortcode. This is
+# only an issue with this showcase as your site should have no piratish
+# translations.
+disableLanguages = ['pir']
+
+# Usually the docs are built with the addition of the Relearn print
+# format. This can get costly for many pages and/or deeply nested sites.
+[outputs]
+  home = ['html', 'rss']
+  section = ['html', 'rss']
+  page = ['html']
+
+[params]
+  # Generation of the search index is costly as all pages are indexed
+  # in a single file. Luckily due to caching, this is only done once
+  # per configured language.
+  disableSearch = true
+
+  # This option can have a major impact if you have many pages.
+  collapsibleMenu = false

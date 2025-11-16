@@ -1,0 +1,64 @@
+{{- $linkObject := "" }}
+{{- $u := urls.Parse .url }}
+{{- $path := strings.TrimPrefix "./" $u.Path }}
+{{- $searchLocal := .searchLocal | default true }}
+{{- $searchGlobal := .searchGlobal | default true }}
+{{- $searchPage := .searchPage | default true }}
+{{- $searchResource := .searchResource | default true }}
+{{- $site := .page.Site }}
+{{- $page := .page }}
+{{- $transSite := "" }}
+{{- $transPage := "" }}
+{{- $lang := $u.Query.Get "lang" }}
+{{- if and $site.Params.enableLegacyLanguageLinks (not $lang) }}
+  {{- /* is it a legacy link into another translation? */}}
+  {{- if strings.HasPrefix $path "/" }}
+    {{- range $site.Sites }}
+      {{- $lang = .Language.Lang }}
+      {{- $prefix := printf "/%s" $lang }}
+      {{- $suffix := strings.TrimPrefix $prefix $path | default "/" }}
+      {{- /* with the second check we check if the prefix was finished;
+        eg. /pir/index.html vs. /pirate/index.html, were the latter is
+        an external address outside of this site */}}
+      {{- if and (strings.HasPrefix $path $prefix) (strings.HasPrefix $suffix "/") }}
+        {{- $path = $suffix }}
+        {{- $transSite = . }}
+        {{- $transPage = $transSite.GetPage $page.Path }}
+        {{- break }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- if not $transSite }}
+    {{- $lang = $site.Language.Lang }}
+    {{- $transSite = $site }}
+    {{- $transPage = $page }}
+  {{- end }}
+{{- else if $lang }}
+  {{- with where $site.Sites "Language.Lang" "eq" $lang }}
+    {{- with index . 0 }}
+      {{- $transSite = . }}
+      {{- $transPage = $transSite.GetPage $page.Path }}
+    {{- end }}
+  {{- end }}
+{{- else }}
+  {{- $lang = $site.Language.Lang }}
+  {{- $transSite = $site }}
+  {{- $transPage = $page }}
+{{- end }}
+{{- if $transSite }}
+  {{- if $path }}
+    {{- with or
+      (and $searchLocal $searchPage $transPage ($transPage.GetPage $path))
+      (and $searchLocal $searchPage $transPage ($transPage.GetPage (strings.TrimRight "/" $path)))
+      (and $searchGlobal $searchPage ($transSite.GetPage $path))
+      (and $searchGlobal $searchPage ($transSite.GetPage (strings.TrimRight "/" $path)))
+      (and $searchLocal $searchResource $transPage ($transPage.Resources.Get $path))
+      (and $searchGlobal $searchResource (resources.Get $path))
+    }}
+      {{- $linkObject = . }}
+    {{- end }}
+  {{- else if $searchPage }}
+    {{- $linkObject = $transPage }}
+  {{- end }}
+{{- end }}
+{{- return $linkObject }}

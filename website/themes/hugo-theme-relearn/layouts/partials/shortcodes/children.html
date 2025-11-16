@@ -1,0 +1,131 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'children' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $type := .type | default "tree" }}
+{{- $showhidden := .showhidden | default false }}
+{{- if eq (printf "%T" $showhidden) "string" }}
+  {{- $showhidden = (eq $showhidden "true") }}
+{{- end }}
+{{- $depth := .depth | default 1 }}
+{{- $withDescription := .description | default false }}
+{{- if eq (printf "%T" $withDescription) "string" }}
+  {{- $withDescription = (eq $withDescription "true") }}
+{{- end }}
+{{- $sortTerm := .sort | lower }}
+{{- $cardtemplate := .cardtemplate | default "default" }}
+{{- if or .containerstyle .style }}
+  {{- if or (eq .containerstyle "ul") (eq .style "li") }}
+    {{- $type = "tree" }}
+  {{- else if hasPrefix .style "h" }}
+    {{- $type = "list" }}
+  {{- else }}
+    {{- $type = "flat" }}
+  {{- end }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'containerstyle' or 'style' for shortcode 'children' found, use 'type=%s' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/8/#8-1-0" $filepath $type }}
+{{- end }}
+{{- $style := "div" }}
+{{- $containerstyle := "div" }}
+{{- if eq $type "tree" }}
+  {{- $style = "li" }}
+  {{- $containerstyle = "ul" }}
+{{- end }}
+
+{{- with $page -}}
+{{ (printf "<%s class=\"children children-type-%s children-sort-%s\">" $containerstyle $type $sortTerm)|safeHTML }}
+  {{- $pages := partial "_relearn/pages.gotmpl" (dict "page" . "by" $sortTerm) }}
+  {{- if eq $type "card" }}
+    {{- $cards := slice }}
+    {{- range $pages }}
+      {{- $hidden := and (or (.Params.hidden) (eq .Title "")) (not $showhidden) }}
+      {{- if not $hidden }}
+        {{- $cardimage := "" }}
+        {{- if .Params.featured_image }}
+          {{- $cardimage = .Params.featured_image }}
+        {{- else if .Params.image }}
+          {{- $cardimage = .Params.image }}
+        {{- else if .Params.banner }}
+          {{- $cardimage = .Params.banner }}
+        {{- else }}
+          {{- if .BundleType }}
+            {{- range .Resources.ByType "image" }}
+              {{- if or
+                (eq .Name "featured.webp") (eq .Name "featured.png") (eq .Name "featured.jpg") (eq .Name "featured.jpeg")
+                (eq .Name "cover.webp") (eq .Name "cover.png") (eq .Name "cover.jpg") (eq .Name "cover.jpeg")
+                (eq .Name "image.webp") (eq .Name "image.png") (eq .Name "image.jpg") (eq .Name "image.jpeg")
+              }}
+                {{- $cardimage = printf "%s" .}}
+                {{- break }}
+              {{- end }}
+            {{- end }}
+            {{- if not $cardimage }}
+              {{- with index (.Resources.ByType "image") 0 }}
+                {{- $cardimage = printf "%s" .}}
+             {{- end }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- $cards = $cards | append (dict
+          "content"  (cond $withDescription (or .Description .Summary | plainify) "")
+          "href"     .Path
+          "image"    $cardimage
+          "title"    .LinkTitle
+          "template" $cardtemplate
+          "params"   (dict
+            "page"        .
+            "depth"       $depth
+            "description" $withDescription
+            "showhidden"  $showhidden
+            "sort"        $sortTerm
+          )
+        ) }}
+      {{- end }}
+    {{- end }}
+    {{- partial "shortcodes/cards.html" (dict
+      "page"     .
+      "content"  $cards
+    ) }}
+  {{- else }}
+    {{- partial "inline/childs" (dict "menu" $pages "containerstyle" $containerstyle "style" $style "showhidden" $showhidden "count" 1 "depth" $depth "pages" .Site.Pages "description" $withDescription "sortTerm" $sortTerm "page" .) }}
+  {{- end }}
+{{ (printf "</%s>" $containerstyle)|safeHTML }}
+{{- end }}
+
+{{- define "partials/inline/childs" }}
+  {{- $page := .page }}
+  {{- range .menu }}
+    {{- $hidden := and (or (.Params.hidden) (eq .Title "")) (not $.showhidden) }}
+    {{- if not $hidden }}
+      {{- if not .IsHome }}
+        {{- if eq $.style "li" }}
+{{ (printf `  <%s class="children-title children-title-%d">` $.style (math.Min $.count 5 | int))|safeHTML }}{{ if .RelPermalink }}<a href="{{ partial "permalink.gotmpl" (dict "to" .) }}">{{ .LinkTitle }}</a>{{ else }}<span>{{ .LinkTitle }}</span>{{ end }}
+        {{- else }}
+{{ (printf `  <%s class="children-title children-title-%d">` $.style (math.Min $.count 5 | int))|safeHTML }}{{ if .RelPermalink }}<a href="{{ partial "permalink.gotmpl" (dict "to" .) }}">{{ .LinkTitle }}</a>{{ else }}<span>{{ .LinkTitle }}</span>{{ end }}{{ (printf "</%s>" $.style)|safeHTML }}
+        {{- end }}
+        {{- if $.description }}
+          {{- with or .Description .Summary | plainify -}}
+<p>{{ . }}</p>
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- if lt $.count $.depth }}
+        {{- if eq $.style "li" }}
+{{- (printf "<%s>" $.containerstyle)|safeHTML }}
+        {{- end }}
+        {{- $pages := partial "_relearn/pages.gotmpl" (dict "page" . "by" $.sortTerm) }}
+        {{- partial "inline/childs" (dict "menu" $pages "containerstyle" $.containerstyle "style" $.style "showhidden" $.showhidden "count" (add $.count 1) "depth" $.depth "pages" $.pages "description" $.description "sortTerm" $.sortTerm "page" $page) }}
+        {{- if eq $.style "li" }}
+{{- (printf "</%s>" $.containerstyle)|safeHTML }}
+        {{- end }}
+      {{- end }}
+      {{- if not .IsHome }}
+        {{- if eq $.style "li" }}
+{{- (printf "</%s>" $.style)|safeHTML -}}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}

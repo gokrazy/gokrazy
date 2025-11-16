@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Ця сторінка показує версію {{.pageVersion.title}}. Актуальну версію можна знайти <a href="{{.latestUrl}}">тут</a>.'
+
+[Search]
+other = "Пошук"
+
+[Search-placeholder]
+other = "Пошук..."
+
+[Clear-search]
+other = "Почистити пошук"
+
+[No-results-found]
+other = "Збіги для \"{0}\" відсутні"
+
+[N-results-found]
+other = "{1} збігів знайдено для \"{0}\""
+
+[Clear-History]
+other = "Почистити історію"
+
+[Reset-view]
+other = "Скинути вигляд"
+
+[View-reset]
+other = "Проглянути скинуте!"
+
+[Attachments-label]
+other = "Додати файли"
+
+[title-404]
+other = "Не знайдено"
+
+[message-404]
+other = "Ой! Щось пішло не так. Схоже що цю сторінку ще не написано ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Повернутися до початкової сторінки"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "Редагувати"
+
+[Show-Markdown]
+other = "Відобразити Markdown"
+
+[Show-source]
+other = "Відобразити джерельний код"
+
+[Print-this-chapter]
+other = "Друк всього розділу"
+
+[More-action]
+other = "Більше"
+
+[shortcuts-menuTitle]
+other = "Більше"
+
+[Expand-title]
+other = "Розкрити..."
+
+[Navigation-toggle]
+other = "Меню"
+
+[Toc-toggle]
+other = "Зміст"
+
+[Byte-symbol]
+other = "Б"
+
+[Kilobyte-symbol]
+other = "КБ"
+
+[Megabyte-symbol]
+other = "МБ"
+
+[caution]
+other = "Увага"
+
+[important]
+other = "Важливо"
+
+[info]
+other = "Інформація"
+
+[note]
+other = "Нотатка"
+
+[tip]
+other = "Порада"
+
+[warning]
+other = "Увага"
+
+[Copy-to-clipboard]
+other = "Копіювати текст у буфер обміну"
+
+[Copied-to-clipboard]
+other = "Текст скопійовано у буфер обміну!"
+
+[Copy-link-to-clipboard]
+other = "Копіювати посилання у буфер обміну"
+
+[Link-copied-to-clipboard]
+other = "Посилання скопійовано у буфер обміну!"
+
+[Chapter]
+other = "Глава {{.}}"
+
+[Language]
+other = "Мова"
+
+[Theme]
+other = "Тема"
+
+[Submenu]
+other = "Підменю {{.}}"
+
+[Subsections]
+other = "Суброзділ {{.}}"
+
+[tags]
+other = "Теги"
+
+[tag]
+other = "Тег"
+
+[categories]
+other = "Категорії"
+
+[category]
+other = "Категорія"
+
+[Details]
+other = "Деталі"
+
+[Version]
+other = "Версія"
+
+[Browser-unsupported-feature]
+other = "Цей браузер не підтримує цю функцію"

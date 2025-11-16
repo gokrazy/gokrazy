@@ -1,0 +1,628 @@
+{
+  "frontMatter.content.snippets": {
+    "Badge": {
+      "body": ["{{% badge title=\"[[&title]]\" style=\"[[&style]]\" color=\"[[&color]]\" icon=\"[[&icon]]\" %}}[[&content]]{{% /badge %}}"],
+      "description": "Displays a little marker in the text",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content",
+          "title": "Text",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "title",
+          "title": "Title",
+          "type": "string"
+        },
+        {
+          "choices": ["", "caution", "important", "info", "neutral", "note", "tip", "warning", "primary", "secondary", "accent", "blue", "cyan", "green", "grey", "magenta", "orange", "red", "default", "transparent", "code", "list", "action"],
+          "default": "",
+          "name": "style",
+          "title": "Style scheme",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "color",
+          "title": "CSS color value",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "icon",
+          "title": "Font Awesome icon",
+          "type": "string"
+        }
+      ]
+    },
+    "Button": {
+      "body": ["{{% button href=\"[[&href]]\" target=\"[[&target]]\" type=\"[[&type]]\" style=\"[[&style]]\" color=\"[[&color]]\" icon=\"[[&icon]]\" iconposition=\"[[&iconposition]]\" %}}[[&content]]{{% /button %}}"],
+      "description": "Displays a clickable button",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content",
+          "title": "Text",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "href",
+          "title": "Destination URL",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "target",
+          "title": "HTML a[target] like eg. `_self` or `_blank`",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "type",
+          "title": "HTML button[type] like eg. `button` or `submit`",
+          "type": "string"
+        },
+        {
+          "choices": ["", "caution", "important", "info", "neutral", "note", "tip", "warning", "primary", "secondary", "accent", "blue", "cyan", "green", "grey", "magenta", "orange", "red", "default", "transparent", "code", "list", "action"],
+          "default": "",
+          "name": "style",
+          "title": "Style scheme",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "color",
+          "title": "CSS color value",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "icon",
+          "title": "Font Awesome icon",
+          "type": "string"
+        },
+        {
+          "choices": ["", "left", "right"],
+          "default": "",
+          "name": "iconposition",
+          "title": "Position of the icon",
+          "type": "choice"
+        }
+      ]
+    },
+    "Card": {
+      "body": ["{{% card title=\"[[&title]]\" href=\"[[&href]]\" image=\"[[&image]]\"", "[[&content]]", "{{% /card %}}"],
+      "description": "Display a single card",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content",
+          "title": "Text",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "title": "Title",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "href",
+          "title": "Destination URL",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "image",
+          "title": "Image URL",
+          "type": "string"
+        }
+      ]
+    },
+    "Cards": {
+      "body": ["{{< cards >}}", "{{% card title=\"[[&title1]]\" href=\"[[&href1]]\" image=\"[[&image1]]\" %}}", "[[&content1]]", "{{% /card %}}", "{{% tab title=\"[[&title2]]\" href=\"[[&href2]]\" image=\"[[&image2]]\" %}}", "[[&content2]]", "{{% /card %}}", "{{< /cards >}}"],
+      "description": "Display a set of cards",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content1",
+          "title": "Text of the first card",
+          "type": "string"
+        },
+        {
+          "name": "title1",
+          "title": "Title of the first card",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "href1",
+          "title": "Destination URL of the first card",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "image1",
+          "title": "Image URL of the first card",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "content2",
+          "title": "Text of the second card",
+          "type": "string"
+        },
+        {
+          "name": "title2",
+          "title": "Title of the second card",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "href2",
+          "title": "Destination URL of the second card",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "image2",
+          "title": "Image URL of the second card",
+          "type": "string"
+        }
+      ]
+    },
+    "Children": {
+      "body": ["{{% children description=\"[[&description]]\" depth=\"[[&depth]]\" sort=\"[[&sort]]\" showhidden=\"[[&showhidden]]\" type=\"[[&type]]\" %}}"],
+      "description": "Displays a list of child pages for the page",
+      "fields": [
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "description",
+          "title": "Show child page description",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "depth",
+          "title": "Depth of child page level to display",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "sort",
+          "title": "Sort predicate",
+          "type": "string"
+        },
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "showhidden",
+          "title": "Show hidden child pages",
+          "type": "choice"
+        },
+        {
+          "choices": ["", "card", "flat", "list", "tree"],
+          "default": "",
+          "name": "type",
+          "title": "The layout used for the listing",
+          "type": "string"
+        }
+      ]
+    },
+    "Expand": {
+      "body": ["{{% expand title=\"[[&title]]\" expanded=\"[[&expanded]]\" %}}[[&content]]{{% /expand %}}"],
+      "description": "Displays an expandable/collapsable section of text",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content",
+          "title": "Text",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "title",
+          "title": "Title",
+          "type": "string"
+        },
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "expanded",
+          "title": "Initially expand content",
+          "type": "choice"
+        }
+      ]
+    },
+    "Highlight": {
+      "body": ["````[[&type]] title=\"[[&title]]\" wrap=\"[[&wrap]]\" lineNos=\"[[&lineNos]]\" anchorLineNos=\"[[&anchorLineNos]]\" lineAnchors=\"[[&lineAnchors]]\" lineNoStart=\"[[&lineNoStart]]\" hl_Lines=\"[[&hl_Lines]]\"", "[[&content]]", "````"],
+      "description": "Displays syntaxhighlighted code",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content",
+          "title": "Text",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "title": "Title",
+          "type": "string"
+        },
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "wrap",
+          "title": "Wrap lines",
+          "type": "choice"
+        },
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "lineNos",
+          "title": "Display line number",
+          "type": "choice"
+        },
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "anchorLineNos",
+          "title": "Line numbers linkable",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "lineAnchors",
+          "title": "Unique prefix for linkable line numbers",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "lineNoStart",
+          "title": "First line number",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "hl_Lines",
+          "title": "Markable lines",
+          "type": "string"
+        }
+      ]
+    },
+    "Icon": {
+      "body": ["{{% icon [[&icon]] %}}"],
+      "description": "Displays a Font Awesome icon",
+      "fields": [
+        {
+          "name": "icon",
+          "title": "Font Awesome icon",
+          "type": "string"
+        }
+      ]
+    },
+    "Include": {
+      "body": ["{{% include file=\"[[&file]]\" hidefirstheading=\"[[&hidefirstheading]]\" %}}"],
+      "description": "Displays the content of another file",
+      "fields": [
+        {
+          "name": "file",
+          "title": "File path",
+          "type": "string"
+        },
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "hidefirstheading",
+          "title": "Hide first heading",
+          "type": "choice"
+        }
+      ]
+    },
+    "Math": {
+      "body": ["````math align=\"[[&align]]\"", "[[&content]]", "````"],
+      "description": "Displays a math or chemical formulae using MathJax",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content",
+          "title": "Formulae",
+          "type": "string"
+        },
+        {
+          "choices": ["", "left", "center", "right"],
+          "default": "",
+          "name": "align",
+          "title": "Horizontal alignment",
+          "type": "choice"
+        }
+      ]
+    },
+    "Mermaid": {
+      "body": ["````mermaid align=\"[[&align]]\" zoom=\"[[&zoom]]\"", "[[&content]]", "````"],
+      "description": "Displays a Mermaid diagram or flowchart",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content",
+          "title": "Diagram",
+          "type": "string"
+        },
+        {
+          "choices": ["", "left", "center", "right"],
+          "default": "",
+          "name": "align",
+          "title": "Horizontal alignment",
+          "type": "choice"
+        },
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "zoom",
+          "title": "Diagram is pan- and zoomable",
+          "type": "choice"
+        }
+      ]
+    },
+    "Notice": {
+      "body": ["{{% notice title=\"[[&title]]\" style=\"[[&style]]\" color=\"[[&color]]\" icon=\"[[&icon]]\" groupid=\"[[&groupid]]\" expanded=\"[[&expanded]]\" %}}[[&content]]{{% /notice %}}"],
+      "description": "Displays a configurable box of text",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content",
+          "title": "Text",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "title",
+          "title": "Title",
+          "type": "string"
+        },
+        {
+          "choices": ["", "caution", "important", "info", "neutral", "note", "tip", "warning", "primary", "secondary", "accent", "blue", "cyan", "green", "grey", "magenta", "orange", "red", "default", "transparent", "code", "list", "action"],
+          "default": "",
+          "name": "style",
+          "title": "Style scheme",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "color",
+          "title": "CSS color value",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "icon",
+          "title": "Font Awesome icon",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "groupid",
+          "title": "Expandable boxes with the same ID synchronize their state",
+          "type": "string"
+        },
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "expanded",
+          "title": "Initially expand content",
+          "type": "choice"
+        }
+      ]
+    },
+    "OpenAPI": {
+      "body": ["{{< openapi src=\"[[&src]]\" >}}"],
+      "description": "Displays a OpenAPI / Swagger specification",
+      "fields": [
+        {
+          "name": "src",
+          "title": "URL to the OpenAPI specification",
+          "type": "string"
+        }
+      ]
+    },
+    "Resources": {
+      "body": ["{{% resources title=\"[[&title]]\" pattern=\"[[&pattern]]\" sort=\"[[&sort]]\" style=\"[[&style]]\" color=\"[[&color]]\" icon=\"[[&icon]]\" expanded=\"[[&expanded]]\" /%}}"],
+      "description": "Displays a list of resources contained in a page bundle",
+      "fields": [
+        {
+          "default": "",
+          "name": "title",
+          "title": "Title",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "pattern",
+          "title": "Regex for filtering file names",
+          "type": "string"
+        },
+        {
+          "choices": ["", "asc", "desc"],
+          "default": "",
+          "name": "sort",
+          "title": "Sorting order",
+          "type": "choice"
+        },
+        {
+          "choices": ["", "caution", "important", "info", "neutral", "note", "tip", "warning", "primary", "secondary", "accent", "blue", "cyan", "green", "grey", "magenta", "orange", "red", "default", "transparent", "code", "list", "action"],
+          "default": "",
+          "name": "style",
+          "title": "Style scheme",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "color",
+          "title": "CSS color value",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "icon",
+          "title": "Font Awesome icon",
+          "type": "string"
+        },
+        {
+          "choices": ["", "false", "true"],
+          "default": "",
+          "name": "expanded",
+          "title": "Initially expand resource list",
+          "type": "choice"
+        }
+      ]
+    },
+    "Site Param": {
+      "body": ["{{% siteparam name=\"[[&name]]\" %}}"],
+      "description": "Displays the value of a site parameter",
+      "fields": [
+        {
+          "name": "name",
+          "title": "The name of the site parameter",
+          "type": "string"
+        }
+      ]
+    },
+    "Tab": {
+      "body": ["{{% tab title=\"[[&title]]\" style=\"[[&style]]\" color=\"[[&color]]\" icon=\"[[&icon]]\" %}}", "[[&content]]", "{{% /tab %}}"],
+      "description": "Display a single tab",
+      "fields": [
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content",
+          "title": "Text",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "title": "Titel",
+          "type": "string"
+        },
+        {
+          "choices": ["", "caution", "important", "info", "neutral", "note", "tip", "warning", "primary", "secondary", "accent", "blue", "cyan", "green", "grey", "magenta", "orange", "red", "default", "transparent", "code", "list", "action"],
+          "default": "",
+          "name": "style",
+          "title": "Style scheme",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "color",
+          "title": "CSS color value",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "icon",
+          "title": "Font Awesome icon",
+          "type": "string"
+        }
+      ]
+    },
+    "Tabs": {
+      "body": ["{{< tabs title=\"[[&title]]\" style=\"[[&style]]\" color=\"[[&color]]\" icon=\"[[&icon]]\" groupid=\"[[&groupid]]\" >}}", "{{% tab title=\"[[&title1]]\" style=\"[[&style1]]\" color=\"[[&color1]]\" icon=\"[[&icon1]]\" %}}", "[[&content1]]", "{{% /tab %}}", "{{% tab title=\"[[&title2]]\" style=\"[[&style2]]\" color=\"[[&color2]]\" icon=\"[[&icon2]]\" %}}", "[[&content2]]", "{{% /tab %}}", "{{< /tabs >}}"],
+      "description": "Display a set of tabs in a tab view",
+      "fields": [
+        {
+          "default": "",
+          "name": "title",
+          "title": "Title of the tab view",
+          "type": "string"
+        },
+        {
+          "choices": ["", "caution", "important", "info", "neutral", "note", "tip", "warning", "primary", "secondary", "accent", "blue", "cyan", "green", "grey", "magenta", "orange", "red", "default", "transparent", "code", "list", "action"],
+          "default": "",
+          "name": "style",
+          "title": "Default style scheme of all tabs",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "color",
+          "title": "Default CSS color value of all tabs",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "icon",
+          "title": "Font Awesome icon of the tab view",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "groupid",
+          "title": "ID to synchronize the tab selection of multiple Tab snippets",
+          "type": "string"
+        },
+        {
+          "default": "FM_SELECTED_TEXT",
+          "name": "content1",
+          "title": "Text of the first tab",
+          "type": "string"
+        },
+        {
+          "name": "title1",
+          "title": "Title of the first tab",
+          "type": "string"
+        },
+        {
+          "choices": ["", "caution", "important", "info", "neutral", "note", "tip", "warning", "primary", "secondary", "accent", "blue", "cyan", "green", "grey", "magenta", "orange", "red", "default", "transparent", "code", "list", "action"],
+          "default": "",
+          "name": "style1",
+          "title": "Style scheme of the first tab",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "color1",
+          "title": "CSS color value of the first tab",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "icon1",
+          "title": "Font Awesome icon of the first tab",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "content2",
+          "title": "Text of the second tab",
+          "type": "string"
+        },
+        {
+          "name": "title2",
+          "title": "Title of the second tab",
+          "type": "string"
+        },
+        {
+          "choices": ["", "caution", "important", "info", "neutral", "note", "tip", "warning", "primary", "secondary", "accent", "blue", "cyan", "green", "grey", "magenta", "orange", "red", "default", "transparent", "code", "list", "action"],
+          "default": "",
+          "name": "style2",
+          "title": "Style scheme of the second tab",
+          "type": "choice"
+        },
+        {
+          "default": "",
+          "name": "color2",
+          "title": "CSS color value of the second tab",
+          "type": "string"
+        },
+        {
+          "default": "",
+          "name": "icon2",
+          "title": "Font Awesome icon of the second tab",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}

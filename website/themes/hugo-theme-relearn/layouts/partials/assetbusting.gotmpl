@@ -1,0 +1,6 @@
+{{- $assetsBuster := "" }}
+{{- $assetBusting := not site.Params.disableAssetsBusting }}
+{{- if $assetBusting }}
+  {{- $assetsBuster = printf "?%d" now.Unix }}
+{{- end }}
+{{- return $assetsBuster }}

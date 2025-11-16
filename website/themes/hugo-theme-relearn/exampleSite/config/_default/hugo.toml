@@ -1,0 +1,41 @@
+# The main configuration file.
+# Usable standalone for a fully functioning site
+# or as base values for all other configurations.
+
+# To use run `hugo` or `hugo server` from the `exampleSite` directory
+
+# change this to a value appropriate for you; if your site is served from a subdirectory
+# set it like 'https://example.com/mysite/'
+baseURL = 'https://example.com/'
+
+# required to be set to `true` to serve this page from a webserver AND the file system;
+# if you set this value to `true`, `baseURL` must not contain a subdirectory;
+# if you don't want to serve your page from the file system, you can also set this value
+# to `false`
+relativeURLs = true # true -> rewrite all site-relative URLs (those with a leading slash) to be relative to the current content
+
+# the directory and theme where Hugo reads the theme files from; this is specific to
+# your installation; this configuration here is for running the exampleSite as-is
+# from within the Relearn theme; you need to delete or change it, if you copy the
+# exampleSite to somewhere outside the themes directory - which is strongly
+# recommended if you want to use it as a starting point for your project;
+# see also the "Getting Started" section in the themes documentation
+themesdir = '..'
+theme = ''
+
+defaultContentLanguage = 'en'
+# if you want to get rrrid o' ourrr pirrrates nonsense uncomment th' next line
+# disableLanguages = ['pir']
+# feel free to delete all files and directories related to this translation:
+# - `content/pir/`
+# - `i18n/`
+# - `layouts/partials/shortcodes/piratify.html`
+# - `layouts/partials/toc.html`
+# - `layouts/shortcodes/piratify.html`
+
+# add showcase-specific output formats
+[outputs]
+  # `print` - activate the themes feature to print whole chapters or leaf pages
+  home = ['html', 'rss', 'print']
+  section = ['html', 'rss', 'print']
+  page = ['html', 'print']

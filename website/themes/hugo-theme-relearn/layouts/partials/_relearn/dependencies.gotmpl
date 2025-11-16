@@ -1,0 +1,76 @@
+{{- range $k, $v := .Site.Params.relearn.dependencies }}
+	{{- $needs := printf "needs%s" .name }}
+	{{- $disable := printf "disable%s" .name }}
+	{{- $enable := printf "%s" (lower .name) }}
+
+	{{- $dep := printf "dependencies/%s.html" $k }}
+	{{- partial $dep (dict "page" $ "location" "default") }}
+    {{- $default := $.Store.Get $needs | default false }}
+
+	{{- $wantsPage := "" }}
+	{{- $filepath := "[virtual file]" }}{{ with and $.File $.File.Filename }}{{ $filepath = . }}{{ end }}
+	{{- if index $.Params $disable }}
+		{{- $wantsPage = false }}
+		{{- warnf "%q: DEPRECATED front matter 'disable%s=true' found, use '%s=false' or '%s.disable=true' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/8/#8-0-0" $filepath .name (lower .name) (lower .name) }}
+	{{- else if ne (index $.Params $disable) nil }}
+		{{- $wantsPage = true }}
+		{{- if $default }}
+			{{- warnf "%q: DEPRECATED front matter 'disable%s=false' found, remove it or use '%s.disable=false' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/8/#8-0-0" $filepath .name (lower .name) }}
+		{{- else }}
+			{{- warnf "%q: DEPRECATED front matter 'disable%s=false' found, use '%s.force=true' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-0-0" $filepath .name (lower .name) }}
+		{{- end }}
+	{{- else if and (eq .name "Math") (ne (index $.Params "disableMathJax") nil) }}
+		{{- $wantsPage = true }}
+		{{- warnf "%q: DEPRECATED front matter 'disableMathJax' found, use 'math' or 'math.force' instead and invert the value; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-0-0" $filepath }}
+	{{- end }}
+	{{- $typePage := printf "%T" (index $.Params $enable) }}
+	{{- if eq $typePage "bool" }}
+		{{- $wants := index $.Params $enable }}
+		{{- if and (eq .name "Math") (not $wants) }}
+			{{- warnf "%q: WARNING front matter 'math=false' found, remove it or use 'math.disable=true' instead if you really meant to turn it off; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/8/#8-0-0" $filepath }}
+		{{- end }}
+		{{- $wantsPage = $wants }}
+	{{- else if eq $typePage "maps.Params" }}
+		{{- if eq (index (index $.Params $enable) "disable") true }}
+			{{- $wantsPage = false }}
+		{{- else if eq (index (index $.Params $enable) "force") true }}
+			{{- $wantsPage = true }}
+		{{- end }}
+	{{- end }}
+
+	{{- $wantsSite := "" }}
+	{{- if index $.Site.Params $disable }}
+		{{- $wantsSite = false }}
+		{{- warnf "DEPRECATED option 'disable%s=true' found, use '%s=false' or '%s.disable=true' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/8/#8-0-0" .name (lower .name) (lower .name) }}
+	{{- else if ne (index $.Site.Params $disable) nil }}
+		{{- $wantsSite = true }}
+		{{- if $default }}
+			{{- warnf "DEPRECATED option 'disable%s=false' found, remove it or use '%s.disable=false' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/8/#8-0-0" .name (lower .name) }}
+		{{- else }}
+			{{- warnf "DEPRECATED option 'disable%s=false' found, use '%s.force=true' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-0-0" .name (lower .name) (lower .name) }}
+		{{- end }}
+	{{- else if and (eq .name "Math") (ne (index $.Site.Params "disableMathJax") nil) }}
+		{{- $wantsSite = true }}
+		{{- warnf "DEPRECATED option 'disableMathJax' found, use 'math' or 'math.force' instead and invert the value; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-0-0" }}
+	{{- end }}
+	{{- $typeSite := printf "%T" (index $.Site.Params $enable) }}
+	{{- if eq $typeSite "bool" }}
+		{{- $wants := index $.Site.Params $enable }}
+		{{- if and (eq .name "Math") (not $wants) }}
+			{{- warnf "WARNING option 'math=false' found, remove it or use 'math.disable=true' instead if you really meant to turn it off; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/8/#8-0-0" }}
+		{{- end }}
+		{{- $wantsPage = $wants }}
+	{{- else if eq $typeSite "maps.Params" }}
+		{{- if eq (index (index $.Site.Params $enable) "disable") true }}
+			{{- $wantsSite = false }}
+		{{- else if eq (index (index $.Site.Params $enable) "force") true }}
+			{{- $wantsSite = true }}
+		{{- end }}
+	{{- end }}
+
+	{{- if ne $wantsPage "" }}
+		{{- $.Store.Set $needs $wantsPage }}
+	{{- else if ne $wantsSite "" }}
+		{{- $.Store.Set $needs $wantsSite }}
+	{{- end }}
+{{- end }}

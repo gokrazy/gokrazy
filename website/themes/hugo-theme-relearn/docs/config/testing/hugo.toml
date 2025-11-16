@@ -1,0 +1,27 @@
+# Configuration to test the showcase for changes in development
+# This configuration will not result in a functioning website.
+
+# To use run `hugo -e testing` or `hugo server -e testing` from the `docs` directory
+
+# We disable this for testing; you must do so too
+# if you want to use the themes parameter disableGeneratorVersion=true;
+# otherwise Hugo will create a generator tag on your home page
+disableHugoGeneratorInject = true
+
+# We are pretty sure, to not have unintentionally untranslated titles;
+# it may happen in case when shortcodes want to set an automatic title
+# out of a given style setting (this is allowed to fail for non severity styles)
+# enableMissingTranslationPlaceholders = true
+
+# Audit your published site for problems
+# https://discourse.gohugo.io/t/audit-your-published-site-for-problems/35184/12
+[minify]
+  [minify.tdewolff]
+    [minify.tdewolff.html]
+      keepComments = true
+
+[params]
+  disableGeneratorVersion = true
+  disableAssetsBusting = true
+  disableRandomIds = true
+  minify = false

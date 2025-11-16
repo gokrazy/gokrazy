@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Bu sayfa {{.pageVersion.title}} sürümünü gösterir. Güncel sürüm bulunabilir <a href="{{.latestUrl}}">burada</a>.'
+
+[Search]
+other = "Ara"
+
+[Search-placeholder]
+other = "Ara..."
+
+[Clear-search]
+other = "Aramayı temizle"
+
+[No-results-found]
+other = "\"{0}\" için sonuç bulunamadı"
+
+[N-results-found]
+other = "\"{0}\" için {1} sonuç bulundu"
+
+[Clear-History]
+other = "Geçmişi Temizle"
+
+[Reset-view]
+other = "Görünümü sıfırla"
+
+[View-reset]
+other = "Görünüm sıfırlandı!"
+
+[Attachments-label]
+other = "Ekler"
+
+[title-404]
+other = "Konumsuz"
+
+[message-404]
+other = "Uups. Görünüşe göre böyle bir sayfa yok ¯\\_(ツ)_/¯"
+
+[Go-to-homepage]
+other = "Anasayfaya dön"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "Düzenlemek"
+
+[Show-Markdown]
+other = "Markdown'ı Göster"
+
+[Show-source]
+other = "Kaynak kodunu göster"
+
+[Print-this-chapter]
+other = "Bölümün tamamını yazdır"
+
+[More-action]
+other = "Dahası Var"
+
+[shortcuts-menuTitle]
+other = "Dahası Var"
+
+[Expand-title]
+other = "Genişlet..."
+
+[Navigation-toggle]
+other = "Menü"
+
+[Toc-toggle]
+other = "İçindekiler"
+
+[Byte-symbol]
+other = "B"
+
+[Kilobyte-symbol]
+other = "KB"
+
+[Megabyte-symbol]
+other = "MB"
+
+[caution]
+other = "Dikkat"
+
+[important]
+other = "Önemli"
+
+[info]
+other = "Bilgi"
+
+[note]
+other = "Not"
+
+[tip]
+other = "Bahşiş"
+
+[warning]
+other = "Uyarı"
+
+[Copy-to-clipboard]
+other = "Metni panoya kopyala"
+
+[Copied-to-clipboard]
+other = "Metin panoya kopyalandı!"
+
+[Copy-link-to-clipboard]
+other = "Bağlantıyı panoya kopyala"
+
+[Link-copied-to-clipboard]
+other = "Bağlantı panoya kopyalandı!"
+
+[Chapter]
+other = "{{.}}. Bölüm"
+
+[Language]
+other = "Dil"
+
+[Theme]
+other = "Tema"
+
+[Submenu]
+other = "Alt menü {{.}}"
+
+[Subsections]
+other = "{{.}} alt bölümleri"
+
+[tags]
+other = "Etiketler"
+
+[tag]
+other = "Etiket"
+
+[categories]
+other = "Kategoriler"
+
+[category]
+other = "Kategori"
+
+[Details]
+other = "Şey"
+
+[Version]
+other = "Sürüm"
+
+[Browser-unsupported-feature]
+other = "Bu tarayıcı bu özelliği desteklemiyor"

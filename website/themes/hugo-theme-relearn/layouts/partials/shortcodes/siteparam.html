@@ -1,0 +1,18 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'siteparam' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $paramNames := split .name "." }}
+{{- with $page }}
+{{- $params := .Site.Params }}
+{{- range $paramName := $paramNames }}
+    {{- with $params }}
+        {{- $params = index . (lower $paramName) }}
+    {{- end }}
+{{- end }}
+{{- with $params }}
+  {{- . }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,71 @@
+{{- $u := urls.Parse .url }}
+{{- $hideFilepath := .hideFilepath | default false }}
+{{- $type := printf "%T" .linkObject }}
+{{- $isPage := or
+	(eq $type "*hugolib.pageForRenderHooks")
+	(eq $type "*hugolib.pageForShortcode")
+	(eq $type "*hugolib.pageState")
+	(eq $type "*hugolib.pageWithOrdinal")
+	(eq $type "*hugolib.pageWithWeight0")
+}}
+{{- $href := partial "permalink.gotmpl" (dict "to" .linkObject) }}
+{{- if $isPage }}
+	{{- $format := $u.Query.Get "format" }}
+	{{- if $format }}
+		{{- $of := .linkObject.OutputFormats.Get $format }}
+		{{- if $of }}
+			{{- $href = partial "permalink.gotmpl" (dict "to" $of) }}
+		{{- else }}
+			{{- $msg := printf "output format %q not found" $of }}
+			{{- partial "inline/print-error" (dict "url" .url "page" .page "param" .param "msg" $msg "linkObject" .linkObject "hideFilepath" $hideFilepath) }}
+		{{- end }}
+	{{- end }}
+{{- end }}
+{{- with $u.RawQuery }}
+	{{- $href = printf "%s?%s" $href . }}
+{{- end }}
+{{- with $u.Fragment }}
+	{{- $href = printf "%s#%s" $href . }}
+	{{- if $isPage }}
+		{{- partial "inline/validate-fragment.html" (dict "page" $.page "linkObject" $.linkObject "parsedURL" $u "url" $.url "param" $.param "hideFilepath" $hideFilepath) }}
+	{{- end }}
+{{- end }}
+{{- $href = replaceRE `&lang=\w*\b` "" $href }}
+{{- $href = replaceRE `\?lang=\w*&\b` "?" $href }}
+{{- $href = replaceRE `\?lang=\w*\b` "" $href }}
+{{- $href = replaceRE `&format=\w*\b` "" $href }}
+{{- $href = replaceRE `\?format=\w*&\b` "?" $href }}
+{{- $href = replaceRE `\?format=\w*\b` "" $href }}
+{{- return $href }}
+{{- define "partials/inline/validate-fragment.html" }}
+	{{- $u := .parsedURL }}
+	{{- with $u.Fragment }}
+		{{- if $.linkObject.Fragments.Identifiers.Contains . }}
+			{{- if gt ($.linkObject.Fragments.Identifiers.Count .) 1 }}
+				{{- $filepath := "[virtual file]" }}{{ with and $.page $.page.File $.page.File.Filename }}{{ $filepath = . }}{{ end }}
+				{{- $msg := printf "%q: duplicate heading ID %q found" $filepath . }}
+			    {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" $.url "page" $.page "param" $.param "msg" $msg) }}
+			{{- end }}
+		{{- else }}
+			{{- $msg := printf "heading ID %q not found" . }}
+			{{- partial "inline/print-error" (dict "url" $.url "page" $.page "param" $.param "msg" $msg "linkObject" $.linkObject "hideFilepath" $.hideFilepath) }}
+		{{- end }}
+	{{- end }}
+{{- end }}
+{{- define "partials/inline/print-error" }}
+	{{- $targetpath := "" }}
+	{{- with .linkObject.File }}
+		{{- $targetpath = .Path }}
+	{{- else }}
+		{{- $targetpath = .Path }}
+	{{- end }}
+	{{- $filepath := "[virtual file]" }}{{ with and .page .page.File .page.File.Filename }}{{ $filepath = . }}{{ end }}
+	{{- $msg := .msg }}
+	{{- if not .hideFilepath }}
+		{{- $msg = printf "%q: %s" $filepath $msg }}
+	{{- end }}
+	{{- if or .hideFilepath (ne .page .linkObject) }}
+		{{- $msg = printf "%s in %q" $msg $targetpath }}
+	{{- end }}
+	{{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .url "page" .page "param" .param "msg" $msg) }}
+{{- end }}

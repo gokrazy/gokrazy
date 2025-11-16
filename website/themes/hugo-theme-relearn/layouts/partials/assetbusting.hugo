@@ -1,0 +1,2 @@
+{{- warnf "DEPRECATED partial 'assetbusting.hugo' used, use 'assetbusting.gotmpl' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-0-0" }}
+{{- partialCached "assetbusting.gotmpl" . }}

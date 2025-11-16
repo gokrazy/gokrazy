@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Ukurasa huu unaonyesha toleo {{.pageVersion.title}}. Toleo la sasa linaweza kupatikana <a href="{{.latestUrl}}">hapa</a>.'
+
+[Search]
+other = "Tafuta"
+
+[Search-placeholder]
+other = "Tafuta..."
+
+[Clear-search]
+other = "Futa utafutaji"
+
+[No-results-found]
+other = "Hakuna matokeo yaliyopatikana kwa \"{0}\""
+
+[N-results-found]
+other = "Matokeo {1} yamepatikana kwa \"{0}\""
+
+[Clear-History]
+other = "Futa Historia"
+
+[Reset-view]
+other = "Weka upya mwonekano"
+
+[View-reset]
+other = "Tazama kuweka upya!"
+
+[Attachments-label]
+other = "Viambatisho"
+
+[title-404]
+other = "Haipatikani"
+
+[message-404]
+other = "Lo! Inaonekana ukurasa huu haupo ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Nenda kwenye ukurasa wa kwanza"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "Hariri"
+
+[Show-Markdown]
+other = "Onyesha Alama"
+
+[Show-source]
+other = "Onyesha msimbo wa chanzo"
+
+[Print-this-chapter]
+other = "Chapisha sura nzima"
+
+[More-action]
+other = "Zaidi"
+
+[shortcuts-menuTitle]
+other = "Zaidi"
+
+[Expand-title]
+other = "Nipanue..."
+
+[Navigation-toggle]
+other = "Menyu"
+
+[Toc-toggle]
+other = "Jedwali la Yaliyomo"
+
+[Byte-symbol]
+other = "B"
+
+[Kilobyte-symbol]
+other = "KB"
+
+[Megabyte-symbol]
+other = "MB"
+
+[caution]
+other = "Tahadhari"
+
+[important]
+other = "Muhimu"
+
+[info]
+other = "Habari"
+
+[note]
+other = "Kumbuka"
+
+[tip]
+other = "Kidokezo"
+
+[warning]
+other = "Onyo"
+
+[Copy-to-clipboard]
+other = "Nakili maandishi kwenye ubao wa kunakili"
+
+[Copied-to-clipboard]
+other = "Maandishi yamenakiliwa kwenye ubao wa kunakili!"
+
+[Copy-link-to-clipboard]
+other = "Nakili kiungo kwenye ubao wa kunakili"
+
+[Link-copied-to-clipboard]
+other = "Kiungo kimenakiliwa kwenye ubao wa kunakili!"
+
+[Chapter]
+other = "Sura ya {{.}}"
+
+[Language]
+other = "Lugha"
+
+[Theme]
+other = "Mandhari"
+
+[Submenu]
+other = "Menyu ndogo {{.}}"
+
+[Subsections]
+other = "Vifungu vidogo vya {{.}}"
+
+[tags]
+other = "Tagi"
+
+[tag]
+other = "Tagi"
+
+[categories]
+other = "Kategoria"
+
+[category]
+other = "Kategoria"
+
+[Details]
+other = "Maelezo"
+
+[Version]
+other = "Toleo"
+
+[Browser-unsupported-feature]
+other = "Kivinjari hiki hakitumii kipengele hiki"

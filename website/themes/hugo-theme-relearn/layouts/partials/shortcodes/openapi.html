@@ -1,0 +1,37 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'openapi' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $u := urls.Parse .src }}
+{{- $src := $u.String }}
+{{- $spec := "" }}
+{{- $id := cond (or (eq .id nil) (eq .id "")) (partial "_relearn/makeRandomMd5.gotmpl" $page) .id }}
+{{- if $u.IsAbs }}
+  {{- partialCached "_relearn/urlExists.gotmpl" (dict "url" .src "page" $page "type" "OpenAPI spec link") $u.String }}
+{{- else }}
+  {{- $path := strings.TrimPrefix "./" $u.Path }}
+  {{- with or
+    ($page.Resources.Get $path)
+    (resources.Get $path)
+  }}
+    {{- $src = "" }}
+    {{- $spec = .Content }}
+  {{- else }}
+    {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+    {{- $msg := printf "%q: OpenAPI spec '%s' is not a resource" $filepath .src }}
+    {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .src "page" $page "param" "openapi" "msg" $msg) }}
+  {{- end }}
+{{- end }}
+{{- with $page -}}
+<div class="sc-openapi-wrapper is-loading helper-loading-container">
+  <div
+    class="sc-openapi-container"
+    id="R-openapi-{{ $id }}"
+    data-openapi-url="{{ $src }}"
+    data-openapi-spec="{{ $spec | safeHTMLAttr }}"
+  ></div>
+</div>
+{{- .Store.Set "hasOpenApi" true }}
+{{- end }}

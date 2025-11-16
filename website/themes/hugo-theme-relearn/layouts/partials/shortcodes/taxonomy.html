@@ -1,0 +1,26 @@
+{{- $taxonomy := .taxonomy }}
+{{- if eq "string" (printf "%T" $taxonomy) }}
+  {{- $taxonomy = .page.GetPage $taxonomy }}
+{{- end }}
+{{- $headingstyle := .headingstyle | default "h2" }}
+{{- with $taxonomy }}
+{{- .Content }}
+{{- $lastCapital := "" }}
+{{- $pages := partialCached "_relearn/pagesTaxonomy.gotmpl" . .Path }}
+{{- range $pages }}
+  {{- $capital := substr .Title 0 1 | upper }}
+  {{- if ne $lastCapital $capital }}
+    {{- if ne $lastCapital "" }}
+</ul>
+    {{- end }}
+{{ (printf `<%s id="%s">%s</%s>` $headingstyle ($capital | plainify | anchorize) $capital $headingstyle) | safeHTML }}
+<ul class="columnize">
+  {{- end }}
+  {{- /* display terms of a taxonomy */}}
+  <li><a href="{{ partial "permalink.gotmpl" (dict "to" .Page) }}">{{ .Title }}</a> ({{ .Count }})</li>
+  {{- $lastCapital = $capital }}
+{{- end }}
+{{- if ne $lastCapital "" }}
+</ul>
+{{- end }}
+{{- end }}

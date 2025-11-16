@@ -1,0 +1,5 @@
+{{- partial "shortcodes/taxonomy.html" (dict
+  "page"           .Page
+  "taxonomy"       (.Get "taxonomy" | default (.Get 0))
+  "headingstyle"   (.Get "headingstyle" | default (.Get 1))
+) }}

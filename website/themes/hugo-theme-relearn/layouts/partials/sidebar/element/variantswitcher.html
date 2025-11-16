@@ -1,0 +1,27 @@
+{{- $themevariants := partialCached "_relearn/themeVariants.gotmpl" . }}
+{{- $showvariantswitch := gt (int (len $themevariants)) 1 }}
+{{- if $showvariantswitch }}
+  {{- $icon := .element.icon | default "paint-brush" }}
+  {{- if and $icon (not (findRE ".*?\\bfa-\\w.*?" $icon)) }}
+    {{- $icon = printf "fa-fw fas fa-%s" $icon }}
+  {{- end }}
+            <li class="R-variantswitcher">
+              <div class="padding menu-control">
+                <i class="{{ $icon }}"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <label class="a11y-only" for="R-select-variant">{{ T "Theme" }}</label>
+                  <select id="R-select-variant">
+                    {{- $firstvariant := true }}
+                    {{- range $themevariants }}
+                      {{- $themevariant := . }}
+                    <option id="R-select-variant-{{ $themevariant.identifier }}" value="{{ $themevariant.identifier }}"{{- if $firstvariant }} selected{{ end }}>{{ $themevariant.name }}</option>
+                      {{- $firstvariant = false }}
+                    {{- end }}
+                  </select>
+                </div>
+                <div class="clear"></div>
+              </div>
+              <script>window.relearn.markVariant();</script>
+            </li>
+{{- end }}

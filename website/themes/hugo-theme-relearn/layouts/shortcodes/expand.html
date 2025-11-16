@@ -1,0 +1,8 @@
+{{- $_hugo_config := `{ "version": 1 }` }}
+{{- partial "shortcodes/expand.html" (dict
+  "page"     .Page
+  "content"  .Inner
+  "open"     (.Get "open" | default "")
+  "expanded" (.Get "expanded" | default (.Get 1))
+  "title"    (.Get "title" | default (.Get 0))
+) }}

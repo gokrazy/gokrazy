@@ -1,0 +1,28 @@
+{{- $onwidths := cond (isset . "onwidths") .onwidths "show" }}
+{{- $onwidthm := cond (isset . "onwidthm") .onwidthm "show" }}
+{{- $onwidthl := cond (isset . "onwidthl") .onwidthl "show" }}
+{{- with .page }}
+	{{- $show := not (.Param "disableNextPrev") }}
+	{{- if $show }}
+		{{- $startarrow := "🡐" }}
+		{{- if eq (.Language.LanguageDirection | default (T "Reading-direction") | default "ltr") "rtl" }}
+			{{- $startarrow = "🡒" }}
+		{{- end }}
+        {{- $prev := partialCached "_relearn/pagePrev.gotmpl" . .Path }}
+		{{- $prevTitle := partial "title.gotmpl" (dict "page" $prev "outputFormat" "html") }}
+		{{- $href := "" }}
+		{{- with (and $prev $prev.Path) }}
+			{{- $href = . }}
+		{{- end }}
+		{{- partial "topbar/func/button.html" (dict
+			"page" .
+			"class" "topbar-button-prev"
+			"href" $href
+			"icon" "chevron-left"
+			"onwidths" $onwidths
+			"onwidthm" $onwidthm
+			"onwidthl" $onwidthl
+			"hint" (printf "%s (%s)" $prevTitle ($startarrow | safeHTML))
+		)}}
+	{{- end }}
+{{- end }}

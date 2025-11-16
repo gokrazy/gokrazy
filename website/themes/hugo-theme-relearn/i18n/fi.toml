@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Tämä sivu näyttää version {{.pageVersion.title}}. Nykyinen versio löytyy <a href="{{.latestUrl}}">täällä</a>.'
+
+[Search]
+other = "Etsi"
+
+[Search-placeholder]
+other = "Etsi..."
+
+[Clear-search]
+other = "Tyhjennä haku"
+
+[No-results-found]
+other = "Ei tuloksia haulle \"{0}\""
+
+[N-results-found]
+other = "{1} tulosta löytyi haulle \"{0}\""
+
+[Clear-History]
+other = "Tyhjennä historia"
+
+[Reset-view]
+other = "Palauta näkymä"
+
+[View-reset]
+other = "Näkymä nollattu!"
+
+[Attachments-label]
+other = "Liitteet"
+
+[title-404]
+other = "Paikantamaton"
+
+[message-404]
+other = "Sivua ei ole ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Etusivulle"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "Muokkaa"
+
+[Show-Markdown]
+other = "Näytä Markdown"
+
+[Show-source]
+other = "Näytä lähdekoodi"
+
+[Print-this-chapter]
+other = "Tulosta koko luku"
+
+[More-action]
+other = "Lisää"
+
+[shortcuts-menuTitle]
+other = "Lisää"
+
+[Expand-title]
+other = "Laajenna..."
+
+[Navigation-toggle]
+other = "Valikko"
+
+[Toc-toggle]
+other = "Sisältö"
+
+[Byte-symbol]
+other = "T"
+
+[Kilobyte-symbol]
+other = "KT"
+
+[Megabyte-symbol]
+other = "MT"
+
+[caution]
+other = "Varoitus"
+
+[important]
+other = "Tärkeä"
+
+[info]
+other = "Info"
+
+[note]
+other = "Huom"
+
+[tip]
+other = "Vihje"
+
+[warning]
+other = "Varoitus"
+
+[Copy-to-clipboard]
+other = "Kopioi teksti leikepöydälle"
+
+[Copied-to-clipboard]
+other = "Teksti kopioitu leikepöydälle!"
+
+[Copy-link-to-clipboard]
+other = "Kopioi linkki leikepöydälle"
+
+[Link-copied-to-clipboard]
+other = "Linkki kopioitu leikepöydälle!"
+
+[Chapter]
+other = "Luku {{.}}"
+
+[Language]
+other = "Kieli"
+
+[Theme]
+other = "Teema"
+
+[Submenu]
+other = "Alavalikko {{.}}"
+
+[Subsections]
+other = "Osa {{.}}"
+
+[tags]
+other = "Tunnisteet"
+
+[tag]
+other = "Tag"
+
+[categories]
+other = "Luokat"
+
+[category]
+other = "Kategoria"
+
+[Details]
+other = "Tiedot"
+
+[Version]
+other = "Versio"
+
+[Browser-unsupported-feature]
+other = "Tämä selain ei tue tätä ominaisuutta"

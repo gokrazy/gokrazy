@@ -1,0 +1,23 @@
+{{- $onwidths := cond (isset . "onwidths") .onwidths "area-more" }}
+{{- $onwidthm := cond (isset . "onwidthm") .onwidthm "show" }}
+{{- $onwidthl := cond (isset . "onwidthl") .onwidthl "show" }}
+{{- with .page }}
+	{{- $format := .OutputFormats.Get "markdown" }}
+	{{- $show := and $format (not (.Param "disableMarkdownButton")) }}
+	{{- if $show }}
+		{{- $show = not (partial "_relearn/pageIsSpecial.gotmpl" .) }}
+	{{- end }}
+	{{- if $show }}
+		{{- $href := printf "%s?format=markdown" .Path }}
+		{{- partial "topbar/func/button.html" (dict
+			"page" .
+			"class" "topbar-button-markdown"
+			"href" $href
+			"icon" "fa-fw fab fa-markdown"
+			"onwidths" $onwidths
+			"onwidthm" $onwidthm
+			"onwidthl" $onwidthl
+			"hint" (T "Show-Markdown")
+		)}}
+	{{- end }}
+{{- end }}

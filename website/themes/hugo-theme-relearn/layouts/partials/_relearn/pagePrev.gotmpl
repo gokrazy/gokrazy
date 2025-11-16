@@ -1,0 +1,106 @@
+{{- $prev := "" }}
+{{- if eq .Page.Kind "term" }}
+  {{- /* go to previous term page or taxonomy page if it is the first term */}}
+  {{- $taxonomy_page := .Site.GetPage .Data.Plural }}
+  {{- $pages := partialCached "_relearn/pagesTaxonomy.gotmpl" $taxonomy_page $taxonomy_page.Path }}
+  {{- $prev = partial "inline/prev-term" (dict "collection" $pages "item" .) | default $taxonomy_page }}
+{{- else if eq .Page.Kind "taxonomy" }}
+  {{- $prev = .Site.Home }}
+{{- else if eq .Page.Kind "home" }}
+  {{- /* no prev here */}}
+{{- else }}
+  {{- $prev = or (partial "inline/prev_page" .) .Site.Home }}
+{{- end }}
+{{- return $prev }}
+
+{{- define "partials/inline/prev-term" }}
+  {{- $collection := .collection }}
+  {{- $item := .item }}
+  {{- $last := "" }}
+  {{- $result := "" }}
+  {{- range $collection }}
+    {{- if eq $item .Page.Page }}
+      {{- $result = $last }}
+      {{- break }}
+    {{- end }}
+    {{- $last = .Page.Page }}
+  {{- end }}
+  {{- return $result }}
+{{- end }}
+
+{{- define "partials/inline/prev_page" }}
+  {{- $previousVisible := "" }}
+  {{- $currentNode := . }}
+  {{- with partial "inline/parent" $currentNode }}
+    {{- $parent := . }}
+    {{- $pages := partialCached "_relearn/pages.gotmpl" (dict "page" $parent) $parent.Path }}
+    {{- $previousSibling := partial "inline/prev_sibling" (dict "siblings" $pages "currentNode" $currentNode) }}
+    {{- if $previousSibling }}
+      {{- $previousVisible = partial "inline/rightmost_descendant" $previousSibling }}
+      {{- if not $previousVisible }}
+        {{- if $previousSibling.RelPermalink }}
+          {{- $previousVisible = $previousSibling }}
+        {{- else }}
+          {{- $previousVisible = partial "inline/prev_page" $previousSibling }}
+        {{- end }}
+      {{- end }}
+    {{- else }}
+      {{- if $parent.RelPermalink }}
+        {{- $previousVisible = $parent }}
+      {{- else }}
+        {{- $previousVisible = partial "inline/prev_page" $parent }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- return $previousVisible }}
+{{- end }}
+
+{{- define "partials/inline/prev_sibling" }}
+  {{- $previousSibling := "" }}
+  {{- $siblings := .siblings }}
+  {{- $currentNode := .currentNode }}
+  {{- range $siblings }}
+    {{- if eq . $currentNode }}
+      {{- break }}
+    {{- else if not (or (eq .Title "") .Params.hidden .Params.menuUrl .Params.menuPageRef) }}
+      {{- $previousSibling = . }}
+    {{- end }}
+  {{- end }}
+  {{- return $previousSibling }}
+{{- end }}
+
+{{- define "partials/inline/rightmost_descendant" }}
+  {{- $rightmostVisible := . }}
+  {{- $pages := (partialCached "_relearn/pages.gotmpl" (dict "page" $rightmostVisible) $rightmostVisible.Path) | collections.Reverse }}
+  {{- range $pages }}
+    {{- if not (or (eq .Title "") .Params.hidden .Params.menuUrl .Params.menuPageRef) }}
+      {{- with partial "inline/rightmost_descendant" . }}
+        {{- if .RelPermalink }}
+          {{- $rightmostVisible = . }}
+          {{- break }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- return $rightmostVisible }}
+{{- end }}
+
+{{- define "partials/inline/parent" }}
+  {{- $nonheadless := "" }}
+  {{- $page := . }}
+  {{- $parent := .Parent }}
+  {{- if not (partial "_relearn/pageIsSpecial.gotmpl" $page) }}
+    {{- with $parent }}
+      {{- $pages := partialCached "_relearn/pages.gotmpl" (dict "page" .) .Path }}
+      {{- range $pages }}
+        {{- if eq . $page }}
+          {{- $nonheadless = $parent }}
+          {{- break }}
+        {{- end }}
+      {{- end }}
+    {{- else }}
+      {{- $nonheadless = $parent }}
+    {{- end }}
+  {{- end }}
+  {{- return $nonheadless }}
+{{- end }}

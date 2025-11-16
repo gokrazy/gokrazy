@@ -1,0 +1,11 @@
+{{- $applyErrorIgnore := .applyErrorIgnore | default true }}
+{{- if partial "_relearn/urlErrorCheck.gotmpl" (dict "page" .page "url" .url "applyErrorIgnore" $applyErrorIgnore) }}
+	{{- $pageParam := index .page.Params .param }}
+	{{- $siteParam := index site.Params .param }}
+	{{- $errorlevel := or (and $pageParam $pageParam.errorlevel) (and $siteParam $siteParam.errorlevel) }}
+	{{- if eq $errorlevel "warning" }}
+		{{- warnf .msg }}
+	{{- else if eq $errorlevel "error" }}
+		{{- errorf .msg }}
+	{{- end }}
+{{- end }}

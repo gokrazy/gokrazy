@@ -1,0 +1,179 @@
+# showcase of the menu shortcuts; you can use relative URLs linking
+# to your content or use fully-qualified URLs to link outside of
+# your project
+[en]
+  title = 'Hugo Relearn Theme'
+  weight = 1
+  languageCode = 'en'
+  languageName = 'English'
+  # Language dependent settings:
+  # Use case https://gohugo.io/content-management/multilingual/#translation-by-content-directory
+  #contentDir = 'content/en'
+  [en.params]
+    landingPageName = '<i class="fa-fw fas fa-home"></i> Home'
+
+[[en.menu.shortcuts]]
+  pre = '<i class="fa-fw fas fa-anchor"></i> '
+  name = 'Example Site'
+  url = 'exampleSite/about/index.html'
+  weight = 1
+[[en.menu.shortcuts]]
+  pre = '<i class="fa-fw fab fa-github"></i> '
+  name = 'GitHub Repo'
+  url = 'https://github.com/McShelby/hugo-theme-relearn'
+  weight = 10
+[[en.menu.shortcuts]]
+  name = 'Showcases'
+  pageRef = '/showcase'
+  weight = 20
+[[en.menu.shortcuts]]
+  name = 'Credits'
+  pageRef = '/more/credits'
+  weight = 30
+[[en.menu.shortcuts]]
+  pre = '<i class="fa-fw fas fa-tags"></i> '
+  name = 'Tags'
+  pageRef = '/tags'
+  weight = 40
+[[en.menu.shortcuts]]
+  pre = '<i class="fa-fw fas fa-layer-group"></i> '
+  name = 'Categories'
+  pageRef = '/categories'
+  weight = 50
+
+[[en.menu.devshortcuts]]
+  identifier = 'devshortcuts'
+  name = 'Dev Shortcuts'
+[[en.menu.devshortcuts]]
+  parent = 'devshortcuts'
+  pre = '<i class="fa-fw fab fa-hackerrank"></i> '
+  name = 'Hugo'
+  url = 'https://gohugo.io/documentation/'
+  weight = 1
+[[en.menu.devshortcuts]]
+  parent = 'devshortcuts'
+  pre = '<i class="fa-fw fas fa-puzzle-piece"></i> '
+  identifier = 'theme'
+  name = 'Theme'
+  weight = 2
+  [[en.menu.devshortcuts.params]]
+    alwaysopen = true
+[[en.menu.devshortcuts]]
+  parent = 'theme'
+  pre = '<i class="fa-fw fas fa-gears"></i> '
+  identifier = 'configoptions'
+  pageRef = 'configuration/reference'
+  weight = 1
+[[en.menu.devshortcuts]]
+  parent = 'theme'
+  pre = '<i class="fa-fw fab fa-markdown"></i> '
+  identifier = 'frontmatter'
+  title = 'Front Matter Reference'
+  pageRef = 'authoring/frontmatter/reference#annotated-front-matter'
+  weight = 2
+[[en.menu.devshortcuts]]
+  parent = 'theme'
+  pre = '<i class="fa-fw fas fa-image"></i> '
+  identifier = 'screenshotframe'
+  title = 'Screenshot Frame'
+  pageRef = 'images/hero.zip'
+  weight = 3
+[[en.menu.devshortcuts]]
+  parent = 'theme'
+  pre = '<i class="fa-fw fas fa-wand-magic-sparkles"></i> '
+  title = 'Maaagic Download'
+  pageRef = 'images/magic.gif?download'
+  weight = 4
+
+# this is ourrr way t' showcase th' multilang settings by
+# doing autotrrranlat'n of th' english content; we are
+# lazy and don't supporrt furrrther trrranslations; arrr,
+# don't take it t' serrrious, fello'; it's prrretty hacky and:
+# NOT MEANT FER PRRRODUCTION! ARRR!
+
+[pir]
+  title = "Cap'n Hugo Relearrrn Theme"
+  weight = 2
+  # It would be more standard compliant to have the language key also
+  # named art-x-pir but that would require to rename all files
+  languageCode = 'art-x-pir'
+  languageDirection = 'rtl' # you can explicitly override the reading direction here, otherwise the translation file contains a default
+  languageName = 'Arrr! ☠ Pirrratish ☠'
+  # Language dependent settings:
+  # Use case https://gohugo.io/content-management/multilingual/#translation-by-content-directory
+  #contentDir = 'content/pir'
+  [pir.params]
+    landingPageName = '<i class="fa-fw fas home"></i> Arrr! Home'
+
+[[pir.menu.shortcuts]]
+  pre = '<i class="fa-fw fas fa-anchor"></i> '
+  name = 'Example Site'
+  url = '../exampleSite/pir/about/index.html'
+  weight = 1
+[[pir.menu.shortcuts]]
+  pre = '<i class="fa-fw fab fa-github"></i> '
+  name = 'GitHub Repo'
+  url = 'https://github.com/McShelby/hugo-theme-relearn'
+  weight = 10
+[[pir.menu.shortcuts]]
+  pre = '<i class="fa-fw fas fa-camera"></i> '
+  name = 'Showcases'
+  pageRef = '/showcase'
+  weight = 20
+[[pir.menu.shortcuts]]
+  name = 'Crrredits'
+  pageRef = '/more/credits'
+  weight = 30
+[[pir.menu.shortcuts]]
+  name = 'Arrr! Tags'
+  pageRef = '/tags'
+  weight = 40
+[[pir.menu.shortcuts]]
+  pre = '<i class="fa-fw fas fa-layer-group"></i> '
+  name = 'Categorrries'
+  pageRef = '/categories'
+  weight = 50
+
+[[pir.menu.devshortcuts]]
+  identifier = 'devshortcuts'
+  name = 'Dev Shortcuts'
+[[pir.menu.devshortcuts]]
+  parent = 'devshortcuts'
+  pre = '<i class="fa-fw fab fa-hackerrank"></i> '
+  name = "Cap'n Hugo"
+  url = 'https://gohugo.io/documentation/'
+  weight = 1
+[[pir.menu.devshortcuts]]
+  parent = 'devshortcuts'
+  pre = '<i class="fa-fw fas fa-puzzle-piece"></i> '
+  identifier = 'theme'
+  name = "Th' Theme"
+  weight = 2
+  [[pir.menu.devshortcuts.params]]
+    alwaysopen = true
+[[pir.menu.devshortcuts]]
+  parent = 'theme'
+  pre = '<i class="fa-fw fas fa-gears"></i> '
+  identifier = 'configoptions'
+  pageRef = 'configuration/reference'
+  weight = 1
+[[pir.menu.devshortcuts]]
+  parent = 'theme'
+  pre = '<i class="fa-fw fab fa-markdown"></i> '
+  identifier = 'frontmatter'
+  title = 'Front Matter Reference'
+  pageRef = 'authoring/frontmatter/reference#annotated-front-matter'
+  weight = 2
+[[pir.menu.devshortcuts]]
+  parent = 'theme'
+  pre = '<i class="fa-fw fas fa-image"></i> '
+  identifier = 'screenshotframe'
+  title = 'Screenshot Frame'
+  pageRef = 'images/hero.zip'
+  weight = 3
+[[pir.menu.devshortcuts]]
+  parent = 'theme'
+  pre = '<i class="fa-fw fas fa-wand-magic-sparkles"></i> '
+  title = 'Maaagic Download'
+  pageRef = 'images/magic.gif?download'
+  weight = 4

@@ -1,0 +1,15 @@
+# Configuration to test versioning support in development
+
+# To use run `hugo -p 1414 -e versioning` or `hugo server -p 1414 -e versioning` from the `exampleSite` directory
+
+# It uses the docs as the current version and abuses the exampleSite
+# as an archived version
+
+baseURL = 'http://localhost:1414/exampleSite/'
+relativeURLs = false
+[params]
+  version = '0.666'
+  versions = [
+    { identifier = 'latest', title = '1.0', baseURL = 'http://localhost:1313/', isLatest = true},
+    { identifier = '0.666', title = '0.666', baseURL = 'http://localhost:1414/exampleSite/'},
+  ]

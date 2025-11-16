@@ -1,0 +1,11 @@
+{{- $versions := slice }}
+{{- range site.Params.versions | default slice }}
+  {{- $version := . }}
+  {{- $isAbs := (urls.Parse .baseURL).IsAbs }}
+  {{- $url := trim .baseURL "/" }}
+  {{- $version = merge $version (dict "isAbs" $isAbs) }}
+  {{- $version = merge $version (dict "value" (.identifier | anchorize)) }}
+  {{- $version = merge $version (dict "baseURL" (cond (or $isAbs (not $url)) $url (print "/" $url))) }}
+  {{- $versions = $versions | append $version }}
+{{- end -}}
+{{- return $versions }}

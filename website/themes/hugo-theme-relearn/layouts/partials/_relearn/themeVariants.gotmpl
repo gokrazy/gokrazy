@@ -1,0 +1,293 @@
+{{- $page := . }}
+{{- $nonautothemevariants := slice }}
+{{- $formathtmlpre := ":root:not([data-r-output-format='print']):not([data-r-theme-variant='my-custom-variant'])" }}
+{{- $formathtml := "" }}
+{{- $minify := not hugo.IsServer }}
+{{- if and (isset site.Params "minify") (ne site.Params.minify "") }}
+  {{- $minify = site.Params.minify }}
+{{- end }}
+
+{{- /*
+Unification run:
+- convert from old forms to slice of dicts
+- add default name property
+- convert auto property to slice
+- remember default variants for auto mode
+*/}}
+{{- $tempthemevariants := slice | append (.Site.Params.themeVariant | default "auto" ) }}
+{{- $themevariants := slice }}
+{{- range $tempthemevariant := $tempthemevariants }}
+  {{- $themevariant := $tempthemevariant }}
+  {{- if not (reflect.IsMap $themevariant) }}
+    {{- $themevariant = dict "identifier" $tempthemevariant }}
+  {{- end }}
+  {{- if not $themevariant.name }}
+    {{- $themevariant = collections.Merge $themevariant (dict "name" ($themevariant.identifier | humanize | strings.Title)) }}
+  {{- end }}
+  {{- if eq $themevariant.identifier "auto" }}
+    {{- $themevariant = collections.Merge $themevariant (dict "auto" ($themevariant.auto | default slice)) }}
+  {{- end }}
+  {{- if not (isset $themevariant "auto") }}
+    {{- $nonautothemevariants = $nonautothemevariants | append $themevariant.identifier }}
+  {{- end }}
+  {{- if eq $themevariant.identifier "my-custom-variant" }}
+    {{- errorf "\"theme-%s.css\": the variant identifier '%s' is reserved for the theme's variant generator, instead rename it to something different" "my-custom-variant" "my-custom-variant" }}
+  {{- end }}
+  {{- $themevariants = $themevariants | append $themevariant }}
+{{- end }}
+
+{{- /*
+Generator run:
+- fill up auto property with defaults
+- write variant & chroma CSS string of normal variants and for light and dark of auto variants
+*/}}
+{{- $defaultautothemevariants := slice }}
+{{- $defaultautothemevariants = $defaultautothemevariants | append (index .Site.Params.themeVariantAuto 0 | default (index $nonautothemevariants 0) | default "relearn-light") }}
+{{- $defaultautothemevariants = $defaultautothemevariants | append (index .Site.Params.themeVariantAuto 1 | default (index $nonautothemevariants 1) | default "relearn-dark") }}
+{{- $tempthemevariants = $themevariants }}
+{{- $themevariants = slice }}
+{{- range $tempthemevariant := $tempthemevariants }}
+  {{- $themevariant := $tempthemevariant }}
+  {{- if collections.IsSet $themevariant "auto" }}
+    {{- $light := index $themevariant.auto 0 | default (index $defaultautothemevariants 0) }}
+    {{- $dark := index $themevariant.auto 1 | default (index $defaultautothemevariants 1) }}
+    {{- $themevariant = collections.Merge $themevariant (dict "auto" (slice | append $light | append $dark)) }}
+    {{- $lightthemevariant := partial "inline/get-theme-details" (dict "themevariant" $themevariant "identifier" $light) }}
+    {{- $darkthemevariant := partial "inline/get-theme-details" (dict "themevariant" $themevariant "identifier" $dark) }}
+    {{- $formathtmlpre = print $formathtmlpre
+      ":not([data-r-theme-variant='" $themevariant.identifier "'])"
+    }}
+    {{- $formathtml = print $formathtml
+      "\n:root:not([data-r-output-format='print'])[data-r-theme-variant='" $themevariant.identifier "'] {"
+      "\n@media screen and (prefers-color-scheme: light) {"
+      "\n" $lightthemevariant.themecontent
+      "\n" $lightthemevariant.chromacontent
+      "\n}"
+      "\n@media screen and (prefers-color-scheme: dark) {"
+      "\n" $darkthemevariant.themecontent
+      "\n" $darkthemevariant.chromacontent
+      "\n}"
+      "\n}"
+    }}
+  {{- else }}
+    {{- $themevariant = partial "inline/get-theme-details" (dict "themevariant" $themevariant "identifier" $themevariant.identifier)}}
+    {{- $formathtmlpre = print $formathtmlpre
+      ":not([data-r-theme-variant='" $themevariant.identifier "'])"
+    }}
+    {{- $formathtml = print $formathtml
+      "\n:root:not([data-r-output-format='print'])[data-r-theme-variant='" $themevariant.identifier "'] {"
+      "\n" $themevariant.themecontent
+      "\n" $themevariant.chromacontent
+      "\n}"
+}}
+  {{- end }}
+  {{- $themevariants = $themevariants | append $themevariant }}
+{{- end }}
+
+{{- /*
+- Read default stuff
+*/}}
+{{- $defaultthemevariant := partial "inline/get-theme-details" (dict "themevariant" (dict) "identifier" "relearn-light") }}
+{{- $nucleuscontent := "" }}
+{{- with resources.Get "/css/nucleus.css" }}
+  {{- $nucleuscontent = .Content }}
+{{- end }}
+{{- $fontscontent := "" }}
+{{- with resources.Get "/css/fonts.css" }}
+  {{- $fontscontent = .Content }}
+{{- end }}
+{{- $htmlcontent := "" }}
+{{- with resources.Get "/css/format-html.css" }}
+  {{- $htmlcontent = .Content }}
+{{- end }}
+{{- $printcontent := "" }}
+{{- with resources.Get "/css/format-print.css" }}
+  {{- $printcontent = .Content }}
+{{- end }}
+{{- $styles := partialCached "_relearn/boxStyles.gotmpl" . }}
+
+{{- /*
+- Read variables.css and add custom box styles
+*/}}
+{{- $variablescontent := "" }}
+{{- with resources.Get "/css/variables.css" }}
+  {{- $boxcontent := "" }}
+  {{- /* replicate variables.css */}}
+  {{- range $styles }}
+    {{- if or .color .textcolor .captioncolor .bgcolor .style }}
+      {{- $identifier := upper .identifier }}
+      {{- $style := upper .style | default "" }}
+      {{- $color := .color | default (cond (ne $style "") (print "var(--INTERNAL-BOX-" $style "-color)") (print "var(--INTERNAL-" $identifier "-color)")) }}
+      {{- $textcolor := .textcolor | default (cond (ne $style "") (print "var(--INTERNAL-BOX-" $style "-TEXT-color)") (print "var(--INTERNAL-BOX-TEXT-color)")) }}
+      {{- $captioncolor := .captioncolor | default (cond (ne $style "") (print "var(--INTERNAL-BOX-" $style "-CAPTION-color)") (print "var(--INTERNAL-BOX-CAPTION-color)")) }}
+      {{- $bgcolor := .bgcolor | default (cond (ne $style "") (print "var(--INTERNAL-BOX-" $style "-BG-color)") (print "var(--INTERNAL-BOX-BG-color)")) }}
+      {{- $boxcontent = print $boxcontent
+        "\n  --INTERNAL-BOX-" $identifier "-color: var(--BOX-" $identifier "-color, " $color ");"
+        "\n  --INTERNAL-BOX-" $identifier "-TEXT-color: var(--BOX-" $identifier "-TEXT-color, " $textcolor ");"
+        "\n  --INTERNAL-BOX-" $identifier "-CAPTION-color: var(--BOX-" $identifier "-CAPTION-color, " $captioncolor ");"
+        "\n  --INTERNAL-BOX-" $identifier "-BG-color: var(--BOX-" $identifier "-BG-color, " $bgcolor ");"
+      }}
+    {{- end }}
+  {{- end }}
+  {{- $variablescontent = print
+    ":root {"
+    "\n" .Content
+    $boxcontent
+    "\n}"
+  }}
+{{- end }}
+
+{{- /*
+- Write theme.css
+*/}}
+{{- with resources.Get "/css/theme.css" }}
+  {{- $boxcontent := "" }}
+  {{- /* replicate theme.css */}}
+  {{- range $styles }}
+    {{- if or .color .textcolor .captioncolor .bgcolor .style }}
+      {{- $identifier := upper .identifier }}
+      {{- $boxcontent = print $boxcontent
+        "\n.cstyle." .identifier " {"
+        "\n  --VARIABLE-BOX-color: var(--INTERNAL-BOX-" $identifier "-color);"
+        "\n  --VARIABLE-BOX-TEXT-color: var(--INTERNAL-BOX-" $identifier "-TEXT-color);"
+        "\n  --VARIABLE-BOX-CAPTION-color: var(--INTERNAL-BOX-" $identifier "-CAPTION-color);"
+        "\n  --VARIABLE-BOX-BG-color: var(--INTERNAL-BOX-" $identifier "-BG-color);"
+        "\n}\n"
+      }}
+    {{- end }}
+  {{- end }}
+  {{- $themecontent := print
+    $variablescontent
+    "\n\n" $nucleuscontent
+    "\n" .Content
+    $boxcontent
+    "\n" $fontscontent
+  }}
+  {{- $cssres := $themecontent | resources.FromString "css/theme.css" }}
+  {{- if $minify }}
+    {{- $cssres = $cssres | minify }}
+  {{- end }}
+  {{- /* the following code causes Hugo to generate our file in public */}}
+  {{- $url := $cssres.RelPermalink }}
+{{- end }}
+
+{{- /*
+- Write swagger.css
+*/}}
+{{- with resources.Get "/css/swagger.css" }}
+  {{- $swaggercontent := print
+    $variablescontent "\n"
+    .Content "\n"
+    $fontscontent "\n"
+  }}
+  {{- $cssres := $swaggercontent | resources.FromString "css/swagger.css" }}
+  {{- if $minify }}
+    {{- $cssres = $cssres | minify }}
+  {{- end }}
+  {{- /* the following code causes Hugo to generate our file in public */}}
+  {{- $url := $cssres.RelPermalink }}
+{{- end }}
+
+{{- /*
+- Write format-html.css
+*/}}
+{{- $htmlcontent = print
+  "@media screen {"
+  "\n" $formathtmlpre ","
+  $formathtml
+  "\n}"
+  "\n@media print {"
+  "\n" $defaultthemevariant.themecontent
+  "\n" $defaultthemevariant.chromacontent
+  "\n}"
+  "\n@media print {"
+  "\n" $printcontent
+  "\n}"
+  "\n" $htmlcontent
+}}
+{{- $cssres := $htmlcontent | resources.FromString "css/format-html.css" }}
+{{- if $minify }}
+  {{- $cssres = $cssres | minify }}
+{{- end }}
+{{- /* the following code causes Hugo to generate our file in public */}}
+{{- $url := $cssres.RelPermalink }}
+
+{{- /*
+- Write format-print.css
+*/}}
+{{- $printcontent = print
+  ":root[data-r-output-format='print'] {"
+  "\n" $defaultthemevariant.themecontent
+  "\n" $defaultthemevariant.chromacontent
+  "\n}"
+  "\n" $printcontent
+}}
+{{- $cssres := $printcontent | resources.FromString "css/format-print.css" }}
+{{- if $minify }}
+  {{- $cssres = $cssres | minify }}
+{{- end }}
+{{- /* the following code causes Hugo to generate our file in public */}}
+{{- $url := $cssres.RelPermalink }}
+
+{{- /*
+Write yet non-dynamic stuff
+- fontawesome
+- robotoflex
+*/}}
+{{- range resources.Match "/fonts/fontawesome/**" }}
+  {{- /* the following code causes Hugo to generate our file in public */}}
+  {{- $url := .RelPermalink }}
+{{- end }}
+{{- range resources.Match "/fonts/robotoflex/**" }}
+  {{- /* the following code causes Hugo to generate our file in public */}}
+  {{- $url := .RelPermalink }}
+{{- end }}
+
+{{- return $themevariants }}
+
+{{- define "partials/inline/get-theme-details" }}
+  {{- $themevariant := .themevariant }}
+  {{- $identifier := .identifier }}
+  {{- $themecontent := "" }}
+  {{- with resources.Get (printf "/css/theme-%s.css" $identifier) }}
+    {{- $themecontent = replaceRE `([ \t]*)(:root)` "${1}&${2}" .Content }}
+  {{- else }}
+    {{- errorf "\"theme-%s.css\": file not found in \"assets/css\"; if you are migrating from a theme version older thant 6.0.0, you have to move it over from \"static/css\"" $identifier }}
+  {{- end }}
+  {{- $chroma := "" }}
+  {{- $chromacontent := "" }}
+  {{- range findRESubmatch `[ \t]*@import\s+[^$]*?chroma-([^.]*?)\.css` $themecontent }}
+    {{- $chroma = index . 1 }}
+    {{- errorf "\"theme-%s.css\": UNSUPPORTED use of @import for chroma stylesheet, instead use '--CODE-theme: %s;'; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/6/#6-0-0" $identifier $chroma }}
+  {{- end }}
+  {{- $tempthemecontent := $themecontent }}
+  {{- range findRESubmatch `[ \t]*@import\s+[^$]*?theme-([^.]*?)\.css` $themecontent }}
+    {{- $subidentifier := index . 1 }}
+    {{- $themevariant = partial "inline/get-theme-details" (dict "themevariant" $themevariant "identifier" $subidentifier) }}
+    {{- $tempthemecontent = replaceRE (printf `[ \t]*@import\s+[^$]*?theme-%s\.css["']?\s*\)?\s*;?` $subidentifier) $themevariant.themecontent $tempthemecontent 1 }}
+    {{- $chroma = $themevariant.chroma }}
+    {{- $chromacontent = $themevariant.chromacontent }}
+  {{- end }}
+  {{- $themecontent = replaceRE `(&\s*)+:root` "&:root" $tempthemecontent }}
+  {{- range findRESubmatch `[ \t]*--CODE-theme\s*:\s*([^;]*?)\s*;` $themecontent }}
+    {{- $chroma = index . 1 }}
+    {{- $cssres := resources.Get (printf "/css/chroma-%s.css" $chroma) }}
+    {{- if not $cssres }}
+      {{- errorf "\"chroma-%s.css\": file not found in \"assets/css\"; if you are migrating from a theme version older thant 6.0.0, you have to move it over from \"static/css\"" $chroma }}
+    {{- end }}
+    {{- $chromacontent = $cssres.Content }}
+  {{- end }}
+  {{- if not $chroma }}
+    {{- $chroma = "relearn-light" }}
+    {{- $cssres := resources.Get (printf "/css/chroma-%s.css" $chroma) }}
+    {{- if not $cssres }}
+      {{- errorf "\"chroma-%s.css\": file not found in \"assets/css\"; if you are migrating from a theme version older thant 6.0.0, you have to move it over from \"static/css\"" $chroma }}
+    {{- end }}
+    {{- $chromacontent = $cssres.Content }}
+    {{- $themecontent = replaceRE `(:root\s*\{[ \t]*)(\s*)` (printf "${1}${2}--CODE-theme: %s;${2}" $chroma) $themecontent }}
+  {{- end }}
+  {{- $themevariant = collections.Merge $themevariant (dict "themecontent" $themecontent) }}
+  {{- $themevariant = collections.Merge $themevariant (dict "chroma" $chroma) }}
+  {{- $themevariant = collections.Merge $themevariant (dict "chromacontent" $chromacontent) }}
+  {{- return $themevariant }}
+{{- end }}

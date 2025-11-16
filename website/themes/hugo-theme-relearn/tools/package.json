@@ -1,0 +1,24 @@
+{
+  "name": "hugo-theme-relearn-dev-tools",
+  "version": "0.1.0",
+  "description": "Helper npm manifest for running project tooling (screenshots, etc.)",
+  "type": "module",
+  "bin": {
+    "test-hugo": "./test/test-hugo.js"
+  },
+  "scripts": {
+    "screenshots": "node screenshots/index.js",
+    "test-hugo": "node test/test-hugo.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "js-toml": "^1.0.0",
+    "puppeteer": "^24.10.2"
+  },
+  "optionalDependencies": {
+    "canvas": "^2.11.2"
+  },
+  "license": "MIT"
+}

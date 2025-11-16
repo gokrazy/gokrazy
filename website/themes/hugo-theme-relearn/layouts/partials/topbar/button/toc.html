@@ -1,0 +1,28 @@
+{{- $onempty := cond (isset . "onempty") .onempty "hide" }}
+{{- $onwidths := cond (isset . "onwidths") .onwidths "show" }}
+{{- $onwidthm := cond (isset . "onwidthm") .onwidthm "show" }}
+{{- $onwidthl := cond (isset . "onwidthl") .onwidthl "show" }}
+{{- with .page }}
+	{{- $show := not (.Param "disableToc") }}
+	{{- if $show }}
+		{{- $content := partial "toc-class.html" . }}
+		{{- $hascontent := not (eq 0 (int (len (trim ($content | plainify) "\n\r\t ")))) }}
+		{{- if not $hascontent }}
+			{{- $content = " " }}
+		{{- else }}
+			{{- $content = (print "\n" $content) | safeHTML }}
+		{{- end }}
+		{{- partial "topbar/func/button.html" (dict
+			"page" .
+			"class" "topbar-button-toc"
+			"href" "javascript:toggleTopbarFlyout(this)"
+			"icon" "list-alt"
+			"onempty" $onempty
+			"onwidths" $onwidths
+			"onwidthm" $onwidthm
+			"onwidthl" $onwidthl
+			"hint" (printf "%s (CTRL+ALT+t)" (T "Toc-toggle"))
+			"content" $content
+		)}}
+	{{- end }}
+{{- end }}

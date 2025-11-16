@@ -1,0 +1,128 @@
+{{- $content := .content }}
+{{- $content = replaceRE `^\s*\r?\n` "" $content }}
+{{- $content = partial "inline/tree2markdown" $content }}
+{{- $content = $content | .page.RenderString -}}
+<div class="list-tree">
+{{- $matches := findRESubmatch `<li>([\s\S]*?)(</li|<ul)` $content }}
+{{- range $matches }}
+  {{- $replacement := "" }}
+  {{- $text := index . 1 }}
+  {{- $rest := index . 2 }}
+  {{- $parts := split $text "|" }}
+
+  {{- if gt (len $parts) 1 }}
+    {{- $name := trim (index $parts 0) " \t\n\r" }}
+
+    {{- $style := "" }}
+    {{- if ge (len $parts) 3 }}
+      {{- $style = trim (index $parts 2) " \t\n\r" }}
+    {{- end }}
+    {{- $color := "" }}
+    {{- $icon := trim (index $parts 1) " \t\n\r" }}
+    {{- $boxStyle := partial "_relearn/boxStyle.gotmpl" (dict "mode" "tree" "style" $style "color" $color "icon" $icon) }}
+    {{- $style = $boxStyle.style }}
+    {{- $color = $boxStyle.color }}
+    {{- $icon = $boxStyle.icon }}
+
+    {{- if $color }}
+      {{- $replacement = printf `<li><i class="%s" style="color: %s;"></i><span>%s</span>%s` $icon $color $name $rest }}
+    {{- else if $style }}
+      {{- $replacement = printf `<li><i class="%s %s cstyle"></i><span>%s</span>%s` $icon $style $name $rest }}
+    {{- else }}
+      {{- $replacement = printf `<li><i class="%s"></i><span>%s</span>%s` $icon $name $rest }}
+    {{- end }}
+  {{- end }}
+
+  {{- if $replacement }}
+    {{- $content = replace $content (index . 0) $replacement }}
+  {{- end }}
+{{- end }}
+{{- $content | safeHTML -}}
+</div>
+
+{{- define "partials/inline/tree2markdown" }}
+  {{- /* this parses native `tree` output into a Markdown list */}}
+  {{- $content := . }}
+  {{- $indentChars := slice " " "\t" }}
+  {{- $treeColChars := slice "│" "├" "└" "─" }}
+  {{- $indentPattern := "" }}
+  {{- $treeColPattern := "" }}
+  {{- $treeColPatternLen := 0 }}
+
+  {{- $firstLine := true }}
+  {{- $lines := split $content "\n" }}
+  {{- range $lineIndex, $line := $lines }}
+    {{- /* the first text line and all empty lines are skipped */}}
+    {{- $skipLine := false }}
+    {{- if not (trim $line " \t\r") }}
+      {{- $skipLine = true }}
+    {{- else if $firstLine }}
+      {{- $firstLine = false }}
+      {{- $skipLine = true }}
+      {{- range split $line "" }}
+        {{- if in $treeColChars . }}
+          {{- $skipLine = false }}
+          {{- break }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- if $skipLine }}
+      {{- continue }}
+    {{- end }}
+
+    {{- if not $treeColPattern }}
+      {{- /* for the first non-empty line we try to find out if it is a tree line and set prefix column pattern according to its column width */}}
+      {{- range $char := (split $line "") }}
+        {{- if and (not $treeColPattern) (in $indentChars $char) }}
+          {{- $indentPattern = print $indentPattern "." }}
+        {{- else if in $treeColChars $char }}
+          {{- if $treeColPattern }}
+            {{- $treeColPattern = print $treeColPattern "[─ ]" }}
+            {{- $treeColPatternLen = add $treeColPatternLen 1 }}
+          {{- else }}
+            {{- $treeColPattern = print $treeColPattern "[│├└ ]" }}
+            {{- $treeColPatternLen = add $treeColPatternLen 1 }}
+          {{- end }}
+        {{- else if eq " " $char }}
+          {{- $treeColPattern = print $treeColPattern "[─ ]" }}
+          {{- $treeColPatternLen = add $treeColPatternLen 1 }}
+        {{- else }}
+          {{- break }}
+        {{- end }}
+      {{- end }}
+      {{- if not $treeColPattern }}
+        {{- /* it is not a tree line so break processing at all and leave content unchanged */}}
+        {{- break }}
+      {{- end }}
+      {{- /* it is a tree line so we reset the content and fill it by parsing next */}}
+      {{- $content = "" }}
+    {{- end }}
+
+    {{- $linePattern := print `^` $indentPattern `((?:` $treeColPattern `)*)([^` (delimit $treeColChars "") `].*)` }}
+    {{- range findRESubmatch $linePattern $line }}
+      {{- $newline := "" }}
+      {{- $rest := (index . 2) }}
+      {{- $treePrefix := (index . 1) }}
+      {{- $treePrefixLen := 0 }}
+      {{- range (split $treePrefix "") }}
+        {{- /* treeChars may contain Unicode chars which len messes up as it only counts bytes */}}
+        {{- $treePrefixLen = add $treePrefixLen 1 }}
+      {{- end }}
+      {{- $treeLevel := div $treePrefixLen $treeColPatternLen }}
+      {{- range seq $treeLevel }}
+        {{- if eq . $treeLevel }}
+          {{- /* last column needs its dash */}}
+          {{- $newline = print $newline "- " }}
+        {{- else }}
+          {{- $newline = print $newline "  " }}
+        {{- end }}
+      {{- end }}
+      {{- /* have seen some weird Windows output that puts in empty lines in the tree, so only write if we have prefix AND rest */}}
+      {{- $rest = trim $rest " \t\r" }}
+      {{- if and $newline $rest }}
+        {{- $content = print $content $newline $rest "\n" }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- return $content }}
+{{- end }}

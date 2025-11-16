@@ -1,0 +1,18 @@
+{{- $title := "" }}
+{{- with and . .menu }}
+  {{- $objectTitle := "" }}
+  {{- $menuPage := partial "_relearn/menuObject.gotmpl" (dict "page" $.page "menu" . "searchResource" false) }}
+  {{- with $menuPage }}
+    {{- $objectTitle = or .LinkTitle .Title }}
+  {{- else }}
+    {{- $menuResource := partial "_relearn/menuObject.gotmpl" (dict "page" $.page "menu" . "searchPage" false) }}
+    {{- with $menuResource }}
+      {{- $objectTitle = .Title }}
+    {{- end }}
+  {{- end }}
+  {{- $title = or .Title (.Name | safeHTML) (.Identifier | safeHTML) }}
+  {{- if and (eq $objectTitle .Title) (ne .Name .Title) }}
+    {{- $title = (.Name | safeHTML) }}
+  {{- end }}
+{{- end }}
+{{- return $title }}

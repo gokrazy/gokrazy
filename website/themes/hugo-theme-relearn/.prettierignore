@@ -1,0 +1,13 @@
+assets/css/chroma*.css
+assets/css/theme-neon.css
+assets/css/variables.css
+assets/css/*/**
+assets/fonts/*/**
+assets/js/*/**
+docs/assets/js/*/**
+exampleSite
+layouts
+*.md
+*.toml
+*.yaml
+*.yml

@@ -1,0 +1,12 @@
+{{- $unused := .Inner }}
+{{- $color    := (.Get "color") }}
+{{- $style    := (.Get "style") }}
+{{- $template := (.Get "template") }}
+{{- $cards    := (.Store.Get "cards") }}
+{{- partial "shortcodes/cards.html" (dict
+  "page"     .Page
+  "color"    $color
+  "content"  $cards
+  "style"    $style
+  "template" $template
+) }}

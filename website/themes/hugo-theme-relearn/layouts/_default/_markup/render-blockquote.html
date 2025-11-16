@@ -1,0 +1,21 @@
+{{- $alerttype := .AlertType }}
+{{- $alerttitle := "" }}
+{{- $alertsign := "" }}
+{{- $hugoVersion := "0.134.0" }}
+{{- if ge hugo.Version $hugoVersion }}
+  {{- $alerttitle = .AlertTitle }}
+  {{- $alertsign = .AlertSign }}
+{{- end }}
+{{- $text := .Text }}
+{{- if $alerttype }}
+  {{- partial "shortcodes/notice.html" (dict
+    "page" .Page
+    "content" $text
+    "expanded" (cond (eq $alertsign "+") true (cond (eq $alertsign "-") false ""))
+    "style" $alerttype
+    "title" $alerttitle
+  ) }}
+{{ else -}}
+<blockquote>
+{{ $text | safeHTML }}</blockquote>
+{{ end }}

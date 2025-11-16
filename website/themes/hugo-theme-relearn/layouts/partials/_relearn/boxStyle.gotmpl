@@ -1,0 +1,99 @@
+{{- $styles := partialCached "_relearn/boxStyles.gotmpl" . }}
+{{- $mode := lower .mode | default (lower .style) | default "" }}
+
+{{- $style := lower .style | default "" }}
+{{- $color := .color | default "" }}
+{{- /* for the time we don't expose textcolor, captioncolor and bgcolor */}}
+{{- $icon := .icon | default "" }}
+{{- $title := .title | default "" }}
+
+{{- $base := dict "identifier" "" "style" "" "color" "" "icon" "" "title" "" }}
+{{- if eq $mode "attachments" }}
+	{{- $base = index $styles "attachments" }}
+	{{- if eq $color "" }}
+		{{- $style = $style | default "transparent" }}
+	{{- else }}
+		{{- $style = $style | default "default" }}
+	{{- end }}
+{{- else if eq $mode "badge" }}
+	{{- $style = $style | default "default" }}
+{{- else if eq $mode "button" }}
+	{{- if eq $color "" }}
+		{{- $style = $style | default "transparent" }}
+	{{- else }}
+		{{- $style = $style | default "default" }}
+	{{- end }}
+{{- else if eq $mode "cards" }}
+	{{- $style = $style | default "filled" }}
+{{- else if eq $mode "icon" }}
+	{{- $style = $style | default "" }}
+{{- else if eq $mode "notice" }}
+	{{- $style = $style | default "default" }}
+{{- else if eq $mode "tabs" }}
+	{{- if eq $color "" }}
+		{{- $style = $style | default "initial" }}
+	{{- else }}
+		{{- $style = $style | default "filled" }}
+	{{- end }}
+{{- else if eq $mode "terms" }}
+	{{- if $style }}
+		{{- $color = $color | default (printf "var(--VARIABLE-BOX-color)") }}
+	{{- else }}
+		{{- $color = $color | default "var(--INTERNAL-TAG-BG-color)" }}
+		{{- $icon = $icon | default "layer-group" }}
+	{{- end }}
+{{- else if eq $mode "tree" }}
+	{{- $style = $style | default "" }}
+{{- end }}
+
+{{- if eq $style "attachments" }}
+	{{- /* sadly attachment styles are so quirky that they need special handling; this code here differs from the above which checks for $mode while this is for the case the user explicitly selected the attachments $style */}}
+	{{- $base = index $styles "attachments" }}
+	{{- if eq $color "" }}
+		{{- $style = "transparent" }}
+	{{- else }}
+		{{- $style = "default" }}
+	{{- end }}
+{{- end }}
+
+{{- $default := dict "identifier" "" "style" "" "color" "" "icon" "" "title" "" }}
+{{- with index $styles $style }}
+	{{- $default = merge . (dict "color" "") }}
+{{- end }}
+{{- $color = $color | default $default.color | default "" }}
+{{- $icon = $icon | default $default.icon | default "" }}
+{{- $title = $title | default $default.title | default "" }}
+
+{{- $set := $base }}
+{{- if $color }}
+	{{- $set = merge $set (dict "color" $color) }}
+{{- end }}
+{{- if and (not $default.identifier) (not $color) }}
+	{{- /* in case of the tree shortcode, one field can contain style as well as color; so we first look for a style and if it is not available we asume it must be a color value instead */}}
+	{{- $set = merge $set (dict "color" $style) }}
+{{- end }}
+{{- if $icon }}
+	{{- $set = merge $set (dict "icon" $icon) }}
+{{- end }}
+{{- if $title }}
+	{{- $set = merge $set (dict "title" $title) }}
+{{- end }}
+{{- $set = merge $set (dict "style" $default.identifier | default $base.identifier | default "") }}
+
+{{- if $set.color }}
+	{{- $color = trim ($set.color) " " }}
+	{{- $set = merge $set (dict "color" $color) }}
+{{- end }}
+{{- if $set.icon }}
+	{{- $icon = trim ($set.icon) " " }}
+	{{- if and $icon (not (findRE ".*?\\bfa-\\w.*?" $icon)) }}
+		{{- $icon = printf "fa-fw fas fa-%s" $icon }}
+	{{- end }}
+	{{- $set = merge $set (dict "icon" $icon) }}
+{{- end }}
+{{- if $set.title }}
+	{{- $title = trim ($set.title) " " }}
+	{{- $set = merge $set (dict "title" $title) }}
+{{- end }}
+
+{{- return $set }}

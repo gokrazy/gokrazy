@@ -1,0 +1,103 @@
+{{- /* 1. set standard effects */}}
+{{- $effects := dict "download" false "target" false }}
+{{- $attributes := .attributes | default dict }}
+
+{{- /* 2. stack configured site effects */}}
+{{- if .page.Site.Params.linkeffects }}
+  {{- $effects = merge $effects .page.Site.Params.linkeffects }}
+{{- end }}
+
+{{- /* 2.1 special case to stack target effect and add external URL marker to attributes */}}
+{{- $u := urls.Parse .url }}
+{{- if $u.IsAbs }}
+  {{- $attributes = merge $attributes (dict "rel" "external") }}
+  {{- if isset .page.Site.Params "externallinktarget" }}
+    {{- $target := trim .page.Site.Params.externallinktarget "\n\r\t " }}
+    {{- if in (slice "") $target }}
+      {{- $target = false }}
+    {{- else if in (slice "false" false 0) $target }}
+      {{- $target = "_self" }}
+    {{- else if in (slice "true" true 1) $target }}
+      {{- $target = "_blank" }}
+    {{- end }}
+    {{- $effects = merge $effects (dict "target" $target) }}
+  {{- end }}
+{{- end }}
+
+{{- /* 3. stack pages frontmatter effects */}}
+{{- if .page.Params.linkeffects }}
+  {{- $effects = merge $effects .page.Params.linkeffects }}
+{{- end }}
+
+{{- /* 3.1 special case to stack target effect of pages frontmatter */}}
+{{- if $u.IsAbs }}
+  {{- if isset .page.Params "externallinktarget" }}
+    {{- $target := trim .page.Params.externallinktarget "\n\r\t " }}
+    {{- if in (slice "") $target }}
+      {{- $target = false }}
+    {{- else if in (slice "false" false 0) $target }}
+      {{- $target = "_self" }}
+    {{- else if in (slice "true" true 1) $target }}
+      {{- $target = "_blank" }}
+    {{- end }}
+    {{- $effects = merge $effects (dict "target" $target) }}
+  {{- end }}
+{{- end }}
+
+{{- /* 4. stack URL query parameter */}}
+{{- if $u.RawQuery }}
+
+  {{- /* 4.1 stack "classes" parameter effects; handle "no" prefix */}}
+  {{- if $u.Query.Has "classes" }}
+    {{- $classes := slice | append (split ($u.Query.Get "classes") ",") }}
+    {{- range $classes }}
+      {{- $k := . }}
+      {{- if isset $effects $k }}
+        {{- $v := true }}
+        {{- if strings.HasPrefix $k "no" }}
+          {{- $k := strings.TrimPrefix "no" $k }}
+          {{- $v := false }}
+        {{- end }}
+        {{- $effects = merge $effects (dict $k $v) }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+  {{- /* 4.2 stack other effect parameter; no handling for "no" prefix */}}
+  {{- range $k, $v := $effects }}
+    {{- if $u.Query.Has $k }}
+      {{- $paramValue := $u.Query.Get $k }}
+      {{- $newValue := true }}
+      {{- if eq $paramValue "" }}
+        {{- $newValue = true }}
+      {{- else if eq $paramValue "true" }}
+        {{- $newValue = true }}
+      {{- else if eq $paramValue "false" }}
+        {{- $newValue = false }}
+      {{- else }}
+        {{- $newValue = $paramValue }}
+      {{- end }}
+      {{- $effects = merge $effects (dict $k $newValue) }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- /* manually translate effects to HTML attributes */}}
+{{- /* "class" should only contain boolean effects if they are true */}}
+{{- $classes := slice }}
+{{- range $k, $v := $effects }}
+  {{- if $v }}
+    {{- if eq (printf "%T" $v) "bool" }}
+      {{- $classes = $classes | append $k }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- if $attributes.class }}{{ $classes = $classes | append (split $attributes.class " ") }}{{ end }}
+{{- $classes = delimit $classes " " }}
+{{- $attributes = merge $attributes (dict "class" $classes ) }}
+
+{{- $attributes = merge $attributes (dict "href" .url) }}
+{{- $attributes = merge $attributes (dict "download" $effects.download) }}
+{{- $attributes = merge $attributes (dict "target" $effects.target) }}
+
+{{- return $attributes }}

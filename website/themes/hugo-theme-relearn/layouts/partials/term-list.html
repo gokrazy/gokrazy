@@ -1,0 +1,31 @@
+{{- $page := .page }}
+{{- $taxonomy := .taxonomy }}
+{{- $class := .class }}
+
+{{- $style := .style | default "" }}
+{{- $color := .color | default "" }}
+{{- $icon := .icon | default "" }}
+{{- $boxStyle := partial "_relearn/boxStyle.gotmpl" (dict "mode" "terms" "style" $style "color" $color "icon" $icon) }}
+{{- $style = $boxStyle.style }}
+{{- $color = $boxStyle.color }}
+{{- $icon = $boxStyle.icon }}
+
+{{- $taxonomy_page := $page.Site.GetPage $taxonomy }}
+{{- $term_pages := slice }}
+{{- range $page.GetTerms $taxonomy }}
+  {{- $term_pages = $term_pages | append (dict "Title" (partial "title.gotmpl" (dict "page" . "linkTitle" true)) "Term" . )}}
+{{- end }}
+{{- $taxonomy_title := partial "title.gotmpl" (dict "page" $taxonomy_page) }}
+{{- with $term_pages }}
+<div class="R-taxonomy taxonomy-{{ $taxonomy }} cstyle{{ with $style }} {{ . }}{{ end }}{{ with $class }} {{ . }}{{ end }}" title="{{ $taxonomy_title }}"{{ with $color }}{{ printf " style=\"--VARIABLE-TAGS-BG-color: %s;\"" . | safeHTMLAttr }}{{ end }}>
+  {{- if $icon }}
+  <i class="{{ $icon }}"></i>
+  {{- end }}
+  <ul>
+  {{- range sort . ".Title" }}
+    {{- $to := .Term }}
+    <li><a class="term-link" href="{{ partial "permalink.gotmpl" (dict "to" $to) }}">{{ .Title }}</a></li>
+  {{- end }}
+  </ul>
+</div>
+{{- end }}

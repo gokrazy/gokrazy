@@ -1,0 +1,1 @@
+{{- warnf "DEPRECATED partial 'page-meta.hugo' used, delete it from your templates; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-0-0" }}

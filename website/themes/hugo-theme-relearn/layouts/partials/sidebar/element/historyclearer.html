@@ -1,0 +1,17 @@
+{{- $showvisitedlinks := site.Params.showVisitedLinks }}
+{{- if $showvisitedlinks }}
+  {{- $icon := .element.icon | default "history" }}
+  {{- if and $icon (not (findRE ".*?\\bfa-\\w.*?" $icon)) }}
+    {{- $icon = printf "fa-fw fas fa-%s" $icon }}
+  {{- end }}
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="{{ $icon }}"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>{{ T "Clear-History" }}</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+{{- end }}

@@ -1,0 +1,31 @@
+{{- $page := .page }}
+{{- $class := .class | default "" }}
+{{- $href := (trim .href " ") | default "" }}
+{{- $onempty := cond (isset . "onempty") .onempty "disable" }}
+{{- $onwidths := cond (isset . "onwidths") .onwidths "show" }}
+{{- $onwidthm := cond (isset . "onwidthm") .onwidthm "show" }}
+{{- $onwidthl := cond (isset . "onwidthl") .onwidthl "show" }}
+{{- $type := .type | default "" }}
+{{- $title := (trim .title " ") | default "" }}
+{{- $hint := (trim .hint " ") | default "" }}
+{{- $icon := (trim .icon " ") | default "" }}
+{{- $content := .content }}
+            <div class="topbar-button {{ $class }}" data-content-empty="{{ $onempty }}" data-width-s="{{ $onwidths }}" data-width-m="{{ $onwidthm }}" data-width-l="{{ $onwidthl }}">
+{{ partial "shortcodes/button.html" (dict
+  "page" $page
+  "href" $href
+  "style" "link"
+  "icon" $icon
+  "borderless" true
+  "type" $type
+  "content" $title
+  "hint" $hint
+)}}
+{{- if $content }}
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  {{- $content }}
+                </div>
+              </div>
+{{- end }}
+            </div>

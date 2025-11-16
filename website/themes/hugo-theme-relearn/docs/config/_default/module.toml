@@ -1,0 +1,50 @@
+# mounts are only needed in this showcase to access the publicly available screenshots and CHANGELOG;
+# remove this section if you don't need further mounts
+[[mounts]]
+  source = 'archetypes'
+  target = 'archetypes'
+[[mounts]]
+  source = 'assets'
+  target = 'assets'
+# Language dependent settings:
+# Use case https://gohugo.io/content-management/multilingual/#translation-by-filename
+[[mounts]]
+  source = 'content'
+  target = 'content'
+# Use case https://gohugo.io/content-management/multilingual/#translation-by-content-directory
+#[[mounts]]
+#  lang = 'en'
+#  source = 'content/en'
+#  target = 'content'
+#[[mounts]]
+#  lang = 'pir'
+#  source = 'content/pir'
+#  target = 'content'
+  [[mounts]]
+    source = 'data'
+    target = 'data'
+  [[mounts]]
+    source = 'i18n'
+    target = 'i18n'
+  [[mounts]]
+    source = 'layouts'
+    target = 'layouts'
+  [[mounts]]
+    source = 'static'
+    target = 'static'
+  # just for this documentation to expose our config in the docs
+  [[mounts]]
+    source = 'config'
+    target = 'assets/config'
+  # just for this documentation to expose the GitHub hero image in the docs
+  [[mounts]]
+    source = '../images'
+    target = 'assets/images'
+  # just for this documentation to expose the CHANGELOG.md in the docs
+  [[mounts]]
+    source = '../CHANGELOG.md'
+    target = 'assets/CHANGELOG.md'
+  # just for this documentation to expose the README.md in the docs
+  [[mounts]]
+    source = '../README.md'
+    target = 'assets/README.md'

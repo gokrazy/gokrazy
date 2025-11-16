@@ -1,0 +1,58 @@
+{{- /* based on Hugo 0.135.0 rss.xml */}}
+{{- $authorEmail := "" }}
+{{- with .Site.Params.author }}
+  {{- if reflect.IsMap . }}
+    {{- with .email }}
+      {{- $authorEmail = . }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- $authorName := partialCached "_relearn/authorName.gotmpl" . }}
+
+{{- $pages := .Pages }}
+{{- $limit := .Site.Config.Services.RSS.Limit }}
+{{- if ge $limit 1 }}
+  {{- $pages = $pages | first $limit }}
+{{- end }}
+
+{{- $page := . }}
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ partial "title.gotmpl" (dict "page" . "fullyQualified" true "reverse" true) }}</title>
+    <link>{{ partial "permalink.gotmpl" (dict "to" . "abs" true) }}</link>
+    <description>{{ trim (or .Description .Summary | plainify | htmlUnescape) "\n\r\t " | transform.XMLEscape | safeHTML }}</description>
+    <generator>Hugo</generator>
+    <language>{{ site.Language.LanguageCode }}</language>{{ with $authorEmail }}
+    <managingEditor>{{ . }}{{ with $authorName }} ({{ . }}){{ end }}</managingEditor>{{ end }}{{ with $authorEmail }}
+    <webMaster>{{ . }}{{ with $authorName }} ({{ . }}){{ end }}</webMaster>{{ end }}{{ with .Site.Copyright }}
+    <copyright>{{ . }}</copyright>{{ end }}{{ if not .Date.IsZero }}
+    <lastBuildDate>{{ (index $pages.ByLastmod.Reverse 0).Lastmod.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</lastBuildDate>{{ end }}
+    {{- with .OutputFormats.Get "rss" }}
+    {{ printf "<atom:link href=%q rel=\"self\" type=%q />" ( partial "permalink.gotmpl" (dict "to" . "abs" true)) .MediaType | safeHTML }}
+    {{- end }}
+    {{- range $pages }}
+      {{- $visible := true }}
+      {{- if partial "_relearn/pageIsSpecial.gotmpl" . }}
+        {{- $visible = false }}
+      {{- else if or (eq .Kind "taxonomy") (eq .Kind "term") }}
+        {{- $visible = and .Title .Permalink (or (ne .Site.Params.disableTagHiddenPages true) (not (partialCached "_relearn/pageIsHidden.gotmpl" . .Path) ) ) }}
+      {{- else }}
+        {{- /* This wants to be partialCached but can't since Hugo 0.146.7 }}
+        {{- $visible = and .Title .Permalink (or (ne .Site.Params.disableSeoHiddenPages true) (not (partialCached "_relearn/pageIsHiddenSelfOrAncestor.gotmpl" (dict "page" . "to" $page) .Path $page.Path) ) ) */}}
+        {{- $visible = and .Title .Permalink (or (ne .Site.Params.disableSeoHiddenPages true) (not (partial "_relearn/pageIsHiddenSelfOrAncestor.gotmpl" (dict "page" . "to" $page) .Path $page.Path) ) ) }}
+      {{- end }}
+      {{- if $visible }}
+    <item>
+      <title>{{ partial "title.gotmpl" (dict "page" .) }}</title>
+      <link>{{ partial "permalink.gotmpl" (dict "to" . "abs" true) }}</link>
+      <pubDate>{{ (or .PublishDate .Date).Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+      {{- with $authorEmail }}<author>{{ . }}{{ with $authorName }} ({{ . }}){{ end }}</author>{{ end }}
+      <guid>{{ partial "permalink.gotmpl" (dict "to" . "abs" true) }}</guid>
+      <description>{{ trim (or .Description .Summary | plainify | htmlUnescape) "\n\r\t " | transform.XMLEscape | safeHTML }}</description>
+    </item>
+      {{- end }}
+    {{- end }}
+  </channel>
+</rss>

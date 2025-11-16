@@ -1,0 +1,24 @@
+{{- $siteLanguages := site.Languages }}
+{{- $showlangswitch := and hugo.IsMultilingual (not site.Params.disableLanguageSwitchingButton) (gt (int (len $siteLanguages)) 1) }}
+{{- if $showlangswitch }}
+  {{- $icon := .element.icon | default "language" }}
+  {{- if and $icon (not (findRE ".*?\\bfa-\\w.*?" $icon)) }}
+    {{- $icon = printf "fa-fw fas fa-%s" $icon }}
+  {{- end }}
+			<li class="R-languageswitcher">
+              <div class="padding menu-control">
+                <i class="{{ $icon }}"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <label class="a11y-only" for="R-select-language">{{ T "Language" }}</label>
+                  <select id="R-select-language">
+                    {{- $pageLang := .page.Language.Lang }}
+                    {{- range .page.AllTranslations }}
+                    <option id="R-select-language-{{ .Language.Lang }}" value="{{ .Language.Lang }}" data-url="{{ partial "permalink.gotmpl" (dict "to" .) }}" lang="{{ .Language.LanguageCode }}"{{ if eq $pageLang .Language.Lang }} selected data-selected{{ end }}>{{ .Language.LanguageName }}</option>
+                    {{- end }}
+                  </select>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+{{- end }}

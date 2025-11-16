@@ -1,0 +1,16 @@
+{{- $ret := true }}
+{{- $applyErrorIgnore := .applyErrorIgnore | default true }}
+{{- if $applyErrorIgnore }}
+	{{- $urlIgnoreCheck := slice | append (.page.Params.urlIgnoreCheck | default slice ) | append (site.Params.urlIgnoreCheck | default slice ) }}
+	{{- if or (isset .page.Params "errorignore") (isset site.Params "errorignore") }}
+  		{{- warnf "DEPRECATED parameter 'errorignore' found, use 'urlIgnoreCheck' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/8/#8-3-0" }}
+		{{- $urlIgnoreCheck = slice | append (.page.Params.urlIgnoreCheck | default slice ) | append (site.Params.urlIgnoreCheck | default slice ) }}
+	{{- end }}
+	{{- range $urlIgnoreCheck }}
+		{{- if findRE . $.url 1 }}
+			{{- $ret = false }}
+			{{- break }}
+		{{- end }}
+	{{- end }}
+{{- end }}
+{{- return $ret }}

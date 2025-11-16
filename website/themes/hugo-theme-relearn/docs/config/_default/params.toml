@@ -1,0 +1,777 @@
+# Theme-specific options;
+# For a detailed explanation and many more options see
+# https://mcshelby.github.io/hugo-theme-relearn/configuration/reference/index.html#annotated-configuration-options
+
+# If an option value is said to be not set, you can achieve the same behavior
+# by giving it an empty string value.
+
+###############################################################################
+# Hugo
+# These options usually apply to other themes as well.
+
+# The author of your site.
+# Default: not set
+# This will be used in HTML meta tags, the open graph protocol and twitter
+# cards.
+author.name = 'Sören Weber'
+
+# The author's email address of your site.
+# Default: not set
+# This will be used in HTML meta tags, the open graph protocol and twitter
+# cards.
+author.emailname = ''
+
+# The social media image of your site.
+# Default: not set
+# This is used for generating social media meta information for the opengraph
+# protocol and twitter cards.
+# This can be overridden in the page's frontmatter.
+images = [ 'images/hero.png' ]
+###############################################################################
+# Relearn Theme
+# These options are specific to the Relearn theme.
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Branding
+# These options set your overall visual appearance.
+
+# The title to be used for links to the main page
+# Default: not set
+# This name will be used for the link to the main page in the upper section
+# of the menu. If not set, `title` from the Hugo settings will be used.
+linkTitle = 'Relearn'
+
+# Used color variants.
+# Default: 'auto'
+# This sets one or more color variants, available to your readers to choose
+# from. You can
+# - set a single value eg. 'zen-light'
+# - an array like [ 'neon', 'learn' ]
+# - an array with options like [ { identifier = 'neon' },{ identifier = 'learn' } ]
+# The last form allows to set further options for each variant.
+# The `identifier` is mandatory. You can also set `name` which overrides the
+# value displayed in the variant selector.
+# If the array has more than one entry, a variant selector
+# is shown in the lower part of the menu. The first entry in the array is the
+# default variant, used for first time visitors.
+# The theme ships with the following variants: 'relearn-bright',
+# 'relearn-light', 'relearn-dark', 'zen-light', 'zen-dark', 'neon', 'learn',
+# 'blue', 'green', 'red'. In addition you can use auto mode variants. See the
+# docs for a detailed explanation.
+# You can also define your own variants. See the docs how this works. Also,
+# the docs provide an interactive theme generator to help you with this task.
+themeVariant = [
+	{ identifier = 'relearn-auto',  name = 'Relearn Light/Dark', auto = [ 'relearn-light', 'relearn-dark' ] },
+	{ identifier = 'relearn-dark'   },
+	{ identifier = 'relearn-light'  },
+	{ identifier = 'relearn-bright' },
+	{ identifier = 'zen-auto',      name = 'Zen Light/Dark', auto = [ 'zen-light', 'zen-dark' ] },
+	{ identifier = 'zen-dark'       },
+	{ identifier = 'zen-light'      },
+	{ identifier = 'retro-auto',    name = 'Retro Learn/Neon', auto = [ 'learn', 'neon' ] },
+	{ identifier = 'neon'           },
+	{ identifier = 'learn'          },
+	{ identifier = 'blue'           },
+	{ identifier = 'green'          },
+	{ identifier = 'red'            }
+]
+
+# Minify theme assets.
+# Default: not set
+# If set to `true`, further theme asset files besides the generated HTML files
+# will be minified during build. If no value is set, the theme will avoid
+# minification if you have started with `hugo server` and otherwise will minify.
+minify = ""
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# General
+# These options are defining general, non visual behavior.
+
+# Avoid new asset URLs on build.
+# Default: false
+# By default JavaScript-files and CSS-files get a unique ID on each rebuild.
+# This makes sure, the user always has the latest version and not some stale
+# copy of his browser cache. Anyways, it can be desireable to turn this
+# off in certain circumstances. For example if you have Hugo's dev server
+# running. Also some proxies dislike this optimization.
+disableAssetsBusting = false
+
+# Avoid generator meta tags.
+# Default: false
+# Set this to true if you want to disable generation for generator meta tags
+# of Hugo and the theme in your HTML head. In this case also don't forget to
+# set Hugo's disableHugoGeneratorInject=true. Otherwise Hugo will generate a
+# meta tag into your home page anyways.
+disableGeneratorVersion = false
+
+# Avoid unique IDs.
+# Default: false
+# In various situations the theme generates non stable unique ids to be used
+# in HTML fragment links. This can be undesirable for example when testing
+# the output for changes. If you disable the random id generation, the theme
+# may not function correctly anymore.
+disableRandomIds = false
+
+# Conditionally ignore errorlevel settings
+# Default: []
+# The theme supports checking referenced address (e.g. with
+# link.errorlevel, image.errorlevel, etc. see below). Sometimes checks lead
+# to console output due to false negatives. You can turn off the checks
+# for individual referenced addresses by defining regular expressions here.
+# The referenced address will be checked against all regexes of this array.
+# If it matches at least one, no output will be written to the console.
+# This array can be expanded in the page's frontmatter.
+urlIgnoreCheck = [
+    'exampleSite',
+	'images/hero\.zip',
+	'http://localhost:1313',
+	'https://github\.com/McShelby/hugo-theme-relearn/settings',
+	'https://github\.com/McShelby/hugo-theme-relearn/archive/main\.zip',
+	'https://github\.com/McShelby/hugo-theme-relearn/edit/main/docs/introduction/releasenotes'
+]
+
+# Check external URLs
+# Default: false
+# If `true` the theme checks during build if an external URL is reachable.
+# If it fails, it write errors according to the errorlevel settings. A check
+# is omitted if the URL is found in the `urlIgnoreCheck` list.
+# This can be overridden in the page's frontmatter.
+urlExternalCheck = true
+
+# Additional code dependencies.
+# Default: See hugo.toml of the theme
+# The theme provides a mechanism to load further JavaScript and CSS
+# dependencies on demand only if they are needed. This comes in handy if you
+# want to add own shortcodes that depend on additional code to be loaded.
+# See the docs how this works.
+# [relearn.dependencies]
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Versioning
+# These options control versioning of your site..
+
+# Available verions
+# Default: not set
+# A list of version items that are available to the version switcher. Each item
+# can contain the following parameter:
+# - identifier: mandatory, not displayed
+# - title: mandatory, text, shown in the version swicher
+# - baseURL: mandatory, the base URL of that specific version
+# - isLateste: optional, but must be set exactly once in the set of items, marks
+#   the latest version of the site, used to retrieve the index of available versions
+#   during runtime for older sites.
+versions = ''
+
+# Version identifier of this site
+# Default: not set
+# If versioning is configured, this is mandatory and must be one of the identifiers
+# from the `versions` array.
+version = 'v1.0'
+
+# Hide deprecated version warning
+# Default: false
+# If you want to hide the deprecation warning, visible on all pages that to not
+# belong to the latest version of the site, set this to `true`.
+disableVersioningWarning = false
+
+# URL of the version index file relative to the language home.
+# Default: 'versionindex.js'
+# You have to set this option if your page already has a content file named
+# `versionindex.js` in the language home.
+versionIndexURL = 'versionindex.js'
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Topbar
+# These options modify the topbar appearance.
+
+# Hide the table of contents button.
+# Default: false
+# If the TOC button is hidden, also the keyboard shortcut is disabled.
+# This can be overridden in the page's frontmatter.
+disableToc = false
+
+# Hide the breadcrumbs.
+# Default: false
+# If the breadcrumbs are hidden, the title of the displayed page will still be
+# shown in the topbar.
+disableBreadcrumb = false
+
+# Hide the Markdown button.
+# Default: false
+# This hides the Markdown button if you activated the Markdown output format.
+# This can be overridden in the page's frontmatter.
+disableMarkdownButton = false
+
+# Hide the Source button.
+# Default: false
+# This hides the Source button if you activated the Source output format.
+# This can be overridden in the page's frontmatter.
+disableSourceButton = false
+
+# Hide the Print button.
+# Default: false
+# This hides the print button if you activated the print output format.
+# This can be overridden in the page's frontmatter.
+disablePrintButton = false
+
+# Hide Next and Previous navigation buttons.
+# Default: false
+# If the navigation buttons are hidden, also the keyboard shortcuts are
+# disabled.
+disableNextPrev = false
+
+# The URL prefix to edit a page.
+# Default: not set
+# If set, an edit button will be shown in the topbar. If the button is hidden,
+# also the keyboard shortcuts are disabled. The value can contain the macro
+# `${FilePath}` which will be replaced by the file path of your displayed page.
+# If no `${FilePath}` is given in the value, the value is treated as if the
+# `${FilePath}` was appended at the end of the value. This can be overridden
+# in the pages frontmatter. This is useful if you want to give the opportunity
+# for people to create merge request for your content.
+editURL = 'https://github.com/McShelby/hugo-theme-relearn/edit/main/docs/content/${FilePath}'
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Search
+# These options modify various aspects of the search functionality.
+
+# Disable the search.
+# Default: false
+# If the search is disabled, no search box will be displayed in the menu,
+# nor in-page search, search popup or dedicated search page will be available.
+# This will also cause the keyboard shortcut to be disabled.
+search.disable = ''
+
+# Disable the search index generation.
+# Default: false
+# If the search index is disabled, no search popup or dedicated search
+# page will be available.
+search.index.disable = ''
+
+# URL of the search index file relative to the language home.
+# Default: 'searchindex.js'
+# You have to set this option if your page already has a content file named
+# `searchindex.js` in the language home. Otherwise ignore it or leave empty
+# to let the default apply.
+search.index.URL = ''
+
+# Template for creation of the search index.
+# Default: '/_relearn_searchindex.js'
+# You can switch the template for generating the index by setting this
+# parameter to a differnt content view. If not set, `/_relearn_searchindex.js`
+# is used. The template must have an implementation in `assets/[YOUR-INDEXTEMPLATE]`.
+search.index.template = ''
+
+# Disable the dedicated search page.
+# Default: false
+# Search and search index must be enabled to let the
+# generation of the dedicated search page to be affected by this option.
+search.page.disable = ''
+
+# URL of the dedicated search page relative to the language home.
+# Default: 'search'
+# In its default form the search page URL is named the same for all languages
+# but you are free to override it in each language options to localise the
+# URL. You also need to set this option if your site already has a content
+# page named `search`.
+search.page.URL = ''
+
+# Content view for dedicated search page.
+# Default: '_relearn_searchpage'
+# You can switch the layout of the dedicated search page by setting this
+# parameter to a differnt content view. If not set, `_relearn_searchpage`
+# is used. The content view must have an implementation in `layouts/[YOUR-VIEWNAME]/article.html`.
+search.page.type = ''
+
+# Adapter for the search engine.
+# Default: 'lunr'
+# The theme can use different search engines. To glue both together, a
+# search adapter needs to be written for each engine. If not set, defaults
+# to `lunr`. The theme ships with an additional `orama` adapter with no
+# usage limitations and an experimental `orama-esm' adapater not usable
+# for headless server deployments but identical in functionality to the
+# `orama` adapter.
+# Each adapter may have futher specific paramters to that adapter in
+# search.adapter.params.
+search.adapter.identifier = ''
+
+# Multilanguage content for Lunr.
+# Default: not set
+# Specific to the Lunr search adapter.
+# If the search index is enabled and your pages contain further languages
+# besides the main one used, add all those auxiliary languages here. This
+# will create a search index with support for all used languages of your site.
+# This is handy for example if you are writing in Spanish but have lots of
+# source code on your page which typically uses English terminology.
+search.adapter.params.additionalContentLanguage = [ 'en' ]
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Menu
+# These options modify the menu appearance.
+
+# Hide the Home entry.
+# Default: false
+# If shown, a Home button will appear below the search bar and the main menu.
+# It links to your the home page of the current language.
+disableLandingPageButton = true
+
+# Hide the language switcher.
+# Default: false
+# If you have more than one language configured, a language switcher is
+# displayed in the lower part of the menu. This option lets you explicitly
+# turn this behavior off.
+disableLanguageSwitchingButton = false
+
+# Shows checkmarks for visited pages of the main menu.
+# Default: false
+# This also causes the display of the `Clear History` entry in the lower part
+# of the menu to remove all checkmarks. The checkmarks will also been removed
+# if you regenerate your site as the ids are not stable.
+showVisitedLinks = true
+
+# The order of main menu submenus.
+# Default: 'weight'
+# Submenus can be ordered by 'weight', 'title', 'linktitle', 'modifieddate',
+# 'expirydate', 'publishdate', 'date', 'length' or 'default' (adhering to
+# Hugo's default sort order). This can be overridden in the pages frontmatter.
+ordersectionsby = 'weight'
+
+# The initial expand state of submenus.
+# Default: not set
+# This controls whether submenus will be expanded (true), or collapsed (false)
+# in the menu. If not set, the first menu level is set to false, all others
+# levels are set to true. This can be overridden in the page's frontmatter.
+# If the displayed page has submenus, they will always been displayed expanded
+# regardless of this option.
+alwaysopen = ''
+
+# Shows expander for submenus.
+# Default: false
+# If set to true, a submenu in the sidebar will be displayed in a collapsible
+# tree view and a clickable expander is set in front of the entry.
+# Note that if set to `true` can have a major performance impact on build
+# for sites with many pages.
+# This can be overridden in the page's frontmatter.
+collapsibleMenu = true
+
+# Hide heading above the shortcuts menu.
+# Default: false
+# If a sidebar menu with identifier `shortcuts` is configured (see below),
+# this is the easy way to remove the heading;
+# The title for the heading can be overwritten in your i18n files. See Hugo's
+# documentation how to do this.
+disableShortcutsTitle = false
+
+# Define your own sidebar menus.
+# Menus are written from the sidebar's top to buttom in the order given in
+# these arrays.
+# This can be overridden in the page's frontmatter.
+# Each entry can contain the following keys:
+# - `type` is mandatory. Either `page` in case it should generate a tree from
+#    the page structure, `menu` in case it should generate a tree from a
+#    defined menu, `custom` for arbitrary HTML snippets or `divider` for a
+#    horizontal ruler.
+# - `identifier` is mandatory. In case of `type=page`, anything can be used,
+#    in case of `type=menu` the `identifier` key must be identical to the
+#    key of the menu definition.
+# - `main`, boolean. If `true`, the first tree level is spaced more generous
+#    and the text is emphasized. Default: `true` for `type=page` and `false`
+#    for `type=menu` and `type=custom`
+# - `disableTitle`, boolean. If `true`, there is no title above the tree.
+#    Default: `true` for `type=page` and `false` for `type=menu`. If a title
+#    should be used, in case of `type=page` it will be taken from the page's
+#    `menuTitle` front matter and if not set, from the translation files, using
+#    the menu `identifier` as key. In case of `type=menu` it will be taken
+#    from the menu `title` according to Hugo's documentation and if not set
+#    from the menu `name` and if this is not set form the page's `linkTitle`.
+# - `pageRef`, optional. In case of `type=page` this is the starting page's
+#    path. If not set, the home page will be used.
+# - `elements`, optional. In case of `type=custom` the list of elements to
+#    display. The theme shipps with the following predefined snippets which
+#    all accept the `icon` parameter to overwrite the default icon
+#    - languageswitcher: will display the language switcher
+#    - variantswitcher: will display the variant switcher
+#    - versionswitcher: will display the version switcher
+#    - historyclearer: will display a button to clear the history of visited links
+
+# The sidebar header menu.
+# Default: see notes
+# If not given, defaults to
+# - a home button if configured; if you redefine this, use a Hugo menu and a type=menu to replicate this
+# - a divider to separate from the sidebarmenus (depending on the configuration of the theme variant)
+sidebarheadermenus = ''
+
+# The main sidebar header.
+# Default: see notes
+# - the main page menu based on your content structure
+# - the shortcuts menu including the title if configured
+sidebarmenus = ''
+
+# The main sidebar header.
+# Default: see notes
+# - a divider to separate from the sidebarmenus if any of the following is configured
+# - the language switcher if multilingual is configured
+# - the variant switcher if multiple variants are configured
+# - the history clearer if you configured to mark visited pages
+sidebarfootermenus = ''
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Hidden pages
+# These options configure how hidden pages are treated.
+# A page flagged as hidden, is only removed from the main menu if you are
+# currently not on this page or the hidden page is not part of current page's
+# ancestors. For all other functionality in Hugo a hidden page behaves like any
+# other page if not otherwise configured.
+
+# Hide hidden pages from search.
+# Default: false
+# Hides hidden pages from the suggestions of the search box and the dedicated
+# search page.
+disableSearchHiddenPages = false
+
+# Hide hidden pages for web crawlers.
+# Default: false
+# Avoids hidden pages from showing up in the sitemap and on Google (et all),
+# otherwise they may be indexed by search engines
+disableSeoHiddenPages = true
+
+# Hide hidden pages for taxonomies.
+# Default: false
+# Hides hidden pages from showing up on the taxonomy and terms pages. If this
+# reduces term counters to zero, an empty but not linked term page will be
+# created anyhow.
+disableTagHiddenPages = false
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Content
+# These options modify how your content is displayed.
+
+# Title separator.
+# Default: '::'
+# Changes the title separator used when concatenating the page title with the
+# site title. This is consistently used throughout the theme.
+titleSeparator = '::'
+
+# Breadcrumb separator.
+# Default: '>'
+# Changes the breadcrumb separator used in the topbars breadcrumb area and for
+# search results and term pages.
+breadcrumbSeparator = '>'
+
+# Hide the root breadcrumb.
+# Default: false
+# The root breadcrumb is usually the home page of your site. Because this is
+# always accessible by clicking on the logo, you may want to reduce clutter
+# by removing this from your breadcrumb.
+disableRootBreadcrumb = true
+
+# Hide breadcrumbs term pages.
+# Default: false
+# If you have lots of taxonomy terms, the term pages may seem cluttered with
+# breadcrumbs to you, so this is the option to turn off breadcrumbs on term
+# pages. Only the page title will then be shown on the term pages.
+disableTermBreadcrumbs = false
+
+# Disable copying heading links to clipboard
+# Default: false
+# If set to true, this disables the copying of anchor links to the clipboard;
+# if also `disableAnchorScrolling=true` then no anchor link will be visible
+# when hovering a heading.
+disableAnchorCopy = false
+
+# Disable scrolling to heading link on click
+# Default: false
+# If set to true, this disables the scrolling to the beginning of the heading
+# when clicked; if also `disableAnchorCopy=true` then no anchor link will
+# be visible when hovering a heading.
+disableAnchorScrolling = false
+
+# User-defined styles for shortcodes
+# Default: not set
+# Besides the predefined `style` values, you are able to define your own. The
+# `style` parameter of the shortcode must match the `identifier` defined here.
+# The title for the style will be determined from the `title`. If no `title`
+# but a `i18n` is set, the title will be taken from the translation files by
+# that key. The `title` may be empty in which case, the box does not contain a
+# default title. `icon` and `color` are working similar.
+# You can also redefine the predefined styles if you're not satisfied with the
+# default values.
+# If you define an optional `style` attribute, this is where all default values
+# are taken from. You can reference predefined styles as also your own styles
+# if they are defined beforehand in this array.
+boxStyle = [
+	{ identifier = 'hugo', color = 'fuchsia', icon = 'fa-fw fab fa-hackerrank' },
+	{ identifier = 'breaking', style = 'warning', title = ' ' },
+	{ identifier = 'change', style = 'note', title = ' ' },
+	{ identifier = 'new', style = 'info', title = ' ', icon = 'plus-circle' },
+
+	{ identifier = 'option', style = 'cyan', icon = 'gears' },
+	{ identifier = 'frontmatter', style = 'green', icon = 'fa-fw fab fa-markdown' },
+	{ identifier = 'hugomenu', color = 'blueviolet', icon = 'bars' },
+
+	{ identifier = 'gfm', color = 'darkgray', icon = 'fa-fw fab fa-github' },
+	{ identifier = 'php', color = 'rgb(136, 140, 196)', icon = 'fa-fw fab fa-php' },
+	{ identifier = 'pants', color = 'darkorange', icon = 'lightbulb' },
+	{ identifier = 'obsidian', color = 'rgb(124, 58, 237)', icon = 'fa-fw far fa-gem' },
+	{ identifier = 'html', color = 'orangered', icon = 'fa-fw fas fa-code' },
+	{ identifier = 'relearn', color = 'rgb(125, 201, 3)', icon = 'fa-fw fas fa-puzzle-piece' },
+
+	{ identifier = 'magic', i18n = '', title = 'Magic', color = 'oklch(0.852 0.199 91.936)', icon = 'rainbow' }
+]
+
+# Hide the authors name and email addresses
+# Default: false
+# If the standard content-footer finds author name information, you can
+# disable the output of this and the according email address by setting this
+# parameter to `true`.
+hideAuthorName = false
+
+# Hide the authors email addresses
+# Default: false
+# If the standard content-footer finds an authors email address, you can
+# disable the output by setting this parameter to `true`.
+hideAuthorEmail = false
+
+# Hide the authoring date
+# Default: false
+# If the standard content-footer finds an authoring date, you can
+# disable the output by setting this parameter to `true`.
+hideAuthorDate = false
+
+# Date format
+# Default: ':date_medium'
+# The date format used for the date in the standard content-footer, when
+# displaying a pages meta information. See https://gohugo.io/functions/time/format/#localization
+# for possible values.
+dateFormat = ':date_medium'
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Highlight
+# These options configure how code is displayed.
+
+# Hide copy-to-clipboard for inline code.
+# Default: false
+# This removes the copy-to-clipboard button from your inline code.
+disableInlineCopyToClipBoard = true
+
+# Always show copy-to-clipboard for block code.
+# Default: false
+# The theme only shows the copy-to-clipboard button if you hover over the code
+# block. Set this to true to disable the hover effect and always show the
+# button.
+disableHoverBlockCopyToClipBoard = false
+
+# Wrap for code blocks.
+# Default: true
+# By default lines of code blocks wrap around if the line is too long to be
+# displayed on screen. If you dislike this behavior, you can reconfigure it
+# here.
+# Note that lines always wrap in print mode regardless of this option.
+# This can be overridden in the page's frontmatter or given as a parameter to
+# individual code blocks.
+highlightWrap = true
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Include
+# These options configure how the include shortcode works.
+
+# What to do when path is not resolved.
+# Default: ''
+# You can control what should happen if a path can not be resolved to as
+# a resource or via the file system. If not set, no output will be written
+# for the unresolved path. If set to `warning` the same happens and an additional
+# warning is printed. If set to `error` an error message is printed and the build
+# is aborted.
+# This can be overridden in the page's frontmatter.
+include.errorlevel = 'warning'
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Images
+# These options configure how images are displayed.
+
+# What to do when local image link is not resolved.
+# Default: ''
+# You can control what should happen if a local image can not be resolved to as
+# a resource. If not set, the unresolved link is written as given into the resulting
+# output. If set to `warning` the same happens and an additional warning is
+# printed. If set to `error` an error message is printed and the build is
+# aborted.
+# Please note that this can not resolve files inside of your `static` directory.
+# This can be overridden in the page's frontmatter.
+image.errorlevel = 'warning'
+
+# Image effects.
+# See the documentation for how you can even add your own arbitrary effects to
+# the list.
+# All effects can be overridden in the page's frontmatter or through URL parameter
+# given to the image. See the documentation for details.
+
+# Default: false
+imageEffects.border = true
+# Default: false
+imageEffects.dataurl = false
+# Default: false
+imageEffects.inlinecontent = false
+# Default: true
+imageEffects.lazy = true
+# Default: true
+imageEffects.lightbox = true
+# Default: false
+imageEffects.shadow = false
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Links
+# These options configure how links are displayed.
+
+# Wether to use Hugo's default relref shortcode implementation
+# Default: false
+# Since the theme provides a link render hook, the usage of the relref shortcode
+# is obsolete. If a site still uses that shortcode, it fails to generate a
+# correct links if the baseURL is configured with a subdirectory and relativeURLs=false.
+# The theme provides an overriden relref shortcode that also works in the
+# above setup but must manually be activated by setting this option to true.
+# See discussion in https://github.com/McShelby/hugo-theme-relearn/discussions/862
+disableDefaultRelref = false
+
+# Generate link URLs the Hugo way.
+# Default: false
+# If set to true, the theme behaves like a standard Hugo installation and
+# appends no index.html to prettyURLs. As a trade off, your build project will
+# not be servable from the file system.
+disableExplicitIndexURLs = false
+
+# Support legacy language links.
+# Default: false
+# If set to true, you can link to pages in other languages by using
+# `/pir/my-page`. This is not recommended, use ``/my-page?lang=pir` instead.
+enableLegacyLanguageLinks = false
+
+# How to open external links.
+# Default: ''
+# For external links you can define how they are opened in your browser. All
+# values for the HTML `target` attribute of the `a` element are allowed. The
+# default value will not add any target attribute opens external links in
+# the same browser tab.
+# If you want to explicitly open those links in the same
+# tab, use '_self'.
+# If you want to set the default behavior for all links, use link effects.
+# This can be overridden in the page's frontmatter.
+externalLinkTarget = '_self'
+
+# What to do when local page link is not resolved.
+# Default: ''
+# You can control what should happen if a local link can not be resolved to a
+# page. If not set, the unresolved link is written as given into the resulting
+# output. If set to `warning` the same happens and an additional warning is
+# printed. If set to `error` an error message is printed and the build is
+# aborted.
+# Please note that with Hugo < 0.123.0 + `uglyURLs=true` this can lead to false
+# negatives.
+# This can be overridden in the page's frontmatter.
+link.errorlevel = 'warning'
+
+# Link effects.
+# See the documentation for how you can even add your own arbitrary effects to
+# the list.
+# All effects can be overridden in the page's frontmatter or through URL parameter
+# given to the link. See the documentation for details.
+
+# Default: false
+linkEffects.download = false
+# Default: false
+linkEffects.target = false
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# MathJax
+# These options configure how math formulae are displayed.
+
+# Initialization options for MathJax.
+# Default: not set
+# A JSON value. See the MathJaxdocumentation for possible parameter.
+# This can be overridden in the page's frontmatter.
+mathJaxInitialize = '{}'
+
+# Force load Math on every page.
+# Default: false
+# If a Math shortcode or codefence is found, the option will be ignored and
+# Math will be loaded regardlessly. This option is useful in case you
+# are using passthrough configuration to render your math. In this case no shortcode or
+# codefence is involved and the library is not loaded by default so you can
+# force loading it by setting `math.force=true`.
+# This option has an alias `math=true`.
+# This can be overridden in the page's frontmatter.
+math.force = false
+
+# URL for external MathJax library.
+# Default: not set
+# Specifies the remote location of the MathJax library. By default the shipped
+# version will be used.
+# This can be overridden in the page's frontmatter.
+customMathJaxURL = '' # 'https://unpkg.com/mathjax/es5/tex-mml-chtml.js'
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Mermaid
+# These options configure how Mermaid graphs are displayed.
+
+# Make graphs panable and zoomable
+# Default: false
+# For huge graphs it can be helpful to make them zoomable. Zoomable graphs come
+# with a reset button for the zoom.
+# This can be overridden in the page's frontmatter or given as a parameter to
+# individual graphs.
+mermaidZoom = true
+
+# Initialization options for Mermaid.
+# Default: not set
+# A JSON value. See the Mermaid documentation for possible parameter.
+# This can be overridden in the page's frontmatter.
+mermaidInitialize = '{ "securityLevel": "loose" }'
+
+# Force load Mermaid on every page.
+# Default: false
+# If a Mermaid shortcode or codefence is found, the option will be ignored and
+# Mermaid will be loaded regardlessly. This option is useful in case you
+# are using scripting to render your graph. In this case no shortcode or
+# codefence is involved and the library is not loaded by default so you can
+# force loading it by setting `mermaid.force=true`.
+# This can be overridden in the page's frontmatter.
+mermaid.force = false
+
+# URL for external Mermaid library.
+# Default: not set
+# Specifies the remote location of the Mermaid library. By default the shipped
+# version will be used.
+# This can be overridden in the page's frontmatter.
+customMermaidURL = '' # 'https://unpkg.com/mermaid/dist/mermaid.min.js'
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# OpenApi
+# These options configure how OpenAPI specifications are displayed.
+
+# Force load OpenAPI on every page.
+# Default: false
+# If a OpenAPI shortcode or codefence is found, the option will be ignored and
+# OpenAPI will be loaded regardlessly. This option is useful in case you
+# are using scripting to render your spec. In this case no shortcode or
+# codefence is involved and the library is not loaded by default so you can
+# force loading it by setting `openapi.force=true`.
+# This can be overridden in the page's frontmatter.
+openapi.force = false
+
+# URL for external OpenAPI library.
+# Default: not set
+# Specifies the remote location of the OpenAPI library. By default the shipped
+# version will be used.
+# This can be overridden in the page's frontmatter.
+customOpenapiURL = '' # 'https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js'
+
+# What to do when a local OpenAPI spec link is not resolved.
+# Default: ''
+# You can control what should happen if a local OpenAPI spec link can not be resolved
+# to a resource. If not set, the unresolved link is written as given into the resulting
+# output. If set to `warning` the same happens and an additional warning is
+# printed. If set to `error` an error message is printed and the build is
+# aborted.
+# Please note that this can not resolve files inside of your `static` directory.
+# This can be overridden in the page's frontmatter.
+openapi.errorlevel = 'warning'

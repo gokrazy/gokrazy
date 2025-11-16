@@ -1,0 +1,11 @@
+.claude
+.hvm
+.DS_Store
+.githooks/hooks.log
+.hugo_build.lock
+**/node_modules
+docs/public*
+exampleSite/public*
+hugo*.exe
+*.xcf
+*.zip

@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Trang này hiển thị phiên bản {{.pageVersion.title}}. Phiên bản hiện tại có thể được tìm thấy <a href="{{.latestUrl}}">Ở đây</a>.'
+
+[Search]
+other = "Tìm kiếm"
+
+[Search-placeholder]
+other = "Tìm kiếm..."
+
+[Clear-search]
+other = "Xóa tìm kiếm"
+
+[No-results-found]
+other = "Không tìm thấy kết quả nào cho \"{0}\""
+
+[N-results-found]
+other = "{1} kết quả được tìm thấy cho \"{0}\""
+
+[Clear-History]
+other = "Xóa lịch sử.."
+
+[Reset-view]
+other = "Đặt lại dạng xem"
+
+[View-reset]
+other = "Xem đặt lại!"
+
+[Attachments-label]
+other = "Tập tin đính kèm"
+
+[title-404]
+other = "Không xác định vị trí"
+
+[message-404]
+other = "Tiếc quá! Có vẻ như trang này không tồn tại ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Đi đến trang chủ"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "Biên tập"
+
+[Show-Markdown]
+other = "Hiển thị Markdown"
+
+[Show-source]
+other = "Hiển thị mã nguồn"
+
+[Print-this-chapter]
+other = "In toàn bộ chương"
+
+[More-action]
+other = "Nội dung khác"
+
+[shortcuts-menuTitle]
+other = "Nội dung khác"
+
+[Expand-title]
+other = "Mở rộng..."
+
+[Navigation-toggle]
+other = "Menu"
+
+[Toc-toggle]
+other = "Mục lục"
+
+[Byte-symbol]
+other = "B"
+
+[Kilobyte-symbol]
+other = "KB"
+
+[Megabyte-symbol]
+other = "MB"
+
+[caution]
+other = "Thận trọng"
+
+[important]
+other = "Quan trọng"
+
+[info]
+other = "Thông tin"
+
+[note]
+other = "Ghi chú"
+
+[tip]
+other = "Mẹo vặt"
+
+[warning]
+other = "Cảnh báo"
+
+[Copy-to-clipboard]
+other = "Sao chép văn bản vào bảng tạm"
+
+[Copied-to-clipboard]
+other = "Văn bản đã sao chép vào bảng tạm!"
+
+[Copy-link-to-clipboard]
+other = "Sao chép liên kết vào bảng tạm"
+
+[Link-copied-to-clipboard]
+other = "Liên kết đã sao chép vào bảng tạm!"
+
+[Chapter]
+other = "Chương {{.}}"
+
+[Language]
+other = "Ngôn ngữ"
+
+[Theme]
+other = "Đề tài"
+
+[Submenu]
+other = "Menu con {{.}}"
+
+[Subsections]
+other = "Tiểu mục của {{.}}"
+
+[tags]
+other = "Thẻ"
+
+[tag]
+other = "Nhãn"
+
+[categories]
+other = "Thể loại"
+
+[category]
+other = "Loại"
+
+[Details]
+other = "Chi tiết"
+
+[Version]
+other = "Phiên bản"
+
+[Browser-unsupported-feature]
+other = "Trình duyệt này không hỗ trợ tính năng này"

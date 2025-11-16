@@ -1,0 +1,5 @@
+{{- $ret := false }}
+{{- if hasPrefix .Path "/_relearn" }}
+	{{- $ret = true }}
+{{- end }}
+{{- return $ret }}

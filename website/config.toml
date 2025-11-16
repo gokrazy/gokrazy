@@ -1,7 +1,7 @@
 baseURL = "https://gokrazy.org/"
 languageCode = "en-us"
 title = "gokrazy"
-theme = "hugo-theme-learn"
+theme = "hugo-theme-relearn"
 disableKinds = ["RSS", "taxonomyTerm"]
 publishDir = "../docs/"
 enableRobotsTXT = true

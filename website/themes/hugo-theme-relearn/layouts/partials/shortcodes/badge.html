@@ -1,0 +1,21 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'badge' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $content := .content }}
+
+{{- $style := .style | default "" }}
+{{- $color := .color | default "" }}
+{{- $icon := .icon | default "" }}
+{{- $title := .title | default "" }}
+{{- $boxStyle := partial "_relearn/boxStyle.gotmpl" (dict "mode" "badge" "style" $style "color" $color "icon" $icon "title" $title) }}
+{{- $style = $boxStyle.style }}
+{{- $color = $boxStyle.color }}
+{{- $icon = $boxStyle.icon }}
+{{- $title = $boxStyle.title }}
+
+{{- with $page -}}
+<span class="badge{{ with $style }} cstyle {{ . }}{{ end }}{{ if or $icon $title }} badge-with-title{{ end }}">{{ if or $icon $title }}<span class="badge-title">{{ if $icon }}<i class="{{ $icon }}"></i>{{ end }}{{ if and $icon $title }} {{ end }}{{ if $title }}{{ $title | .RenderString }}{{ end }}</span>{{ end }}<span class="badge-content"{{ with $color }} style="background-color: {{ . }};"{{ end }}>{{ $content | safeHTML }}</span></span>
+{{- end }}

@@ -1,0 +1,20 @@
+{{- $unused := .Inner }}
+{{- $color   := (.Get "color") }}
+{{- $groupid := ((.Get "groupid") | default (.Get "groupId")) }}
+{{- if (.Get "groupId") }}
+  {{- $filepath := "[virtual file]" }}{{ with and .Page .Page.File .Page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'groupId' for shortcode 'tabs' found, use 'groupid' instead; see https://mcshelby.github.io/hugo-theme-relearn/shortcodes/tabs#parameter" $filepath }}
+{{- end }}
+{{- $icon    := (.Get "icon") }}
+{{- $style   := (.Get "style") }}
+{{- $title   := (.Get "title") }}
+{{- $tabs    := (.Store.Get "tabs") }}
+{{- partial "shortcodes/tabs.html" (dict
+  "page"    .Page
+  "color"   $color
+  "content" $tabs
+  "groupid" $groupid
+  "icon"    $icon
+  "style"   $style
+  "title"   $title
+) }}

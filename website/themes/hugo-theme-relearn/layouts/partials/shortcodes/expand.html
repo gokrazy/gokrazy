@@ -1,0 +1,24 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'expand' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $title := .title | default (T "Expand-title") }}
+{{- $title = trim $title " " }}
+{{- $expanded := .expanded | default false }}
+{{- if and (isset . "open") (or (ne (printf "%T" .open) "string") (ne (trim .open " " ) "")) }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'open' for shortcode 'expand' found, use 'expanded' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/6/#6-3-0" $filepath }}
+  {{- $expanded = .open }}
+{{- end }}
+{{- if eq (printf "%T" $expanded) "string" }}
+	{{- $expanded = (eq $expanded "true") }}
+{{- end }}
+{{- partial "shortcodes/notice.html" (dict
+  "page"     .page
+  "content"  .content
+  "expanded" $expanded
+  "style"    "transparent"
+  "title"    $title
+) }}

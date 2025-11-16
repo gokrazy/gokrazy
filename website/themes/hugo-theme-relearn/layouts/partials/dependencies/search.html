@@ -1,0 +1,120 @@
+{{- $page := .page }}
+{{- $location := .location }}
+{{- $assetBusting := partialCached "assetbusting.gotmpl" . }}
+{{- $minify := not hugo.IsServer }}
+{{- if and (isset site.Params "minify") (ne site.Params.minify "") }}
+  {{- $minify = site.Params.minify }}
+{{- end }}
+
+{{- $adapter := "lunr" }}
+{{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.adapter) site.Params.search.adapter }}
+  {{- $adapter = .identifier | default $adapter }}
+{{- end }}
+{{- $disableSearchIndex := false }}
+{{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.index) site.Params.search.index.disable }}
+  {{- $disableSearchIndex = . }}
+{{- end }}
+{{- $searchIndexURL := "searchindex.js" }}
+{{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.index) site.Params.search.index }}
+  {{- $searchIndexURL = .URL | default $searchIndexURL }}
+{{- end }}
+{{- $searchIndexTemplate := "/_relearn_searchindex.js" }}
+{{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.index) site.Params.search.index }}
+  {{- $searchIndexTemplate = .template | default $searchIndexTemplate }}
+{{- end }}
+{{- $disableSearchPage := false }}
+{{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.page) site.Params.search.page.disable }}
+  {{- $disableSearchPage = . }}
+{{- end }}
+
+{{- if eq $location "default" }}
+  {{- with $page }}
+    {{- if or
+      (ne (index site.Params "disableSearchIndex") nil)
+      (ne (index site.Params "searchIndexURL") nil)
+      (ne (index site.Params "disableSearchPage") nil)
+      (ne (index site.Params "searchPageURL") nil)
+    }}
+      {{- errorf "UNSUPPORTED option 'disableSearchIndex', 'searchIndexURL', 'disableSearchPage' and/or 'searchPageURL' found, migrate your search configuration under the 'search' table instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/8/#8-0-0" }}
+    {{- end }}
+    {{- .Store.Set "needsSearch" true }}
+    {{- with site.Home.OutputFormats.Get "search" }}
+      {{- warnf "UNSUPPORTED usage of 'search' output format found, remove it from your config; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-0-0" }}
+    {{- end }}
+    {{- with site.Home.OutputFormats.Get "searchpage" }}
+      {{- warnf "UNSUPPORTED usage of 'searchpage' output format found, remove it from your config; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-0-0" }}
+    {{- end }}
+  {{- end }}
+{{- else if eq $location "header" }}
+  {{- with $page }}
+    {{- $searchIndexUrl := "" }}
+    {{- with resources.Get "/css/auto-complete/auto-complete.css" }}
+    <link href="{{ (. | minify).RelPermalink }}{{ $assetBusting }}" rel="stylesheet">
+    {{- end }}
+    {{- with resources.Get "/js/auto-complete/auto-complete.js" }}
+    <script src="{{ (. | minify).RelPermalink }}{{ $assetBusting }}" defer></script>
+    {{- end }}
+    {{- if not $disableSearchIndex }}
+      {{- $searchIndexUrl = trim $searchIndexURL "/" }}
+      {{- $searchIndexUrl = path.Join (path.Dir $searchIndexUrl) (print (path.BaseName $searchIndexUrl) "." .Language.Lang (path.Ext $searchIndexUrl)) }}
+      {{- if .IsHome }}
+        {{- $templateres := resources.Get $searchIndexTemplate }}
+        {{- $resultres := $templateres | resources.ExecuteAsTemplate $searchIndexUrl site.Home }}
+        {{- /* the following code causes Hugo to generate our file in public */}}
+        {{- $url := $resultres.RelPermalink }}
+      {{- end }}
+      {{- with resources.Get (printf "/js/search-%s.js" $adapter) }}
+        {{- $res := . }}
+        {{- if $minify }}
+          {{- $res = $res | minify }}
+        {{- end }}
+    <script src="{{ $res.RelPermalink }}{{ $assetBusting }}" defer></script>
+      {{- else }}
+        {{- with resources.Get (printf "/js/search-%s.mjs" $adapter) }}
+          {{- $res := . }}
+          {{- if $minify }}
+            {{- $res = $res | minify }}
+          {{- end }}
+    <script src="{{ $res.RelPermalink }}{{ $assetBusting }}" type="module" defer></script>
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- with resources.Get "/js/search.js" }}
+      {{- $res := . }}
+      {{- if $minify }}
+        {{- $res = $res | minify }}
+      {{- end }}
+    <script src="{{ $res.RelPermalink }}{{ $assetBusting }}" defer></script>
+    {{- end }}
+    {{- if $searchIndexUrl }}
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url={{ (printf "%s%s" $searchIndexUrl $assetBusting) | relURL }};
+    </script>
+    {{- end }}
+  {{- end }}
+{{- else if eq $location "search" }}
+  {{- $link := "" }}
+  {{- if not $disableSearchIndex }}
+    {{- if not $disableSearchPage }}
+      {{- with site.GetPage "_relearn_searchpage" }}
+        {{- $link = partial "permalink.gotmpl" (dict "to" .) }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+        <search>{{ if $link }}<form action="{{ $link }}" method="get">{{ end }}
+          <div class="searchbox default-animation">
+            {{ if $link }}<button class="search-detail" type="submit" title="{{ T "Search" }} (CTRL+ALT+f)">{{ end }}<i class="fas fa-search"{{ if not $link }} title="{{ T "Search" }} (CTRL+ALT+f)"{{ end }}></i>{{ if $link }}</button>{{ end }}
+            <label class="a11y-only" for="R-search-by">{{ T "Search" }}</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="{{ T "Search-placeholder" }}">
+            <button class="search-clear" type="button" data-search-clear="" title="{{ T "Clear-search" }}"><i class="fas fa-times" title="{{ T "Clear-search" }}"></i></button>
+          </div>
+        {{ if $link }}</form>{{ end }}</search>
+{{- end }}
+
+{{- if or (eq $location "default") .Store.Get "hasSearch" }}
+  {{- if not $disableSearchIndex }}
+    {{- $dep := printf "dependencies/search-%s.html" $adapter }}
+    {{- partial $dep (dict "page" $page "location" $location) }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,37 @@
+{{- $_hugo_config := `{ "version": 1 }` }}
+{{- $color    := (.Get "color") }}
+{{- $content  := .Inner }}
+{{- $href     := (.Get "href") }}
+{{- $icon     := (.Get "icon") }}
+{{- $image    := (.Get "image") }}
+{{- $params   := (.Get "params") }}
+{{- $style    := (.Get "style") }}
+{{- $template := (.Get "template") }}
+{{- $title    := (.Get "title") }}
+{{- $cards := slice }}
+{{- if and .Parent (.Parent.Store.Get "cards") }}
+    {{- $cards = .Parent.Store.Get "cards" }}
+{{- end }}
+{{- $cards = $cards | append (dict
+    "color"    $color
+    "content"  $content
+    "href"     $href
+    "icon"     $icon
+    "image"    $image
+    "params"   $params
+    "style"    $style
+    "template" $template
+    "title"    $title
+) }}
+{{- if .Parent }}
+    {{- $.Parent.Store.Set "cards" $cards }}
+{{- else }}
+    {{- /* if no containing cards shortcode is present, we display this card as single */}}
+    {{- partial "shortcodes/cards.html" (dict
+        "page"     .Page
+        "color"    ""
+        "content"  $cards
+        "style"    ""
+        "template" ""
+    ) }}
+{{- end }}

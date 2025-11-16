@@ -1,0 +1,45 @@
+{{ partial "shortcodes/notice.html" (dict
+  "page"  .Page
+  "style" "note"
+  "content" "The <code>CODE-theme</code> parameter can be changed in the generator but the change will not be reflected dynamically in the page preview."
+)}}
+{{ partial "shortcodes/button.html" (dict
+  "page" .Page
+  "href" "javascript:window.variants&&variants.getStylesheet();this.blur();"
+  "style" "secondary"
+  "icon" "download"
+  "content" "Download variant"
+)}}
+{{- partial "shortcodes/button.html" (dict
+  "page" .Page
+  "href" "javascript:window.variants&&variants.resetVariant();this.blur();"
+  "style" "warning"
+  "icon" "trash"
+  "content" "Reset variant"
+)}}
+<div id="R-vargenerator" class="mermaid zoomable" style="background-color: var(--INTERNAL-MAIN-TEXT-color);">
+	Graph
+</div>
+{{ partial "shortcodes/button.html" (dict
+  "page" .Page
+  "href" "javascript:window.variants&&variants.getStylesheet();this.blur();"
+  "style" "secondary"
+  "icon" "download"
+  "content" "Download variant"
+)}}
+{{- partial "shortcodes/button.html" (dict
+  "page" .Page
+  "href" "javascript:window.variants&&variants.resetVariant();this.blur();"
+  "style" "warning"
+  "icon" "trash"
+  "content" "Reset variant"
+)}}
+<script>
+	window.variants && variants.generator( '#R-vargenerator' );
+</script>
+{{- /* the variant generator also requires Mermaid; so as there is no Mermaid
+       shortcode involved here to create the graph, we have to take care
+	   to load it our self; the quickest way to do this is, to set the
+	   Mermaid dependency as well */}}
+{{- .Page.Store.Set "hasMermaid" true }}
+{{- .Page.Store.Set "hasVariantGenerator" true }}

@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "rtl"
+
+[Versioning-warning]
+other = 'این صفحه نسخه {{.pageVersion.title}} را نشان میدهد. نسخه فعلی را میتوان در <a href="{{.latestUrl}}">اینجا</a> یافت.'
+
+[Search]
+other = "جستجو"
+
+[Search-placeholder]
+other = "جستجو..."
+
+[Clear-search]
+other = "پاک کردن جستجو"
+
+[No-results-found]
+other = "نتیجه‌ای برای \"{0}\" یافت نشد"
+
+[N-results-found]
+other = "{1} نتیجه برای \"{0}\" یافت شد"
+
+[Clear-History]
+other = "پاک کردن تاریخچه"
+
+[Reset-view]
+other = "بازنشانی نمایش"
+
+[View-reset]
+other = "نمایش بازنشانی شد!"
+
+[Attachments-label]
+other = "پیوست‌ها"
+
+[title-404]
+other = "یافت نشد"
+
+[message-404]
+other = "اوه! به نظر می‌رسد این صفحه وجود ندارد ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "رفتن به صفحه اصلی"
+
+[home-button]
+other = "Home"
+
+[Edit-this-page]
+other = "ویرایش"
+
+[Show-Markdown]
+other = "نمایش Markdown"
+
+[Show-source]
+other = "نمایش کد منبع"
+
+[Print-this-chapter]
+other = "چاپ کل فصل"
+
+[More-action]
+other = "بیشتر"
+
+[shortcuts-menuTitle]
+other = "بیشتر"
+
+[Expand-title]
+other = "باز کردن..."
+
+[Navigation-toggle]
+other = "منو"
+
+[Toc-toggle]
+other = "فهرست مطالب"
+
+[Byte-symbol]
+other = "بایت"
+
+[Kilobyte-symbol]
+other = "کیلوبایت"
+
+[Megabyte-symbol]
+other = "مگابایت"
+
+[caution]
+other = "احتیاط"
+
+[important]
+other = "مهم"
+
+[info]
+other = "اطلاعات"
+
+[note]
+other = "یادداشت"
+
+[tip]
+other = "نکته"
+
+[warning]
+other = "هشدار"
+
+[Copy-to-clipboard]
+other = "کپی متن به کلیپ‌بورد"
+
+[Copied-to-clipboard]
+other = "متن به کلیپ‌بورد کپی شد!"
+
+[Copy-link-to-clipboard]
+other = "کپی لینک به کلیپ‌بورد"
+
+[Link-copied-to-clipboard]
+other = "لینک به کلیپ‌بورد کپی شد!"
+
+[Chapter]
+other = "فصل {{.}}"
+
+[Language]
+other = "زبان"
+
+[Theme]
+other = "پوسته"
+
+[Submenu]
+other = "زیرمنو {{.}}"
+
+[Subsections]
+other = "زیرقسمت‌های {{.}}"
+
+[tags]
+other = "برچسب‌ها"
+
+[tag]
+other = "برچسب"
+
+[categories]
+other = "دسته‌بندی‌ها"
+
+[category]
+other = "دسته‌بندی"
+
+[Details]
+other = "جزئیات"
+
+[Version]
+other = "نسخه"
+
+[Browser-unsupported-feature]
+other = "این مرورگر از این ویژگی پشتیبانی نمی‌کند"

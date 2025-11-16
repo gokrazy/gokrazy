@@ -1,0 +1,146 @@
+[Reading-direction]
+other = "ltr"
+
+[Versioning-warning]
+other = 'Denne side viser version {{.pageVersion.title}}. Den aktuelle version kan findes <a href="{{.latestUrl}}">her</a>.'
+
+[Search]
+other = "Søg"
+
+[Search-placeholder]
+other = "Søg..."
+
+[Clear-search]
+other = "Ryd søgning"
+
+[No-results-found]
+other = "Ingen resultater fundet for \"{0}\""
+
+[N-results-found]
+other = "{1} resultat(er) fundet for \"{0}\""
+
+[Clear-History]
+other = "Ryd historik"
+
+[Reset-view]
+other = "Nulstil visning"
+
+[View-reset]
+other = "Visning nulstillet!"
+
+[Attachments-label]
+other = "Vedhæftninger"
+
+[title-404]
+other = "Ikke fundet"
+
+[message-404]
+other = "Ups. Det ser ud til at siden ikke findes ¯\\_(ツ)_/¯."
+
+[Go-to-homepage]
+other = "Gå til forsiden"
+
+[home-button]
+other = "Forside"
+
+[Edit-this-page]
+other = "Rediger"
+
+[Show-Markdown]
+other = "Vis Markdown"
+
+[Show-source]
+other = "Vis kildekode"
+
+[Print-this-chapter]
+other = "Udskriv hele kapitlet"
+
+[More-action]
+other = "Mere"
+
+[shortcuts-menuTitle]
+other = "Mere"
+
+[Expand-title]
+other = "Udvid mig..."
+
+[Navigation-toggle]
+other = "Menu"
+
+[Toc-toggle]
+other = "Indholdsfortegnelse"
+
+[Byte-symbol]
+other = "B"
+
+[Kilobyte-symbol]
+other = "KB"
+
+[Megabyte-symbol]
+other = "MB"
+
+[caution]
+other = "Forsigtig"
+
+[important]
+other = "Vigtigt"
+
+[info]
+other = "Information"
+
+[note]
+other = "Note"
+
+[tip]
+other = "Tip"
+
+[warning]
+other = "Advarsel"
+
+[Copy-to-clipboard]
+other = "Kopier tekst til udklipsholder"
+
+[Copied-to-clipboard]
+other = "Tekst kopieret til udklipsholder!"
+
+[Copy-link-to-clipboard]
+other = "Kopier link til udklipsholder"
+
+[Link-copied-to-clipboard]
+other = "Link kopieret til udklipsholder!"
+
+[Chapter]
+other = "Kapitel {{.}}"
+
+[Language]
+other = "Sprog"
+
+[Theme]
+other = "Tema"
+
+[Submenu]
+other = "Undermenu {{.}}"
+
+[Subsections]
+other = "Undersektioner af {{.}}"
+
+[tags]
+other = "Tags"
+
+[tag]
+other = "Tag"
+
+[categories]
+other = "Kategorier"
+
+[category]
+other = "Kategori"
+
+[Details]
+other = "Detaljer"
+
+[Version]
+other = "Version"
+
+[Browser-unsupported-feature]
+other = "Denne browser understøtter ikke denne funktion"

@@ -1,0 +1,120 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'button' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+
+{{- $attributes := .attributes | default dict }}
+{{- $borderless := .borderless | default false }}
+{{- $hint := .hint | default "" }}
+{{- $type := .type | default "" }}
+{{- $isButton := false }}
+{{- $isLink := false }}
+{{- $href := (trim .href " ") | default "" }}
+{{- if or $type (strings.HasPrefix $href "javascript:") }}
+  {{- $isButton = true }}
+  {{- $href = substr $href (len "javascript:") }}
+  {{- if not $type }}
+    {{- $type = "button" }}
+  {{- end }}
+{{- else if not $href }}
+{{- else }}
+  {{- $isLink = true }}
+  {{- $u := urls.Parse .href }}
+  {{- if $u.IsAbs }}
+    {{- partialCached "_relearn/urlExists.gotmpl" (dict "url" .href "page" $page "type" "link") $u.String }}
+  {{- else }}
+    {{- $linkObject := partial "_relearn/linkObject.gotmpl" (dict "url" .href "page" $page) }}
+    {{- if $linkObject }}
+      {{- $href = partial "_relearn/decoratedLink.gotmpl" (dict "url" .href "page" $page "linkObject" $linkObject "param" "link") }}
+    {{- else }}
+      {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+      {{- $msg := printf "%q: link '%s' is not a page or a resource" $filepath .href }}
+      {{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" .href "page" $page "param" "link" "msg" $msg) }}
+    {{- end }}
+  {{- end }}
+  {{- if and (isset . "target") (or (ne (printf "%T" .target) "string") (ne (trim .target " " ) "")) }}
+    {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+    {{- warnf "%q: DEPRECATED parameter 'target' for shortcode 'button' found, use link effects instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-4-0" $filepath }}
+  {{- end }}
+  {{- $attributes = merge $attributes (partial "_relearn/linkAttributes.gotmpl" (dict "url" $href "page" $page "attributes" (dict "target" .target "title" $hint))) }}
+{{- end }}
+
+{{- $content := .content }}
+
+{{- $style := .style | default "" }}
+{{- $color := .color | default "" }}
+{{- $icon := .icon | default "" }}
+{{- $title := .title | default $content | default "" }}
+{{- $boxStyle := partial "_relearn/boxStyle.gotmpl" (dict "mode" "button" "style" $style "color" $color "icon" $icon "title" $title) }}
+{{- $style = $boxStyle.style }}
+{{- $color = $boxStyle.color }}
+{{- $icon = $boxStyle.icon }}
+{{- $title = $boxStyle.title }}
+
+{{- $iconposition := .iconposition | default "left" }}
+
+{{- $params := dict }}
+{{- $classes := slice }}
+{{- $classes = $classes | append "btn" }}
+{{- $classes = $classes | append "cstyle" }}
+{{- $classes = $classes | append (.class | default "button") }}
+{{- if $style }}
+  {{- $classes = $classes | append $style }}
+{{- end }}
+{{- if $borderless }}
+  {{- $classes = $classes | append "noborder" }}
+{{- end }}
+{{- if not $title }}
+  {{- $classes = $classes | append "notitle" }}
+{{- end }}
+{{- if not $icon }}
+  {{- $classes = $classes | append "noicon" }}
+{{- end }}
+{{- if or $isButton $isLink }}
+  {{- $classes = $classes | append "interactive" }}
+{{- end }}
+{{- $params = dict "class" (delimit $classes " ") | merge $params }}
+
+{{- if $color }}
+  {{- $params = dict "style" (print "--VARIABLE-BOX-color: " $color ";") | merge $params }}
+{{- end }}
+
+{{- with $page -}}
+<span
+  {{- range $k, $v := $params }}
+    {{- if $v }}
+      {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+    {{- end }}
+  {{- end }}>
+  {{- if $isButton -}}
+  <button{{ with $href }} onclick="{{ . | safeJS }}"{{ end }}{{ if gt (len $type) 0 }} type="{{ $type }}"{{ end }}{{ if $hint }} title="{{ $hint }}"{{ end }}>
+  {{- else if $isLink -}}
+  <a
+    {{- range $k, $v := $attributes }}
+      {{- if $v }}
+        {{- if eq (printf "%T" $v) "bool" }}
+          {{- printf " %s" $k | safeHTMLAttr }}
+        {{- else }}
+          {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+        {{- end }}
+      {{- end }}
+    {{- end }}>
+  {{- else -}}
+  <span>
+  {{- end }}
+  {{- if and $icon (eq $iconposition "left") }}<i class="{{ $icon }}"></i>{{ end }}
+  {{- if and $icon (eq $iconposition "left") $title }} {{ end }}
+  {{- if $title }}<span class="title">{{- $title | safeHTML }}</span>{{ end }}
+  {{- if and $icon (eq $iconposition "right") $title }} {{ end }}
+  {{- if and $icon (eq $iconposition "right") }}<i class="{{ $icon }}"></i>{{ end }}
+  {{- if $isButton -}}
+  </button>
+  {{- else if $isLink -}}
+  </a>
+  {{- else -}}
+  </span>
+  {{- end -}}
+</span>
+{{- end }}

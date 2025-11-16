@@ -1,0 +1,15 @@
+<h{{ .Level }} id="{{ .Anchor }}" {{- with .Attributes.class }} class="{{ . }}" {{- end }}>
+{{- .Text }}
+{{- $enableAnchorCopy := not (eq site.Params.disableAnchorCopy true) }}
+{{- $enableAnchorScrolling := not (eq site.Params.disableAnchorScrolling true) }}
+{{- if or $enableAnchorCopy $enableAnchorScrolling }}
+{{- partial "shortcodes/button.html" (dict
+  "page" .Page
+  "class" (print "anchor" (cond $enableAnchorCopy " copyanchor" "") (cond $enableAnchorScrolling " scrollanchor" ""))
+  "href" "javascript:"
+  "borderless" true
+  "style" "link"
+  "icon" "fa-fw fas fa-link fa-lg"
+  "hint" (cond $enableAnchorCopy (T "Copy-link-to-clipboard") "")
+)}}
+{{- end }}</h{{ .Level }}>

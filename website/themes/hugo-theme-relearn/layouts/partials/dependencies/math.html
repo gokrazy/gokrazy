@@ -1,0 +1,37 @@
+{{- $page := .page }}
+{{- $location := .location }}
+{{- if eq $location "footer" }}
+  {{- with $page }}
+    {{- $assetBusting := partialCached "assetbusting.gotmpl" . }}
+    {{- $init := "{}" }}
+    {{- if isset .Params "mathjaxinitialize" }}
+      {{- $init = .Params.mathJaxInitialize }}
+    {{- else if isset .Site.Params "mathjaxinitialize" }}
+      {{- $init = .Site.Params.mathJaxInitialize }}
+    {{- end }}
+    <script>
+      window.MathJax = Object.assign( window.MathJax || {}, {
+        tex: {
+          inlineMath:  [['\\(', '\\)'], ['$',  '$']],  // inline
+          displayMath: [['\\[', '\\]'], ['$$', '$$']], // block
+        },
+        options: {
+          enableMenu: false // avoid translation hassle for context menu
+        }
+      }, JSON.parse({{ $init }}) );
+    </script>
+    {{- if and (isset .Params "custommathjaxurl") .Params.customMathJaxURL }}
+    <script id="MathJax-script" async src="{{ .Params.customMathJaxURL }}"></script>
+    {{- else if and (isset .Site.Params "custommathjaxurl") .Site.Params.customMathJaxURL }}
+    <script id="MathJax-script" async src="{{ .Site.Params.customMathJaxURL }}"></script>
+    {{- else }}
+      {{- with resources.Get "/js/mathjax/tex-mml-chtml.js" }}
+    <script id="MathJax-script" async src="{{ .RelPermalink }}{{ $assetBusting }}"></script>
+      {{- end }}
+      {{- range resources.Match "/js/mathjax/**" }}
+        {{- /* the following code causes Hugo to generate our file in public */}}
+        {{- $url := .RelPermalink }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,2 @@
+{{- warnf "DEPRECATED partial 'relLangPrettyUglyURL.hugo' used, use 'permalink.gotmpl' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/7/#7-0-0" }}
+{{- partial "permalink.gotmpl" . }}

@@ -1,0 +1,23 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'tab' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $tabs := (slice | append (dict
+    "color"   .color
+    "content" .content
+    "icon"    .icon
+    "name"    .name
+    "style"   .style
+    "title"   .title
+)) }}
+{{- partial "shortcodes/tabs.html" (dict
+    "page"    $page
+    "color"   ""
+    "content" $tabs
+    "groupid" ""
+    "icon"    ""
+    "style"   ""
+    "title"   ""
+) }}

@@ -1,0 +1,69 @@
+{{- $page := .page }}
+{{- $location := .location }}
+{{- $assetBusting := partialCached "assetbusting.gotmpl" . }}
+{{- $minify := not hugo.IsServer }}
+{{- if and (isset site.Params "minify") (ne site.Params.minify "") }}
+  {{- $minify = site.Params.minify }}
+{{- end }}
+
+{{- if eq $location "header" }}
+  {{- with $page }}
+    {{- $pageBaseLang := replaceRE "([a-z]+).*" "${1}" .Page.Language.LanguageCode }}
+    {{- $additionalContentLanguage := slice }}
+    {{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.adapter) (reflect.IsMap site.Params.search.adapter.params) site.Params.search.adapter.params }}
+      {{- $additionalContentLanguage = .additionalContentLanguage | default $additionalContentLanguage }}
+    {{- end }}
+    {{- $contentlangs := (union (slice | append $additionalContentLanguage) (slice $pageBaseLang)) }}
+    {{- $quotedcontentlangs := slice }}
+    {{- $searchIndexUrl := "" }}
+    {{- $disableSearchIndex := false }}
+    {{- with and (reflect.IsMap site.Params.search) (reflect.IsMap site.Params.search.index) site.Params.search.index.disable }}
+      {{- $disableSearchIndex = . }}
+    {{- end }}
+    {{- if not $disableSearchIndex }}
+      {{- with resources.Get "/js/lunr/lunr.min.js" }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+      {{- end }}
+      {{- with resources.Get "/js/lunr/lunr.stemmer.support.min.js" }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+      {{- end }}
+      {{- with resources.Get "/js/lunr/lunr.multi.min.js" }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+      {{- end }}
+      {{- $missingcontentlangs := slice }}
+      {{- $tinyseg := false }}
+      {{- $wordcut := false }}
+      {{- range $contentlangs }}
+        {{- $lang := . }}
+        {{- with resources.Get (printf "/js/lunr/lunr.%s.min.js" $lang) }}
+          {{- if and (not $tinyseg) (or (eq $lang "ja")) }}
+            {{- $tinyseg = true }}
+            {{- with resources.Get "/js/lunr/tinyseg.js" }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+            {{- end }}
+          {{- end }}
+          {{- if and (not $wordcut) (or (eq $lang "hi") (eq $lang "th")) }}
+            {{- $wordcut = true }}
+            {{- with resources.Get "/js/lunr/wordcut.js" }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+            {{- end }}
+          {{- end }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+        {{- else }}
+          {{- $missingcontentlangs = $missingcontentlangs | append . }}
+        {{- end }}
+      {{- end }}
+      {{- $contentlangs = $contentlangs | complement $missingcontentlangs }}
+    {{- end }}
+    {{- /* with resources.Get "/js/search-lunr.js" }}
+    <script src="{{ .RelPermalink }}{{ $assetBusting }}" defer></script>
+    {{- end */}}
+    {{- range $contentlangs }}
+      {{- $quotedcontentlangs = $quotedcontentlangs | append (printf "'%s'" .) }}
+    {{- end }}
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=[{{ delimit $quotedcontentlangs ", " | safeJS }}];
+    </script>
+  {{- end }}
+{{- end }}

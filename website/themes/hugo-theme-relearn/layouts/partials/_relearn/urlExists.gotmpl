@@ -1,0 +1,29 @@
+{{- $page := .page }}
+{{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+{{- if and
+	(or .page.Params.urlExternalCheck site.Params.urlExternalCheck)
+	(partial "_relearn/urlErrorCheck.gotmpl" (dict "page" $page "url" .url)) }}
+	{{- $checkedUrls := (hugo.Store.Get "r-checked-urls") | default dict }}
+	{{- if not (isset $checkedUrls .url) }}
+		{{- hugo.Store.SetInMap "r-checked-urls" .url 1 }}
+		{{- with try (resources.GetRemote .url) }}
+			{{- with .Value }}
+				{{- with .Data }}
+					{{- if not (and (ge .StatusCode 200) (lt .StatusCode 400)) }}
+						{{- $msg := printf "Remote resource couldn't be fetched for URL '%s': %s" $.url .Status }}
+						{{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" $.url "page" $page "param" $.type "msg" $msg) }}
+					{{- end }}
+				{{- else }}
+					{{- $msg := printf "Remote resource couldn't be fetched for URL '%s'" $.url }}
+					{{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" $.url "page" $page "param" $.type "msg" $msg) }}
+				{{- end }}
+			{{- else with .Err }}
+				{{- $msg := printf "Remote resource couldn't be fetched for URL '%s': %s" $.url . }}
+				{{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" $.url "page" $page "param" $.type "msg" $msg) }}
+			{{- else }}
+				{{- $msg := printf "Remote resource couldn't be fetched for URL '%s'" $.url }}
+				{{- partial "_relearn/urlErrorReport.gotmpl" (dict "url" $.url "page" $page "param" $.type "msg" $msg) }}
+			{{- end }}
+		{{- end }}
+	{{- end }}
+{{- end }}

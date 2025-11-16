@@ -1,0 +1,12 @@
+
+<article>
+  <header class="headline">
+  </header>
+
+{{- $title := partial "title.gotmpl" (dict "page" .) }}
+<h1 id="{{ $title | plainify | anchorize }}">{{ $title }}</h1>
+{{ partial "shortcodes/term.html" (dict "page" . "term" .) }}
+
+  <footer class="footline">
+  </footer>
+</article>

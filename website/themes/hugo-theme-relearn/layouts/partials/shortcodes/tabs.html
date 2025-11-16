@@ -1,0 +1,90 @@
+{{- $page := .page }}
+{{- if and (not $page) .context }}
+  {{- $page = .context }}
+  {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+  {{- warnf "%q: DEPRECATED parameter 'context' for shortcode 'tabs' found, use 'page' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-18-0" $filepath }}
+{{- end }}
+{{- $groupid := printf "R-tabs-%s" (or .groupid (partial "_relearn/makeRandomMd5.gotmpl" $page) | md5) }}
+{{- $style := .style }}
+{{- $color := .color }}
+{{- $icon := .icon }}
+{{- $title := .title }}
+{{- $tabs := slice }}
+{{- range $tab := (.content | default slice) }}
+  {{- if and (not $tab.title) $tab.name }}
+    {{- $filepath := "[virtual file]" }}{{ with and $page $page.File $page.File.Filename }}{{ $filepath = . }}{{ end }}
+    {{- warnf "%q: DEPRECATED parameter 'name' for shortcode 'tab' found, use 'title' instead; see https://mcshelby.github.io/hugo-theme-relearn/introduction/releasenotes/5/#5-16-0" $filepath }}
+    {{- $tab = merge $tab (dict "title" .name) }}
+  {{- end }}
+  {{- with $tab }}
+    {{- $content := trim .content "\n\r\t " }}
+    {{- $hasContent := ne (strings.TrimPrefix "<p>" $content) "" }}
+
+    {{- $style := .style | default $style | default "" }}
+    {{- $color := .color | default $color | default "" }}
+    {{- $icon := .icon | default "" }}
+    {{- $title := .title | default "" }}
+    {{- $boxStyle := partial "_relearn/boxStyle.gotmpl" (dict "mode" "tabs" "style" $style "color" $color "icon" $icon "title" $title) }}
+    {{- $style = $boxStyle.style }}
+    {{- $color = $boxStyle.color }}
+    {{- $icon := $boxStyle.icon }}
+    {{- $title := $boxStyle.title }}
+
+    {{- $id := partial "_relearn/makeRandomMd5.gotmpl" $page }}
+    {{- /* a tab may have only an icon with no title, so we need to take this into account for groupid switching */}}
+    {{- $itemid := or ($title | $page.RenderString | plainify) $icon | md5 }}
+    {{- if $hasContent }}
+      {{- $tabs = $tabs | append (dict
+        "color"   $color
+        "content" $content
+        "icon"    $icon
+        "id"      (printf "R-tab-id-%s" $id)
+        "itemid"  (printf "R-tab-%s" $itemid)
+        "style"   $style
+        "title"   $title
+      ) }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- $style = .style | default "" }}
+{{- $color = .color | default "" }}
+{{- $icon := .icon | default "" }}
+{{- $title := .title | default "" }}
+{{- $boxStyle := partial "_relearn/boxStyle.gotmpl" (dict "mode" "tabs" "style" $style "color" $color "icon" $icon "title" $title) }}
+{{- $color = $boxStyle.color }}
+{{- $style = $boxStyle.style }}
+{{- $icon := $boxStyle.icon }}
+{{- $title := $boxStyle.title }}
+
+{{- with $page }}
+  {{- if len $tabs -}}
+<div class="tab-panel" data-tab-group="{{ $groupid }}">
+  <div class="tab-nav">
+    <div class="tab-nav-title">{{ if $icon }}<i class="{{ $icon }}"></i>{{ end }}{{ if and $icon $title }} {{ end }}{{ $title | $page.RenderString }}{{ if (not $title) }}&#8203;{{ end }}</div>
+    {{- range $idx, $tab := $tabs }}
+    <button
+      aria-controls="{{ .id }}" aria-expanded="{{ cond (eq $idx 0) "true" "false" }}"
+      data-tab-item="{{ .itemid }}"
+      class="tab-nav-button tab-panel-style cstyle{{ with .style }} {{ . }}{{ end }}{{ cond (eq $idx 0) " active" "" }}"{{ with .color }} style="--VARIABLE-BOX-color: {{ . }};"{{ end }}{{ if eq $idx 0 }} tabindex="-1"{{ end }}
+      onclick="switchTab('{{ $groupid }}','{{ .itemid }}')"
+    >
+      <span class="tab-nav-text">{{ if .icon }}<i class="{{ .icon }}"></i>{{ end }}{{ if and .icon .title }} {{ end }}{{ .title | $page.RenderString }}{{ if (not .title) }}&#8203;{{ end }}</span>
+    </button>
+    {{- end }}
+  </div>
+  <div class="tab-content-container">
+    {{- range $idx, $tab := $tabs }}
+    <div
+      id="{{ .id }}"
+      data-tab-item="{{ .itemid }}"
+      class="tab-content tab-panel-style cstyle{{ with .style }} {{ . }}{{ end }}{{ cond (eq $idx 0) " active" ""}}"{{ with .color }} style="--VARIABLE-BOX-color: {{ . }};"{{ end }}>
+      <div class="tab-content-text">
+{{ .content | safeHTML }}
+      </div>
+    </div>
+    {{- end }}
+  </div>
+</div>
+  {{- end }}
+{{- end }}
