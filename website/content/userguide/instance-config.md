@@ -786,7 +786,7 @@ included in the boot file system of your gokrazy instance:
 
 - `pieeprom-*.bin`, Raspberry Pi EEPROM update files
 - `recovery.bin`, Raspberry Pi EEPROM update files
-- `lv805-*.bin`, Raspberry Pi EEPROM update files
+- `vl805-*.bin`, Raspberry Pi EEPROM update files
 
 Default if unset: `github.com/gokrazy/rpi-eeprom`
 
