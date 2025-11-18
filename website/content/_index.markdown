@@ -3,8 +3,6 @@ layout: default
 title: gokrazy Go appliances
 ---
 
-# gokrazy Go appliances
-
 With gokrazy, you can deploy one or more Go programs as
 [appliances](https://en.wikipedia.org/wiki/Computer_appliance) to a Raspberry
 Pi, Virtual Machine, embedded or normal PC (see [supported
