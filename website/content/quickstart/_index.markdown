@@ -9,7 +9,7 @@ weight = 1
 
 ## Prep: pick a supported device
 
-Currently, the Raspberry Pi 4 B is the recommended platform for
+Currently, the Raspberry Pi 5 or Pi 4 B are the recommended platform for
 using gokrazy, but you can find
 other <a href="/platforms/">supported and upcoming platforms</a>.
 
