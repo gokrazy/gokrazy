@@ -445,7 +445,7 @@ func SuperviseServices(services []*Service) error {
 	}
 
 	var err error
-	lastInstalledEepromVersion, err = readLastInstalledEepromVersion(Model())
+	lastInstalledEepromVersion, err = readEEPROMVersions(Model())
 	if err != nil {
 		log.Printf("getting EEPROM version: %v", err)
 	}

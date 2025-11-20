@@ -65,12 +65,9 @@ table {
 	{{ end }}
         {{ if .EEPROM }}
         <tr>
-          <th>EEPROM<br>(SHA256)</th>
+          <th>EEPROM</th>
           <td style="vertical-align: top">
-	    {{ shortenSHA256 .EEPROM.PieepromSHA256 }} (bootloader)
-	    {{ if modelIsPi4 .Model }}<br>
-	    {{ shortenSHA256 .EEPROM.VL805SHA256 }} (VL805)
-	    {{ end }}
+	    {{ .EEPROM.FirmwareDate }}<br>
 	  </td>
         </tr>
         {{ end }}
