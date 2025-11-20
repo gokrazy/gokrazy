@@ -37,27 +37,27 @@ gok edit And make the following changes:
 Change the HTTP port from 80 (default) to 1080 (for example) to move gokrazy’s web interface listening port out of the way and let caddy serve on TCP port 80. If you want to run caddy on a different port, you can skip this step. Configure Package config: Command-line flags and Package config: Extra files to make caddy run its webserver on startup (run) and to make caddy locate its config file (--config). { &#34;Hostname&#34;: &#34;webserver&#34;, &#34;Update&#34;: { &#34;HTTPPort&#34;: &#34;1080&#34; }, &#34;Packages&#34;: [ &#34;github.com/gokrazy/fbstatus&#34;, &#34;github.com/gokrazy/hello&#34;, &#34;github.com/gokrazy/serial-busybox&#34;, &#34;github.com/gokrazy/breakglass&#34;, &#34;github.com/caddyserver/caddy/v2/cmd/caddy&#34; ], &#34;PackageConfig&#34;: { &#34;github.com/caddyserver/caddy/v2/cmd/caddy&#34;: { &#34;CommandLineFlags&#34;: [ &#34;run&#34;, &#34;--config&#34;, &#34;/etc/caddy/Caddyfile&#34; ], &#34;ExtraFilePaths&#34;: { &#34;/etc/caddy/Caddyfile&#34;: &#34;Caddyfile&#34; } } } } Then, create the referenced Caddyfile extra file and modify it to your liking. In this example, we explicitly configure an HTTP listener to disable Caddy’s automatic HTTPS setup, so that your server will work without a publically reachable address.">
     <meta itemprop="wordCount" content="222">
     <title>Caddy HTTP server :: gokrazy</title>
-    <link href="/images/favicon.png?1763445998" rel="icon" type="image/png">
-    <link href="/css/auto-complete/auto-complete.min.css?1763445998" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1763445998" defer></script>
-    <script src="/js/search-lunr.min.js?1763445998" defer></script>
-    <script src="/js/search.min.js?1763445998" defer></script>
+    <link href="/images/favicon.png?1763621646" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1763621646" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1763621646" defer></script>
+    <script src="/js/search-lunr.min.js?1763621646" defer></script>
+    <script src="/js/search.min.js?1763621646" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1763445998";
+      window.relearn.index_js_url="/searchindex.en.js?1763621646";
     </script>
-    <script src="/js/lunr/lunr.min.js?1763445998" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1763445998" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1763445998" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1763445998" defer></script>
+    <script src="/js/lunr/lunr.min.js?1763621646" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1763621646" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1763621646" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1763621646" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763445998" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763445998" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1763445998" rel="stylesheet">
-    <link href="/css/theme.min.css?1763445998" rel="stylesheet">
-    <link href="/css/format-html.min.css?1763445998" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763621646" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1763621646" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1763621646" rel="stylesheet">
+    <link href="/css/theme.min.css?1763621646" rel="stylesheet">
+    <link href="/css/format-html.min.css?1763621646" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -289,8 +289,8 @@ the port.</p>
 <div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1763445998" defer></script>
-    <script src="/js/theme.min.js?1763445998" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1763621646" defer></script>
+    <script src="/js/theme.min.js?1763621646" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
