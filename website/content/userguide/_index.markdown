@@ -5,8 +5,6 @@ chapter: true
 weight: 3
 ---
 
-# Configuration
-
 After following the [Quickstart guide](/quickstart/), you should have a working
 gokrazy instance to further customize.
 

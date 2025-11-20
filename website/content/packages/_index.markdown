@@ -7,8 +7,6 @@ aliases:
   - /userguide/install/
 ---
 
-# Available packages
-
 The guides in this chapter show how to set up popular third-party software.
 
 If you feel a common program should be included here but isn’t, please [file an
