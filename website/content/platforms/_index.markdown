@@ -160,11 +160,11 @@ gokrazy on unsupported platform or to provide new features. They may not be as
 thoroughly tested as the official platforms. Please report any issue to their
 respective repository.
 
-| repository                           | source         | devices                                            |
-|--------------------------------------|----------------|----------------------------------------------------|
-| [gokrazy-community/kernel-rpi-os-32] | [Raspberry Pi] | Pi 1, Pi 2, Pi 3, Pi 4, Pi 5, Pi Zero 2 W (32 bit) |
-| [anupcshan/gokrazy-odroidxu4-kernel] | [kernel.org]   | Odroid XU4, HC1, HC2                               |
-| [anupcshan/gokrazy-rock64-kernel]    | [kernel.org]   | Pine64 Rock64                                      |
+| repository                           | source         | devices                                                       |
+|--------------------------------------|----------------|---------------------------------------------------------------|
+| [gokrazy-community/kernel-rpi-os-32] | [Raspberry Pi] | Pi 1, Pi 2, Pi 3, Pi 4, Pi 5, Pi Zero W, Pi Zero 2 W (32 bit) |
+| [anupcshan/gokrazy-odroidxu4-kernel] | [kernel.org]   | Odroid XU4, HC1, HC2                                          |
+| [anupcshan/gokrazy-rock64-kernel]    | [kernel.org]   | Pine64 Rock64                                                 |
 
 [Raspberry Pi]: https://github.com/raspberrypi/linux
 [kernel.org]: https://kernel.org/
