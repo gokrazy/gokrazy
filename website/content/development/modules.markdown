@@ -83,6 +83,12 @@ The `gok` CLI will set up the `replace` directive for you. For more details on
 `replace`, see [the Go
 wiki](https://github.com/golang/go/wiki/Modules#when-should-i-use-the-replace-directive).
 
+To undo a local override, either manually delete the `replace` directive in the
+relevant `builddir/.../go.mod` file, or use `go mod edit` with
+`-dropreplace=path/to/pkg`. See this
+[comment](https://github.com/gokrazy/gokrazy/discussions/352#discussioncomment-15404080)
+for a worked example.
+
 ## Influencing the granularity
 
 Often, one Go *package* will be the only package you use from a certain Go
