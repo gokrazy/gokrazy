@@ -410,8 +410,8 @@ func main() {
 		if err := applyLease(nl, *ifname, lsrc, l, *extraRoutePriority); err != nil {
 			log.Fatal(err)
 		}
-		// Leave the process running indefinitely
-		time.Sleep(time.Duration(1<<63 - 1))
+		log.Print("Static config applied successfully; exiting.")
+		os.Exit(125)
 	}
 
 	conn, err := packet.Listen(intf, packet.Datagram, unix.ETH_P_IP, nil)
