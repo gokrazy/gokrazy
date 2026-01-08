@@ -15,7 +15,6 @@ func TestWaitForSleep(t *testing.T) {
 	}
 }
 
-
 func TestWaitFor(t *testing.T) {
 	// Test that it doesn't panic on known values
 	// We can't really test the waiting behaviour easily without blocking,
