@@ -205,6 +205,7 @@ type service struct {
 	supervision   supervisionMode
 
 	waitForClock bool
+	waitFor      []string
 
 	state *processState
 }
@@ -414,6 +415,11 @@ func supervise(s *service) {
 	if strings.HasPrefix(s.Cmd().Path, "/user/") && s.waitForClock {
 		l.Print("gokrazy: waiting for clock to be synced")
 		WaitForClock()
+	}
+
+	if strings.HasPrefix(s.Cmd().Path, "/user/") && len(s.waitFor) > 0 {
+		l.Printf("gokrazy: waiting for %v", s.waitFor)
+		WaitFor(s.waitFor...)
 	}
 
 	for {
