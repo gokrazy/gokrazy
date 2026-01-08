@@ -420,6 +420,47 @@ permanently running services.
 }
 {{< /highlight >}}
 
+### PackageConfig → WaitFor {#packagewaitfor}
+
+(No correspondence to former per-package directory text files.)
+
+The `WaitFor` field makes the gokrazy init system wait for the specified conditions
+to be met before starting the program. This is useful when you want to ensure
+the network is ready, or the clock is synchronized, but modifying the program source
+to call [`gokrazy.WaitFor()`](https://pkg.go.dev/github.com/gokrazy/gokrazy#WaitFor)
+is inconvenient.
+
+The available conditions are:
+
+*   `"clock"`: Wait for the system clock to be set (via NTP).
+*   `"net-route"`: Wait for a default route to be installed (local network via DHCP).
+*   `"net-online"`: Wait for internet connectivity (ping gokrazy.org).
+*   `"interface=<ifname>"`: Wait for the specified network interface to be up (e.g. `interface=tailscale0`).
+*   `"sleep=<duration>"`: Wait for the specified duration (e.g. `sleep=5s`).
+
+**Example:**
+
+{{< highlight json "hl_lines=10-18" >}}
+{
+    "Hostname": "scanner",
+    "Packages": [
+        "github.com/gokrazy/fbstatus",
+        "github.com/gokrazy/hello",
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "github.com/evcc-io/evcc"
+    ],
+    "PackageConfig": {
+        "github.com/evcc-io/evcc": {
+            "WaitFor": [
+                "clock",
+                "interface=tailscale0"
+            ]
+        }
+    }
+}
+{{< /highlight >}}
+
 ### PackageConfig → WaitForClock {#packagewaitforclock}
 
 (Corresponds to the former `waitforclock` per-package directory text files.)
@@ -549,7 +590,7 @@ handled as if you had configured `ExtraFilePaths:
 cat > ~/gokrazy/webserver/Caddyfile <<'EOT'
 http://:80 {
 	root * /tmp
-	file_server browse 
+	file_server browse
 }
 EOT
 ```

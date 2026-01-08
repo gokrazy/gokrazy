@@ -417,6 +417,11 @@ func NewWaitForClockService(cmd *exec.Cmd) *Service {
 	return newService(cmd, false, true)
 }
 
+// SetWaitFor sets the conditions to wait for before starting the service.
+func (s *Service) SetWaitFor(waitFor []string) {
+	s.s.waitFor = waitFor
+}
+
 // Supervise runs SuperviseServices, creating services from commands.
 //
 // Deprecated: newer versions of gokr-packer run gokrazy.SuperviseServices()
