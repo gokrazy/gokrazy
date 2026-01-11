@@ -44,11 +44,7 @@ func getCaps() (caps, error) {
 // mustDropPrivileges executes the program in a child process, dropping root
 // privileges, but retaining the CAP_SYS_TIME capability to change the system
 // clock.
-func mustDropPrivileges(rtc *os.File) {
-	if os.Getenv("NTP_PRIVILEGES_DROPPED") == "1" {
-		return
-	}
-
+func mustDropPrivileges(rtc, cookie *os.File) {
 	// From include/uapi/linux/capability.h:
 	// Allow setting the real-time clock
 	const CAP_SYS_TIME = 25
@@ -71,7 +67,11 @@ func mustDropPrivileges(rtc *os.File) {
 	cmd.Env = append(os.Environ(), "NTP_PRIVILEGES_DROPPED=1")
 	if rtc != nil {
 		cmd.Env = append(cmd.Env, "NTP_RTC=1")
-		cmd.ExtraFiles = []*os.File{rtc}
+		cmd.ExtraFiles = append(cmd.ExtraFiles, rtc)
+	}
+	if cookie != nil {
+		cmd.Env = append(cmd.Env, "NTP_COOKIE=1")
+		cmd.ExtraFiles = append(cmd.ExtraFiles, cookie)
 	}
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
