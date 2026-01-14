@@ -15,7 +15,7 @@ import (
 	"github.com/beevik/ntp"
 )
 
-const cookiePath = "/perm/.ntp-time-at-last-shutdown"
+const timefile = "ntp-time-at-last-shutdown" // Our process is started in /perm/home/ntp.
 
 var servers = []string{
 	"0.gokrazy.pool.ntp.org",
@@ -53,13 +53,13 @@ func set(rtc *os.File) error {
 func loadTime(cookie *os.File) error {
 	buf, err := io.ReadAll(cookie)
 	if err != nil {
-		return fmt.Errorf("io.ReadAll(%v): %v", cookiePath, err)
+		return fmt.Errorf("io.ReadAll(%v): %v", timefile, err)
 	}
 	var t time.Time
 	if err := t.UnmarshalText(buf); err != nil {
 		return fmt.Errorf("t.UnmarshalText(%v): %v", string(buf), err)
 	}
-	if err := setTimeOfDay(t, cookiePath); err != nil {
+	if err := setTimeOfDay(t, timefile); err != nil {
 		return fmt.Errorf("setTimeOfDay: %v", err)
 	}
 	return nil
@@ -78,6 +78,9 @@ func saveTime(cookie *os.File) error {
 	}
 	if _, err := cookie.Write(buf); err != nil {
 		return fmt.Errorf("cookie.Write(%v): %v", buf, err)
+	}
+	if err := cookie.Close(); err != nil {
+		return fmt.Errorf("cookie.Close: %v", err)
 	}
 	return nil
 }
@@ -101,7 +104,7 @@ func main() {
 			nextFD++
 		}
 		if os.Getenv("NTP_COOKIE") == "1" {
-			cookie = os.NewFile(nextFD, cookiePath)
+			cookie = os.NewFile(nextFD, timefile)
 			nextFD++
 		}
 	} else {
@@ -109,9 +112,9 @@ func main() {
 		if err != nil && !os.IsNotExist(err) {
 			log.Fatal(err)
 		}
-		cookie, err = os.OpenFile(cookiePath, os.O_RDWR|os.O_CREATE, 0600)
+		cookie, err = os.OpenFile(timefile, os.O_RDWR|os.O_CREATE, 0600)
 		if err != nil {
-			log.Printf("os.Open(%v): %v", cookiePath, err)
+			log.Printf("os.Open(%v): %v", timefile, err)
 		}
 		mustDropPrivileges(rtc, cookie) // Never returns.
 	}
@@ -122,16 +125,11 @@ func main() {
 			// Wait for SIGTERM to save time to /perm.
 			ch := make(chan os.Signal, 1)
 			signal.Notify(ch, syscall.SIGTERM)
-			defer func() {
-				signal.Reset(syscall.SIGTERM)
-				if err := syscall.Kill(os.Getpid(), syscall.SIGTERM); err != nil {
-					log.Fatalf("syscall.Kill(re-sending caught SIGTERM): %v", err)
-				}
-			}()
 			<-ch
 			if err := saveTime(cookie); err != nil {
 				log.Printf("persisting time to /perm failed: %v", err)
 			}
+			os.Exit(128 + int(syscall.SIGTERM))
 		}()
 		// Load time saved at previous shutdown, if any.
 		if err := loadTime(cookie); err != nil {
