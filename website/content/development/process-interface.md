@@ -35,6 +35,9 @@ is started with `HOME=/perm/home/tailscaled`.
 When your binary is first started, gokrazy sets the `GOKRAZY_FIRST_START=1`
 environment variable.
 
+The `PATH` environment variable is set to `/user:/gokrazy` so that all binaries
+on the system can be discovered.
+
 ## Privilege dropping / security
 
 An easy way to implement privilege dropping in Go is to re-execute the process

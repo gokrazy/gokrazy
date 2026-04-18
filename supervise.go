@@ -475,6 +475,9 @@ func supervise(s *service) {
 			cmd.Dir = homeDir
 		}
 
+		// Set $PATH so that binaries can find each other
+		cmd.Env = append(cmd.Env, "PATH=/user:/gokrazy")
+
 		// If $USER isn't already set, set it to root
 		// in order to further increase the chance of daemons
 		// working properly out of the box
