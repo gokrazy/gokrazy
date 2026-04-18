@@ -31,29 +31,29 @@ Starts your binary using Go’s os/exec.Command API. The stdout and stderr file 
 gokrazy’s init process (pid 1) supervises all the binaries the user specified via gokr-packer flags.
 More specifically, gokrazy:
 Starts your binary using Go’s os/exec.Command API. The stdout and stderr file descriptors are hooked up to a ring buffer and can be viewed via gokrazy’s web interface. Extra command-line flags or environment variables can be specified using per-package configuration. When your binary’s process exits, gokrazy restarts it! If the process exits with status code 0 (or 125), gokrazy will stop supervision. Exiting immediately with status code 0 when the GOKRAZY_FIRST_START=1 environment variable is set means “don’t start the program on boot” Environment variables gokrazy sets the HOME environment variable to HOME=/perm/home/&lt;cmd&gt;, where &lt;cmd&gt; is the name of your binary. For example, tailscale.com/cmd/tailscaled is started with HOME=/perm/home/tailscaled.">
-    <meta itemprop="wordCount" content="272">
+    <meta itemprop="wordCount" content="290">
     <title>Process interface / requirements :: gokrazy</title>
-    <link href="/images/favicon.png?1771400400" rel="icon" type="image/png">
-    <link href="/css/auto-complete/auto-complete.min.css?1771400400" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1771400400" defer></script>
-    <script src="/js/search-lunr.min.js?1771400400" defer></script>
-    <script src="/js/search.min.js?1771400400" defer></script>
+    <link href="/images/favicon.png?1776502605" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1776502605" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1776502605" defer></script>
+    <script src="/js/search-lunr.min.js?1776502605" defer></script>
+    <script src="/js/search.min.js?1776502605" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1771400400";
+      window.relearn.index_js_url="/searchindex.en.js?1776502605";
     </script>
-    <script src="/js/lunr/lunr.min.js?1771400400" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1771400400" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1771400400" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1771400400" defer></script>
+    <script src="/js/lunr/lunr.min.js?1776502605" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1776502605" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1776502605" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1776502605" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1771400400" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1771400400" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1771400400" rel="stylesheet">
-    <link href="/css/theme.min.css?1771400400" rel="stylesheet">
-    <link href="/css/format-html.min.css?1771400400" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1776502605" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1776502605" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1776502605" rel="stylesheet">
+    <link href="/css/theme.min.css?1776502605" rel="stylesheet">
+    <link href="/css/format-html.min.css?1776502605" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -195,6 +195,8 @@ program on boot”</li>
 is started with <code>HOME=/perm/home/tailscaled</code>.</p>
 <p>When your binary is first started, gokrazy sets the <code>GOKRAZY_FIRST_START=1</code>
 environment variable.</p>
+<p>The <code>PATH</code> environment variable is set to <code>/user:/gokrazy</code> so that all binaries
+on the system can be discovered.</p>
 <h2 id="privilege-dropping--security">Privilege dropping / security<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>An easy way to implement privilege dropping in Go is to re-execute the process
 with <a href="https://pkg.go.dev/syscall#SysProcAttr" rel="external">syscall.SysProcAttr</a> fields
@@ -303,8 +305,8 @@ the configured rsync modules</li>
 <div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1771400400" defer></script>
-    <script src="/js/theme.min.js?1771400400" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1776502605" defer></script>
+    <script src="/js/theme.min.js?1776502605" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
