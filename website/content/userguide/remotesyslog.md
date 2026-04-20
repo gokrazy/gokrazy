@@ -11,8 +11,19 @@ persist logs elsewhere for later analysis.
 
 ## Client side (gokrazy)
 
-To enable remote syslog, you need to configure a target by creating the file
-`remote_syslog/target` on the permanent data partition.
+To enable remote syslog, you need to configure a target. gokrazy checks the
+following sources in order, using the first value found:
+
+### Option 1: Linux kernel command line
+
+Specify the target via the `gokrazy.remote_syslog.target` kernel command line
+parameter. This is primarily intended for integration tests where Linux is being
+booted from a qemu microvm.
+
+### Option 2: permanent data partition (`/perm`)
+
+Create the file `remote_syslog/target` on the permanent data partition. This
+allows changing the target at runtime without rebuilding the image.
 
 ```shell
 # The following assumes you already created a file system
@@ -23,6 +34,11 @@ sudo mount /dev/disk/by-partuuid/2e18c40c-04 /mnt
 echo 10.0.0.76:514 | sudo tee /mnt/remote_syslog/target
 sudo umount /mnt
 ```
+
+### Option 3: gokrazy config (`/etc/gokrazy`)
+
+Include the file `remote_syslog/target` in the `/etc/gokrazy` directory of your
+gokrazy image. This bakes the configuration into the image at build time.
 
 I recommend using a (static) IP address for increased reliability, so that
 remote syslog works even when DNS does not.
