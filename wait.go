@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strings"
 	"time"
 
 	"github.com/vishvananda/netlink"
@@ -36,18 +37,26 @@ func WaitFor(things ...string) {
 	start := time.Now()
 	// Wait in sequence (but we might wait concurrently in the future).
 	for _, thing := range things {
-		switch thing {
-		case "clock":
+		switch {
+		case thing == "clock":
 			log.Printf("waiting for clock")
 			waitForClock()
 
-		case "net-route":
+		case thing == "net-route":
 			log.Printf("waiting for net-route")
 			waitForNetRoute()
 
-		case "net-online":
+		case thing == "net-online":
 			log.Printf("waiting for net-online")
 			waitForNetOnline()
+
+		case strings.HasPrefix(thing, "interface="):
+			log.Printf("waiting for %s", thing)
+			waitForInterface(strings.TrimPrefix(thing, "interface="))
+
+		case strings.HasPrefix(thing, "sleep="):
+			log.Printf("waiting for %s", thing)
+			waitForSleep(strings.TrimPrefix(thing, "sleep="))
 
 		default:
 			panic(fmt.Sprintf("BUG: gokrazy.WaitFor(%q) unknown", thing))
@@ -141,4 +150,35 @@ func waitForNetOnline() {
 		}
 		break // no error, wait succeeded
 	}
+}
+
+func waitForInterface1(ifname string) error {
+	iface, err := net.InterfaceByName(ifname)
+	if err != nil {
+		return err
+	}
+	if iface.Flags&net.FlagUp == 0 {
+		return fmt.Errorf("interface %s found, but not up", ifname)
+	}
+	return nil
+}
+
+func waitForInterface(ifname string) {
+	for {
+		if err := waitForInterface1(ifname); err != nil {
+			log.Printf("waiting for interface %s: %v", ifname, err)
+			time.Sleep(1 * time.Second)
+			continue
+		}
+		break // no error, wait succeeded
+	}
+}
+
+func waitForSleep(duration string) {
+	d, err := time.ParseDuration(duration)
+	if err != nil {
+		log.Printf("waiting for sleep: %v", err)
+		return
+	}
+	time.Sleep(d)
 }
