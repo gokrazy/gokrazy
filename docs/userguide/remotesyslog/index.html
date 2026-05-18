@@ -6,46 +6,46 @@
     <meta name="generator" content="Hugo 0.152.2">
     <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
     <meta name="description" content="If you update your gokrazy installations daily, as we recommend you do, logs will be cleared daily as a side effect of rebooting the device. You can use Remote Syslog to persist logs elsewhere for later analysis.
-Client side (gokrazy) To enable remote syslog, you need to configure a target by creating the file remote_syslog/target on the permanent data partition.">
+Client side (gokrazy) To enable remote syslog, you need to configure a target. gokrazy checks the following sources in order, using the first value found:">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Remote Syslog: sending gokrazy logs over the network :: gokrazy">
     <meta name="twitter:description" content="If you update your gokrazy installations daily, as we recommend you do, logs will be cleared daily as a side effect of rebooting the device. You can use Remote Syslog to persist logs elsewhere for later analysis.
-Client side (gokrazy) To enable remote syslog, you need to configure a target by creating the file remote_syslog/target on the permanent data partition.">
+Client side (gokrazy) To enable remote syslog, you need to configure a target. gokrazy checks the following sources in order, using the first value found:">
     <meta property="og:url" content="https://gokrazy.org/userguide/remotesyslog/index.html">
     <meta property="og:site_name" content="gokrazy">
     <meta property="og:title" content="Remote Syslog: sending gokrazy logs over the network :: gokrazy">
     <meta property="og:description" content="If you update your gokrazy installations daily, as we recommend you do, logs will be cleared daily as a side effect of rebooting the device. You can use Remote Syslog to persist logs elsewhere for later analysis.
-Client side (gokrazy) To enable remote syslog, you need to configure a target by creating the file remote_syslog/target on the permanent data partition.">
+Client side (gokrazy) To enable remote syslog, you need to configure a target. gokrazy checks the following sources in order, using the first value found:">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Configuration">
     <meta itemprop="name" content="Remote Syslog: sending gokrazy logs over the network :: gokrazy">
     <meta itemprop="description" content="If you update your gokrazy installations daily, as we recommend you do, logs will be cleared daily as a side effect of rebooting the device. You can use Remote Syslog to persist logs elsewhere for later analysis.
-Client side (gokrazy) To enable remote syslog, you need to configure a target by creating the file remote_syslog/target on the permanent data partition.">
-    <meta itemprop="wordCount" content="179">
+Client side (gokrazy) To enable remote syslog, you need to configure a target. gokrazy checks the following sources in order, using the first value found:">
+    <meta itemprop="wordCount" content="266">
     <title>Remote Syslog: sending gokrazy logs over the network :: gokrazy</title>
-    <link href="/images/favicon.png?1776502605" rel="icon" type="image/png">
-    <link href="/css/auto-complete/auto-complete.min.css?1776502605" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1776502605" defer></script>
-    <script src="/js/search-lunr.min.js?1776502605" defer></script>
-    <script src="/js/search.min.js?1776502605" defer></script>
+    <link href="/images/favicon.png?1779085891" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1779085891" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1779085891" defer></script>
+    <script src="/js/search-lunr.min.js?1779085891" defer></script>
+    <script src="/js/search.min.js?1779085891" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1776502605";
+      window.relearn.index_js_url="/searchindex.en.js?1779085891";
     </script>
-    <script src="/js/lunr/lunr.min.js?1776502605" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1776502605" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1776502605" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1776502605" defer></script>
+    <script src="/js/lunr/lunr.min.js?1779085891" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1779085891" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1779085891" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1779085891" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1776502605" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1776502605" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1776502605" rel="stylesheet">
-    <link href="/css/theme.min.css?1776502605" rel="stylesheet">
-    <link href="/css/format-html.min.css?1776502605" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1779085891" rel="stylesheet">
+    <link href="/css/theme.min.css?1779085891" rel="stylesheet">
+    <link href="/css/format-html.min.css?1779085891" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -114,7 +114,13 @@ Client side (gokrazy) To enable remote syslog, you need to configure a target by
                 <div class="topbar-content-wrapper">
 <nav class="TableOfContents">
   <ul>
-    <li><a href="#client-side-gokrazy">Client side (gokrazy)</a></li>
+    <li><a href="#client-side-gokrazy">Client side (gokrazy)</a>
+      <ul>
+        <li><a href="#option-1-linux-kernel-command-line">Option 1: Linux kernel command line</a></li>
+        <li><a href="#option-2-permanent-data-partition-perm">Option 2: permanent data partition (<code>/perm</code>)</a></li>
+        <li><a href="#option-3-gokrazy-config-etcgokrazy">Option 3: gokrazy config (<code>/etc/gokrazy</code>)</a></li>
+      </ul>
+    </li>
     <li><a href="#server-side-syslog-ng">Server side (syslog-ng)</a></li>
   </ul>
 </nav>
@@ -154,8 +160,15 @@ will be cleared daily as a side effect of rebooting the device. You can use
 <a href="https://en.wikipedia.org/wiki/Syslog#Network_protocol" rel="external">Remote Syslog</a> to
 persist logs elsewhere for later analysis.</p>
 <h2 id="client-side-gokrazy">Client side (gokrazy)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p>To enable remote syslog, you need to configure a target by creating the file
-<code>remote_syslog/target</code> on the permanent data partition.</p>
+<p>To enable remote syslog, you need to configure a target. gokrazy checks the
+following sources in order, using the first value found:</p>
+<h3 id="option-1-linux-kernel-command-line">Option 1: Linux kernel command line<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Specify the target via the <code>gokrazy.remote_syslog.target</code> kernel command line
+parameter. This is primarily intended for integration tests where Linux is being
+booted from a qemu microvm.</p>
+<h3 id="option-2-permanent-data-partition-perm">Option 2: permanent data partition (<code>/perm</code>)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Create the file <code>remote_syslog/target</code> on the permanent data partition. This
+allows changing the target at runtime without rebuilding the image.</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># The following assumes you already created a file system</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># on the permanent data partition. Otherwise, please use:</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># sudo mkfs.ext4 /dev/disk/by-partuuid/2e18c40c-04</span>
@@ -163,6 +176,9 @@ persist logs elsewhere for later analysis.</p>
 </span></span><span style="display:flex;"><span>sudo mount /dev/disk/by-partuuid/2e18c40c-04 /mnt
 </span></span><span style="display:flex;"><span>echo 10.0.0.76:514 | sudo tee /mnt/remote_syslog/target
 </span></span><span style="display:flex;"><span>sudo umount /mnt</span></span></code></pre></div>
+<h3 id="option-3-gokrazy-config-etcgokrazy">Option 3: gokrazy config (<code>/etc/gokrazy</code>)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Include the file <code>remote_syslog/target</code> in the <code>/etc/gokrazy</code> directory of your
+gokrazy image. This bakes the configuration into the image at build time.</p>
 <p>I recommend using a (static) IP address for increased reliability, so that
 remote syslog works even when DNS does not.</p>
 <h2 id="server-side-syslog-ng">Server side (syslog-ng)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
@@ -257,8 +273,8 @@ log { source(net); destination(remote); };</code></pre></div>
 <div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1776502605" defer></script>
-    <script src="/js/theme.min.js?1776502605" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1779085891" defer></script>
+    <script src="/js/theme.min.js?1779085891" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
