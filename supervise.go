@@ -495,8 +495,14 @@ func supervise(s *service) {
 			cmd.Dir = homeDir
 		}
 
-		// Set $PATH so that binaries can find each other
-		cmd.Env = append(cmd.Env, "PATH=/user:/gokrazy")
+		// If $PATH isn't already set, set $PATH
+		// so that binaries can find each other.
+		hasPath := slices.ContainsFunc(cmd.Env, func(s string) bool {
+			return strings.HasPrefix(s, "PATH=")
+		})
+		if !hasPath {
+			cmd.Env = append(cmd.Env, "PATH=/user:/gokrazy")
+		}
 
 		// If $USER isn't already set, set it to root
 		// in order to further increase the chance of daemons
@@ -504,7 +510,6 @@ func supervise(s *service) {
 		hasUser := slices.ContainsFunc(cmd.Env, func(s string) bool {
 			return strings.HasPrefix(s, "USER=")
 		})
-
 		if !hasUser {
 			cmd.Env = append(cmd.Env, "USER=root")
 		}
