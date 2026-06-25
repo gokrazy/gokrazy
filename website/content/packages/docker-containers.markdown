@@ -18,11 +18,9 @@ re-package into https://github.com/gokrazy/podman.
 Include the following packages in your gokrazy installation:
 
 ```bash
-gok add github.com/gokrazy/iptables
 gok add github.com/gokrazy/nsenter
 gok add github.com/gokrazy/podman
-gok add github.com/greenpau/cni-plugins/cmd/cni-nftables-portmap
-gok add github.com/greenpau/cni-plugins/cmd/cni-nftables-firewall
+gok add github.com/spod/nftables
 ```
 
 Then, deploy as usual:
@@ -30,6 +28,8 @@ Then, deploy as usual:
 ```bash
 gok update
 ```
+
+**Note:** Podman 5+ uses netavark for container networking instead of CNI. If you are migrating from podman < 5, you can remove `github.com/gokrazy/iptables` and any CNI plugin packages, and replace them with `github.com/spod/nftables`.
 
 ## Step 2: Verify podman works
 
