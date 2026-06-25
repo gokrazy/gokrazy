@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="generator" content="Hugo 0.161.1">
     <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
     <meta name="description" content="Create the filesystem gokrazy provides a handy way to create the permanent data filesystem on the fourth partition of your gokrazy installation. The gokrazy/mkfs program will create the filesystem. To actually access the permanent data partition from your own program, gokrazy will mount the partition under /perm directory during the startup.
 You can add the gokrazy/mkfs program to your gokrazy instance:">
@@ -25,27 +25,27 @@ You can add the gokrazy/mkfs program to your gokrazy instance:">
 You can add the gokrazy/mkfs program to your gokrazy instance:">
     <meta itemprop="wordCount" content="375">
     <title>Access permanent data :: gokrazy</title>
-    <link href="/images/favicon.png?1779085891" rel="icon" type="image/png">
-    <link href="/css/auto-complete/auto-complete.min.css?1779085891" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1779085891" defer></script>
-    <script src="/js/search-lunr.min.js?1779085891" defer></script>
-    <script src="/js/search.min.js?1779085891" defer></script>
+    <link href="/images/favicon.png?1782408721" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1782408721" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1782408721" defer></script>
+    <script src="/js/search-lunr.min.js?1782408721" defer></script>
+    <script src="/js/search.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1779085891";
+      window.relearn.index_js_url="/searchindex.en.js?1782408721";
     </script>
-    <script src="/js/lunr/lunr.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1779085891" defer></script>
+    <script src="/js/lunr/lunr.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1779085891" rel="stylesheet">
-    <link href="/css/theme.min.css?1779085891" rel="stylesheet">
-    <link href="/css/format-html.min.css?1779085891" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1782408721" rel="stylesheet">
+    <link href="/css/theme.min.css?1782408721" rel="stylesheet">
+    <link href="/css/format-html.min.css?1782408721" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -156,15 +156,15 @@ You can add the gokrazy/mkfs program to your gokrazy instance:">
 The <a href="https://github.com/gokrazy/mkfs" rel="external">gokrazy/mkfs</a> program will create the filesystem.
 To actually access the permanent data partition from your own program, gokrazy will mount the partition under <code>/perm</code> directory during the startup.</p>
 <p>You can add the <code>gokrazy/mkfs</code> program to your gokrazy instance:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/mkfs</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/mkfs</span></span></code></pre></div>
 <p>…or, if you want to run it only once without otherwise including it in your
 installation, you can use <code>gok run</code>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/gokrazy/mkfs
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/gokrazy/mkfs
 </span></span><span style="display:flex;"><span>cd mkfs
 </span></span><span style="display:flex;"><span>gok -i bakery run</span></span></code></pre></div>
 <h2 id="permanent-data-in-action">Permanent data in action<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>The Go program demonstrates the functionality of the permanent data mount:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;encoding/json&#34;</span>
@@ -220,16 +220,16 @@ installation, you can use <code>gok run</code>:</p>
 This can be handy if you need e.g. to pass a configuration file for your application.
 To access the filesystem put the SD card into your PC/notebook. Your OS will likely mount the filesystem automatically.
 Copy the file to the permanent data filesystem.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir /path/to-mounted/filesystem/my-example
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir /path/to-mounted/filesystem/my-example
 </span></span><span style="display:flex;"><span>sudo cp config.json /path/to-mounted/filesystem/my-example</span></span></code></pre></div>
 <p>If you want to access files on the permanent data filesystem you may need the <a href="https://en.wikipedia.org/wiki/Sudo" rel="external">sudo</a> capability.</p>
 <h2 id="notes-about-macos">Notes about macOS<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>In macOS, to identify what device file maps to the mini sd card use:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ diskutil list</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ diskutil list</span></span></code></pre></div>
 <p>If you want to create an ext4 filesystem from macOS, use the ext2/3/4 <a href="https://e2fsprogs.sourceforge.net/" rel="external">utilities</a>.
 The easiest way to install them is via <a href="https://formulae.brew.sh/formula/e2fsprogs#default" rel="external">homebrew</a>.</p>
 <p>With the utilities installed you can run (replace X and Y based on the <code>diskutil list</code> output):</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sudo <span style="color:#e6db74">`</span>brew --prefix e2fsprogs<span style="color:#e6db74">`</span>/sbin/mkfs.ext4 /dev/diskXsY</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sudo <span style="color:#e6db74">`</span>brew --prefix e2fsprogs<span style="color:#e6db74">`</span>/sbin/mkfs.ext4 /dev/diskXsY</span></span></code></pre></div>
 
   <footer class="footline">
   </footer>
@@ -313,8 +313,8 @@ The easiest way to install them is via <a href="https://formulae.brew.sh/formula
 <div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1779085891" defer></script>
-    <script src="/js/theme.min.js?1779085891" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1782408721" defer></script>
+    <script src="/js/theme.min.js?1782408721" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

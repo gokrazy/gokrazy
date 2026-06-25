@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="generator" content="Hugo 0.161.1">
     <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
     <meta name="description" content="gokrazy has limited support for Bluetooth. The usual Bluetooth utilities (bluez) have a lot of dependencies that are not available on gokrazy and those are out of scope here. But the basic Bluetooth hardware are supported on low level. This is useful in particular for applications using Bluetooth LE natively in Go.
 To enable Bluetooth in gokrazy, first add the github.com/gokrazy/bluetooth package to your gokrazy instance:
@@ -29,27 +29,27 @@ To enable Bluetooth in gokrazy, first add the github.com/gokrazy/bluetooth packa
 gok add github.com/gokrazy/bluetooth The github.com/gokrazy/bluetooth package loads the appropriate kernel modules and firmware required.">
     <meta itemprop="wordCount" content="158">
     <title>Using Bluetooth :: gokrazy</title>
-    <link href="/images/favicon.png?1779085891" rel="icon" type="image/png">
-    <link href="/css/auto-complete/auto-complete.min.css?1779085891" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1779085891" defer></script>
-    <script src="/js/search-lunr.min.js?1779085891" defer></script>
-    <script src="/js/search.min.js?1779085891" defer></script>
+    <link href="/images/favicon.png?1782408721" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1782408721" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1782408721" defer></script>
+    <script src="/js/search-lunr.min.js?1782408721" defer></script>
+    <script src="/js/search.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1779085891";
+      window.relearn.index_js_url="/searchindex.en.js?1782408721";
     </script>
-    <script src="/js/lunr/lunr.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1779085891" defer></script>
+    <script src="/js/lunr/lunr.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1779085891" rel="stylesheet">
-    <link href="/css/theme.min.css?1779085891" rel="stylesheet">
-    <link href="/css/format-html.min.css?1779085891" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1782408721" rel="stylesheet">
+    <link href="/css/theme.min.css?1782408721" rel="stylesheet">
+    <link href="/css/format-html.min.css?1782408721" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -158,17 +158,17 @@ of scope here. But the basic Bluetooth hardware are supported on low level. This
 is useful in particular for applications using Bluetooth LE natively in Go.</p>
 <p>To enable Bluetooth in gokrazy, first add the
 <code>github.com/gokrazy/bluetooth</code> package to your gokrazy instance:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/bluetooth</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/bluetooth</span></span></code></pre></div>
 <p>The <code>github.com/gokrazy/bluetooth</code> package loads the appropriate kernel modules
 and firmware required.</p>
 <h2 id="example-program">Example program<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>As demo we&rsquo;re using the <a href="https://gitlab.com/jtaimisto/bluewalker" rel="external">bluewalker</a> Bluetooth LE scanner utility to show that
 Bluetooth is working:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add gitlab.com/jtaimisto/bluewalker</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add gitlab.com/jtaimisto/bluewalker</span></span></code></pre></div>
 <p>Then, open your instance’s <code>config.json</code> in your editor:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit</span></span></code></pre></div>
 <p>And configure <a href="/userguide/package-config/index.html#flags">Package config: Command-line flags</a>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;blue&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -187,11 +187,11 @@ Bluetooth is working:</p>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 
 <p>Then, deploy as usual:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update</span></span></code></pre></div>
 <p>Once deployed, you can see Bluetooth events being received in the bluewalker
 output.</p>
-<p><a href="#R-image-23822b5998e34f99bd41cb7d0efc9693" class="lightbox-link"><img alt="Bluewalker output in gokrazy web interface" class="lazy lightbox figure-image" loading="lazy" src="/img/2022-03-09-bluetooth-bluewalker.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-23822b5998e34f99bd41cb7d0efc9693"><img alt="Bluewalker output in gokrazy web interface" class="lazy lightbox lightbox-image" loading="lazy" src="/img/2022-03-09-bluetooth-bluewalker.png"></a></p>
+<p><a href="#R-image-e69e2cd7ae8b8c8ea618fe70ee2ebffe" class="lightbox-link"><img alt="Bluewalker output in gokrazy web interface" class="lazy lightbox figure-image" loading="lazy" src="/img/2022-03-09-bluetooth-bluewalker.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e69e2cd7ae8b8c8ea618fe70ee2ebffe"><img alt="Bluewalker output in gokrazy web interface" class="lazy lightbox lightbox-image" loading="lazy" src="/img/2022-03-09-bluetooth-bluewalker.png"></a></p>
 
   <footer class="footline">
   </footer>
@@ -275,8 +275,8 @@ output.</p>
 <div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1779085891" defer></script>
-    <script src="/js/theme.min.js?1779085891" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1782408721" defer></script>
+    <script src="/js/theme.min.js?1782408721" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

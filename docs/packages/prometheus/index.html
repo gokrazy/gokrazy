@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="generator" content="Hugo 0.161.1">
     <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
     <meta name="description" content="Prometheus is monitoring system and time series database.
 Note: In the following we will assume that your instance is called hello (default) as well as that the hostname is hello as well.
@@ -33,27 +33,27 @@ Installing the Prometheus Node Exporter If all you want to do is monitor your go
 gok add github.com/prometheus/node_exporter Installing the Prometheus Time Series Database To install the prometheus monitoring system, add the prometheus program to your gokrazy instance:">
     <meta itemprop="wordCount" content="489">
     <title>Prometheus :: gokrazy</title>
-    <link href="/images/favicon.png?1779085891" rel="icon" type="image/png">
-    <link href="/css/auto-complete/auto-complete.min.css?1779085891" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1779085891" defer></script>
-    <script src="/js/search-lunr.min.js?1779085891" defer></script>
-    <script src="/js/search.min.js?1779085891" defer></script>
+    <link href="/images/favicon.png?1782408721" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1782408721" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1782408721" defer></script>
+    <script src="/js/search-lunr.min.js?1782408721" defer></script>
+    <script src="/js/search.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1779085891";
+      window.relearn.index_js_url="/searchindex.en.js?1782408721";
     </script>
-    <script src="/js/lunr/lunr.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1779085891" defer></script>
+    <script src="/js/lunr/lunr.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1779085891" rel="stylesheet">
-    <link href="/css/theme.min.css?1779085891" rel="stylesheet">
-    <link href="/css/format-html.min.css?1779085891" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1782408721" rel="stylesheet">
+    <link href="/css/theme.min.css?1782408721" rel="stylesheet">
+    <link href="/css/format-html.min.css?1782408721" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -169,18 +169,18 @@ time series database.</p>
 <h2 id="installing-the-prometheus-node-exporter">Installing the Prometheus Node Exporter<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>If all you want to do is monitor your gokrazy installation, just add the
 Prometheus <a href="https://github.com/prometheus/node_exporter" rel="external">node exporter</a>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/prometheus/node_exporter</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/prometheus/node_exporter</span></span></code></pre></div>
 <h2 id="installing-the-prometheus-time-series-database">Installing the Prometheus Time Series Database<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>To install the prometheus monitoring system, add the <code>prometheus</code> program to
 your gokrazy instance:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/prometheus/prometheus/cmd/prometheus</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/prometheus/prometheus/cmd/prometheus</span></span></code></pre></div>
 <p>We need a valid prometheus config for prometheus to start successfully. Start
 with the <a href="https://github.com/prometheus/prometheus/blob/main/documentation/examples/prometheus.yml" rel="external">default <code>prometheus.yml</code> from the prometheus
 repository</a>.
 Save it to your gokrazy instance directory, e.g.
 <code>~/gokrazy/hello/prometheus.yml</code>.</p>
 <p>Open your instance’s config.json in your editor:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit</span></span></code></pre></div>
 <p>To use the prometheus config file, we need to do two things in the gokrazy
 config:</p>
 <ol>
@@ -190,7 +190,7 @@ files</a></li>
 <li>We also add <code>WaitForClock</code> to get accurate timestamps for our timeseries data</li>
 </ol>
 <p>Your config should look something like this:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;hello&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -213,27 +213,27 @@ files</a></li>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 
 <p>Then, deploy as usual:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update</span></span></code></pre></div>
 <p>In theory, this is enough to deploy prometheus, but unfortunately we are missing
 the web assets for the web UI which are not included in our build of prometheus.</p>
 <p>You can use prometheus as is, if you never want to go to the web UI on
 <code>hello:9090</code>. If you visit the web UI anyway, you will get this (or a similar)
 error:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Error opening React index.html: open web/ui/static/react/index.html: no such file or directory</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Error opening React index.html: open web/ui/static/react/index.html: no such file or directory</span></span></code></pre></div>
 <p>To get the web UI to work, we first need the missing files. You have two
 options:</p>
 <h3 id="option-a-build-web-assets">Option A: Build Web Assets<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>Follow <a href="https://github.com/prometheus/prometheus?tab=readme-ov-file#building-from-source" rel="external">Prometheus → Building from
 source</a>,
 meaning:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/prometheus/prometheus
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/prometheus/prometheus
 </span></span><span style="display:flex;"><span>cd prometheus
 </span></span><span style="display:flex;"><span>make assets-compress</span></span></code></pre></div>
 <p>Instruct gokrazy to use this build of Prometheus:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i hello add .</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i hello add .</span></span></code></pre></div>
 <p>Configure gokrazy to build Prometheus with the <code>builtinassets</code> <a href="/userguide/instance-config/index.html#packagegobuildtags">Go build
 tag</a>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;hello&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -260,7 +260,7 @@ tag</a>:</p>
 
 <p>To update Prometheus, you’ll need to update your Prometheus dir instead of using
 <code>gok get</code>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git pull <span style="color:#f92672">&amp;&amp;</span> make assets-compress</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git pull <span style="color:#f92672">&amp;&amp;</span> make assets-compress</span></span></code></pre></div>
 <h3 id="option-b-download-web-assets">Option B: Download Web Assets<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>The web assets are released with every prometheus release and you need to update
 them by hand with every new version.</p>
@@ -355,8 +355,8 @@ like <code>2.46.0</code>
 <div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1779085891" defer></script>
-    <script src="/js/theme.min.js?1779085891" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1782408721" defer></script>
+    <script src="/js/theme.min.js?1782408721" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="generator" content="Hugo 0.161.1">
     <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
     <meta name="description" content="In addition to running gokrazy on a Raspberry Pi or another ARM board, you can also run it in a QEMU x86-64 virtual machine. The following guide covers what’s necessary to build and run a gokrazy image on QEMU. Your hypervisor may require additional configuration.
 Building the image Create a new gokrazy instance gok -i virtual new The -i flag specifies the name of the instance. In this case, we’re using virtual, but you can use any name you like. The instance configuration will be created in your home directory under ~/gokrazy/virtual.">
@@ -25,27 +25,27 @@ Building the image Create a new gokrazy instance gok -i virtual new The -i flag 
 Building the image Create a new gokrazy instance gok -i virtual new The -i flag specifies the name of the instance. In this case, we’re using virtual, but you can use any name you like. The instance configuration will be created in your home directory under ~/gokrazy/virtual.">
     <meta itemprop="wordCount" content="534">
     <title>QEMU x86-64 virtual machine :: gokrazy</title>
-    <link href="/images/favicon.png?1779085891" rel="icon" type="image/png">
-    <link href="/css/auto-complete/auto-complete.min.css?1779085891" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1779085891" defer></script>
-    <script src="/js/search-lunr.min.js?1779085891" defer></script>
-    <script src="/js/search.min.js?1779085891" defer></script>
+    <link href="/images/favicon.png?1782408721" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1782408721" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1782408721" defer></script>
+    <script src="/js/search-lunr.min.js?1782408721" defer></script>
+    <script src="/js/search.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1779085891";
+      window.relearn.index_js_url="/searchindex.en.js?1782408721";
     </script>
-    <script src="/js/lunr/lunr.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1779085891" defer></script>
+    <script src="/js/lunr/lunr.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1779085891" rel="stylesheet">
-    <link href="/css/theme.min.css?1779085891" rel="stylesheet">
-    <link href="/css/format-html.min.css?1779085891" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1782408721" rel="stylesheet">
+    <link href="/css/theme.min.css?1782408721" rel="stylesheet">
+    <link href="/css/format-html.min.css?1782408721" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -165,7 +165,7 @@ necessary to build and run a gokrazy image on QEMU. Your hypervisor may require
 additional configuration.</p>
 <h2 id="building-the-image">Building the image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <h3 id="create-a-new-gokrazy-instance">Create a new gokrazy instance<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual new</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual new</span></span></code></pre></div>
 <p>The <code>-i</code> flag specifies the name of the instance. In this case, we&rsquo;re using
 <code>virtual</code>, but you can use any name you like. The instance configuration will be
 created in your home directory under <code>~/gokrazy/virtual</code>.</p>
@@ -173,35 +173,35 @@ created in your home directory under <code>~/gokrazy/virtual</code>.</p>
 <p>Run <code>gok -i virtual edit</code> to open the <a href="/userguide/instance-config/index.html">instance
 configuration</a> file in your favorite editor. You&rsquo;ll
 need to make the following changes:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;virtual&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>  <span style="color:#f92672">&#34;KernelPackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/rtr7/kernel&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>  <span style="color:#f92672">&#34;FirmwarePackage&#34;</span>: <span style="color:#e6db74">&#34;github.com/rtr7/kernel&#34;</span>,
 </span></span><span style="display:flex; background-color:#3c3d38"><span>  <span style="color:#f92672">&#34;SerialConsole&#34;</span>: <span style="color:#e6db74">&#34;ttyS0,115200&#34;</span>,
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}</span></span></code></pre></div>
+</span></span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 
 <h3 id="build-the-image">Build the image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>The following command will build a single image file that contains the kernel,
 firmware, and root filesystem. The <code>--target_storage_bytes</code> flag must be
 specified to set the size of the image. The example below creates a 4GB image.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual overwrite --full virtual.img --target_storage_bytes <span style="color:#ae81ff">4294967296</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual overwrite --full virtual.img --target_storage_bytes <span style="color:#ae81ff">4294967296</span></span></span></code></pre></div>
 <p>The image will be written to the current directory as <code>virtual.img</code>.</p>
 <h3 id="use-the-image-with-qemu">Use the image with QEMU<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>You can now use the image with QEMU. The following command will boot the image
 in QEMU with a serial console:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qemu-system-x86_64 <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -machine accel<span style="color:#f92672">=</span>kvm <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -smp <span style="color:#ae81ff">8</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -m <span style="color:#ae81ff">2048</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -drive file<span style="color:#f92672">=</span>virtual.img,format<span style="color:#f92672">=</span>raw <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -nographic</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qemu-system-x86_64 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -machine accel<span style="color:#f92672">=</span>kvm <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -smp <span style="color:#ae81ff">8</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -m <span style="color:#ae81ff">2048</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -drive file<span style="color:#f92672">=</span>virtual.img,format<span style="color:#f92672">=</span>raw <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -nographic</span></span></code></pre></div>
 <h3 id="use-the-image-with-proxmox">Use the image with Proxmox<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>You can also use the image with other hypervisors, such as <a href="https://www.proxmox.com/en/proxmox-virtual-environment/overview" rel="external">Proxmox
 PVE</a>. Start by
 creating a new VM without a storage device. Then, upload the image to the
 Proxmox host and add it as a hard disk to the VM.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qm importdisk &lt;vmid&gt; virtual.img &lt;storage&gt;
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qm importdisk &lt;vmid&gt; virtual.img &lt;storage&gt;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># for example, for vmid 105 and local-zfs storage:</span>
 </span></span><span style="display:flex;"><span>qm importdisk <span style="color:#ae81ff">105</span> virtual.img local-zfs</span></span></code></pre></div>
@@ -216,7 +216,7 @@ will allow you to discover the VM&rsquo;s IP address. The
 <a href="https://github.com/bradfitz/qemu-guest-kragent" rel="external">qemu-guest-kragent</a> project
 provides a simple agent that can be used with gokrazy.</p>
 <p>To add the agent to your gokrazy instance, run the following command:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual add github.com/bradfitz/qemu-guest-kragent</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok -i virtual add github.com/bradfitz/qemu-guest-kragent</span></span></code></pre></div>
 <p>Visit the Proxmox web UI and choose the VM. Click &ldquo;Options&rdquo; and select &ldquo;QEMU
 Guest Agent&rdquo;. Make sure &ldquo;Use QEMU Guest Agent&rdquo; is checked. Click &ldquo;OK&rdquo; to save
 your changes.</p>
@@ -232,7 +232,7 @@ or <code>vga: virtio</code> in the config file.</li>
 <p>You can now use this gokrazy VM instance as you would any other gokrazy
 instance. For example, you can add packages, configure the instance, and update
 it.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual update</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOARCH<span style="color:#f92672">=</span>amd64 gok -i virtual update</span></span></code></pre></div>
 <p>For more information, see the <a href="/userguide/instance-config/index.html">Instance config reference</a>.</p>
 
   <footer class="footline">
@@ -317,8 +317,8 @@ it.</p>
 <div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1779085891" defer></script>
-    <script src="/js/theme.min.js?1779085891" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1782408721" defer></script>
+    <script src="/js/theme.min.js?1782408721" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

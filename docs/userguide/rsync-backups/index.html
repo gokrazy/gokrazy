@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="generator" content="Hugo 0.161.1">
     <meta name="generator" content="Relearn 8.2.0+220806ce3ced8264fbdd693f77f28216a8a1b6ae">
     <meta name="description" content="I like to periodically back up all scans from my scan2drive appliance to my PC. The PC is backed up as well, so that automatically distributes my scans to multiple machines in case one of them fails.
 A convenient way to set up an efficient partial or full backup of a gokrazy device’s permanent data partition is to use the gokrazy rsync daemon. This article walks you through how I have set up my backup, but many variants are possible to cater to different requirements.">
@@ -25,27 +25,27 @@ A convenient way to set up an efficient partial or full backup of a gokrazy devi
 A convenient way to set up an efficient partial or full backup of a gokrazy device’s permanent data partition is to use the gokrazy rsync daemon. This article walks you through how I have set up my backup, but many variants are possible to cater to different requirements.">
     <meta itemprop="wordCount" content="391">
     <title>Permanent data backup with the gokrazy rsync :: gokrazy</title>
-    <link href="/images/favicon.png?1779085891" rel="icon" type="image/png">
-    <link href="/css/auto-complete/auto-complete.min.css?1779085891" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1779085891" defer></script>
-    <script src="/js/search-lunr.min.js?1779085891" defer></script>
-    <script src="/js/search.min.js?1779085891" defer></script>
+    <link href="/images/favicon.png?1782408721" rel="icon" type="image/png">
+    <link href="/css/auto-complete/auto-complete.min.css?1782408721" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1782408721" defer></script>
+    <script src="/js/search-lunr.min.js?1782408721" defer></script>
+    <script src="/js/search.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1779085891";
+      window.relearn.index_js_url="/searchindex.en.js?1782408721";
     </script>
-    <script src="/js/lunr/lunr.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1779085891" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1779085891" defer></script>
+    <script src="/js/lunr/lunr.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1782408721" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1782408721" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1779085891" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1779085891" rel="stylesheet">
-    <link href="/css/theme.min.css?1779085891" rel="stylesheet">
-    <link href="/css/format-html.min.css?1779085891" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1782408721" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1782408721" rel="stylesheet">
+    <link href="/css/theme.min.css?1782408721" rel="stylesheet">
+    <link href="/css/format-html.min.css?1782408721" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -164,12 +164,12 @@ requirements.</p>
 because it can be built reproducibly any time using Go.)</p>
 <h2 id="install">Step 1. Install the gokrazy rsync daemon<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>Add the gokrazy rsync implementation <code>gokr-rsync</code> to your gokrazy instance:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/rsync/cmd/gokr-rsync</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok add github.com/gokrazy/rsync/cmd/gokr-rsync</span></span></code></pre></div>
 <h2 id="configure">Step 2. Configure the gokrazy rsync daemon<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>Open your gokrazy instance’s <code>config.json</code> in your editor:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok edit</span></span></code></pre></div>
 <p>Configure <a href="/userguide/package-config/index.html#flags">Package config: Command-line flags</a> and <a href="/userguide/package-config/index.html#extrafiles">Package config: Extra files</a>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;backedup&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Packages&#34;</span>: [
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;github.com/gokrazy/fbstatus&#34;</span>,
@@ -195,7 +195,7 @@ because it can be built reproducibly any time using Go.)</p>
 
 <p>In the daemon config file, configure an authorized SSH listener and which
 rsync modules to serve:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; ~/gokrazy/hello/gokr-rsyncd.toml <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; ~/gokrazy/hello/gokr-rsyncd.toml <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">dont_namespace = true 
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[[listener]]
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  [listener.authorized_ssh]
@@ -206,29 +206,29 @@ rsync modules to serve:</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  path = &#34;/perm/scans&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span></span></span></code></pre></div>
 <p>Finally, create the authorized keys file that determines who can access the rsync daemon:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; ~/gokrazy/hello/gokr-rsyncd.authorized_keys <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; ~/gokrazy/hello/gokr-rsyncd.authorized_keys <span style="color:#e6db74">&lt;&lt;&#39;EOT&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ssh-ed25519 […] michael@midna
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOT</span></span></span></code></pre></div>
 <p>Then, deploy as usual:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gok update</span></span></code></pre></div>
 <h2 id="ssh">Step 3. Configure SSH from the backup machine<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>On your PC (not the gokrazy instance), add an SSH configuration stanza to your
 <code>~/.ssh/config</code> to configure the custom port (22873 for ssh+rsync) and which
 passwordless identity file to use (for the <a href="/userguide/rsync-backups/index.html#cron">cron job in step 4</a>):</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Host scan2drive-backup
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Host scan2drive-backup
 </span></span><span style="display:flex;"><span>    Hostname scan2drive.lan
 </span></span><span style="display:flex;"><span>    Port 22873
 </span></span><span style="display:flex;"><span>    IdentityFile ~/.ssh/id_ed25519_scan2drivebackup</span></span></code></pre></div>
 <p>Now you should be able to run rsync via SSH as usual:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/</span></span></code></pre></div>
 <h2 id="cron">Step 4. Configure a daily cron job<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>First, install <a href="https://github.com/stapelberg/rsyncprom" rel="external">the <code>rsync-prom</code> tool</a>
 to monitor your periodic transfer with <a href="https://prometheus.io/" rel="external">Prometheus</a>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go install github.com/stapelberg/rsyncprom/cmd/rsync-prom@latest</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go install github.com/stapelberg/rsyncprom/cmd/rsync-prom@latest</span></span></code></pre></div>
 <p>Then wrap the above rsync command in an rsync-prom invocation in a shell script called <code>scan2drive-backup-sync.sh</code>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>SSH_AUTH_SOCK<span style="color:#f92672">=</span> ~/go/bin/rsync-prom --instance<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;scan2drive@midna&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span>SSH_AUTH_SOCK<span style="color:#f92672">=</span> ~/go/bin/rsync-prom --instance<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;scan2drive@midna&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  rsync -av -e ssh rsync://scan2drive-backup/scans/ ~/scan2drive-backup/</span></span></code></pre></div>
 <p>Finally, run <code>crontab -e</code> and run the script at your convenience, like so:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>30 07 * * * /home/michael/scan2drive-backup-sync.sh</code></pre></div>
 
@@ -314,8 +314,8 @@ to monitor your periodic transfer with <a href="https://prometheus.io/" rel="ext
 <div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1779085891" defer></script>
-    <script src="/js/theme.min.js?1779085891" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1782408721" defer></script>
+    <script src="/js/theme.min.js?1782408721" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
