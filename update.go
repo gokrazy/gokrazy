@@ -217,7 +217,7 @@ func nonConcurrentSwitchHandler(newRootPartition int) func(http.ResponseWriter, 
 		defer mu.Unlock()
 
 		if err := switchRootPartition(newRootPartition); err != nil {
-			log.Printf("switching root partition to %q failed: %v", newRootPartition, err)
+			log.Printf("switching root partition to %d failed: %v", newRootPartition, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -236,7 +236,7 @@ func nonConcurrentTestbootHandler(newRootPartition int) func(http.ResponseWriter
 		defer mu.Unlock()
 
 		if err := enableTestboot(); err != nil {
-			log.Printf("enabling test-boot of new root partition %q failed: %v", newRootPartition, err)
+			log.Printf("enabling test-boot of new root partition %d failed: %v", newRootPartition, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

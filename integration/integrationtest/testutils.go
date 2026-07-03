@@ -111,8 +111,8 @@ replace %s => %s
 	}
 
 	qemuArgs = append(qemuArgs,
-		//"-enable-kvm",
-		//"-cpu", "host",
+		"-enable-kvm",
+		"-cpu", "host",
 		"-nodefaults",
 		"-m", "4G",
 		"-smp", "8", // required! system gets stuck without -smp
