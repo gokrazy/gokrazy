@@ -186,6 +186,24 @@ func applyLease(nl *netlink.Handle, ifname string, source string, lease dhcp4.Le
 	}
 
 	if r := lease.Router; len(r) > 0 {
+		// If the gateway is not within the host's subnet (e.g. with a
+		// /32 address), add a host route for the gateway on the
+		// interface first, otherwise the default route will fail.
+		if !addr.IPNet.Contains(r) {
+			err = nl.RouteReplace(&netlink.Route{
+				LinkIndex: l.Attrs().Index,
+				Dst: &net.IPNet{
+					IP:   r,
+					Mask: net.CIDRMask(32, 32),
+				},
+				Scope:    netlink.SCOPE_LINK,
+				Priority: priorityFromName(ifname) + extraRoutePriority,
+			})
+			if err != nil {
+				return fmt.Errorf("RouteReplace (gateway host route): %v", err)
+			}
+		}
+
 		err = nl.RouteReplace(&netlink.Route{
 			LinkIndex: l.Attrs().Index,
 			Dst:       defaultDst,
