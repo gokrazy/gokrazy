@@ -136,6 +136,15 @@ func loadTime(timefile *os.File) error {
 	if err := t.UnmarshalText(buf); err != nil {
 		return fmt.Errorf("time.UnmarshalText(%v): %v", string(buf), err)
 	}
+	// Only step the clock forwards. Machines without a battery-backed real time
+	// clock boot at the epoch, so the saved time is later and is restored.
+	// Machines that boot with a correct time (PCs, VMs, a Raspberry Pi with an
+	// RTC hat) keep it: stepping them back to the last shutdown would make
+	// every timestamp wrong until the first NTP query succeeds.
+	if now := time.Now().Round(0); !t.After(now) {
+		log.Printf("not setting clock to %v (from %s): system clock (%v) is already at or ahead of it", t, timefilePath, now)
+		return nil
+	}
 	if err := setTimeOfDay(t, timefilePath); err != nil {
 		return fmt.Errorf("setTimeOfDay: %v", err)
 	}
