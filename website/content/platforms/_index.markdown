@@ -141,14 +141,14 @@ These kernels are tested in [Continuous Integration](#ci).
 They are built from one of two sources: Either from Raspberry Pi’s Linux kernel
 fork, or from the upstream Linux kernel from [kernel.org].
 
-The upstream Linux kernel gets security fixes the quickest, but the Raspberry Pi
-Linux kernel supports more Raspberry Pi models (notably the Pi 5, which upstream
-does not support) and peripherals.
+The upstream Linux kernel gets security fixes the quickest and supports the
+Raspberry Pi 5 as well, but the Raspberry Pi Linux kernel supports more
+Raspberry Pi peripherals.
 
 | repository             | source         | devices                       |
 |------------------------|----------------|-------------------------------|
 | [gokrazy/kernel.rpi]   | [Raspberry Pi] | Pi 3, Pi 4, Pi 5, Pi Zero 2 W |
-| [gokrazy/kernel]       | [kernel.org]   | Pi 3, Pi 4, Pi Zero 2 W       |
+| [gokrazy/kernel]       | [kernel.org]   | Pi 3, Pi 4, Pi 5, Pi Zero 2 W |
 | [gokrazy/kernel.amd64] | [kernel.org]   | PC x86_64, VMs                |
 | [gokrazy/kernel.arm64] | [kernel.org]   | PC arm64, VMs                 |
 
