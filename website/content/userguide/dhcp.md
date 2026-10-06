@@ -47,6 +47,25 @@ IP, router and DNS options. If your DHCP server provides NTP servers, the
 [gokrazy NTP client](/userguide/ntp/) uses them automatically; otherwise it
 falls back to its default servers.
 
+## IPv6 DNS Servers
+
+IPv6 addresses are configured by the Linux kernel via
+[SLAAC](https://en.wikipedia.org/wiki/IPv6_address#Stateless_address_autoconfiguration_(SLAAC)).
+If the router advertisements on your network announce DNS servers (RDNSS
+option, see [RFC 8106](https://www.rfc-editor.org/rfc/rfc8106)), the DHCP client
+adds them to `/etc/resolv.conf`:
+
+- IPv6 DNS servers are listed after the DNS servers from the DHCPv4 lease, up
+  to the limit of 3 nameservers that resolvers use. If there are IPv6 DNS
+  servers, one of the 3 is reserved for them, so at most 2 DNS servers from the
+  DHCPv4 lease are used.
+- A DNS server is removed when the router withdraws it, or when its advertised
+  lifetime has run out by the next time `/etc/resolv.conf` is written.
+
+This currently requires the DHCPv4 client to run: on networks without a DHCPv4
+server (IPv6-only), or with `-static_network_config`, DNS servers from router
+advertisements are not used.
+
 ## Static Network Configuration
 
 If you want the DHCP client to not actually fetch a lease, but apply a

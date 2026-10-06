@@ -9,6 +9,7 @@ require (
 	github.com/google/gopacket v1.1.19
 	github.com/google/renameio/v2 v2.0.2
 	github.com/kenshaw/evdev v0.1.0
+	github.com/mdlayher/ndp v1.1.0
 	github.com/mdlayher/packet v1.1.2
 	github.com/mdlayher/watchdog v0.0.0-20221003142519-49be0df7b3b5
 	github.com/rtr7/dhcp4 v0.0.0-20220302171438-18c84d089b46
@@ -22,4 +23,5 @@ require (
 	github.com/vishvananda/netns v0.0.5 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sync v0.21.0 // indirect
+	golang.org/x/text v0.38.0 // indirect
 )
