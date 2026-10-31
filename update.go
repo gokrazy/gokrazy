@@ -53,6 +53,60 @@ func readCmdline() ([]byte, error) {
 	return b, nil
 }
 
+// rewriteCmdline applies replace to the contents of a file holding the kernel
+// command line (cmdline.txt or a systemd-boot entry) and returns contents of
+// the same length, because the file is overwritten in place and can neither
+// shrink nor grow.
+func rewriteCmdline(b []byte, replace func([]byte) []byte) ([]byte, error) {
+	rep := replace(b)
+	if len(rep) > len(b) {
+		return nil, fmt.Errorf("the modified kernel command line is %d bytes longer than its file, which is overwritten in place", len(rep)-len(b))
+	}
+	if pad := len(b) - len(rep); pad > 0 {
+		// The file content length can shrink when switching from PARTUUID= (the
+		// default) to /dev/mmcblk0p[23], on an older gokrazy installation.
+		// Because we overwrite the file in place and have no means to truncate
+		// it to a smaller length, we pad the command line with spaces instead.
+		// Note that we need to insert spaces before a trailing newline,
+		// otherwise the system won’t boot:
+		spaces := bytes.Repeat([]byte{' '}, pad)
+		if trimmed, ok := bytes.CutSuffix(rep, []byte{'\n'}); ok {
+			rep = append(append(trimmed[:len(trimmed):len(trimmed)], spaces...), '\n')
+		} else {
+			rep = append(rep[:len(rep):len(rep)], spaces...)
+		}
+	}
+	return rep, nil
+}
+
+// addCmdlineFlag adds flag to the kernel command line in b: the "options"
+// line of a systemd-boot entry, or all of cmdline.txt. gok pads the command
+// line with spaces so that flags can be added in place, so the flag takes the
+// room of as many spaces, keeping b’s length when there is enough padding.
+func addCmdlineFlag(b []byte, flag string) []byte {
+	start := 0
+	if i := bytes.Index(b, []byte("\noptions ")); i >= 0 {
+		start = i + 1
+	}
+	end := len(b)
+	if i := bytes.IndexByte(b[start:], '\n'); i >= 0 {
+		end = start + i
+	}
+	line := b[start:end]
+	content := bytes.TrimRight(line, " ")
+	for _, f := range bytes.Fields(content) {
+		if string(f) == flag {
+			return b
+		}
+	}
+	newLine := append(append(bytes.Clone(content), ' '), flag...)
+	if pad := len(line) - len(newLine); pad > 0 {
+		newLine = append(newLine, bytes.Repeat([]byte{' '}, pad)...)
+	}
+	out := append(bytes.Clone(b[:start]), newLine...)
+	return append(out, b[end:]...)
+}
+
 func modifyCmdlineFile(f *os.File, offset, length int64, replace func([]byte) []byte) error {
 	if _, err := f.Seek(offset, io.SeekStart); err != nil {
 		return err
@@ -61,23 +115,13 @@ func modifyCmdlineFile(f *os.File, offset, length int64, replace func([]byte) []
 	if _, err := f.Read(b); err != nil {
 		return err
 	}
+	rep, err := rewriteCmdline(b, replace)
+	if err != nil {
+		return err
+	}
 	if _, err := f.Seek(offset, io.SeekStart); err != nil {
 		return err
 	}
-
-	rep := replace(b)
-	if pad := len(b) - len(rep); pad > 0 {
-		// The file content length can shrink when switching from PARTUUID= (the
-		// default) to /dev/mmcblk0p[23], on an older gokrazy installation.
-		// Because we overwrite the file in place and have no means to truncate
-		// it to a smaller length, we pad the command line with spaces instead.
-		// Note that we need to insert spaces before the trailing newline,
-		// otherwise the system won’t boot:
-		rep = bytes.ReplaceAll(rep,
-			[]byte{'\n'},
-			append(bytes.Repeat([]byte{' '}, pad), '\n'))
-	}
-
 	if _, err := f.Write(rep); err != nil {
 		return err
 	}
@@ -125,9 +169,7 @@ func switchRootPartition(newRootPartition int) error {
 
 func enableTestboot() error {
 	return modifyCmdline(func(b []byte) []byte {
-		return bytes.ReplaceAll(b,
-			[]byte{'\n'},
-			[]byte(" gokrazy.try_boot_inactive=1\n"))
+		return addCmdlineFlag(b, "gokrazy.try_boot_inactive=1")
 	})
 }
 
